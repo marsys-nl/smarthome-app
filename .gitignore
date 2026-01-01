@@ -1,0 +1,15 @@
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Kotlin project-specific cache directory
+.kotlin
+
+# Ignore IDE related folders
+.idea
+
+# Ignore Gradle build output directory
+build
+
+# Local-only property files
+local.properties
+keystore.properties
