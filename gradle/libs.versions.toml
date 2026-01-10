@@ -1,0 +1,31 @@
+[versions]
+smarthome-app-version = "2026.01-SNAPSHOT"
+smarthome-domain-version = "2026.01-SNAPSHOT"
+smarthome-api-version = "2026.01-SNAPSHOT"
+
+android-gradle-plugin = "8.13.2"
+android-sdk-compile = "36"
+android-sdk-min = "31"
+android-sdk-target = "36"
+
+androidx-activity = "1.12.2"
+
+jetbrains-compose = "1.10.0-rc02"
+
+jvm-toolchain = "21"
+
+kotlin = "2.3.0"
+
+[libraries]
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
+
+compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "jetbrains-compose" }
+compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "jetbrains-compose" }
+compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "jetbrains-compose" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
