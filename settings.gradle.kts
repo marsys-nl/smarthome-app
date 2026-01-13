@@ -19,5 +19,5 @@ dependencyResolutionManagement {
 
 include(
     ":app:android",
-    ":app:library",
+    ":shared:library",
 )

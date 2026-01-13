@@ -1,4 +1,4 @@
-package network.smarthome.app.library
+package network.smarthome.shared.library
 
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
