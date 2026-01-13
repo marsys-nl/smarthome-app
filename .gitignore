@@ -10,6 +10,14 @@
 # Ignore Gradle build output directory
 build
 
+# User settings
+xcuserdata/
+
+# App packaging
+*.ipa
+*.dSYM.zip
+*.dSYM
+
 # Local-only property files
 local.properties
 keystore.properties
