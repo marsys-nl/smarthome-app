@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "network.marsys.smarthome.shared.library"
-version = libs.versions.smarthome.app.version.get()
+version = libs.versions.smarthome.app.name.get()
 
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
