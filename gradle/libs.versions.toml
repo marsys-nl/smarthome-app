@@ -1,7 +1,11 @@
 [versions]
-smarthome-app-version = "2026.01-SNAPSHOT"
-smarthome-domain-version = "2026.01-SNAPSHOT"
-smarthome-api-version = "2026.01-SNAPSHOT"
+# year = major, month = minor
+# major * 1000000, minor * 1000, patch * 1
+smarthome-app-code = "26001001"
+smarthome-app-name = "2026.01-SNAPSHOT"
+
+smarthome-domain = "2026.01-SNAPSHOT"
+smarthome-api = "2026.01-SNAPSHOT"
 
 android-gradle-plugin = "8.13.2"
 android-sdk-compile = "36"

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "network.marsys.smarthome.app"
-version = libs.versions.smarthome.app.version.get()
+version = libs.versions.smarthome.app.name.get()
 
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
@@ -21,7 +21,7 @@ android {
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
 
-        versionCode = 1
+        versionCode =  libs.versions.smarthome.app.code.get().toInt()
         versionName = "$version"
     }
 
