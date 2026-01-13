@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
 }
 
-group = "network.marsys.smarthome.app.library"
+group = "network.marsys.smarthome.shared.library"
 version = libs.versions.smarthome.app.version.get()
 
 kotlin {
