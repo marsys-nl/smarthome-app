@@ -10,7 +10,7 @@ android-sdk-target = "36"
 
 androidx-activity = "1.12.2"
 
-jetbrains-compose = "1.10.0-rc02"
+jetbrains-compose = "1.10.0"
 
 jvm-toolchain = "21"
 
