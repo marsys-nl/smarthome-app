@@ -11,11 +11,14 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
+    @Suppress("UnstableApiUsage")
     repositories {
         google()
         mavenCentral()
     }
 }
+
+includeBuild("build-logic")
 
 include(
     ":app:android",
