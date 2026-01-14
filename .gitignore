@@ -21,3 +21,6 @@ xcuserdata/
 # Local-only property files
 local.properties
 keystore.properties
+
+# Stop recording updates
+Versions.xcconfig

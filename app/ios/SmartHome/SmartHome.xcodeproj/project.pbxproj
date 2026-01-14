@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		552FB30B2F17072800DBDA00 /* Versions.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 552FB30A2F17072800DBDA00 /* Versions.xcconfig */; };
 		55F3E2992F13B9A100811597 /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 55F3E2972F13B9A100811597 /* Config.xcconfig */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		552FB30A2F17072800DBDA00 /* Versions.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Versions.xcconfig; sourceTree = "<group>"; };
 		55F3E26A2F13B96000811597 /* SmartHome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SmartHome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55F3E27A2F13B96400811597 /* SmartHomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartHomeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		55F3E2842F13B96500811597 /* SmartHomeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartHomeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				55F3E2972F13B9A100811597 /* Config.xcconfig */,
+				552FB30A2F17072800DBDA00 /* Versions.xcconfig */,
 			);
 			path = Configuration;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				552FB30B2F17072800DBDA00 /* Versions.xcconfig in Resources */,
 				55F3E2992F13B9A100811597 /* Config.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,7 +265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :app:library:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :shared:library:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -305,6 +309,7 @@
 /* Begin XCBuildConfiguration section */
 		55F3E28C2F13B96500811597 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55F3E2972F13B9A100811597 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -368,6 +373,7 @@
 		};
 		55F3E28D2F13B96500811597 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 55F3E2972F13B9A100811597 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
