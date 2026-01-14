@@ -37,7 +37,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		55F3E29F2F1512D700811597 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		55F3E29F2F1512D700811597 /* Exceptions for "SmartHome" folder in "SmartHome" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -50,7 +50,7 @@
 		55F3E26C2F13B96000811597 /* SmartHome */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				55F3E29F2F1512D700811597 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				55F3E29F2F1512D700811597 /* Exceptions for "SmartHome" folder in "SmartHome" target */,
 			);
 			path = SmartHome;
 			sourceTree = "<group>";
@@ -265,7 +265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :app:library:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :shared:library:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
