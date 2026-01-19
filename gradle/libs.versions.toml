@@ -7,7 +7,7 @@ smarthome-app-name = "2026.01-SNAPSHOT"
 smarthome-domain = "2026.01-SNAPSHOT"
 smarthome-api = "2026.01-SNAPSHOT"
 
-android-gradle-plugin = "8.13.2"
+android-gradle-plugin = "9.0.0"
 android-sdk-compile = "36"
 android-sdk-min = "31"
 android-sdk-target = "36"
@@ -33,7 +33,6 @@ android-application = { id = "com.android.application", version.ref = "android-g
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
 marsys-smarthome-apply-ios-version = { id = "network.marsys.conventions.apply-ios-version" }
