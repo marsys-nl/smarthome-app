@@ -20,12 +20,16 @@ jvm-toolchain = "21"
 
 kotlin = "2.3.0"
 
+ktlint = "1.8.0"
+
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 
 compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "jetbrains-compose" }
 compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "jetbrains-compose" }
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "jetbrains-compose" }
+
+ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }

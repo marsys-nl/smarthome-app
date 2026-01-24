@@ -20,7 +20,7 @@ android {
         minSdk = libs.versions.android.sdk.min.get().toInt()
         targetSdk = libs.versions.android.sdk.target.get().toInt()
 
-        versionCode =  libs.versions.smarthome.app.code.get().toInt()
+        versionCode = libs.versions.smarthome.app.code.get().toInt()
         versionName = "$version"
     }
 
