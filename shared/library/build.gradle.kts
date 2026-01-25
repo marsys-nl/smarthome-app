@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.marsys.smarthome.apply.ios.version)
+    alias(libs.plugins.marsys.smarthome.detekt)
 }
 
 group = "network.marsys.smarthome.shared.library"

@@ -14,6 +14,8 @@ android-sdk-target = "36"
 
 androidx-activity = "1.12.2"
 
+detekt = "2.0.0-alpha.1"
+
 jetbrains-compose = "1.10.0"
 
 jvm-toolchain = "21"
@@ -29,14 +31,19 @@ compose-foundation = { group = "org.jetbrains.compose.foundation", name = "found
 compose-components-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "jetbrains-compose" }
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "jetbrains-compose" }
 
+detekt = { group = "dev.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+
 ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
+
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 
+marsys-smarthome-detekt = { id = "network.marsys.conventions.detekt" }
 marsys-smarthome-apply-ios-version = { id = "network.marsys.conventions.apply-ios-version" }
