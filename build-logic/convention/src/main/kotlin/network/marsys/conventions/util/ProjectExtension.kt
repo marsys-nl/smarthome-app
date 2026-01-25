@@ -7,6 +7,8 @@ import org.gradle.kotlin.dsl.getByType
 internal val Project.libs
     get() = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+internal fun Project.library(name: String) =
+    libs.findLibrary(name).get()
+
 internal fun Project.plugin(name: String) =
     libs.findPlugin(name).get().get().pluginId
-

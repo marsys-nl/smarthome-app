@@ -15,6 +15,7 @@ android-sdk-target = "36"
 androidx-activity = "1.12.2"
 
 detekt = "2.0.0-alpha.1"
+detekt-compose-rules = "0.5.5"
 
 jetbrains-compose = "1.10.0"
 
@@ -32,6 +33,7 @@ compose-components-resources = { group = "org.jetbrains.compose.components", nam
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "jetbrains-compose" }
 
 detekt = { group = "dev.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+detekt-compose-rules = { group = "io.nlopez.compose.rules", name = "detekt", version.ref = "detekt-compose-rules" }
 
 ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
