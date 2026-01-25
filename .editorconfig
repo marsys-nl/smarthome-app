@@ -26,6 +26,9 @@ ij_kotlin_line_break_after_multiline_when_entry = true
 # Class signature rules
 ktlint_standard_class-signature = disabled
 
+# Function naming rules
+ktlint_function_naming_ignore_when_annotated_with = Composable
+
 # Function signature rules
 ktlint_standard_function-signature = disabled
 ktlint_function_signature_body_expression_wrapping = multiline
