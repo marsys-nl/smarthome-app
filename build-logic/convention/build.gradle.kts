@@ -2,7 +2,12 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "network.marsys.conventions"
+dependencies {
+    implementation(libs.detekt)
+}
+
+val packageName = "network.marsys.conventions"
+group = packageName
 
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
@@ -18,8 +23,13 @@ tasks {
 gradlePlugin {
     plugins {
         register("applyIosVersion") {
-            id = "network.marsys.conventions.apply-ios-version"
+            id = "${packageName}.apply-ios-version"
             implementationClass = "network.marsys.conventions.ApplyIosVersionPlugin"
+        }
+
+        register("applyDetekt") {
+            id = "${packageName}.detekt"
+            implementationClass = "${packageName}.ApplyDetektPlugin"
         }
     }
 }
