@@ -24,16 +24,16 @@ class ApplyIosVersionPlugin : Plugin<Project> {
                     content = buildString {
                         appendLine("MARKETING_VERSION=$marketingVersion")
                         appendLine("CURRENT_PROJECT_VERSION=$currentVersion")
-                    }
+                    },
                 )
             }
 
             tasks.matching { task ->
                 task.name.contains("ios", ignoreCase = true) && (
-                        task.name.contains("Link", ignoreCase = true)
-                                || task.name.contains("Sync", ignoreCase = true)
-                                || task.name.contains("Pack", ignoreCase = true)
-                        )
+                    task.name.contains("Link", ignoreCase = true) ||
+                        task.name.contains("Sync", ignoreCase = true) ||
+                        task.name.contains("Pack", ignoreCase = true)
+                    )
             }.configureEach {
                 dependsOn(applyIosVersionTask)
             }
@@ -49,7 +49,7 @@ class ApplyIosVersionPlugin : Plugin<Project> {
     private fun Task.generateFile(
         targetDirectory: File,
         file: String,
-        content: String
+        content: String,
     ) {
         val outputFile = targetDirectory.resolve(file)
         outputs.file(outputFile)
