@@ -2,6 +2,7 @@ package network.marsys.conventions
 
 import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.extensions.DetektExtension
+import network.marsys.conventions.util.library
 import network.marsys.conventions.util.plugin
 import network.marsys.conventions.util.library
 import org.gradle.api.Plugin
@@ -30,16 +31,18 @@ class ApplyDetektPlugin : Plugin<Project> {
 
         afterEvaluate {
             tasks.withType(Detekt::class.java).configureEach {
-                setSource(files(
-                    "src/main/kotlin",
-                    "src/test/kotlin",
-                    "src/commonMain/kotlin",
-                    "src/commonTest/kotlin",
-                    "src/androidMain/kotlin",
-                    "src/androidTest/kotlin",
-                    "src/iosMain/kotlin",
-                    "src/iosTest/kotlin",
-                ))
+                setSource(
+                    files(
+                        "src/main/kotlin",
+                        "src/test/kotlin",
+                        "src/commonMain/kotlin",
+                        "src/commonTest/kotlin",
+                        "src/androidMain/kotlin",
+                        "src/androidTest/kotlin",
+                        "src/iosMain/kotlin",
+                        "src/iosTest/kotlin",
+                    ),
+                )
             }
         }
     }
