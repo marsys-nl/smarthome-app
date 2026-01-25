@@ -4,7 +4,6 @@ import dev.detekt.gradle.Detekt
 import dev.detekt.gradle.extensions.DetektExtension
 import network.marsys.conventions.util.library
 import network.marsys.conventions.util.plugin
-import network.marsys.conventions.util.library
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
