@@ -54,4 +54,4 @@ jobs:
               run: chmod +x gradlew
 
             - name: Build release version
-              run: ./gradlew assembleRelease --no-deamon --parallel
+              run: ./gradlew build --no-daemon --parallel
