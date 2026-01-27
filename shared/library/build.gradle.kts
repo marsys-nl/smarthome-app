@@ -1,4 +1,5 @@
 plugins {
+    alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
@@ -16,6 +17,11 @@ applyIosVersion {
 
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
+
+    androidLibrary {
+        namespace = "$group"
+        compileSdk = libs.versions.android.sdk.compile.get().toInt()
+    }
 
     jvm()
 
