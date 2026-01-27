@@ -22,5 +22,6 @@ includeBuild("build-logic")
 
 include(
     ":app:android",
+    ":shared:feature:onboarding",
     ":shared:library",
 )

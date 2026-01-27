@@ -31,6 +31,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.feature.onboarding)
+
             implementation(libs.compose.foundation)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.runtime)

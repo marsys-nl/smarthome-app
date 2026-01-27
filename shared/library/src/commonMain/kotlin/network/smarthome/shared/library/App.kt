@@ -1,9 +1,9 @@
 package network.smarthome.shared.library
 
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
+import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreenView
 
 @Composable
 fun App() {
-    BasicText("Hello, Smart Home App!")
+    OnboardingScreenView()
 }
