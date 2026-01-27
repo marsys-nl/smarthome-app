@@ -11,6 +11,6 @@ fun OnboardingScreenView() {
 
 @Preview
 @Composable
-fun OnboardingScreenViewPreview() {
+private fun OnboardingScreenViewPreview() {
     OnboardingScreenView()
 }
