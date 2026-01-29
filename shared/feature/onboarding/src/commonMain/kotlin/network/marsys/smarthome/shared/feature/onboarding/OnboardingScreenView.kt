@@ -17,9 +17,11 @@ import org.jetbrains.compose.resources.painterResource
 private val OnboardingBackgroundColor = Color(0xFFF1BF42)
 
 @Composable
-fun OnboardingScreenView() {
+fun OnboardingScreenView(
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(OnboardingBackgroundColor),
         horizontalAlignment = Alignment.CenterHorizontally,
