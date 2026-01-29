@@ -14,6 +14,8 @@ kotlin {
     androidLibrary {
         namespace = "$group"
         compileSdk = libs.versions.android.sdk.compile.get().toInt()
+
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
 
     jvm()
@@ -29,6 +31,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(libs.compose.foundation)
+            implementation(libs.compose.resources)
             implementation(libs.compose.ui.tooling.preview)
         }
     }
