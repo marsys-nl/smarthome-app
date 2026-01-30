@@ -12,7 +12,7 @@ android-sdk-compile = "36"
 android-sdk-min = "31"
 android-sdk-target = "36"
 
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.3"
 
 detekt = "2.0.0-alpha.2"
 detekt-compose-rules = "0.5.6"
