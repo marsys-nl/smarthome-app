@@ -32,6 +32,9 @@ kotlin {
         commonMain.dependencies {
             api(libs.compose.foundation)
             api(libs.compose.ui.tooling.preview)
+            api(libs.compose.unstyled)
+            implementation(libs.compose.unstyled.theming)
+            implementation(libs.compose.unstyled.primitives)
         }
     }
 }
