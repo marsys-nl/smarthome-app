@@ -14,7 +14,7 @@ val textOnBackground = ThemeToken<Color>("textOnBackground")
 @Composable
 fun SmartHomeTheme(
     theme: ThemeComposable = SmartHomeDefaultTheme,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     theme.invoke(content)
 }

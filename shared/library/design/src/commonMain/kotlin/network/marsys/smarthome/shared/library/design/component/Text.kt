@@ -31,7 +31,7 @@ fun Text(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
     overflow: TextOverflow = TextOverflow.Clip,
-    autoSize: TextAutoSize? = null
+    autoSize: TextAutoSize? = null,
 ) = UnstyledText(
     text = text,
     modifier = modifier,
@@ -48,5 +48,5 @@ fun Text(
     maxLines = maxLines,
     onTextLayout = onTextLayout,
     overflow = overflow,
-    autoSize = autoSize
+    autoSize = autoSize,
 )
