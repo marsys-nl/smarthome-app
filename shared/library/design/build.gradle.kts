@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.marsys.smarthome.detekt)
 }
 
-group = "network.marsys.smarthome.shared.feature.onboarding"
+group = "network.marsys.smarthome.shared.library.design"
 version = libs.versions.smarthome.app.name.get()
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
@@ -24,9 +24,14 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        androidMain.dependencies {
+            api(libs.compose.ui.tooling)
+            api(libs.compose.ui.tooling.preview)
+        }
+
         commonMain.dependencies {
-            implementation(projects.shared.library.design)
-            implementation(libs.compose.resources)
+            api(libs.compose.foundation)
+            api(libs.compose.ui.tooling.preview)
         }
     }
 }

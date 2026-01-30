@@ -24,4 +24,5 @@ include(
     ":app:android",
     ":shared:feature:onboarding",
     ":shared:library",
+    ":shared:library:design",
 )
