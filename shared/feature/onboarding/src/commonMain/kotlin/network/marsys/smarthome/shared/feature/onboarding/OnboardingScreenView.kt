@@ -4,17 +4,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.composeunstyled.theme.Theme
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
+import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.background
+import network.marsys.smarthome.shared.library.design.colors
+import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.theme.SmartHomeOnboardingTheme
 import org.jetbrains.compose.resources.painterResource
-
-private val OnboardingBackgroundColor = Color(0xFFF1BF42)
 
 @Composable
 fun OnboardingScreenView(
@@ -23,10 +25,10 @@ fun OnboardingScreenView(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(OnboardingBackgroundColor),
+            .background(Theme[colors][background]),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        BasicText("Onboarding")
+        Text(text = "Onboarding")
 
         Image(
             painter = painterResource(Res.drawable.logo),
@@ -38,5 +40,9 @@ fun OnboardingScreenView(
 @Preview(widthDp = 360, heightDp = 640)
 @Composable
 private fun OnboardingScreenViewPreview() {
-    OnboardingScreenView()
+    SmartHomeTheme(
+        theme = SmartHomeOnboardingTheme,
+    ) {
+        OnboardingScreenView()
+    }
 }

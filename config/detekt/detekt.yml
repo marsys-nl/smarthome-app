@@ -63,7 +63,7 @@ style:
     AlsoCouldBeApply:
         active: false
     BracesOnIfStatements:
-        singleLine: 'always'
+        singleLine: 'necessary'
         multiLine: 'always'
     CascadingCallWrapping:
         includeElvis: false
