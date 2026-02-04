@@ -8,41 +8,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.composeunstyled.theme.Theme
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
-import network.marsys.smarthome.shared.library.design.background
-import network.marsys.smarthome.shared.library.design.colors
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.theme.SmartHomeOnboardingTheme
+import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun OnboardingScreenView(
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Theme[colors][background]),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    SmartHomeTheme(
+        scheme = ColorScheme.invertedPrimaryColorScheme,
     ) {
-        Text(text = "Onboarding")
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(SmartHomeTheme.colors.background),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(text = "Onboarding")
 
-        Image(
-            painter = painterResource(Res.drawable.logo),
-            contentDescription = "SmartHome logo",
-        )
+            Image(
+                painter = painterResource(Res.drawable.logo),
+                contentDescription = "SmartHome logo",
+            )
+        }
     }
 }
 
 @Preview(widthDp = 360, heightDp = 640)
 @Composable
 private fun OnboardingScreenViewPreview() {
-    SmartHomeTheme(
-        theme = SmartHomeOnboardingTheme,
-    ) {
-        OnboardingScreenView()
-    }
+    OnboardingScreenView()
 }
