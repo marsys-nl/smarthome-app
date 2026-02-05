@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 
+@Suppress("PropertyName")
 internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val Background: Brush = SolidColor(PaletteTokens.Slate.Slate950)
     override val Container: Brush = SolidColor(PaletteTokens.Slate.Slate800.copy(alpha = .8f))

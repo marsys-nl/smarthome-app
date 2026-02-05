@@ -31,6 +31,10 @@ complexity:
     TooManyFunctions:
         ignoreAnnotatedFunctions: ['Preview']
 
+Compose:
+    CompositionLocalAllowlist:
+        allowedCompositionLocals: LocalColorScheme
+
 naming:
     FunctionNameMaxLength:
         excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -92,3 +96,5 @@ style:
         maxChainedCalls: 3
     UnusedPrivateFunction:
         ignoreAnnotated: ['Preview']
+    UseIfInsteadOfWhen:
+        active: false

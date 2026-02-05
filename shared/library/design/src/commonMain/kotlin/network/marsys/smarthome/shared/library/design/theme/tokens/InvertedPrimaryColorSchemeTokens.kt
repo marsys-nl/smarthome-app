@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 
+@Suppress("PropertyName")
 internal object InvertedPrimaryColorSchemeTokens : ColorSchemeTokens {
     override val Background: Brush = SolidColor(PaletteTokens.Amber.Amber500)
     override val Container: Brush = SolidColor(PaletteTokens.Amber.Amber600.copy(alpha = .3f))
