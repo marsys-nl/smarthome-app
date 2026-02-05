@@ -37,8 +37,14 @@ fun ToggleSwitch(
     enabled: Boolean = true,
 ) {
     val transition = updateTransition(checked, "switch-animation")
-    val trackColor by transition.animateColor(ToggleSwitchDefaults.transition()) { colors.trackColor(enabled, it).value }
-    val thumbColor by transition.animateColor(ToggleSwitchDefaults.transition()) { colors.thumbColor(enabled, it).value }
+
+    val trackColor by transition.animateColor(transitionSpec = ToggleSwitchDefaults.transition()) {
+        colors.trackColor(enabled, it).value
+    }
+
+    val thumbColor by transition.animateColor(transitionSpec = ToggleSwitchDefaults.transition()) {
+        colors.thumbColor(enabled, it).value
+    }
 
     UnstyledToggleSwitch(
         toggled = checked,
@@ -57,7 +63,7 @@ fun ToggleSwitch(
                     shape = CircleShape,
                     shadow = Shadow(
                         radius = 6.dp,
-                        spread = -(4).dp,
+                        spread = -4.dp,
                         color = PaletteTokens.Base.Black.copy(alpha = 1f),
                         offset = DpOffset(0.dp, 4.dp),
                     ),
