@@ -37,6 +37,7 @@ Compose:
 
 naming:
     FunctionNameMaxLength:
+        maximumFunctionNameLength: 40
         excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     FunctionNaming:
         ignoreAnnotated: ['Composable']
@@ -94,6 +95,8 @@ style:
         ignoreRanges: true
     MaxChainedCallsOnSameLine:
         maxChainedCalls: 3
+    UnnecessaryParentheses:
+        allowForUnclearPrecedence: true
     UnusedPrivateFunction:
         ignoreAnnotated: ['Preview']
     UseIfInsteadOfWhen:
