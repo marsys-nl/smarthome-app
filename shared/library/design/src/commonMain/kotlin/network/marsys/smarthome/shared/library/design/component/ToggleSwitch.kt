@@ -7,11 +7,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
@@ -20,118 +19,141 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpSize
+import com.composeunstyled.ToggleSwitch
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
-import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-import com.composeunstyled.ToggleSwitch as UnstyledToggleSwitch
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.SwitchTokens
 
 @Composable
-fun ToggleSwitch(
+fun Switch(
     checked: Boolean,
     modifier: Modifier = Modifier,
     onCheckedChange: (Boolean) -> Unit = {},
-    colors: ToggleSwitchColors = ToggleSwitchDefaults.colors(),
+    colors: SwitchColors = SwitchDefaults.colors(),
     enabled: Boolean = true,
 ) {
     val transition = updateTransition(checked, "switch-animation")
 
-    val trackColor by transition.animateColor(transitionSpec = ToggleSwitchDefaults.transition()) {
+    val trackColor by transition.animateColor(transitionSpec = SwitchDefaults.transition()) {
         colors.trackColor(enabled, it).value
     }
 
-    val thumbColor by transition.animateColor(transitionSpec = ToggleSwitchDefaults.transition()) {
+    val thumbColor by transition.animateColor(transitionSpec = SwitchDefaults.transition()) {
         colors.thumbColor(enabled, it).value
     }
 
-    UnstyledToggleSwitch(
+    ToggleSwitch(
         toggled = checked,
         modifier = modifier
-            .size(width = 36.dp, height = 20.dp),
+            .size(SwitchDefaults.trackSize()),
         enabled = enabled,
-        shape = CircleShape,
+        shape = SwitchDefaults.trackShape(),
         backgroundColor = trackColor,
         onToggled = onCheckedChange,
-        contentPadding = PaddingValues(all = 2.dp),
+        contentPadding = SwitchDefaults.trackPadding(),
     ) {
         Box(
             modifier = Modifier
-                .size(16.dp)
+                .fillMaxHeight(1f)
+                .aspectRatio(1f)
                 .dropShadow(
-                    shape = CircleShape,
-                    shadow = Shadow(
-                        radius = 6.dp,
-                        spread = -4.dp,
-                        color = PaletteTokens.Base.Black.copy(alpha = 1f),
-                        offset = DpOffset(0.dp, 4.dp),
-                    ),
+                    shape = SwitchDefaults.thumbShape(),
+                    shadow = SwitchDefaults.thumbShadow(),
                 )
-                .background(thumbColor, CircleShape),
+                .background(
+                    color = thumbColor,
+                    shape = SwitchDefaults.thumbShape(),
+                ),
         )
     }
 }
 
 @Immutable
 @ConsistentCopyVisibility
-data class ToggleSwitchColors internal constructor(
-    val activeTrackColor: Color,
-    val inactiveTrackColor: Color,
-    val activeThumbColor: Color,
-    val inactiveThumbColor: Color,
-    val activeDisabledTrackColor: Color,
-    val inactiveDisabledTrackColor: Color,
-    val activeDisabledThumbColor: Color,
-    val inactiveDisabledThumbColor: Color,
+data class SwitchColors internal constructor(
+    val checkedTrackColor: Color,
+    val uncheckedTrackColor: Color,
+    val checkedThumbColor: Color,
+    val uncheckedThumbColor: Color,
+    val disabledCheckedTrackColor: Color,
+    val disabledUncheckedTrackColor: Color,
+    val disabledCheckedThumbColor: Color,
+    val disabledUncheckedThumbColor: Color,
 ) {
     @Composable
-    internal fun trackColor(enabled: Boolean, active: Boolean): State<Color> =
+    internal fun trackColor(enabled: Boolean, checked: Boolean): State<Color> =
         rememberUpdatedState(
             if (enabled) {
-                if (active) activeTrackColor else inactiveTrackColor
+                if (checked) checkedTrackColor else uncheckedTrackColor
             } else {
-                if (active) activeDisabledTrackColor else inactiveDisabledTrackColor
+                if (checked) disabledCheckedTrackColor else disabledUncheckedTrackColor
             },
         )
 
     @Composable
-    internal fun thumbColor(enabled: Boolean, active: Boolean): State<Color> =
+    internal fun thumbColor(enabled: Boolean, checked: Boolean): State<Color> =
         rememberUpdatedState(
             if (enabled) {
-                if (active) activeThumbColor else inactiveThumbColor
+                if (checked) checkedThumbColor else uncheckedThumbColor
             } else {
-                if (active) activeDisabledThumbColor else inactiveDisabledThumbColor
+                if (checked) disabledCheckedThumbColor else disabledUncheckedThumbColor
             },
         )
 }
 
-object ToggleSwitchDefaults {
+object SwitchDefaults {
     private const val ANIMATION_DURATION_MILLIS = 500
 
     @Composable
     fun colors(
-        activeTrackColor: Color = PaletteTokens.Emerald.Emerald500,
-        inactiveTrackColor: Color = PaletteTokens.Neutral.Neutral200,
-        activeThumbColor: Color = Color.White,
-        inactiveThumbColor: Color = activeThumbColor,
-        activeDisabledTrackColor: Color = PaletteTokens.Neutral.Neutral100,
-        inactiveDisabledTrackColor: Color = activeDisabledTrackColor,
-        activeDisabledThumbColor: Color = activeThumbColor,
-        inactiveDisabledThumbColor: Color = activeThumbColor,
-    ): ToggleSwitchColors = ToggleSwitchColors(
-        activeTrackColor = activeTrackColor,
-        inactiveTrackColor = inactiveTrackColor,
-        activeThumbColor = activeThumbColor,
-        inactiveThumbColor = inactiveThumbColor,
-        activeDisabledTrackColor = activeDisabledTrackColor,
-        inactiveDisabledTrackColor = inactiveDisabledTrackColor,
-        activeDisabledThumbColor = activeDisabledThumbColor,
-        inactiveDisabledThumbColor = inactiveDisabledThumbColor,
+        checkedTrackColor: Color = SwitchTokens.CheckedTrackColor,
+        uncheckedTrackColor: Color = SwitchTokens.UncheckedTrackColor,
+        checkedThumbColor: Color = SwitchTokens.CheckedThumbColor,
+        uncheckedThumbColor: Color = SwitchTokens.UncheckedThumbColor,
+        disabledCheckedTrackColor: Color = SwitchTokens.DisabledCheckedTrackColor,
+        disabledUncheckedTrackColor: Color = SwitchTokens.DisabledUncheckedTrackColor,
+        disabledCheckedThumbColor: Color = SwitchTokens.DisabledCheckedThumbColor,
+        disabledUncheckedThumbColor: Color = SwitchTokens.DisabledUncheckedThumbColor,
+    ): SwitchColors = SwitchColors(
+        checkedTrackColor = checkedTrackColor,
+        uncheckedTrackColor = uncheckedTrackColor,
+        checkedThumbColor = checkedThumbColor,
+        uncheckedThumbColor = uncheckedThumbColor,
+        disabledCheckedTrackColor = disabledCheckedTrackColor,
+        disabledUncheckedTrackColor = disabledUncheckedTrackColor,
+        disabledCheckedThumbColor = disabledCheckedThumbColor,
+        disabledUncheckedThumbColor = disabledUncheckedThumbColor,
+    )
+
+    @Composable
+    fun thumbShadow(): Shadow = Shadow(
+        radius = SwitchTokens.ThumbShadowRadius,
+        spread = SwitchTokens.ThumbShadowSpread,
+        color = SwitchTokens.ThumbShadowColor,
+        offset = SwitchTokens.ThumbShadowOffset,
+    )
+
+    @Composable
+    fun thumbShape(): Shape = SwitchTokens.ThumbShape
+
+    @Composable
+    fun trackPadding(): PaddingValues = PaddingValues(
+        all = SwitchTokens.ThumbPadding,
+    )
+
+    @Composable
+    fun trackShape(): Shape = SwitchTokens.TrackShape
+
+    @Composable
+    fun trackSize(): DpSize = DpSize(
+        width = SwitchTokens.TrackWidth,
+        height = SwitchTokens.TrackHeight,
     )
 
     @Composable
@@ -144,13 +166,13 @@ object ToggleSwitchDefaults {
 
 @Preview
 @Composable
-private fun CheckedToggleSwitchPreview(
+private fun CheckedSwitchPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        ToggleSwitch(
+        Switch(
             checked = true,
             enabled = true,
         )
@@ -159,13 +181,13 @@ private fun CheckedToggleSwitchPreview(
 
 @Preview
 @Composable
-private fun UncheckedToggleSwitchPreview(
+private fun UncheckedSwitchPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        ToggleSwitch(
+        Switch(
             checked = false,
             enabled = true,
         )
@@ -174,14 +196,14 @@ private fun UncheckedToggleSwitchPreview(
 
 @Preview
 @Composable
-private fun DisabledUncheckedToggleSwitchPreview(
+private fun DisabledCheckedSwitchPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        ToggleSwitch(
-            checked = true,
+        Switch(
+            checked = false,
             enabled = false,
         )
     }
@@ -189,14 +211,14 @@ private fun DisabledUncheckedToggleSwitchPreview(
 
 @Preview
 @Composable
-private fun DisabledCheckedToggleSwitchPreview(
+private fun DisabledUncheckedSwitchPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        ToggleSwitch(
-            checked = false,
+        Switch(
+            checked = true,
             enabled = false,
         )
     }

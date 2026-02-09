@@ -2,28 +2,39 @@ package network.marsys.smarthome.shared.library.design.theme
 
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.DarkColorSchemeTokens
-import network.marsys.smarthome.shared.library.design.theme.tokens.InvertedPrimaryColorSchemeTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.LightColorSchemeTokens
 
 @Stable
 @ConsistentCopyVisibility
 data class ColorScheme internal constructor(
-    val background: Brush,
-    val container: Brush,
-    val containerSubtle: Brush,
-    val contentOnContainer: Color,
-    val contentOnContainerEmphasized: Color,
-    val contentOnContainerSubtle: Color,
-    val contentOnPrimary: Color,
-    val primary: Color,
+    private val backgroundPrimary: Color,
+    private val backgroundSecondary: Color,
+    private val backgroundTertiary: Color,
+    private val backgroundBrandPrimary: Color,
+    private val backgroundBrandSecondary: Color,
+    private val backgroundDisabled: Color,
+    private val foregroundPrimaryAlternative: Color,
+    private val foregroundDisabled: Color,
+    private val textPrimary: Color,
 ) {
+    operator fun get(token: ColorKeyToken): Color = when (token) {
+        ColorKeyToken.BackgroundPrimary -> backgroundPrimary
+        ColorKeyToken.BackgroundSecondary -> backgroundSecondary
+        ColorKeyToken.BackgroundTertiary -> backgroundTertiary
+        ColorKeyToken.BackgroundBrandPrimary -> backgroundBrandPrimary
+        ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
+        ColorKeyToken.BackgroundDisabled -> backgroundDisabled
+        ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
+        ColorKeyToken.ForegroundDisabled -> foregroundDisabled
+        ColorKeyToken.TextPrimary -> textPrimary
+    }
+
     companion object {
         val lightColorScheme = lightColorScheme()
         val darkColorScheme = darkColorScheme()
-        val invertedPrimaryColorScheme = invertedPrimaryColorScheme()
     }
 }
 
@@ -32,61 +43,45 @@ val LocalColorScheme = staticCompositionLocalOf<ColorScheme> {
 }
 
 internal fun darkColorScheme(
-    background: Brush = DarkColorSchemeTokens.Background,
-    container: Brush = DarkColorSchemeTokens.Container,
-    containerSubtle: Brush = DarkColorSchemeTokens.ContainerSubtle,
-    contentOnContainer: Color = DarkColorSchemeTokens.ContentOnContainer,
-    contentOnContainerEmphasized: Color = DarkColorSchemeTokens.ContentOnContainerEmphasized,
-    contentOnContainerSubtle: Color = DarkColorSchemeTokens.ContentOnContainerSubtle,
-    contentOnPrimary: Color = DarkColorSchemeTokens.ContentOnPrimary,
-    primary: Color = DarkColorSchemeTokens.Primary,
+    backgroundPrimary: Color = DarkColorSchemeTokens.BackgroundPrimary,
+    backgroundSecondary: Color = DarkColorSchemeTokens.BackgroundSecondary,
+    backgroundTertiary: Color = DarkColorSchemeTokens.BackgroundTertiary,
+    backgroundBrandPrimary: Color = DarkColorSchemeTokens.BackgroundBrandPrimary,
+    backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
+    backgroundDisabled: Color = DarkColorSchemeTokens.BackgroundDisabled,
+    foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
+    foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
+    textPrimary: Color = DarkColorSchemeTokens.TextPrimary,
 ) = ColorScheme(
-    background = background,
-    container = container,
-    containerSubtle = containerSubtle,
-    contentOnContainer = contentOnContainer,
-    contentOnContainerEmphasized = contentOnContainerEmphasized,
-    contentOnContainerSubtle = contentOnContainerSubtle,
-    contentOnPrimary = contentOnPrimary,
-    primary = primary,
-)
-
-internal fun invertedPrimaryColorScheme(
-    background: Brush = InvertedPrimaryColorSchemeTokens.Background,
-    container: Brush = InvertedPrimaryColorSchemeTokens.Container,
-    containerSubtle: Brush = InvertedPrimaryColorSchemeTokens.ContainerSubtle,
-    contentOnContainer: Color = InvertedPrimaryColorSchemeTokens.ContentOnContainer,
-    contentOnContainerEmphasized: Color = InvertedPrimaryColorSchemeTokens.ContentOnContainerEmphasized,
-    contentOnContainerSubtle: Color = InvertedPrimaryColorSchemeTokens.ContentOnContainerSubtle,
-    contentOnPrimary: Color = InvertedPrimaryColorSchemeTokens.ContentOnPrimary,
-    primary: Color = InvertedPrimaryColorSchemeTokens.Primary,
-) = ColorScheme(
-    background = background,
-    container = container,
-    containerSubtle = containerSubtle,
-    contentOnContainer = contentOnContainer,
-    contentOnContainerEmphasized = contentOnContainerEmphasized,
-    contentOnContainerSubtle = contentOnContainerSubtle,
-    contentOnPrimary = contentOnPrimary,
-    primary = primary,
+    backgroundPrimary = backgroundPrimary,
+    backgroundSecondary = backgroundSecondary,
+    backgroundTertiary = backgroundTertiary,
+    backgroundBrandPrimary = backgroundBrandPrimary,
+    backgroundBrandSecondary = backgroundBrandSecondary,
+    backgroundDisabled = backgroundDisabled,
+    foregroundPrimaryAlternative = foregroundPrimaryAlternative,
+    foregroundDisabled = foregroundDisabled,
+    textPrimary = textPrimary,
 )
 
 internal fun lightColorScheme(
-    background: Brush = LightColorSchemeTokens.Background,
-    container: Brush = LightColorSchemeTokens.Container,
-    containerSubtle: Brush = LightColorSchemeTokens.ContainerSubtle,
-    contentOnContainer: Color = LightColorSchemeTokens.ContentOnContainer,
-    contentOnContainerEmphasized: Color = LightColorSchemeTokens.ContentOnContainerEmphasized,
-    contentOnContainerSubtle: Color = LightColorSchemeTokens.ContentOnContainerSubtle,
-    contentOnPrimary: Color = LightColorSchemeTokens.ContentOnPrimary,
-    primary: Color = LightColorSchemeTokens.Primary,
+    backgroundPrimary: Color = LightColorSchemeTokens.BackgroundPrimary,
+    backgroundSecondary: Color = LightColorSchemeTokens.BackgroundSecondary,
+    backgroundTertiary: Color = LightColorSchemeTokens.BackgroundTertiary,
+    backgroundBrandPrimary: Color = LightColorSchemeTokens.BackgroundBrandPrimary,
+    backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
+    backgroundDisabled: Color = LightColorSchemeTokens.BackgroundDisabled,
+    foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
+    foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
+    textPrimary: Color = LightColorSchemeTokens.TextPrimary,
 ) = ColorScheme(
-    background = background,
-    container = container,
-    containerSubtle = containerSubtle,
-    contentOnContainer = contentOnContainer,
-    contentOnContainerEmphasized = contentOnContainerEmphasized,
-    contentOnContainerSubtle = contentOnContainerSubtle,
-    contentOnPrimary = contentOnPrimary,
-    primary = primary,
+    backgroundPrimary = backgroundPrimary,
+    backgroundSecondary = backgroundSecondary,
+    backgroundTertiary = backgroundTertiary,
+    backgroundBrandPrimary = backgroundBrandPrimary,
+    backgroundBrandSecondary = backgroundBrandSecondary,
+    backgroundDisabled = backgroundDisabled,
+    foregroundPrimaryAlternative = foregroundPrimaryAlternative,
+    foregroundDisabled = foregroundDisabled,
+    textPrimary = textPrimary,
 )

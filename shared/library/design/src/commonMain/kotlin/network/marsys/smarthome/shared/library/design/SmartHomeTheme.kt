@@ -9,10 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
 fun SmartHomeTheme(
@@ -46,7 +47,7 @@ fun SmartHomeComponentPreview(
     scheme: ColorScheme,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    background: @Composable () -> Brush = { LocalColorScheme.current.container },
+    background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundSecondary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(

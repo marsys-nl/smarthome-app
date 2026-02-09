@@ -13,6 +13,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -20,12 +21,12 @@ fun OnboardingScreenView(
     modifier: Modifier = Modifier,
 ) {
     SmartHomeTheme(
-        scheme = ColorScheme.invertedPrimaryColorScheme,
+        scheme = ColorScheme.lightColorScheme,
     ) {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(SmartHomeTheme.colors.background),
+                .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundBrandPrimary]),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "Onboarding")

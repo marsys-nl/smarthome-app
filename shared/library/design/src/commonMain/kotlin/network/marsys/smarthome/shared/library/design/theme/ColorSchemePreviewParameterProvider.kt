@@ -6,7 +6,6 @@ class ColorSchemePreviewParameterProvider : PreviewParameterProvider<ColorScheme
     private val schemes = sequenceOf(
         "Light color scheme" to ColorScheme.lightColorScheme,
         "Dark color scheme" to ColorScheme.darkColorScheme,
-        "Primary background color scheme" to ColorScheme.invertedPrimaryColorScheme,
     )
 
     override val values: Sequence<ColorScheme> = schemes
