@@ -22,9 +22,13 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.theme.ColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import com.composeunstyled.ToggleSwitch as UnstyledToggleSwitch
 
@@ -140,64 +144,60 @@ object ToggleSwitchDefaults {
 
 @Preview
 @Composable
-private fun CheckedToggleSwitchPreview() {
-    SmartHomeTheme {
-        Column(
-            modifier = Modifier
-                .padding(16.dp),
-        ) {
-            ToggleSwitch(
-                checked = true,
-                enabled = true,
-            )
-        }
+private fun CheckedToggleSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        ToggleSwitch(
+            checked = true,
+            enabled = true,
+        )
     }
 }
 
 @Preview
 @Composable
-private fun UncheckedToggleSwitchPreview() {
-    SmartHomeTheme {
-        Column(
-            modifier = Modifier
-                .padding(16.dp),
-        ) {
-            ToggleSwitch(
-                checked = false,
-                enabled = true,
-            )
-        }
+private fun UncheckedToggleSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        ToggleSwitch(
+            checked = false,
+            enabled = true,
+        )
     }
 }
 
 @Preview
 @Composable
-private fun DisabledUncheckedToggleSwitchPreview() {
-    SmartHomeTheme {
-        Column(
-            modifier = Modifier
-                .padding(8.dp),
-        ) {
-            ToggleSwitch(
-                checked = true,
-                enabled = false,
-            )
-        }
+private fun DisabledUncheckedToggleSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        ToggleSwitch(
+            checked = true,
+            enabled = false,
+        )
     }
 }
 
 @Preview
 @Composable
-private fun DisabledCheckedToggleSwitchPreview() {
-    SmartHomeTheme {
-        Column(
-            modifier = Modifier
-                .padding(16.dp),
-        ) {
-            ToggleSwitch(
-                checked = false,
-                enabled = false,
-            )
-        }
+private fun DisabledCheckedToggleSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        ToggleSwitch(
+            checked = false,
+            enabled = false,
+        )
     }
 }
