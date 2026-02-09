@@ -8,8 +8,9 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
@@ -18,16 +19,15 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.DpOffset
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpSize
+import com.composeunstyled.ToggleSwitch
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
-import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-import com.composeunstyled.ToggleSwitch
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.SwitchTokens
 
 @Composable
@@ -51,26 +51,25 @@ fun Switch(
     ToggleSwitch(
         toggled = checked,
         modifier = modifier
-            .size(width = 36.dp, height = 20.dp),
+            .size(SwitchDefaults.trackSize()),
         enabled = enabled,
-        shape = CircleShape,
+        shape = SwitchDefaults.trackShape(),
         backgroundColor = trackColor,
         onToggled = onCheckedChange,
-        contentPadding = PaddingValues(all = 2.dp),
+        contentPadding = SwitchDefaults.trackPadding(),
     ) {
         Box(
             modifier = Modifier
-                .size(16.dp)
+                .fillMaxHeight(1f)
+                .aspectRatio(1f)
                 .dropShadow(
-                    shape = CircleShape,
-                    shadow = Shadow(
-                        radius = 6.dp,
-                        spread = -4.dp,
-                        color = PaletteTokens.Base.Black.copy(alpha = 1f),
-                        offset = DpOffset(0.dp, 4.dp),
-                    ),
+                    shape = SwitchDefaults.thumbShape(),
+                    shadow = SwitchDefaults.thumbShadow(),
                 )
-                .background(thumbColor, CircleShape),
+                .background(
+                    color = thumbColor,
+                    shape = SwitchDefaults.thumbShape(),
+                ),
         )
     }
 }
@@ -130,6 +129,31 @@ object SwitchDefaults {
         disabledUncheckedTrackColor = disabledUncheckedTrackColor,
         disabledCheckedThumbColor = disabledCheckedThumbColor,
         disabledUncheckedThumbColor = disabledUncheckedThumbColor,
+    )
+
+    @Composable
+    fun thumbShadow(): Shadow = Shadow(
+        radius = SwitchTokens.ThumbShadowRadius,
+        spread = SwitchTokens.ThumbShadowSpread,
+        color = SwitchTokens.ThumbShadowColor,
+        offset = SwitchTokens.ThumbShadowOffset,
+    )
+
+    @Composable
+    fun thumbShape(): Shape = SwitchTokens.ThumbShape
+
+    @Composable
+    fun trackPadding(): PaddingValues = PaddingValues(
+        all = SwitchTokens.ThumbPadding,
+    )
+
+    @Composable
+    fun trackShape(): Shape = SwitchTokens.TrackShape
+
+    @Composable
+    fun trackSize(): DpSize = DpSize(
+        width = SwitchTokens.TrackWidth,
+        height = SwitchTokens.TrackHeight,
     )
 
     @Composable
