@@ -1,22 +1,41 @@
 package network.marsys.smarthome.shared.library.design.theme.tokens.components
 
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.color
 
 object SwitchTokens {
-    val CheckedTrackColor: Color = PaletteTokens.Emerald.Emerald500
-    val UncheckedTrackColor: Color = PaletteTokens.Neutral.Neutral200
-    val CheckedThumbColor: Color = PaletteTokens.Base.White
-    val UncheckedThumbColor: Color = PaletteTokens.Base.White
-    val DisabledCheckedTrackColor: Color = PaletteTokens.Neutral.Neutral100
-    val DisabledUncheckedTrackColor: Color = PaletteTokens.Neutral.Neutral100
-    val DisabledCheckedThumbColor: Color = PaletteTokens.Base.White
-    val DisabledUncheckedThumbColor: Color = PaletteTokens.Base.White
+    val CheckedTrackColor: Color
+        @Composable
+        get() = color(ColorKeyToken.BackgroundBrandSecondary)
+    val UncheckedTrackColor: Color
+        @Composable
+        get() = color(ColorKeyToken.BackgroundTertiary)
+    val CheckedThumbColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundPrimaryAlternative)
+    val UncheckedThumbColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundPrimaryAlternative)
+    val DisabledCheckedTrackColor: Color
+        @Composable
+        get() = color(ColorKeyToken.BackgroundDisabled)
+    val DisabledUncheckedTrackColor: Color
+        @Composable
+        get() = color(ColorKeyToken.BackgroundDisabled)
+    val DisabledCheckedThumbColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundDisabled)
+    val DisabledUncheckedThumbColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundDisabled)
 
     val TrackWidth: Dp = 36.dp
     val TrackHeight: Dp = 20.dp
