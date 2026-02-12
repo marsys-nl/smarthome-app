@@ -12,7 +12,7 @@ android-sdk-compile = "36"
 android-sdk-min = "31"
 android-sdk-target = "36"
 
-androidx-activity = "1.12.3"
+androidx-activity = "1.12.4"
 
 compose-unstyled = "1.49.6"
 
