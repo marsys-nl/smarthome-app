@@ -7,14 +7,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import org.jetbrains.compose.resources.painterResource
+
+private val OnboardingBackgroundColor = Color(color = 0xFFF1BF42)
 
 @Composable
 fun OnboardingScreenView(
@@ -26,7 +29,7 @@ fun OnboardingScreenView(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundBrandPrimary]),
+                .background(OnboardingBackgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(text = "Onboarding")
@@ -39,7 +42,8 @@ fun OnboardingScreenView(
     }
 }
 
-@Preview(widthDp = 360, heightDp = 640)
+@PreviewFontScales
+@PreviewScreenSizes
 @Composable
 private fun OnboardingScreenViewPreview() {
     OnboardingScreenView()
