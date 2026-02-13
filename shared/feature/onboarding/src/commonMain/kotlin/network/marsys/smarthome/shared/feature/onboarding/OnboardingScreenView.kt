@@ -2,12 +2,17 @@ package network.marsys.smarthome.shared.feature.onboarding
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -26,17 +31,27 @@ fun OnboardingScreenView(
     SmartHomeTheme(
         scheme = ColorScheme.lightColorScheme,
     ) {
-        Column(
-            modifier = modifier
+        Box(
+            modifier = Modifier
                 .fillMaxSize()
                 .background(OnboardingBackgroundColor),
-            horizontalAlignment = Alignment.CenterHorizontally,
+            contentAlignment = Alignment.TopCenter,
         ) {
-            Text(text = "Onboarding")
+            Column(
+                modifier = modifier
+                    .widthIn(max = 600.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(text = "Onboarding")
+            }
 
             Image(
                 painter = painterResource(Res.drawable.logo),
                 contentDescription = "SmartHome logo",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(108.dp),
             )
         }
     }
