@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SmartHome" parent="Theme.AppCompat.Light.NoActionBar" />
+    <style name="Theme.SmartHome.Splash" parent="Theme.SmartHome">
+        <item name="android:windowSplashScreenAnimationDuration">3000</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_animated</item>
+        <item name="android:windowSplashScreenBackground">#F1BF42</item>
+    </style>
+</resources>
