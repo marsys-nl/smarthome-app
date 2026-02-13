@@ -34,4 +34,5 @@ dependencies {
     implementation(projects.shared.library)
 
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
 }
