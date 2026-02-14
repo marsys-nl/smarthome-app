@@ -16,6 +16,7 @@ enum class ColorKeyToken {
     ForegroundDisabled,
 
     TextPrimary,
+    TextDisabled,
 }
 
 @Composable

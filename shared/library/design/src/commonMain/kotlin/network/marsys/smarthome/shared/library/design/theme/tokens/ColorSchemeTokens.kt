@@ -13,4 +13,5 @@ internal interface ColorSchemeTokens {
     val ForegroundPrimaryAlternative: Color
     val ForegroundDisabled: Color
     val TextPrimary: Color
+    val TextDisabled: Color
 }
