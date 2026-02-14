@@ -77,14 +77,14 @@ fun Switch(
 @Immutable
 @ConsistentCopyVisibility
 data class SwitchColors internal constructor(
-    val checkedTrackColor: Color,
-    val uncheckedTrackColor: Color,
-    val checkedThumbColor: Color,
-    val uncheckedThumbColor: Color,
-    val disabledCheckedTrackColor: Color,
-    val disabledUncheckedTrackColor: Color,
-    val disabledCheckedThumbColor: Color,
-    val disabledUncheckedThumbColor: Color,
+    private val checkedTrackColor: Color,
+    private val uncheckedTrackColor: Color,
+    private val checkedThumbColor: Color,
+    private val uncheckedThumbColor: Color,
+    private val disabledCheckedTrackColor: Color,
+    private val disabledUncheckedTrackColor: Color,
+    private val disabledCheckedThumbColor: Color,
+    private val disabledUncheckedThumbColor: Color,
 ) {
     @Composable
     internal fun trackColor(enabled: Boolean, checked: Boolean): State<Color> =
