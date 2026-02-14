@@ -1,7 +1,6 @@
 package network.marsys.smarthome.shared.library.design.component
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
@@ -32,7 +31,7 @@ fun Button(
     shape: Shape = ButtonDefaults.buttonShape(),
     colors: ButtonColors = ButtonDefaults.colors(),
     contentPadding: PaddingValues = ButtonDefaults.contentPadding(),
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     val transition = updateTransition(enabled, "button-animation")
 
