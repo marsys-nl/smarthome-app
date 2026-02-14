@@ -32,13 +32,13 @@ fun OnboardingScreenView(
         scheme = ColorScheme.lightColorScheme,
     ) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .background(OnboardingBackgroundColor),
             contentAlignment = Alignment.TopCenter,
         ) {
             Column(
-                modifier = modifier
+                modifier = Modifier
                     .widthIn(max = 600.dp)
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
