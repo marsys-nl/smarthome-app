@@ -19,6 +19,7 @@ data class ColorScheme internal constructor(
     private val foregroundPrimaryAlternative: Color,
     private val foregroundDisabled: Color,
     private val textPrimary: Color,
+    private val textDisabled: Color,
 ) {
     operator fun get(token: ColorKeyToken): Color = when (token) {
         ColorKeyToken.BackgroundPrimary -> backgroundPrimary
@@ -30,6 +31,7 @@ data class ColorScheme internal constructor(
         ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
         ColorKeyToken.ForegroundDisabled -> foregroundDisabled
         ColorKeyToken.TextPrimary -> textPrimary
+        ColorKeyToken.TextDisabled -> textDisabled
     }
 
     companion object {
@@ -52,6 +54,7 @@ internal fun darkColorScheme(
     foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
     textPrimary: Color = DarkColorSchemeTokens.TextPrimary,
+    textDisabled: Color = DarkColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
     backgroundSecondary = backgroundSecondary,
@@ -62,6 +65,7 @@ internal fun darkColorScheme(
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundDisabled = foregroundDisabled,
     textPrimary = textPrimary,
+    textDisabled = textDisabled,
 )
 
 internal fun lightColorScheme(
@@ -74,6 +78,7 @@ internal fun lightColorScheme(
     foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
     textPrimary: Color = LightColorSchemeTokens.TextPrimary,
+    textDisabled: Color = LightColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
     backgroundSecondary = backgroundSecondary,
@@ -84,4 +89,5 @@ internal fun lightColorScheme(
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundDisabled = foregroundDisabled,
     textPrimary = textPrimary,
+    textDisabled = textDisabled,
 )

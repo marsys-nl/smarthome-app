@@ -13,4 +13,5 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val ForegroundPrimaryAlternative: Color = PaletteTokens.Base.White
     override val ForegroundDisabled: Color = PaletteTokens.Slate.Slate50
     override val TextPrimary: Color = PaletteTokens.Slate.Slate800
+    override val TextDisabled: Color = PaletteTokens.Slate.Slate400
 }
