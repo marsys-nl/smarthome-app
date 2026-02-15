@@ -26,6 +26,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.components.Bu
 
 @Composable
 fun Button(
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.buttonShape(),
@@ -44,7 +45,7 @@ fun Button(
     }
 
     UnstyledButton(
-        onClick = {},
+        onClick = onClick,
         enabled = enabled,
         shape = shape,
         backgroundColor = backgroundColor,
@@ -122,6 +123,7 @@ private fun ButtonPreview(
         scheme = scheme,
     ) {
         Button(
+            onClick = {},
             enabled = true,
         ) {
             Text("Simple button")
@@ -138,6 +140,7 @@ private fun DisabledButtonPreview(
         scheme = scheme,
     ) {
         Button(
+            onClick = {},
             enabled = false,
         ) {
             Text("Simple button")
