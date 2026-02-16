@@ -23,13 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -76,46 +73,8 @@ fun OnboardingScreenView(
                         .weight(1f),
                 )
 
-                Button(
-                    onClick = { },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = OnboardingInitialScreenButtonBackgroundColor,
-                        contentColor = OnboardingInitialScreenButtonTextColor,
-                    ),
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .height(IntrinsicSize.Min),
-                        horizontalArrangement = Arrangement
-                            .spacedBy(8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        val density = LocalDensity.current
-                        var textHeight by remember { mutableStateOf(0.dp) }
-
-                        Text(
-                            text = "Next",
-                            modifier = Modifier
-                                .onGloballyPositioned {
-                                    textHeight = with(density) {
-                                        it.size.height.toDp()
-                                    }
-                                },
-                            fontWeight = FontWeight.Bold,
-                        )
-
-                        Image(
-                            imageVector = Icons.ArrowRight,
-                            contentDescription = "Next button icon",
-                            modifier = Modifier
-                                .height(textHeight),
-                            colorFilter = ColorFilter.tint(
-                                color = OnboardingInitialScreenButtonTextColor,
-                            ),
-                        )
-                    }
+                OnboardingNextButton {
+                    // NO-OP
                 }
             }
 
@@ -125,6 +84,53 @@ fun OnboardingScreenView(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(108.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun OnboardingNextButton(
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth(),
+        colors = ButtonDefaults.colors(
+            backgroundColor = OnboardingInitialScreenButtonBackgroundColor,
+            contentColor = OnboardingInitialScreenButtonTextColor,
+        ),
+    ) {
+        Row(
+            modifier = Modifier
+                .height(IntrinsicSize.Min),
+            horizontalArrangement = Arrangement
+                .spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val density = LocalDensity.current
+            var textHeight by remember { mutableStateOf(0.dp) }
+
+            Text(
+                text = "Next",
+                modifier = Modifier
+                    .onGloballyPositioned {
+                        textHeight = with(density) {
+                            it.size.height.toDp()
+                        }
+                    },
+                fontWeight = FontWeight.Bold,
+            )
+
+            Image(
+                imageVector = Icons.ArrowRight,
+                contentDescription = "Next button icon",
+                modifier = Modifier
+                    .height(textHeight),
+                colorFilter = ColorFilter.tint(
+                    color = OnboardingInitialScreenButtonTextColor,
+                ),
             )
         }
     }
