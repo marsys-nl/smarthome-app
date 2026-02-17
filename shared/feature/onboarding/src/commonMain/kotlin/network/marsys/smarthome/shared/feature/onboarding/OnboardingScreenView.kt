@@ -30,7 +30,9 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -78,7 +80,22 @@ fun OnboardingScreenView(
                         .padding(bottom = 40.dp),
                 )
 
-                Text(text = "Onboarding")
+                Text(
+                    text = "Welcome to your SmartHome",
+                    modifier = Modifier
+                        .padding(bottom = 8.dp),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 32.sp,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.W700,
+                )
+
+                Text(
+                    text = "Control all your devices from one beautiful app",
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                )
 
                 Spacer(
                     modifier = Modifier
