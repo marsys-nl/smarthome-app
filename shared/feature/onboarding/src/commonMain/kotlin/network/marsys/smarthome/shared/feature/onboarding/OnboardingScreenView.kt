@@ -75,7 +75,7 @@ fun OnboardingScreenView(
                 OnboardingLoadingIndicator(
                     progress = .2f,
                     modifier = Modifier
-                        .padding(bottom = 40.dp)
+                        .padding(bottom = 40.dp),
                 )
 
                 Text(text = "Onboarding")
@@ -116,13 +116,13 @@ private fun OnboardingLoadingIndicator(
                 color = OnboardingInitialScreenProgressIndicatorBackgroundColor
                     .copy(alpha = .3f),
             )
-            .clip(CircleShape)
+            .clip(CircleShape),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxHeight()
                 .fillMaxWidth(fraction = progress)
-                .background(OnboardingInitialScreenProgressIndicatorForegroundColor)
+                .background(OnboardingInitialScreenProgressIndicatorForegroundColor),
         )
     }
 }
