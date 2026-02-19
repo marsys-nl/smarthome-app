@@ -203,7 +203,7 @@ private fun OnboardingNextButton(
 @Composable
 private fun OnboardingPageIndicator(
     page: Int,
-    pages: Int
+    pages: Int,
 ) {
     Row(
         modifier = Modifier
@@ -232,7 +232,7 @@ private fun OnboardingPageIndicator(
                     .background(
                         color = backgroundColor,
                         shape = CircleShape,
-                    )
+                    ),
             )
         }
     }
