@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingLoadingIndicator
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingPageIndicator
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -54,7 +55,7 @@ private val OnboardingInitialScreenProgressIndicatorBackgroundColor = PaletteTok
 private val OnboardingInitialScreenProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
 
 private val OnboardingInitialScreenPageIndicatorActiveBackgroundColor = PaletteTokens.Slate.Slate800
-private val OnboardingInitialScreenPageIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600
+private val OnboardingInitialScreenPageIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600.copy(alpha = .3f)
 
 @Composable
 fun OnboardingScreenView(
@@ -84,22 +85,7 @@ fun OnboardingScreenView(
                         .padding(bottom = 40.dp),
                 )
 
-                Text(
-                    text = "Welcome to your SmartHome",
-                    modifier = Modifier
-                        .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 32.sp,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.W700,
-                )
-
-                Text(
-                    text = "Control all your devices from one beautiful app",
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
+                OnboardingTitles()
 
                 Spacer(
                     modifier = Modifier
@@ -113,6 +99,8 @@ fun OnboardingScreenView(
                 OnboardingPageIndicator(
                     page = 1,
                     pages = 5,
+                    activePageIndicatorColor = OnboardingInitialScreenPageIndicatorActiveBackgroundColor,
+                    inactivePageIndicatorColor = OnboardingInitialScreenPageIndicatorInactiveBackgroundColor,
                 )
             }
 
@@ -175,41 +163,23 @@ private fun OnboardingNextButton(
 }
 
 @Composable
-private fun OnboardingPageIndicator(
-    page: Int,
-    pages: Int,
-) {
-    Row(
+private fun ColumnScope.OnboardingTitles() {
+    Text(
+        text = "Welcome to your SmartHome",
         modifier = Modifier
-            .padding(top = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        repeat(pages) { index ->
-            val sizeModifier = if (index + 1 == page) {
-                Modifier
-                    .size(32.dp, 6.dp)
-            } else {
-                Modifier
-                    .size(6.dp)
-            }
+            .padding(bottom = 8.dp),
+        textAlign = TextAlign.Center,
+        lineHeight = 32.sp,
+        fontSize = 22.sp,
+        fontWeight = FontWeight.W700,
+    )
 
-            val backgroundColor = if (index + 1 == page) {
-                OnboardingInitialScreenPageIndicatorActiveBackgroundColor
-            } else {
-                OnboardingInitialScreenPageIndicatorInactiveBackgroundColor
-                    .copy(alpha = .3f)
-            }
-
-            Box(
-                modifier = sizeModifier
-                    .background(
-                        color = backgroundColor,
-                        shape = CircleShape,
-                    ),
-            )
-        }
-    }
+    Text(
+        text = "Control all your devices from one beautiful app",
+        textAlign = TextAlign.Center,
+        lineHeight = 20.sp,
+        fontSize = 14.sp,
+    )
 }
 
 @PreviewFontScales
