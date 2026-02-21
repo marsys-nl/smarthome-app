@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -85,22 +85,7 @@ fun OnboardingScreenView(
                         .padding(bottom = 40.dp),
                 )
 
-                Text(
-                    text = "Welcome to your SmartHome",
-                    modifier = Modifier
-                        .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 32.sp,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.W700,
-                )
-
-                Text(
-                    text = "Control all your devices from one beautiful app",
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
+                OnboardingTitles()
 
                 Spacer(
                     modifier = Modifier
@@ -175,6 +160,26 @@ private fun OnboardingNextButton(
             )
         }
     }
+}
+
+@Composable
+private fun ColumnScope.OnboardingTitles() {
+    Text(
+        text = "Welcome to your SmartHome",
+        modifier = Modifier
+            .padding(bottom = 8.dp),
+        textAlign = TextAlign.Center,
+        lineHeight = 32.sp,
+        fontSize = 22.sp,
+        fontWeight = FontWeight.W700,
+    )
+
+    Text(
+        text = "Control all your devices from one beautiful app",
+        textAlign = TextAlign.Center,
+        lineHeight = 20.sp,
+        fontSize = 14.sp,
+    )
 }
 
 @PreviewFontScales
