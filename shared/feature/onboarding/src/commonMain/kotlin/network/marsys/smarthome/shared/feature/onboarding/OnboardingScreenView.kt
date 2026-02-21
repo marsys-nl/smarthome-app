@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
@@ -53,6 +54,9 @@ private val OnboardingInitialScreenButtonBackgroundColor = PaletteTokens.Slate.S
 private val OnboardingInitialScreenButtonTextColor = PaletteTokens.Base.White
 private val OnboardingInitialScreenProgressIndicatorBackgroundColor = PaletteTokens.Amber.Amber600
 private val OnboardingInitialScreenProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
+
+private val OnboardingInitialScreenPageIndicatorActiveBackgroundColor = PaletteTokens.Slate.Slate800
+private val OnboardingInitialScreenPageIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600
 
 @Composable
 fun OnboardingScreenView(
@@ -105,6 +109,11 @@ fun OnboardingScreenView(
                 OnboardingNextButton {
                     // NO-OP
                 }
+
+                OnboardingPageIndicator(
+                    page = 1,
+                    pages = 5,
+                )
             }
 
             Image(
@@ -186,6 +195,44 @@ private fun OnboardingNextButton(
                 colorFilter = ColorFilter.tint(
                     color = OnboardingInitialScreenButtonTextColor,
                 ),
+            )
+        }
+    }
+}
+
+@Composable
+private fun OnboardingPageIndicator(
+    page: Int,
+    pages: Int,
+) {
+    Row(
+        modifier = Modifier
+            .padding(top = 24.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        repeat(pages) { index ->
+            val sizeModifier = if (index + 1 == page) {
+                Modifier
+                    .size(32.dp, 6.dp)
+            } else {
+                Modifier
+                    .size(6.dp)
+            }
+
+            val backgroundColor = if (index + 1 == page) {
+                OnboardingInitialScreenPageIndicatorActiveBackgroundColor
+            } else {
+                OnboardingInitialScreenPageIndicatorInactiveBackgroundColor
+                    .copy(alpha = .3f)
+            }
+
+            Box(
+                modifier = sizeModifier
+                    .background(
+                        color = backgroundColor,
+                        shape = CircleShape,
+                    ),
             )
         }
     }
