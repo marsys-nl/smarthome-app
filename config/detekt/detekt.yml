@@ -38,7 +38,7 @@ Compose:
 naming:
     FunctionNameMaxLength:
         maximumFunctionNameLength: 40
-        excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
+        ignoreAnnotated: ['Preview', 'Test']
     FunctionNaming:
         ignoreAnnotated: ['Composable']
     ObjectPropertyNaming:
