@@ -13,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
@@ -37,7 +38,10 @@ fun SmartHomeTheme(
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        values = arrayOf(LocalColorScheme provides scheme),
+        values = arrayOf(
+            LocalColorScheme provides scheme,
+            LocalContentColor provides scheme[ColorKeyToken.TextPrimary],
+        ),
         content = content,
     )
 }
