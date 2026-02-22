@@ -44,6 +44,10 @@ val LocalColorScheme = staticCompositionLocalOf<ColorScheme> {
     error("No color scheme provided")
 }
 
+val LocalContentColor = staticCompositionLocalOf<Color> {
+    error("No content color provided")
+}
+
 internal fun darkColorScheme(
     backgroundPrimary: Color = DarkColorSchemeTokens.BackgroundPrimary,
     backgroundSecondary: Color = DarkColorSchemeTokens.BackgroundSecondary,

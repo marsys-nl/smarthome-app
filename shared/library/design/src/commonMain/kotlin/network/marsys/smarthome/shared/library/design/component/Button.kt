@@ -8,6 +8,7 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -22,6 +23,7 @@ import com.composeunstyled.UnstyledButton
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 
 @Composable
@@ -53,7 +55,11 @@ fun Button(
         contentPadding = contentPadding,
         modifier = modifier,
     ) {
-        content.invoke(this)
+        CompositionLocalProvider(
+            LocalContentColor provides contentColor,
+        ) {
+            content.invoke(this)
+        }
     }
 }
 
