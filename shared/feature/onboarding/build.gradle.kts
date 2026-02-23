@@ -26,6 +26,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.library.design)
+
+            implementation(libs.androidx.navigation.ui)
             implementation(libs.compose.resources)
             implementation(libs.kotlinx.serialization.json)
         }
