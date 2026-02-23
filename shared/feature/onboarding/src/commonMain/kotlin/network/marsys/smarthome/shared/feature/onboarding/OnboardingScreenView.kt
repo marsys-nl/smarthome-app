@@ -40,6 +40,8 @@ fun OnboardingScreenView(
         entryProvider = entryProvider {
             entry<OnboardingScreens.Initial> {
                 InitialOnboardingScreenView(
+                    numberOfScreens = OnboardingScreens.SCREEN_COUNT,
+                    indexOfScreen = 1,
                     navigateToEntities = {
                         backStack += OnboardingScreens.Entities
                     },

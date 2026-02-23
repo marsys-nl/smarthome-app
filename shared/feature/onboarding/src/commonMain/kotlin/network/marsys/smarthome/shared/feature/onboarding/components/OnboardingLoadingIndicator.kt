@@ -23,13 +23,27 @@ import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
-fun OnboardingLoadingIndicator(
+internal fun OnboardingProgressIndicator(
+    numberOfScreens: Int,
+    indexOfScreen: Int,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = LocalColorScheme.current[ColorKeyToken.BackgroundTertiary],
+    foregroundColor: Color = LocalColorScheme.current[ColorKeyToken.BackgroundBrandPrimary],
+) = OnboardingProgressIndicator(
+    progress = 1f / (numberOfScreens + 1f) * indexOfScreen,
+    modifier = modifier,
+    backgroundColor = backgroundColor,
+    foregroundColor = foregroundColor,
+)
+
+@Composable
+private fun OnboardingProgressIndicator(
     @FloatRange(from = 0.0, to = 1.0)
     progress: Float,
     modifier: Modifier = Modifier,
     backgroundColor: Color = LocalColorScheme.current[ColorKeyToken.BackgroundTertiary],
     foregroundColor: Color = LocalColorScheme.current[ColorKeyToken.BackgroundBrandPrimary],
-) = OnboardingLoadingIndicator(
+) = OnboardingProgressIndicator(
     progress = progress,
     modifier = modifier,
     background = SolidColor(backgroundColor),
@@ -37,7 +51,7 @@ fun OnboardingLoadingIndicator(
 )
 
 @Composable
-fun OnboardingLoadingIndicator(
+private fun OnboardingProgressIndicator(
     @FloatRange(from = 0.0, to = 1.0)
     progress: Float,
     background: Brush,
@@ -62,13 +76,13 @@ fun OnboardingLoadingIndicator(
 
 @Preview
 @Composable
-private fun OnboardingLoadingIndicatorNoProgressPreview(
+private fun OnboardingProgressIndicatorNoProgressPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLoadingIndicator(
+        OnboardingProgressIndicator(
             progress = 0f,
         )
     }
@@ -76,13 +90,13 @@ private fun OnboardingLoadingIndicatorNoProgressPreview(
 
 @Preview
 @Composable
-private fun OnboardingLoadingIndicatorSomeProgressPreview(
+private fun OnboardingProgressIndicatorSomeProgressPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLoadingIndicator(
+        OnboardingProgressIndicator(
             progress = .5f,
         )
     }
@@ -90,13 +104,13 @@ private fun OnboardingLoadingIndicatorSomeProgressPreview(
 
 @Preview
 @Composable
-private fun OnboardingLoadingIndicatorFullProgressPreview(
+private fun OnboardingProgressIndicatorFullProgressPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLoadingIndicator(
+        OnboardingProgressIndicator(
             progress = 1f,
         )
     }
