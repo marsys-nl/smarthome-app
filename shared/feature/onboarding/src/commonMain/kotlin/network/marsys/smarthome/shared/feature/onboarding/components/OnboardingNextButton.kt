@@ -20,6 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_button_next
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonColors
@@ -30,6 +33,7 @@ import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OnboardingNextButton(
@@ -54,7 +58,7 @@ fun OnboardingNextButton(
             var textHeight by remember { mutableStateOf(0.dp) }
 
             Text(
-                text = "Next",
+                text = stringResource(Res.string.onboarding_button_next),
                 modifier = Modifier
                     .onGloballyPositioned {
                         textHeight = with(density) {
@@ -66,7 +70,7 @@ fun OnboardingNextButton(
 
             Image(
                 imageVector = Icons.ArrowRight,
-                contentDescription = "Next button icon",
+                contentDescription = null,
                 modifier = Modifier
                     .height(textHeight),
                 colorFilter = ColorFilter.tint(

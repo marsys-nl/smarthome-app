@@ -23,6 +23,9 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingN
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingPageIndicator
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_logo_description
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_subtitle
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -31,6 +34,7 @@ import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 private val OnboardingBackgroundColor = Color(color = 0xFFF1BF42)
 
@@ -74,7 +78,7 @@ fun InitialOnboardingScreenView(
                 )
 
                 Text(
-                    text = "Welcome to your SmartHome",
+                    text = stringResource(Res.string.onboarding_initial_title),
                     modifier = Modifier
                         .padding(bottom = 8.dp),
                     textAlign = TextAlign.Center,
@@ -84,7 +88,7 @@ fun InitialOnboardingScreenView(
                 )
 
                 Text(
-                    text = "Control all your devices from one beautiful app",
+                    text = stringResource(Res.string.onboarding_initial_subtitle),
                     textAlign = TextAlign.Center,
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
@@ -115,7 +119,7 @@ fun InitialOnboardingScreenView(
 
             Image(
                 painter = painterResource(Res.drawable.logo),
-                contentDescription = "SmartHome logo",
+                contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
                 modifier = Modifier
                     .align(Alignment.Center)
                     .size(108.dp),
