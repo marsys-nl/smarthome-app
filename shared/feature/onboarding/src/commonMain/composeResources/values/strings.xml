@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_initial_logo_description">SmartHome logo</string>
+    <string name="onboarding_initial_title">Welcome to your SmartHome</string>
+    <string name="onboarding_initial_subtitle">Control all your devices from one beautiful app</string>
+
+    <string name="onboarding_button_next">Next</string>
+</resources>
