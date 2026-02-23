@@ -51,6 +51,7 @@ private val OnboardingInitialScreenPageIndicatorInactiveBackgroundColor = Palett
 @Composable
 @Suppress("LongMethod")
 fun InitialOnboardingScreenView(
+    navigateToEntities: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SmartHomeTheme(
@@ -100,9 +101,7 @@ fun InitialOnboardingScreenView(
                 )
 
                 OnboardingNextButton(
-                    onClick = {
-                        // No-op
-                    },
+                    onClick = navigateToEntities,
                     colors = ButtonDefaults.colors(
                         backgroundColor = OnboardingInitialScreenButtonBackgroundColor,
                         contentColor = OnboardingInitialScreenButtonTextColor,
@@ -132,5 +131,7 @@ fun InitialOnboardingScreenView(
 @PreviewScreenSizes
 @Composable
 private fun InitialOnboardingScreenViewPreview() {
-    InitialOnboardingScreenView()
+    InitialOnboardingScreenView(
+        navigateToEntities = {},
+    )
 }
