@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.marsys.smarthome.apply.ios.version) apply false
     alias(libs.plugins.marsys.smarthome.detekt) apply false
 }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.marsys.smarthome.detekt)
 }
 
@@ -26,6 +27,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.library.design)
             implementation(libs.compose.resources)
+            implementation(libs.kotlinx.serialization.json)
         }
     }
 }
