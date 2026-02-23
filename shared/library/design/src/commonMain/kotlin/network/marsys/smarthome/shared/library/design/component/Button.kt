@@ -19,11 +19,14 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.composeunstyled.UnstyledButton
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 
 @Composable
@@ -34,6 +37,7 @@ fun Button(
     shape: Shape = ButtonDefaults.buttonShape(),
     colors: ButtonColors = ButtonDefaults.colors(),
     contentPadding: PaddingValues = ButtonDefaults.contentPadding(),
+    borderWidth: Dp = 0.dp,
     content: @Composable RowScope.() -> Unit,
 ) {
     val transition = updateTransition(enabled, "button-animation")
@@ -46,6 +50,10 @@ fun Button(
         colors.contentColor(it).value
     }
 
+    val borderColor by transition.animateColor(transitionSpec = ButtonDefaults.transition()) {
+        colors.borderColor(it).value
+    }
+
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
@@ -53,6 +61,8 @@ fun Button(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         contentPadding = contentPadding,
+        borderColor = borderColor,
+        borderWidth = borderWidth,
         modifier = modifier,
     ) {
         CompositionLocalProvider(
@@ -68,8 +78,10 @@ fun Button(
 data class ButtonColors internal constructor(
     private val backgroundColor: Color,
     private val contentColor: Color,
+    private val borderColor: Color,
     private val disabledBackgroundColor: Color,
     private val disabledContentColor: Color,
+    private val disabledBorderColor: Color,
 ) {
     @Composable
     internal fun backgroundColor(enabled: Boolean): State<Color> =
@@ -81,6 +93,12 @@ data class ButtonColors internal constructor(
     internal fun contentColor(enabled: Boolean): State<Color> =
         rememberUpdatedState(
             if (enabled) contentColor else disabledContentColor,
+        )
+
+    @Composable
+    internal fun borderColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(
+            if (enabled) borderColor else disabledBorderColor,
         )
 }
 
@@ -94,13 +112,17 @@ object ButtonDefaults {
     fun colors(
         backgroundColor: Color = ButtonTokens.BackgroundColor,
         contentColor: Color = ButtonTokens.ContentColor,
+        borderColor: Color = ButtonTokens.BorderColor,
         disabledBackgroundColor: Color = ButtonTokens.DisabledBackgroundColor,
         disabledContentColor: Color = ButtonTokens.DisabledContentColor,
+        disabledBorderColor: Color = borderColor,
     ): ButtonColors = ButtonColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
+        borderColor = borderColor,
         disabledBackgroundColor = disabledBackgroundColor,
         disabledContentColor = disabledContentColor,
+        disabledBorderColor = disabledBorderColor,
     )
 
     @Composable
@@ -132,7 +154,7 @@ private fun ButtonPreview(
             onClick = {},
             enabled = true,
         ) {
-            Text("Simple button")
+            Text("Button")
         }
     }
 }
@@ -149,7 +171,50 @@ private fun DisabledButtonPreview(
             onClick = {},
             enabled = false,
         ) {
-            Text("Simple button")
+            Text("Disabled button")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun BorderedButtonPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        Button(
+            onClick = {},
+            colors = ButtonDefaults.colors(
+                backgroundColor = Color.Unspecified,
+                borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
+            ),
+            borderWidth = 1.dp,
+        ) {
+            Text("Bordered button")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun BorderedDisabledButtonPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        Button(
+            onClick = {},
+            enabled = false,
+            colors = ButtonDefaults.colors(
+                backgroundColor = Color.Unspecified,
+                borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
+            ),
+            borderWidth = 1.dp,
+        ) {
+            Text("Bordered disabled button")
         }
     }
 }
