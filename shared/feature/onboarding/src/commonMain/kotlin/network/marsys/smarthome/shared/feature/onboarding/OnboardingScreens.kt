@@ -4,7 +4,7 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface OnboardingScreens : NavKey {
+internal sealed interface OnboardingScreens : NavKey {
     @Serializable
     data object Initial : OnboardingScreens
 
@@ -16,4 +16,8 @@ sealed interface OnboardingScreens : NavKey {
 
     @Serializable
     data object Configuration : OnboardingScreens
+
+    companion object {
+        const val SCREEN_COUNT = 4
+    }
 }
