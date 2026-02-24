@@ -2,7 +2,7 @@ package network.marsys.smarthome.shared.library.design.theme.tokens
 
 import androidx.compose.ui.graphics.Color
 
-@Suppress("PropertyName")
+@Suppress("ComplexInterface", "PropertyName")
 internal interface ColorSchemeTokens {
     val BackgroundPrimary: Color
     val BackgroundSecondary: Color
