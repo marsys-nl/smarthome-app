@@ -9,6 +9,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
+import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
 import network.marsys.smarthome.shared.library.design.component.Text
 
@@ -49,7 +50,16 @@ fun OnboardingScreenView(
             }
 
             entry<OnboardingScreens.Entities> {
-                Text("Not yet implemented")
+                EntitiesOnboardingScreenView(
+                    numberOfScreens = OnboardingScreens.SCREEN_COUNT,
+                    indexOfScreen = 2,
+                    navigateToScenes = {
+                        backStack += OnboardingScreens.Scenes
+                    },
+                    navigateBack = {
+                        backStack.removeLast()
+                    },
+                )
             }
 
             entry<OnboardingScreens.Scenes> {
