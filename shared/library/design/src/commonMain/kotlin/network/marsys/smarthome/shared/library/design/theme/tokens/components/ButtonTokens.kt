@@ -29,5 +29,5 @@ object ButtonTokens {
     val ButtonShape: Shape = RoundedCornerShape(16.dp)
 
     val ButtonHorizontalPadding: Dp = 16.dp
-    val ButtonVerticalPadding: Dp = 24.dp
+    val ButtonVerticalPadding: Dp = 16.dp
 }
