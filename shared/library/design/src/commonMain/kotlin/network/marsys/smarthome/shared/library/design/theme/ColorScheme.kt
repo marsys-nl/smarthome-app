@@ -16,6 +16,7 @@ data class ColorScheme internal constructor(
     private val backgroundBrandPrimary: Color,
     private val backgroundBrandSecondary: Color,
     private val backgroundDisabled: Color,
+    private val borderPrimary: Color,
     private val foregroundPrimaryAlternative: Color,
     private val foregroundDisabled: Color,
     private val textPrimary: Color,
@@ -28,6 +29,7 @@ data class ColorScheme internal constructor(
         ColorKeyToken.BackgroundBrandPrimary -> backgroundBrandPrimary
         ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
         ColorKeyToken.BackgroundDisabled -> backgroundDisabled
+        ColorKeyToken.BorderPrimary -> borderPrimary
         ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
         ColorKeyToken.ForegroundDisabled -> foregroundDisabled
         ColorKeyToken.TextPrimary -> textPrimary
@@ -55,6 +57,7 @@ internal fun darkColorScheme(
     backgroundBrandPrimary: Color = DarkColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
     backgroundDisabled: Color = DarkColorSchemeTokens.BackgroundDisabled,
+    borderPrimary: Color = DarkColorSchemeTokens.BorderPrimary,
     foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
     textPrimary: Color = DarkColorSchemeTokens.TextPrimary,
@@ -66,6 +69,7 @@ internal fun darkColorScheme(
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
     backgroundDisabled = backgroundDisabled,
+    borderPrimary = borderPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundDisabled = foregroundDisabled,
     textPrimary = textPrimary,
@@ -79,6 +83,7 @@ internal fun lightColorScheme(
     backgroundBrandPrimary: Color = LightColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
     backgroundDisabled: Color = LightColorSchemeTokens.BackgroundDisabled,
+    borderPrimary: Color = LightColorSchemeTokens.BorderPrimary,
     foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
     textPrimary: Color = LightColorSchemeTokens.TextPrimary,
@@ -90,6 +95,7 @@ internal fun lightColorScheme(
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
     backgroundDisabled = backgroundDisabled,
+    borderPrimary = borderPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundDisabled = foregroundDisabled,
     textPrimary = textPrimary,

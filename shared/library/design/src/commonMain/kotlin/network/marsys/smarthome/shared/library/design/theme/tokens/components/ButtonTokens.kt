@@ -16,6 +16,9 @@ object ButtonTokens {
     val ContentColor: Color
         @Composable
         get() = color(ColorKeyToken.TextPrimary)
+    val BorderColor: Color
+        @Composable
+        get() = Color.Unspecified
     val DisabledBackgroundColor: Color
         @Composable
         get() = color(ColorKeyToken.BackgroundDisabled)
