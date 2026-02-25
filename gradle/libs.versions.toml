@@ -14,7 +14,7 @@ android-sdk-target = "36"
 
 androidx-activity = "1.12.4"
 androidx-appcompat = "1.7.1"
-androidx-navigation = "1.1.0-alpha02"
+androidx-navigation = "1.1.0-alpha03"
 
 compose-unstyled = "1.49.6"
 
