@@ -111,7 +111,9 @@ fun InitialOnboardingScreenView(
                 OnboardingNextButton(
                     onClick = navigateToEntities,
                     colors = ButtonDefaults.colors(
-                        backgroundColor = OnboardingInitialScreenButtonBackgroundColor,
+                        backgroundColor = SolidColor(
+                            value = OnboardingInitialScreenButtonBackgroundColor,
+                        ),
                         contentColor = OnboardingInitialScreenButtonTextColor,
                     ),
                 )
