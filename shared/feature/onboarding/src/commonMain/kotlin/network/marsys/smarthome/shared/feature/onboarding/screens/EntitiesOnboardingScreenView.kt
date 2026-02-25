@@ -14,18 +14,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingBackButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingPageIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+
+private val OnboardingForegroundGradient = Brush.linearGradient(
+    colors = listOf(
+        PaletteTokens.Amber.Amber400,
+        PaletteTokens.Emerald.Emerald400,
+    ),
+)
 
 @Composable
 internal fun EntitiesOnboardingScreenView(
@@ -53,12 +62,7 @@ internal fun EntitiesOnboardingScreenView(
                     numberOfScreens = numberOfScreens,
                     indexOfScreen = indexOfScreen,
                     colors = OnboardingProgressIndicatorDefaults.colors(
-                        foreground = Brush.linearGradient(
-                            colors = listOf(
-                                PaletteTokens.Amber.Amber400,
-                                PaletteTokens.Emerald.Emerald400,
-                            ),
-                        ),
+                        foreground = OnboardingForegroundGradient,
                     ),
                     modifier = Modifier
                         .padding(bottom = 40.dp),
@@ -84,9 +88,15 @@ internal fun EntitiesOnboardingScreenView(
                     )
                 }
 
-                OnboardingPageIndicator(
-                    page = indexOfScreen,
-                    pages = numberOfScreens,
+                OnboardingScreenIndicator(
+                    screen = indexOfScreen,
+                    screens = numberOfScreens,
+                    modifier = Modifier
+                        .padding(top = 24.dp),
+                    colors = OnboardingScreenIndicatorDefaults.colors(
+                        activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
+                        currentScreenIndicatorColor = OnboardingForegroundGradient,
+                    ),
                 )
             }
         }
