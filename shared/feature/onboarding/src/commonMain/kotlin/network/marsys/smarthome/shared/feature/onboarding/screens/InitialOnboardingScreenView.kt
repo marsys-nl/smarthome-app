@@ -20,9 +20,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingPageIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_logo_description
@@ -46,8 +47,8 @@ private val OnboardingInitialScreenProgressIndicatorBackgroundColor = PaletteTok
     .copy(alpha = .3f)
 private val OnboardingInitialScreenProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
 
-private val OnboardingInitialScreenPageIndicatorActiveBackgroundColor = PaletteTokens.Slate.Slate800
-private val OnboardingInitialScreenPageIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600
+private val ScreenIndicatorActiveBackgroundColor = PaletteTokens.Slate.Slate800
+private val ScreenIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600
     .copy(alpha = .3f)
 
 @Composable
@@ -115,11 +116,15 @@ fun InitialOnboardingScreenView(
                     ),
                 )
 
-                OnboardingPageIndicator(
-                    page = 1,
-                    pages = 5,
-                    activePageIndicatorColor = OnboardingInitialScreenPageIndicatorActiveBackgroundColor,
-                    inactivePageIndicatorColor = OnboardingInitialScreenPageIndicatorInactiveBackgroundColor,
+                OnboardingScreenIndicator(
+                    screen = 1,
+                    screens = 5,
+                    modifier = Modifier
+                        .padding(top = 24.dp),
+                    colors = OnboardingScreenIndicatorDefaults.colors(
+                        activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
+                        inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
+                    ),
                 )
             }
 
