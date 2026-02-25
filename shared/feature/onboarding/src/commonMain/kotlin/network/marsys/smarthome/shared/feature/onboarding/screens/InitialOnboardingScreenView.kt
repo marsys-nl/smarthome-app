@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingPageIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_logo_description
@@ -75,8 +77,10 @@ fun InitialOnboardingScreenView(
                 OnboardingProgressIndicator(
                     numberOfScreens = numberOfScreens,
                     indexOfScreen = indexOfScreen,
-                    backgroundColor = OnboardingInitialScreenProgressIndicatorBackgroundColor,
-                    foregroundColor = OnboardingInitialScreenProgressIndicatorForegroundColor,
+                    colors = OnboardingProgressIndicatorDefaults.colors(
+                        background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
+                        foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
+                    ),
                     modifier = Modifier
                         .padding(bottom = 40.dp),
                 )
