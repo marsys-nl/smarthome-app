@@ -1,5 +1,6 @@
 package network.marsys.smarthome.shared.library.design.theme.tokens
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 @Suppress("ComplexInterface", "PropertyName")
@@ -13,6 +14,8 @@ internal interface ColorSchemeTokens {
     val BorderPrimary: Color
     val ForegroundPrimaryAlternative: Color
     val ForegroundDisabled: Color
+    val GradientBrandPrimaryToSecondary: Brush get() =
+        GradientTokens.Amber.Amber400.ToEmerald400
     val TextPrimary: Color
     val TextDisabled: Color
 }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingBackButton
@@ -27,14 +26,8 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-
-private val OnboardingForegroundGradient = Brush.linearGradient(
-    colors = listOf(
-        PaletteTokens.Amber.Amber400,
-        PaletteTokens.Emerald.Emerald400,
-    ),
-)
 
 @Composable
 internal fun EntitiesOnboardingScreenView(
@@ -62,7 +55,7 @@ internal fun EntitiesOnboardingScreenView(
                     numberOfScreens = numberOfScreens,
                     indexOfScreen = indexOfScreen,
                     colors = OnboardingProgressIndicatorDefaults.colors(
-                        foreground = OnboardingForegroundGradient,
+                        foreground = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary],
                     ),
                     modifier = Modifier
                         .padding(bottom = 40.dp),
@@ -95,7 +88,7 @@ internal fun EntitiesOnboardingScreenView(
                         .padding(top = 24.dp),
                     colors = OnboardingScreenIndicatorDefaults.colors(
                         activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                        currentScreenIndicatorColor = OnboardingForegroundGradient,
+                        currentScreenIndicatorColor = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary],
                     ),
                 )
             }
