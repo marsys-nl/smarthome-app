@@ -29,6 +29,10 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 
+private val BrandPrimaryToSecondaryGradient
+    @Composable
+    get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
+
 @Composable
 internal fun EntitiesOnboardingScreenView(
     numberOfScreens: Int,
@@ -55,7 +59,7 @@ internal fun EntitiesOnboardingScreenView(
                     numberOfScreens = numberOfScreens,
                     indexOfScreen = indexOfScreen,
                     colors = OnboardingProgressIndicatorDefaults.colors(
-                        foreground = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary],
+                        foreground = BrandPrimaryToSecondaryGradient,
                     ),
                     modifier = Modifier
                         .padding(bottom = 40.dp),
@@ -88,7 +92,7 @@ internal fun EntitiesOnboardingScreenView(
                         .padding(top = 24.dp),
                     colors = OnboardingScreenIndicatorDefaults.colors(
                         activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                        currentScreenIndicatorColor = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary],
+                        currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
                     ),
                 )
             }
