@@ -1,15 +1,9 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +16,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingP
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIcon
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -29,7 +24,6 @@ import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 
@@ -46,66 +40,55 @@ internal fun EntitiesOnboardingScreenView(
     modifier: Modifier = Modifier,
 ) {
     SmartHomeTheme {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(LocalColorScheme.current[ColorKeyToken.BackgroundPrimary]),
-            contentAlignment = Alignment.TopCenter,
+        OnboardingScreenScaffold(
+            modifier = modifier,
         ) {
-            Column(
+            OnboardingProgressIndicator(
+                numberOfScreens = numberOfScreens,
+                indexOfScreen = indexOfScreen,
+                colors = OnboardingProgressIndicatorDefaults.colors(
+                    foreground = BrandPrimaryToSecondaryGradient,
+                ),
                 modifier = Modifier
-                    .padding(all = 40.dp)
-                    .widthIn(max = 400.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .padding(bottom = 40.dp),
+            )
+
+            OnboardingScreenIcon(
+                icon = Icons.HousePlug,
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
+            )
+
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                OnboardingProgressIndicator(
-                    numberOfScreens = numberOfScreens,
-                    indexOfScreen = indexOfScreen,
-                    colors = OnboardingProgressIndicatorDefaults.colors(
-                        foreground = BrandPrimaryToSecondaryGradient,
-                    ),
-                    modifier = Modifier
-                        .padding(bottom = 40.dp),
+                OnboardingBackButton(
+                    onClick = navigateBack,
                 )
 
-                OnboardingScreenIcon(
-                    icon = Icons.HousePlug,
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f),
-                )
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    OnboardingBackButton(
-                        onClick = navigateBack,
-                    )
-
-                    OnboardingNextButton(
-                        onClick = navigateToScenes,
-                        colors = ButtonDefaults.colors(
-                            backgroundColor = BrandPrimaryToSecondaryGradient,
-                            contentColor = PaletteTokens.Base.White,
-                        ),
-                    )
-                }
-
-                OnboardingScreenIndicator(
-                    screen = indexOfScreen,
-                    screens = numberOfScreens,
-                    modifier = Modifier
-                        .padding(top = 24.dp),
-                    colors = OnboardingScreenIndicatorDefaults.colors(
-                        activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                        currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
+                OnboardingNextButton(
+                    onClick = navigateToScenes,
+                    colors = ButtonDefaults.colors(
+                        backgroundColor = BrandPrimaryToSecondaryGradient,
+                        contentColor = PaletteTokens.Base.White,
                     ),
                 )
             }
+
+            OnboardingScreenIndicator(
+                screen = indexOfScreen,
+                screens = numberOfScreens,
+                modifier = Modifier
+                    .padding(top = 24.dp),
+                colors = OnboardingScreenIndicatorDefaults.colors(
+                    activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
+                    currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
+                ),
+            )
         }
     }
 }
