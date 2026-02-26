@@ -19,12 +19,15 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingB
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIcon
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
+import network.marsys.smarthome.shared.library.design.icons.HousePlug
+import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
@@ -66,7 +69,9 @@ internal fun EntitiesOnboardingScreenView(
                         .padding(bottom = 40.dp),
                 )
 
-                // Content goes here.
+                OnboardingScreenIcon(
+                    icon = Icons.HousePlug,
+                )
 
                 Spacer(
                     modifier = Modifier
