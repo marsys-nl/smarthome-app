@@ -52,7 +52,7 @@ internal fun OnboardingScreenIcon(
         modifier = Modifier
             .size(size = 32.dp),
         colorFilter = ColorFilter.tint(
-            color = LocalColorScheme.current[ColorKeyToken.BackgroundBrandPrimary],
+            color = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
         ),
     )
 }
