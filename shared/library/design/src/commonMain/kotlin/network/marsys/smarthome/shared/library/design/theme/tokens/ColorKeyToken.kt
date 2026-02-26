@@ -15,6 +15,7 @@ enum class ColorKeyToken {
     BorderPrimary,
 
     ForegroundPrimaryAlternative,
+    ForegroundBrandPrimary,
     ForegroundDisabled,
 
     TextPrimary,
