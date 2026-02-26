@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -31,7 +32,7 @@ fun OnboardingBackButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     colors: ButtonColors = ButtonDefaults.colors(
-        backgroundColor = Color.Transparent,
+        backgroundColor = SolidColor(Color.Unspecified),
         borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
     ),
 ) {

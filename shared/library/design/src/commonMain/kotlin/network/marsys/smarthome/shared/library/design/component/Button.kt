@@ -1,21 +1,22 @@
 package network.marsys.smarthome.shared.library.design.component
 
-import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -40,18 +41,23 @@ fun Button(
     borderWidth: Dp = 0.dp,
     content: @Composable RowScope.() -> Unit,
 ) {
-    val transition = updateTransition(enabled, "button-animation")
+    val background = colors.backgroundColor(enabled).value
 
-    val backgroundColor by transition.animateColor(transitionSpec = ButtonDefaults.transition()) {
-        colors.backgroundColor(it).value
+    val backgroundColor = when (background) {
+        is SolidColor -> background.value
+        else -> Color.Unspecified
     }
 
-    val contentColor by transition.animateColor(transitionSpec = ButtonDefaults.transition()) {
-        colors.contentColor(it).value
-    }
+    val contentColor = colors.contentColor(enabled).value
+    val borderColor = colors.borderColor(enabled).value
 
-    val borderColor by transition.animateColor(transitionSpec = ButtonDefaults.transition()) {
-        colors.borderColor(it).value
+    val gradientModifier = when (background) {
+        is ShaderBrush -> Modifier.background(
+            brush = background,
+            shape = shape,
+        )
+
+        else -> Modifier
     }
 
     UnstyledButton(
@@ -63,7 +69,8 @@ fun Button(
         contentPadding = contentPadding,
         borderColor = borderColor,
         borderWidth = borderWidth,
-        modifier = modifier,
+        modifier = modifier
+            .then(gradientModifier),
     ) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
@@ -76,15 +83,15 @@ fun Button(
 @Immutable
 @ConsistentCopyVisibility
 data class ButtonColors internal constructor(
-    private val backgroundColor: Color,
+    private val backgroundColor: Brush,
     private val contentColor: Color,
     private val borderColor: Color,
-    private val disabledBackgroundColor: Color,
+    private val disabledBackgroundColor: Brush,
     private val disabledContentColor: Color,
     private val disabledBorderColor: Color,
 ) {
     @Composable
-    internal fun backgroundColor(enabled: Boolean): State<Color> =
+    internal fun backgroundColor(enabled: Boolean): State<Brush> =
         rememberUpdatedState(
             if (enabled) backgroundColor else disabledBackgroundColor,
         )
@@ -110,10 +117,10 @@ object ButtonDefaults {
 
     @Composable
     fun colors(
-        backgroundColor: Color = ButtonTokens.BackgroundColor,
+        backgroundColor: Brush = ButtonTokens.BackgroundColor,
         contentColor: Color = ButtonTokens.ContentColor,
         borderColor: Color = ButtonTokens.BorderColor,
-        disabledBackgroundColor: Color = ButtonTokens.DisabledBackgroundColor,
+        disabledBackgroundColor: Brush = ButtonTokens.DisabledBackgroundColor,
         disabledContentColor: Color = ButtonTokens.DisabledContentColor,
         disabledBorderColor: Color = borderColor,
     ): ButtonColors = ButtonColors(
@@ -135,6 +142,7 @@ object ButtonDefaults {
     )
 
     @Composable
+    @Suppress("unused")
     internal fun <T> transition(
         duration: Int = ANIMATION_DURATION_MILLIS,
     ): @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<T> = {
@@ -187,7 +195,7 @@ private fun BorderedButtonPreview(
         Button(
             onClick = {},
             colors = ButtonDefaults.colors(
-                backgroundColor = Color.Unspecified,
+                backgroundColor = SolidColor(Color.Unspecified),
                 borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
             ),
             borderWidth = 1.dp,
@@ -209,7 +217,7 @@ private fun BorderedDisabledButtonPreview(
             onClick = {},
             enabled = false,
             colors = ButtonDefaults.colors(
-                backgroundColor = Color.Unspecified,
+                backgroundColor = SolidColor(Color.Unspecified),
                 borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
             ),
             borderWidth = 1.dp,

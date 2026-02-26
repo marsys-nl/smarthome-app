@@ -24,6 +24,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
@@ -82,6 +83,10 @@ internal fun EntitiesOnboardingScreenView(
 
                     OnboardingNextButton(
                         onClick = navigateToScenes,
+                        colors = ButtonDefaults.colors(
+                            backgroundColor = BrandPrimaryToSecondaryGradient,
+                            contentColor = PaletteTokens.Base.White,
+                        ),
                     )
                 }
 
