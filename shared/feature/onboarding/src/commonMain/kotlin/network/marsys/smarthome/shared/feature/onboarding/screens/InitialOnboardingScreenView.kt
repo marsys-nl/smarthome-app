@@ -1,15 +1,9 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +18,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingP
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_logo_description
@@ -62,80 +57,71 @@ fun InitialOnboardingScreenView(
     SmartHomeTheme(
         scheme = ColorScheme.lightColorScheme,
     ) {
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(OnboardingBackgroundColor),
-            contentAlignment = Alignment.TopCenter,
+        OnboardingScreenScaffold(
+            modifier = modifier,
+            backgroundColor = OnboardingBackgroundColor,
+            centeredSlot = {
+                Image(
+                    painter = painterResource(Res.drawable.logo),
+                    contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(108.dp),
+                )
+            },
         ) {
-            Column(
+            OnboardingProgressIndicator(
+                numberOfScreens = numberOfScreens,
+                indexOfScreen = indexOfScreen,
+                colors = OnboardingProgressIndicatorDefaults.colors(
+                    background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
+                    foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
+                ),
                 modifier = Modifier
-                    .padding(all = 40.dp)
-                    .widthIn(max = 400.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                OnboardingProgressIndicator(
-                    numberOfScreens = numberOfScreens,
-                    indexOfScreen = indexOfScreen,
-                    colors = OnboardingProgressIndicatorDefaults.colors(
-                        background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
-                        foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
-                    ),
-                    modifier = Modifier
-                        .padding(bottom = 40.dp),
-                )
+                    .padding(bottom = 40.dp),
+            )
 
-                Text(
-                    text = stringResource(Res.string.onboarding_initial_title),
-                    modifier = Modifier
-                        .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 32.sp,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.W700,
-                )
-
-                Text(
-                    text = stringResource(Res.string.onboarding_initial_subtitle),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f),
-                )
-
-                OnboardingNextButton(
-                    onClick = navigateToEntities,
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = SolidColor(
-                            value = OnboardingInitialScreenButtonBackgroundColor,
-                        ),
-                        contentColor = OnboardingInitialScreenButtonTextColor,
-                    ),
-                )
-
-                OnboardingScreenIndicator(
-                    screen = 1,
-                    screens = 5,
-                    modifier = Modifier
-                        .padding(top = 24.dp),
-                    colors = OnboardingScreenIndicatorDefaults.colors(
-                        activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
-                        inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
-                    ),
-                )
-            }
-
-            Image(
-                painter = painterResource(Res.drawable.logo),
-                contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
+            Text(
+                text = stringResource(Res.string.onboarding_initial_title),
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(108.dp),
+                    .padding(bottom = 8.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 32.sp,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.W700,
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_initial_subtitle),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .weight(1f),
+            )
+
+            OnboardingNextButton(
+                onClick = navigateToEntities,
+                colors = ButtonDefaults.colors(
+                    backgroundColor = SolidColor(
+                        value = OnboardingInitialScreenButtonBackgroundColor,
+                    ),
+                    contentColor = OnboardingInitialScreenButtonTextColor,
+                ),
+            )
+
+            OnboardingScreenIndicator(
+                screen = 1,
+                screens = 5,
+                modifier = Modifier
+                    .padding(top = 24.dp),
+                colors = OnboardingScreenIndicatorDefaults.colors(
+                    activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
+                    inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
+                ),
             )
         }
     }
