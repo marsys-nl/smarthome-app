@@ -8,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingBackButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
@@ -17,15 +20,20 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_subtitle
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
+import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import org.jetbrains.compose.resources.stringResource
 
 private val BrandPrimaryToSecondaryGradient
     @Composable
@@ -55,6 +63,23 @@ internal fun EntitiesOnboardingScreenView(
 
             OnboardingScreenIcon(
                 icon = Icons.HousePlug,
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_entities_title),
+                modifier = Modifier
+                    .padding(bottom = 8.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 32.sp,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.W700,
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_entities_subtitle),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
             )
 
             Spacer(
