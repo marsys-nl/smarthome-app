@@ -48,7 +48,7 @@ fun Card(
                 brush = colors.backgroundColor,
                 shape = shape,
             )
-            .padding(contentPadding)
+            .padding(contentPadding),
     ) {
         content.invoke()
     }

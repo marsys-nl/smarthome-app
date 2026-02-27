@@ -38,7 +38,7 @@ internal fun OnboardingScreenIcon(
 
 @Preview
 @Composable
-private fun OnboardingEntitiesScreenIcon(
+private fun OnboardingEntitiesScreenIconPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
