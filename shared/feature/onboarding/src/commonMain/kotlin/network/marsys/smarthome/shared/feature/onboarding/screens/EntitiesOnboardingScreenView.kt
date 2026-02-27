@@ -40,6 +40,7 @@ private val BrandPrimaryToSecondaryGradient
     get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
 
 @Composable
+@Suppress("LongMethod")
 internal fun EntitiesOnboardingScreenView(
     numberOfScreens: Int,
     indexOfScreen: Int,
