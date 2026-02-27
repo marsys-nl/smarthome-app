@@ -65,7 +65,7 @@ internal fun EntitiesOnboardingScreenView(
             OnboardingScreenIcon(
                 icon = Icons.HousePlug,
                 modifier = Modifier
-                    .padding(bottom = 16.dp)
+                    .padding(bottom = 16.dp),
             )
 
             Text(
