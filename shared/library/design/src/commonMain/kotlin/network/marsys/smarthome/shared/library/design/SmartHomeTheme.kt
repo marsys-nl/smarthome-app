@@ -51,7 +51,7 @@ fun SmartHomeComponentPreview(
     scheme: ColorScheme,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
-    background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundSecondary] },
+    background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
