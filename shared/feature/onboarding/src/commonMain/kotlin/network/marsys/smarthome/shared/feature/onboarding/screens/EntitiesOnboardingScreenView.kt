@@ -1,8 +1,10 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -13,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingBackButton
+import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingLightEntity
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
@@ -23,6 +26,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_title
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_try_interaction
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -38,6 +42,8 @@ import org.jetbrains.compose.resources.stringResource
 private val BrandPrimaryToSecondaryGradient
     @Composable
     get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
+
+private const val ENTITY_WIDTH_FRACTION = .9f
 
 @Composable
 @Suppress("LongMethod")
@@ -85,10 +91,26 @@ internal fun EntitiesOnboardingScreenView(
                 fontSize = 14.sp,
             )
 
-            Spacer(
+            Column(
                 modifier = Modifier
+                    .fillMaxWidth(ENTITY_WIDTH_FRACTION)
+                    .fillMaxHeight()
                     .weight(1f),
-            )
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                OnboardingLightEntity(
+                    modifier = Modifier
+                        .padding(bottom = 12.dp),
+                )
+
+                Text(
+                    text = stringResource(Res.string.onboarding_entities_try_interaction),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                )
+            }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),

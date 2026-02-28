@@ -6,6 +6,7 @@
 
     <string name="onboarding_entities_title">Control entities</string>
     <string name="onboarding_entities_subtitle">You can control devices, lights, thermostats, and more</string>
+    <string name="onboarding_entities_try_interaction">Try interacting with these entities</string>
 
     <string name="onboarding_button_next">Next</string>
 </resources>
