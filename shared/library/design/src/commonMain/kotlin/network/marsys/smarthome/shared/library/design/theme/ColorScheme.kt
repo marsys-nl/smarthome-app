@@ -24,6 +24,7 @@ data class ColorScheme internal constructor(
     private val foregroundDisabled: Color,
     private val gradientBrandPrimaryToSecondary: Brush,
     private val textPrimary: Color,
+    private val textSecondary: Color,
     private val textDisabled: Color,
 ) {
     operator fun get(token: ColorKeyToken): Color = when (token) {
@@ -38,6 +39,7 @@ data class ColorScheme internal constructor(
         ColorKeyToken.ForegroundBrandPrimary -> foregroundBrandPrimary
         ColorKeyToken.ForegroundDisabled -> foregroundDisabled
         ColorKeyToken.TextPrimary -> textPrimary
+        ColorKeyToken.TextSecondary -> textSecondary
         ColorKeyToken.TextDisabled -> textDisabled
     }
 
@@ -72,6 +74,7 @@ internal fun darkColorScheme(
     foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
     gradientBrandPrimaryToSecondary: Brush = DarkColorSchemeTokens.GradientBrandPrimaryToSecondary,
     textPrimary: Color = DarkColorSchemeTokens.TextPrimary,
+    textSecondary: Color = DarkColorSchemeTokens.TextSecondary,
     textDisabled: Color = DarkColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -86,6 +89,7 @@ internal fun darkColorScheme(
     foregroundDisabled = foregroundDisabled,
     gradientBrandPrimaryToSecondary = gradientBrandPrimaryToSecondary,
     textPrimary = textPrimary,
+    textSecondary = textSecondary,
     textDisabled = textDisabled,
 )
 
@@ -102,6 +106,7 @@ internal fun lightColorScheme(
     foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
     gradientBrandPrimaryToSecondary: Brush = LightColorSchemeTokens.GradientBrandPrimaryToSecondary,
     textPrimary: Color = LightColorSchemeTokens.TextPrimary,
+    textSecondary: Color = DarkColorSchemeTokens.TextSecondary,
     textDisabled: Color = LightColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -116,5 +121,6 @@ internal fun lightColorScheme(
     foregroundDisabled = foregroundDisabled,
     gradientBrandPrimaryToSecondary = gradientBrandPrimaryToSecondary,
     textPrimary = textPrimary,
+    textSecondary = textSecondary,
     textDisabled = textDisabled,
 )

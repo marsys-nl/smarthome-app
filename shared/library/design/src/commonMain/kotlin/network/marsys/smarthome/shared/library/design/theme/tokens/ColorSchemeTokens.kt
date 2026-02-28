@@ -18,5 +18,6 @@ internal interface ColorSchemeTokens {
     val GradientBrandPrimaryToSecondary: Brush get() =
         GradientTokens.Amber.Amber400.ToEmerald400
     val TextPrimary: Color
+    val TextSecondary: Color
     val TextDisabled: Color
 }

@@ -19,6 +19,7 @@ enum class ColorKeyToken {
     ForegroundDisabled,
 
     TextPrimary,
+    TextSecondary,
     TextDisabled,
 }
 
