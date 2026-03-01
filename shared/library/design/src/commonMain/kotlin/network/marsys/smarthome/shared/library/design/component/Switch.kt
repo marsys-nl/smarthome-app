@@ -165,6 +165,7 @@ object SwitchDefaults {
             width = SwitchTokens.TrackWidthRegular,
             height = SwitchTokens.TrackHeightRegular,
         )
+
         SwitchSize.Small -> DpSize(
             width = SwitchTokens.TrackWidthSmall,
             height = SwitchTokens.TrackHeightSmall,

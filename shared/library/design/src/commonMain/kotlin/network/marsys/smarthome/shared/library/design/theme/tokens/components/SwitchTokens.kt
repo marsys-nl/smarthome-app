@@ -37,7 +37,6 @@ object SwitchTokens {
         @Composable
         get() = color(ColorKeyToken.ForegroundDisabled)
 
-
     val TrackWidthRegular: Dp = 48.dp
     val TrackHeightRegular: Dp = 28.dp
     val TrackWidthSmall: Dp = 36.dp
