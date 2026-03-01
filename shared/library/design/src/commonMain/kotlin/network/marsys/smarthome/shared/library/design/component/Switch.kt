@@ -37,6 +37,7 @@ fun Switch(
     onCheckedChange: (Boolean) -> Unit = {},
     colors: SwitchColors = SwitchDefaults.colors(),
     enabled: Boolean = true,
+    size: SwitchSize = SwitchSize.Normal,
 ) {
     val transition = updateTransition(checked, "switch-animation")
 
@@ -51,12 +52,12 @@ fun Switch(
     ToggleSwitch(
         toggled = checked,
         modifier = modifier
-            .size(SwitchDefaults.trackSize()),
+            .size(SwitchDefaults.trackSize(size)),
         enabled = enabled,
         shape = SwitchDefaults.trackShape(),
         backgroundColor = trackColor,
         onToggled = onCheckedChange,
-        contentPadding = SwitchDefaults.trackPadding(),
+        contentPadding = SwitchDefaults.trackPadding(size),
     ) {
         Box(
             modifier = Modifier
@@ -107,6 +108,11 @@ data class SwitchColors internal constructor(
         )
 }
 
+sealed interface SwitchSize {
+    data object Normal : SwitchSize
+    data object Small : SwitchSize
+}
+
 object SwitchDefaults {
     private const val ANIMATION_DURATION_MILLIS = 500
 
@@ -143,18 +149,27 @@ object SwitchDefaults {
     fun thumbShape(): Shape = SwitchTokens.ThumbShape
 
     @Composable
-    fun trackPadding(): PaddingValues = PaddingValues(
-        all = SwitchTokens.ThumbPadding,
+    fun trackPadding(size: SwitchSize = SwitchSize.Normal): PaddingValues = PaddingValues(
+        all = when (size) {
+            SwitchSize.Normal -> SwitchTokens.ThumbPaddingNormal
+            SwitchSize.Small -> SwitchTokens.ThumbPaddingSmall
+        },
     )
 
     @Composable
     fun trackShape(): Shape = SwitchTokens.TrackShape
 
     @Composable
-    fun trackSize(): DpSize = DpSize(
-        width = SwitchTokens.TrackWidth,
-        height = SwitchTokens.TrackHeight,
-    )
+    fun trackSize(size: SwitchSize = SwitchSize.Normal): DpSize = when (size) {
+        SwitchSize.Normal -> DpSize(
+            width = SwitchTokens.TrackWidthNormal,
+            height = SwitchTokens.TrackHeightNormal,
+        )
+        SwitchSize.Small -> DpSize(
+            width = SwitchTokens.TrackWidthSmall,
+            height = SwitchTokens.TrackHeightSmall,
+        )
+    }
 
     @Composable
     internal fun <T> transition(
@@ -220,6 +235,38 @@ private fun DisabledUncheckedSwitchPreview(
         Switch(
             checked = true,
             enabled = false,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SmallCheckedSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        Switch(
+            checked = true,
+            enabled = true,
+            size = SwitchSize.Small,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun SmallUncheckedSwitchPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        Switch(
+            checked = false,
+            enabled = true,
+            size = SwitchSize.Small,
         )
     }
 }
