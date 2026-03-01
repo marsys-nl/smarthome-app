@@ -43,7 +43,7 @@ private val BrandPrimaryToSecondaryGradient
     @Composable
     get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
 
-private const val ENTITY_WIDTH_FRACTION = .9f
+private const val ENTITY_WIDTH_FRACTION = .95f
 
 @Composable
 @Suppress("LongMethod")

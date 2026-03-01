@@ -37,11 +37,14 @@ object SwitchTokens {
         @Composable
         get() = color(ColorKeyToken.ForegroundDisabled)
 
-    val TrackWidth: Dp = 36.dp
-    val TrackHeight: Dp = 20.dp
+    val TrackWidthRegular: Dp = 48.dp
+    val TrackHeightRegular: Dp = 28.dp
+    val TrackWidthSmall: Dp = 36.dp
+    val TrackHeightSmall: Dp = 20.dp
     val TrackShape: Shape = CircleShape
 
-    val ThumbPadding: Dp = 2.dp
+    val ThumbPaddingRegular: Dp = 4.dp
+    val ThumbPaddingSmall: Dp = 2.dp
     val ThumbShadowRadius: Dp = 6.dp
     val ThumbShadowSpread: Dp = -4.dp
     val ThumbShadowOffset: DpOffset = DpOffset(0.dp, 4.dp)
