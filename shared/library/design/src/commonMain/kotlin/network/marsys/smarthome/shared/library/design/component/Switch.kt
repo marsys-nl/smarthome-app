@@ -37,7 +37,7 @@ fun Switch(
     onCheckedChange: (Boolean) -> Unit = {},
     colors: SwitchColors = SwitchDefaults.colors(),
     enabled: Boolean = true,
-    size: SwitchSize = SwitchSize.Normal,
+    size: SwitchSize = SwitchSize.Regular,
 ) {
     val transition = updateTransition(checked, "switch-animation")
 
@@ -109,7 +109,7 @@ data class SwitchColors internal constructor(
 }
 
 sealed interface SwitchSize {
-    data object Normal : SwitchSize
+    data object Regular : SwitchSize
     data object Small : SwitchSize
 }
 
@@ -149,9 +149,9 @@ object SwitchDefaults {
     fun thumbShape(): Shape = SwitchTokens.ThumbShape
 
     @Composable
-    fun trackPadding(size: SwitchSize = SwitchSize.Normal): PaddingValues = PaddingValues(
+    fun trackPadding(size: SwitchSize = SwitchSize.Regular): PaddingValues = PaddingValues(
         all = when (size) {
-            SwitchSize.Normal -> SwitchTokens.ThumbPaddingNormal
+            SwitchSize.Regular -> SwitchTokens.ThumbPaddingRegular
             SwitchSize.Small -> SwitchTokens.ThumbPaddingSmall
         },
     )
@@ -160,10 +160,10 @@ object SwitchDefaults {
     fun trackShape(): Shape = SwitchTokens.TrackShape
 
     @Composable
-    fun trackSize(size: SwitchSize = SwitchSize.Normal): DpSize = when (size) {
-        SwitchSize.Normal -> DpSize(
-            width = SwitchTokens.TrackWidthNormal,
-            height = SwitchTokens.TrackHeightNormal,
+    fun trackSize(size: SwitchSize = SwitchSize.Regular): DpSize = when (size) {
+        SwitchSize.Regular -> DpSize(
+            width = SwitchTokens.TrackWidthRegular,
+            height = SwitchTokens.TrackHeightRegular,
         )
         SwitchSize.Small -> DpSize(
             width = SwitchTokens.TrackWidthSmall,
