@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.library.design.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -21,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.CardTokens
 
@@ -30,8 +34,20 @@ fun Card(
     colors: CardColors = CardDefaults.colors(),
     shape: Shape = CardDefaults.shape(),
     contentPadding: PaddingValues = CardDefaults.contentPadding(),
+    borderWidth: Dp = 0.dp,
     content: @Composable () -> Unit,
 ) {
+    val borderModifier =
+        if (borderWidth > 0.dp && colors.borderColor.isSpecified) {
+            Modifier.border(
+                width = borderWidth,
+                color = colors.borderColor,
+                shape = shape,
+            )
+        } else {
+            Modifier
+        }
+
     Box(
         modifier = modifier
             .dropShadow(
@@ -48,6 +64,7 @@ fun Card(
                 brush = colors.backgroundColor,
                 shape = shape,
             )
+            .then(borderModifier)
             .padding(contentPadding),
     ) {
         content.invoke()
@@ -96,6 +113,28 @@ private fun CardPreview(
         scheme = scheme,
     ) {
         Card {
+            Box(
+                modifier = Modifier
+                    .size(size = 100.dp),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun BorderedCardPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        Card(
+            colors = CardDefaults.colors(
+                borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
+            ),
+            borderWidth = 1.dp,
+        ) {
             Box(
                 modifier = Modifier
                     .size(size = 100.dp),
