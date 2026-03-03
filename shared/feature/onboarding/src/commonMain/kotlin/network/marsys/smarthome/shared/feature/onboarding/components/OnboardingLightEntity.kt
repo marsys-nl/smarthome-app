@@ -11,20 +11,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.retain.retain
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_dining_table_lamp
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_card_separator
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_off
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_on
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
@@ -38,16 +41,17 @@ import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewPa
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 @Suppress("LongMethod")
 fun OnboardingLightEntity(
+    state: Boolean,
     modifier: Modifier = Modifier,
+    onStateChange: (Boolean) -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    var light by retain { mutableStateOf(false) }
-
-    val cardColors = if (light) {
+    val cardColors = if (state) {
         CardDefaults.colors(
             backgroundColor = LocalColorScheme.current[GradientKeyToken.DimmedPrimaryToSecondary],
             borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
@@ -56,16 +60,16 @@ fun OnboardingLightEntity(
         CardDefaults.colors()
     }
 
-    val borderWidth = if (light) 1.dp else 0.dp
+    val borderWidth = if (state) 1.dp else 0.dp
 
     Card(
         modifier = modifier
             .toggleable(
-                value = light,
+                value = state,
                 indication = null,
                 interactionSource = interactionSource,
                 role = Role.Switch,
-                onValueChange = { light = !light },
+                onValueChange = onStateChange,
             ),
         colors = cardColors,
         contentPadding = PaddingValues(all = 20.dp),
@@ -77,7 +81,7 @@ fun OnboardingLightEntity(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LightEntityIcon(
-                isOn = light,
+                isOn = state,
             )
 
             Column(
@@ -87,18 +91,23 @@ fun OnboardingLightEntity(
                     .spacedBy(4.dp),
             ) {
                 Text(
-                    text = "Living room light",
+                    text = stringResource(Res.string.entity_dining_table_lamp),
                     lineHeight = 24.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = LocalColorScheme.current[ColorKeyToken.TextPrimary],
                 )
 
+                val separator = stringResource(Res.string.entity_state_card_separator)
+
                 Text(
-                    text = if (light) {
-                        "On • 80%"
+                    text = if (state) {
+                        listOf(
+                            stringResource(Res.string.entity_state_on),
+                            "80%",
+                        ).joinToString(separator = separator)
                     } else {
-                        "Off"
+                        stringResource(Res.string.entity_state_off)
                     },
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
@@ -107,10 +116,8 @@ fun OnboardingLightEntity(
             }
 
             Switch(
-                checked = light,
-                onCheckedChange = {
-                    light = !light
-                },
+                checked = state,
+                onCheckedChange = onStateChange,
             )
         }
     }
@@ -150,7 +157,20 @@ private fun LightEntityIcon(
     )
 }
 
-@Preview
+@PreviewLocales
+@Composable
+private fun OnboardingEntitiesLightOffPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
+    SmartHomeComponentPreview(
+        scheme = scheme,
+    ) {
+        OnboardingLightEntity(
+            state = false,
+        )
+    }
+}
+
 @PreviewLocales
 @Composable
 private fun OnboardingEntitiesLightOnPreview(
@@ -159,6 +179,8 @@ private fun OnboardingEntitiesLightOnPreview(
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLightEntity()
+        OnboardingLightEntity(
+            state = true,
+        )
     }
 }

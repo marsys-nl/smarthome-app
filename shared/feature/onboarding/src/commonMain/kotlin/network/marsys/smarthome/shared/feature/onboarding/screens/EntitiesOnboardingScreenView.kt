@@ -7,6 +7,10 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.retain.retain
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -100,9 +104,13 @@ internal fun EntitiesOnboardingScreenView(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
+                var light by retain { mutableStateOf(false) }
+
                 OnboardingLightEntity(
+                    state = light,
                     modifier = Modifier
                         .padding(bottom = 12.dp),
+                    onStateChange = { light = it },
                 )
 
                 Text(

@@ -4,5 +4,14 @@
     <string name="onboarding_initial_title">Welkom bij jouw SmartHome</string>
     <string name="onboarding_initial_subtitle">Bedien al je apparaten vanuit één mooie app</string>
 
+    <string name="onboarding_entities_title">Bedien entiteiten</string>
+    <string name="onboarding_entities_subtitle">Je kunt apparaten, lampen, thermostaten en meer bedienen</string>
+    <string name="onboarding_entities_try_interaction">Probeer met deze entiteiten te interageren</string>
+
+    <string name="entity_dining_table_lamp">Eetkamerlamp</string>
+
+    <string name="entity_state_on">Aan</string>
+    <string name="entity_state_off">Uit</string>
+
     <string name="onboarding_button_next">Volgende</string>
 </resources>
