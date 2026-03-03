@@ -8,5 +8,11 @@
     <string name="onboarding_entities_subtitle">You can control devices, lights, thermostats, and more</string>
     <string name="onboarding_entities_try_interaction">Try interacting with these entities</string>
 
+    <string name="entity_dining_table_lamp">Dining table lamp</string>
+
+    <string name="entity_state_card_separator" translatable="false"> • </string>
+    <string name="entity_state_on">On</string>
+    <string name="entity_state_off">Off</string>
+
     <string name="onboarding_button_next">Next</string>
 </resources>
