@@ -46,12 +46,12 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 @Suppress("LongMethod")
 fun OnboardingLightEntity(
-    state: MutableState<Boolean> = retain { mutableStateOf(false) },
+    state: Boolean,
     modifier: Modifier = Modifier,
+    onStateChange: (Boolean) -> Unit = {},
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-
-    val cardColors = if (state.value) {
+    val cardColors = if (state) {
         CardDefaults.colors(
             backgroundColor = LocalColorScheme.current[GradientKeyToken.DimmedPrimaryToSecondary],
             borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
@@ -60,16 +60,16 @@ fun OnboardingLightEntity(
         CardDefaults.colors()
     }
 
-    val borderWidth = if (state.value) 1.dp else 0.dp
+    val borderWidth = if (state) 1.dp else 0.dp
 
     Card(
         modifier = modifier
             .toggleable(
-                value = state.value,
+                value = state,
                 indication = null,
                 interactionSource = interactionSource,
                 role = Role.Switch,
-                onValueChange = { state.value = it },
+                onValueChange = onStateChange,
             ),
         colors = cardColors,
         contentPadding = PaddingValues(all = 20.dp),
@@ -81,7 +81,7 @@ fun OnboardingLightEntity(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             LightEntityIcon(
-                isOn = state.value,
+                isOn = state,
             )
 
             Column(
@@ -101,10 +101,10 @@ fun OnboardingLightEntity(
                 val separator = stringResource(Res.string.entity_state_card_separator)
 
                 Text(
-                    text = if (state.value) {
+                    text = if (state) {
                         listOf(
                             stringResource(Res.string.entity_state_on),
-                            "80%"
+                            "80%",
                         ).joinToString(separator = separator)
                     } else {
                         stringResource(Res.string.entity_state_off)
@@ -116,8 +116,8 @@ fun OnboardingLightEntity(
             }
 
             Switch(
-                checked = state.value,
-                onCheckedChange = { state.value = !it },
+                checked = state,
+                onCheckedChange = onStateChange,
             )
         }
     }
@@ -166,7 +166,7 @@ private fun OnboardingEntitiesLightOffPreview(
         scheme = scheme,
     ) {
         OnboardingLightEntity(
-            state = mutableStateOf(false)
+            state = false,
         )
     }
 }
@@ -180,7 +180,7 @@ private fun OnboardingEntitiesLightOnPreview(
         scheme = scheme,
     ) {
         OnboardingLightEntity(
-            state = mutableStateOf(true)
+            state = true,
         )
     }
 }
