@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Switch
@@ -150,8 +151,9 @@ private fun LightEntityIcon(
 }
 
 @Preview
+@PreviewLocales
 @Composable
-private fun OnboardingEntitiesScreenIconPreview(
+private fun OnboardingEntitiesLightOnPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
