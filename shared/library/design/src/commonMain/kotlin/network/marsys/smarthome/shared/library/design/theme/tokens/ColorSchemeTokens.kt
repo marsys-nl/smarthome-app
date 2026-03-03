@@ -12,11 +12,14 @@ internal interface ColorSchemeTokens {
     val BackgroundBrandSecondary: Color
     val BackgroundDisabled: Color
     val BorderPrimary: Color
+    val ForegroundPrimary: Color
     val ForegroundPrimaryAlternative: Color
     val ForegroundBrandPrimary: Color
     val ForegroundDisabled: Color
     val GradientBrandPrimaryToSecondary: Brush get() =
         GradientTokens.Amber.Amber400.ToEmerald400
+    val GradientDimmedPrimaryToSecondary: Brush get() =
+        GradientTokens.Amber.Amber400.ToEmerald400(alpha = .2f)
     val TextPrimary: Color
     val TextSecondary: Color
     val TextDisabled: Color
