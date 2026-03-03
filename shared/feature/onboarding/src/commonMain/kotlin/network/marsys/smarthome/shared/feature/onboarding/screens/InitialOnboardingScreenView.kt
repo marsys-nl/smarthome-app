@@ -26,6 +26,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
@@ -127,6 +128,7 @@ fun InitialOnboardingScreenView(
     }
 }
 
+@PreviewLocales
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable

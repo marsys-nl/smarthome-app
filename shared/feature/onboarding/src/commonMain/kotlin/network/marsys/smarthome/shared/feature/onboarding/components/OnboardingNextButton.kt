@@ -17,13 +17,12 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_button_next
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonColors
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
@@ -81,7 +80,7 @@ fun OnboardingNextButton(
     }
 }
 
-@Preview
+@PreviewLocales
 @Composable
 private fun OnboardingNextButtonPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
