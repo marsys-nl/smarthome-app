@@ -219,7 +219,7 @@ private fun DisabledCheckedSwitchPreview(
         scheme = scheme,
     ) {
         Switch(
-            checked = false,
+            checked = true,
             enabled = false,
         )
     }
@@ -234,7 +234,7 @@ private fun DisabledUncheckedSwitchPreview(
         scheme = scheme,
     ) {
         Switch(
-            checked = true,
+            checked = false,
             enabled = false,
         )
     }
