@@ -12,12 +12,19 @@ internal sealed interface OnboardingScreens : NavKey {
     data object Entities : OnboardingScreens
 
     @Serializable
-    data object Scenes : OnboardingScreens
+    data object Appearance : OnboardingScreens
 
     @Serializable
     data object Configuration : OnboardingScreens
 
     companion object {
         const val SCREEN_COUNT = 4
+
+        internal fun indexOf(screen: OnboardingScreens) = when (screen) {
+            Initial -> 1
+            Entities -> 2
+            Appearance -> 3
+            Configuration -> 4
+        }
     }
 }

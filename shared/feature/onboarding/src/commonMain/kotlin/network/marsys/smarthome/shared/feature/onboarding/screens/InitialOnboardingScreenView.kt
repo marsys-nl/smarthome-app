@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreens
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
@@ -50,11 +51,12 @@ private val ScreenIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber60
 @Composable
 @Suppress("LongMethod")
 fun InitialOnboardingScreenView(
-    numberOfScreens: Int,
-    indexOfScreen: Int,
     navigateToEntities: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val numberOfScreens: Int = OnboardingScreens.SCREEN_COUNT
+    val indexOfScreen: Int = OnboardingScreens.indexOf(OnboardingScreens.Initial)
+
     OnboardingScreenScaffold(
         modifier = modifier,
         backgroundColor = OnboardingBackgroundColor,
@@ -133,8 +135,6 @@ private fun InitialOnboardingScreenLightModePreview() {
         darkMode = false,
     ) {
         InitialOnboardingScreenView(
-            numberOfScreens = 4,
-            indexOfScreen = 1,
             navigateToEntities = {},
         )
     }
@@ -149,8 +149,6 @@ private fun InitialOnboardingScreenDarkModePreview() {
         darkMode = true,
     ) {
         InitialOnboardingScreenView(
-            numberOfScreens = 4,
-            indexOfScreen = 1,
             navigateToEntities = {},
         )
     }
