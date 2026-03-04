@@ -1,9 +1,9 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -64,66 +64,64 @@ fun InitialOnboardingScreenView(
                 contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(108.dp),
+                    .sizeIn(maxHeight = maxHeight / 6)
+                    .aspectRatio(1f),
             )
         },
-    ) {
-        OnboardingProgressIndicator(
-            numberOfScreens = numberOfScreens,
-            indexOfScreen = indexOfScreen,
-            colors = OnboardingProgressIndicatorDefaults.colors(
-                background = SolidColor(OnboardingProgressIndicatorBackgroundColor),
-                foreground = SolidColor(OnboardingProgressIndicatorForegroundColor),
-            ),
-            modifier = Modifier
-                .padding(bottom = 40.dp),
-        )
-
-        Text(
-            text = stringResource(Res.string.onboarding_initial_title),
-            modifier = Modifier
-                .padding(bottom = 8.dp),
-            textAlign = TextAlign.Center,
-            lineHeight = 32.sp,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.W700,
-            color = OnboardingContentColor,
-        )
-
-        Text(
-            text = stringResource(Res.string.onboarding_initial_subtitle),
-            textAlign = TextAlign.Center,
-            lineHeight = 20.sp,
-            fontSize = 14.sp,
-            color = OnboardingContentColor,
-        )
-
-        Spacer(
-            modifier = Modifier
-                .weight(1f),
-        )
-
-        OnboardingNextButton(
-            onClick = navigateToEntities,
-            colors = ButtonDefaults.colors(
-                backgroundColor = SolidColor(
-                    value = OnboardingButtonBackgroundColor,
+        header = {
+            OnboardingProgressIndicator(
+                numberOfScreens = numberOfScreens,
+                indexOfScreen = indexOfScreen,
+                colors = OnboardingProgressIndicatorDefaults.colors(
+                    background = SolidColor(OnboardingProgressIndicatorBackgroundColor),
+                    foreground = SolidColor(OnboardingProgressIndicatorForegroundColor),
                 ),
-                contentColor = OnboardingButtonTextColor,
-            ),
-        )
+                modifier = Modifier
+                    .padding(bottom = 40.dp),
+            )
 
-        OnboardingScreenIndicator(
-            screen = 1,
-            screens = 5,
-            modifier = Modifier
-                .padding(top = 24.dp),
-            colors = OnboardingScreenIndicatorDefaults.colors(
-                activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
-                inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
-            ),
-        )
-    }
+            Text(
+                text = stringResource(Res.string.onboarding_initial_title),
+                modifier = Modifier
+                    .padding(bottom = 8.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 32.sp,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.W700,
+                color = OnboardingContentColor,
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_initial_subtitle),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                color = OnboardingContentColor,
+            )
+        },
+        footer = {
+            OnboardingNextButton(
+                onClick = navigateToEntities,
+                colors = ButtonDefaults.colors(
+                    backgroundColor = SolidColor(
+                        value = OnboardingButtonBackgroundColor,
+                    ),
+                    contentColor = OnboardingButtonTextColor,
+                ),
+            )
+
+            OnboardingScreenIndicator(
+                screen = 1,
+                screens = 5,
+                modifier = Modifier
+                    .padding(top = 24.dp),
+                colors = OnboardingScreenIndicatorDefaults.colors(
+                    activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
+                    inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
+                ),
+            )
+        },
+    )
 }
 
 @PreviewLocales
