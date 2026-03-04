@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ fun OnboardingScreenScaffold(
     ) {
         Column(
             modifier = Modifier
+                .statusBarsPadding()
                 .padding(all = 40.dp)
                 .widthIn(max = 400.dp)
                 .fillMaxWidth(),
