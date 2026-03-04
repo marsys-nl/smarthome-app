@@ -12,6 +12,8 @@ internal interface ColorSchemeTokens {
     val BackgroundBrandSecondary: Color
     val BackgroundDisabled: Color
     val BorderPrimary: Color
+    val BorderBrandPrimary: Color
+    val BorderBrandPrimaryDimmed: Color
     val ForegroundPrimary: Color
     val ForegroundPrimaryAlternative: Color
     val ForegroundBrandPrimary: Color
