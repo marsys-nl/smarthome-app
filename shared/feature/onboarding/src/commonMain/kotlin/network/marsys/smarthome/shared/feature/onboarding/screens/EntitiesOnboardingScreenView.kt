@@ -3,7 +3,6 @@ package network.marsys.smarthome.shared.feature.onboarding.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -66,45 +65,74 @@ internal fun EntitiesOnboardingScreenView(
 ) {
     OnboardingScreenScaffold(
         modifier = modifier,
+        header = {
+            OnboardingProgressIndicator(
+                numberOfScreens = numberOfScreens,
+                indexOfScreen = indexOfScreen,
+                colors = OnboardingProgressIndicatorDefaults.colors(
+                    foreground = BrandPrimaryToSecondaryGradient,
+                ),
+                modifier = Modifier
+                    .padding(bottom = 40.dp),
+            )
+
+            OnboardingScreenIcon(
+                icon = Icons.HousePlug,
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_entities_title),
+                modifier = Modifier
+                    .padding(bottom = 8.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 32.sp,
+                fontSize = 22.sp,
+                fontWeight = FontWeight.W700,
+            )
+
+            Text(
+                text = stringResource(Res.string.onboarding_entities_subtitle),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+            )
+        },
+        footer = {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                OnboardingBackButton(
+                    onClick = navigateBack,
+                )
+
+                OnboardingNextButton(
+                    onClick = navigateToScenes,
+                    colors = ButtonDefaults.colors(
+                        backgroundColor = BrandPrimaryToSecondaryGradient,
+                        contentColor = PaletteTokens.Base.White,
+                    ),
+                )
+            }
+
+            OnboardingScreenIndicator(
+                screen = indexOfScreen,
+                screens = numberOfScreens,
+                modifier = Modifier
+                    .padding(top = 24.dp),
+                colors = OnboardingScreenIndicatorDefaults.colors(
+                    activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
+                    currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
+                ),
+            )
+        },
     ) {
-        OnboardingProgressIndicator(
-            numberOfScreens = numberOfScreens,
-            indexOfScreen = indexOfScreen,
-            colors = OnboardingProgressIndicatorDefaults.colors(
-                foreground = BrandPrimaryToSecondaryGradient,
-            ),
-            modifier = Modifier
-                .padding(bottom = 40.dp),
-        )
-
-        OnboardingScreenIcon(
-            icon = Icons.HousePlug,
-            modifier = Modifier
-                .padding(bottom = 16.dp),
-        )
-
-        Text(
-            text = stringResource(Res.string.onboarding_entities_title),
-            modifier = Modifier
-                .padding(bottom = 8.dp),
-            textAlign = TextAlign.Center,
-            lineHeight = 32.sp,
-            fontSize = 22.sp,
-            fontWeight = FontWeight.W700,
-        )
-
-        Text(
-            text = stringResource(Res.string.onboarding_entities_subtitle),
-            textAlign = TextAlign.Center,
-            lineHeight = 20.sp,
-            fontSize = 14.sp,
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxWidth(ENTITY_WIDTH_FRACTION)
-                .fillMaxHeight()
-                .weight(1f),
+                .padding(vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -140,34 +168,6 @@ internal fun EntitiesOnboardingScreenView(
                 fontSize = 14.sp,
             )
         }
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            OnboardingBackButton(
-                onClick = navigateBack,
-            )
-
-            OnboardingNextButton(
-                onClick = navigateToScenes,
-                colors = ButtonDefaults.colors(
-                    backgroundColor = BrandPrimaryToSecondaryGradient,
-                    contentColor = PaletteTokens.Base.White,
-                ),
-            )
-        }
-
-        OnboardingScreenIndicator(
-            screen = indexOfScreen,
-            screens = numberOfScreens,
-            modifier = Modifier
-                .padding(top = 24.dp),
-            colors = OnboardingScreenIndicatorDefaults.colors(
-                activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
-            ),
-        )
     }
 }
 
