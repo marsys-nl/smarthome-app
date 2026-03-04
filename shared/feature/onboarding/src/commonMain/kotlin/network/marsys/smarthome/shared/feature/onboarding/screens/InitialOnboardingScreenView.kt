@@ -30,18 +30,18 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 private val OnboardingBackgroundColor = Color(color = 0xFFF1BF42)
+private val OnboardingContentColor = PaletteTokens.Slate.Slate800
 
-private val OnboardingInitialScreenButtonBackgroundColor = PaletteTokens.Slate.Slate800
-private val OnboardingInitialScreenButtonTextColor = PaletteTokens.Base.White
-private val OnboardingInitialScreenProgressIndicatorBackgroundColor = PaletteTokens.Amber.Amber600
+private val OnboardingButtonBackgroundColor = PaletteTokens.Slate.Slate800
+private val OnboardingButtonTextColor = PaletteTokens.Base.White
+private val OnboardingProgressIndicatorBackgroundColor = PaletteTokens.Amber.Amber600
     .copy(alpha = .3f)
-private val OnboardingInitialScreenProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
+private val OnboardingProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
 
 private val ScreenIndicatorActiveBackgroundColor = PaletteTokens.Slate.Slate800
 private val ScreenIndicatorInactiveBackgroundColor = PaletteTokens.Amber.Amber600
@@ -72,8 +72,8 @@ fun InitialOnboardingScreenView(
             numberOfScreens = numberOfScreens,
             indexOfScreen = indexOfScreen,
             colors = OnboardingProgressIndicatorDefaults.colors(
-                background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
-                foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
+                background = SolidColor(OnboardingProgressIndicatorBackgroundColor),
+                foreground = SolidColor(OnboardingProgressIndicatorForegroundColor),
             ),
             modifier = Modifier
                 .padding(bottom = 40.dp),
@@ -87,6 +87,7 @@ fun InitialOnboardingScreenView(
             lineHeight = 32.sp,
             fontSize = 22.sp,
             fontWeight = FontWeight.W700,
+            color = OnboardingContentColor,
         )
 
         Text(
@@ -94,6 +95,7 @@ fun InitialOnboardingScreenView(
             textAlign = TextAlign.Center,
             lineHeight = 20.sp,
             fontSize = 14.sp,
+            color = OnboardingContentColor,
         )
 
         Spacer(
@@ -105,9 +107,9 @@ fun InitialOnboardingScreenView(
             onClick = navigateToEntities,
             colors = ButtonDefaults.colors(
                 backgroundColor = SolidColor(
-                    value = OnboardingInitialScreenButtonBackgroundColor,
+                    value = OnboardingButtonBackgroundColor,
                 ),
-                contentColor = OnboardingInitialScreenButtonTextColor,
+                contentColor = OnboardingButtonTextColor,
             ),
         )
 
