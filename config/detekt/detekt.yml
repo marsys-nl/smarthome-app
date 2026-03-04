@@ -38,7 +38,7 @@ Compose:
 naming:
     FunctionNameMaxLength:
         maximumFunctionNameLength: 40
-        ignoreAnnotated: ['Preview', 'Test']
+        ignoreAnnotated: ['Preview', 'PreviewLocales', 'Test']
     FunctionNaming:
         ignoreAnnotated: ['Composable']
     ObjectPropertyNaming:

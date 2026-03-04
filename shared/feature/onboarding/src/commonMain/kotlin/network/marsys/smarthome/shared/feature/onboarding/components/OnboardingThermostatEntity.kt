@@ -2,37 +2,32 @@ package network.marsys.smarthome.shared.feature.onboarding.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_lamp_dining_table
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_card_separator
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_off
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_on
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_heating
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_idle
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_thermostat_nursery
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
-import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
-import network.marsys.smarthome.shared.library.design.icons.Lightbulb
+import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
@@ -41,12 +36,9 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyTo
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-@Suppress("LongMethod")
-fun OnboardingLightEntity(
+fun OnboardingThermostatEntity(
     state: Boolean,
     modifier: Modifier = Modifier,
-    onStateChange: (Boolean) -> Unit = {},
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val cardColors = if (state) {
         CardDefaults.colors(
@@ -60,14 +52,7 @@ fun OnboardingLightEntity(
     val borderWidth = if (state) 1.dp else 0.dp
 
     Card(
-        modifier = modifier
-            .toggleable(
-                value = state,
-                indication = null,
-                interactionSource = interactionSource,
-                role = Role.Switch,
-                onValueChange = onStateChange,
-            ),
+        modifier = modifier,
         colors = cardColors,
         contentPadding = PaddingValues(all = 20.dp),
         borderWidth = borderWidth,
@@ -77,7 +62,7 @@ fun OnboardingLightEntity(
                 .spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            LightEntityIcon(
+            ThermostatEntityIcon(
                 state = state,
             )
 
@@ -88,7 +73,7 @@ fun OnboardingLightEntity(
                     .spacedBy(4.dp),
             ) {
                 Text(
-                    text = stringResource(Res.string.entity_lamp_dining_table),
+                    text = stringResource(Res.string.entity_thermostat_nursery),
                     lineHeight = 24.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
@@ -96,32 +81,26 @@ fun OnboardingLightEntity(
                 )
 
                 val separator = stringResource(Res.string.entity_state_card_separator)
+                val stateStringResource = if (state) {
+                    Res.string.entity_state_heating
+                } else {
+                    Res.string.entity_state_idle
+                }
 
                 Text(
-                    text = if (state) {
-                        listOf(
-                            stringResource(Res.string.entity_state_on),
-                            "80%",
-                        ).joinToString(separator = separator)
-                    } else {
-                        stringResource(Res.string.entity_state_off)
-                    },
+                    text = listOf("22°C", stringResource(stateStringResource))
+                        .joinToString(separator = separator),
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
                     color = LocalColorScheme.current[ColorKeyToken.TextSecondary],
                 )
             }
-
-            Switch(
-                checked = state,
-                onCheckedChange = onStateChange,
-            )
         }
     }
 }
 
 @Composable
-private fun LightEntityIcon(
+private fun ThermostatEntityIcon(
     state: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -140,7 +119,7 @@ private fun LightEntityIcon(
         }
 
     Image(
-        imageVector = Icons.Lightbulb,
+        imageVector = Icons.Thermostat,
         modifier = modifier
             .background(
                 shape = RoundedCornerShape(16.dp),
@@ -156,13 +135,13 @@ private fun LightEntityIcon(
 
 @PreviewLocales
 @Composable
-private fun OnboardingEntitiesLightOffPreview(
+private fun OnboardingEntitiesThermostatIdlePreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLightEntity(
+        OnboardingThermostatEntity(
             state = false,
         )
     }
@@ -170,13 +149,13 @@ private fun OnboardingEntitiesLightOffPreview(
 
 @PreviewLocales
 @Composable
-private fun OnboardingEntitiesLightOnPreview(
+private fun OnboardingEntitiesThermostatHeatingPreview(
     @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
 ) {
     SmartHomeComponentPreview(
         scheme = scheme,
     ) {
-        OnboardingLightEntity(
+        OnboardingThermostatEntity(
             state = true,
         )
     }

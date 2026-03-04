@@ -6,11 +6,14 @@
 
     <string name="onboarding_entities_title">Control entities</string>
     <string name="onboarding_entities_subtitle">You can control devices, lights, thermostats, and more</string>
-    <string name="onboarding_entities_try_interaction">Try interacting with these entities</string>
+    <string name="onboarding_entities_interaction">Some entities are interactable\nEntities may also change based upon incoming updates</string>
 
-    <string name="entity_dining_table_lamp">Dining table lamp</string>
+    <string name="entity_lamp_dining_table">Dining table</string>
+    <string name="entity_thermostat_nursery">Nursery</string>
 
     <string name="entity_state_card_separator" translatable="false"> • </string>
+    <string name="entity_state_idle">Idle</string>
+    <string name="entity_state_heating">Heating</string>
     <string name="entity_state_on">On</string>
     <string name="entity_state_off">Off</string>
 

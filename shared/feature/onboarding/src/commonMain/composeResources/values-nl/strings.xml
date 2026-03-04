@@ -6,10 +6,13 @@
 
     <string name="onboarding_entities_title">Bedien entiteiten</string>
     <string name="onboarding_entities_subtitle">Je kunt apparaten, lampen, thermostaten en meer bedienen</string>
-    <string name="onboarding_entities_try_interaction">Probeer met deze entiteiten te interageren</string>
+    <string name="onboarding_entities_interaction">Met sommige entiteiten is te interageren\nEntiteiten kunnen ook op basis van inkomende updates veranderen</string>
 
-    <string name="entity_dining_table_lamp">Eetkamerlamp</string>
+    <string name="entity_lamp_dining_table">Eetkamer</string>
+    <string name="entity_thermostat_nursery">Babykamer</string>
 
+    <string name="entity_state_idle">Inactief</string>
+    <string name="entity_state_heating">Verwarmen</string>
     <string name="entity_state_on">Aan</string>
     <string name="entity_state_off">Uit</string>
 
