@@ -64,112 +64,110 @@ internal fun EntitiesOnboardingScreenView(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SmartHomeTheme {
-        OnboardingScreenScaffold(
-            modifier = modifier,
+    OnboardingScreenScaffold(
+        modifier = modifier,
+    ) {
+        OnboardingProgressIndicator(
+            numberOfScreens = numberOfScreens,
+            indexOfScreen = indexOfScreen,
+            colors = OnboardingProgressIndicatorDefaults.colors(
+                foreground = BrandPrimaryToSecondaryGradient,
+            ),
+            modifier = Modifier
+                .padding(bottom = 40.dp),
+        )
+
+        OnboardingScreenIcon(
+            icon = Icons.HousePlug,
+            modifier = Modifier
+                .padding(bottom = 16.dp),
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_entities_title),
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+            textAlign = TextAlign.Center,
+            lineHeight = 32.sp,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.W700,
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_entities_subtitle),
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(ENTITY_WIDTH_FRACTION)
+                .fillMaxHeight()
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
         ) {
-            OnboardingProgressIndicator(
-                numberOfScreens = numberOfScreens,
-                indexOfScreen = indexOfScreen,
-                colors = OnboardingProgressIndicatorDefaults.colors(
-                    foreground = BrandPrimaryToSecondaryGradient,
-                ),
+            var light by retain { mutableStateOf(false) }
+
+            OnboardingLightEntity(
+                state = light,
                 modifier = Modifier
-                    .padding(bottom = 40.dp),
+                    .padding(bottom = 12.dp),
+                onStateChange = { light = it },
             )
 
-            OnboardingScreenIcon(
-                icon = Icons.HousePlug,
+            var thermostat by retain { mutableStateOf(Random.nextBoolean()) }
+
+            LaunchedEffect(key1 = Unit) {
+                while (true) {
+                    val delayInMillis = Random.nextInt(from = 10, until = 30) * THERMOSTAT_DELAY_MULTIPLIER
+                    delay(delayInMillis)
+                    thermostat = !thermostat
+                }
+            }
+
+            OnboardingThermostatEntity(
+                state = thermostat,
                 modifier = Modifier
-                    .padding(bottom = 16.dp),
+                    .padding(bottom = 12.dp),
             )
 
             Text(
-                text = stringResource(Res.string.onboarding_entities_title),
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                textAlign = TextAlign.Center,
-                lineHeight = 32.sp,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.W700,
-            )
-
-            Text(
-                text = stringResource(Res.string.onboarding_entities_subtitle),
+                text = stringResource(Res.string.onboarding_entities_interaction),
                 textAlign = TextAlign.Center,
                 lineHeight = 20.sp,
                 fontSize = 14.sp,
             )
+        }
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth(ENTITY_WIDTH_FRACTION)
-                    .fillMaxHeight()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                var light by retain { mutableStateOf(false) }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            OnboardingBackButton(
+                onClick = navigateBack,
+            )
 
-                OnboardingLightEntity(
-                    state = light,
-                    modifier = Modifier
-                        .padding(bottom = 12.dp),
-                    onStateChange = { light = it },
-                )
-
-                var thermostat by retain { mutableStateOf(Random.nextBoolean()) }
-
-                LaunchedEffect(key1 = Unit) {
-                    while (true) {
-                        val delayInMillis = Random.nextInt(from = 10, until = 30) * THERMOSTAT_DELAY_MULTIPLIER
-                        delay(delayInMillis)
-                        thermostat = !thermostat
-                    }
-                }
-
-                OnboardingThermostatEntity(
-                    state = thermostat,
-                    modifier = Modifier
-                        .padding(bottom = 12.dp),
-                )
-
-                Text(
-                    text = stringResource(Res.string.onboarding_entities_interaction),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                OnboardingBackButton(
-                    onClick = navigateBack,
-                )
-
-                OnboardingNextButton(
-                    onClick = navigateToScenes,
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = BrandPrimaryToSecondaryGradient,
-                        contentColor = PaletteTokens.Base.White,
-                    ),
-                )
-            }
-
-            OnboardingScreenIndicator(
-                screen = indexOfScreen,
-                screens = numberOfScreens,
-                modifier = Modifier
-                    .padding(top = 24.dp),
-                colors = OnboardingScreenIndicatorDefaults.colors(
-                    activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                    currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
+            OnboardingNextButton(
+                onClick = navigateToScenes,
+                colors = ButtonDefaults.colors(
+                    backgroundColor = BrandPrimaryToSecondaryGradient,
+                    contentColor = PaletteTokens.Base.White,
                 ),
             )
         }
+
+        OnboardingScreenIndicator(
+            screen = indexOfScreen,
+            screens = numberOfScreens,
+            modifier = Modifier
+                .padding(top = 24.dp),
+            colors = OnboardingScreenIndicatorDefaults.colors(
+                activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
+                currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
+            ),
+        )
     }
 }
 
@@ -177,11 +175,32 @@ internal fun EntitiesOnboardingScreenView(
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun EntitiesOnboardingScreenViewPreview() {
-    EntitiesOnboardingScreenView(
-        numberOfScreens = 4,
-        indexOfScreen = 2,
-        navigateToScenes = {},
-        navigateBack = {},
-    )
+private fun EntitiesOnboardingScreenLightModePreview() {
+    SmartHomeTheme(
+        darkMode = false,
+    ) {
+        EntitiesOnboardingScreenView(
+            numberOfScreens = 4,
+            indexOfScreen = 2,
+            navigateToScenes = {},
+            navigateBack = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun EntitiesOnboardingScreenDarkModePreview() {
+    SmartHomeTheme(
+        darkMode = true,
+    ) {
+        EntitiesOnboardingScreenView(
+            numberOfScreens = 4,
+            indexOfScreen = 2,
+            navigateToScenes = {},
+            navigateBack = {},
+        )
+    }
 }

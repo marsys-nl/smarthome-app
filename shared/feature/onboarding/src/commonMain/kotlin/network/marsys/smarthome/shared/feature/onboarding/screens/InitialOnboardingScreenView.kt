@@ -55,76 +55,72 @@ fun InitialOnboardingScreenView(
     navigateToEntities: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    SmartHomeTheme(
-        scheme = ColorScheme.lightColorScheme,
+    OnboardingScreenScaffold(
+        modifier = modifier,
+        backgroundColor = OnboardingBackgroundColor,
+        centeredSlot = {
+            Image(
+                painter = painterResource(Res.drawable.logo),
+                contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .size(108.dp),
+            )
+        },
     ) {
-        OnboardingScreenScaffold(
-            modifier = modifier,
-            backgroundColor = OnboardingBackgroundColor,
-            centeredSlot = {
-                Image(
-                    painter = painterResource(Res.drawable.logo),
-                    contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(108.dp),
-                )
-            },
-        ) {
-            OnboardingProgressIndicator(
-                numberOfScreens = numberOfScreens,
-                indexOfScreen = indexOfScreen,
-                colors = OnboardingProgressIndicatorDefaults.colors(
-                    background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
-                    foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
+        OnboardingProgressIndicator(
+            numberOfScreens = numberOfScreens,
+            indexOfScreen = indexOfScreen,
+            colors = OnboardingProgressIndicatorDefaults.colors(
+                background = SolidColor(OnboardingInitialScreenProgressIndicatorBackgroundColor),
+                foreground = SolidColor(OnboardingInitialScreenProgressIndicatorForegroundColor),
+            ),
+            modifier = Modifier
+                .padding(bottom = 40.dp),
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_initial_title),
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+            textAlign = TextAlign.Center,
+            lineHeight = 32.sp,
+            fontSize = 22.sp,
+            fontWeight = FontWeight.W700,
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_initial_subtitle),
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+
+        Spacer(
+            modifier = Modifier
+                .weight(1f),
+        )
+
+        OnboardingNextButton(
+            onClick = navigateToEntities,
+            colors = ButtonDefaults.colors(
+                backgroundColor = SolidColor(
+                    value = OnboardingInitialScreenButtonBackgroundColor,
                 ),
-                modifier = Modifier
-                    .padding(bottom = 40.dp),
-            )
+                contentColor = OnboardingInitialScreenButtonTextColor,
+            ),
+        )
 
-            Text(
-                text = stringResource(Res.string.onboarding_initial_title),
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                textAlign = TextAlign.Center,
-                lineHeight = 32.sp,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.W700,
-            )
-
-            Text(
-                text = stringResource(Res.string.onboarding_initial_subtitle),
-                textAlign = TextAlign.Center,
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-            )
-
-            Spacer(
-                modifier = Modifier
-                    .weight(1f),
-            )
-
-            OnboardingNextButton(
-                onClick = navigateToEntities,
-                colors = ButtonDefaults.colors(
-                    backgroundColor = SolidColor(
-                        value = OnboardingInitialScreenButtonBackgroundColor,
-                    ),
-                    contentColor = OnboardingInitialScreenButtonTextColor,
-                ),
-            )
-
-            OnboardingScreenIndicator(
-                screen = 1,
-                screens = 5,
-                modifier = Modifier
-                    .padding(top = 24.dp),
-                colors = OnboardingScreenIndicatorDefaults.colors(
-                    activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
-                    inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
-                ),
-            )
-        }
+        OnboardingScreenIndicator(
+            screen = 1,
+            screens = 5,
+            modifier = Modifier
+                .padding(top = 24.dp),
+            colors = OnboardingScreenIndicatorDefaults.colors(
+                activeScreenIndicatorColor = SolidColor(ScreenIndicatorActiveBackgroundColor),
+                inactiveScreenIndicatorColor = SolidColor(ScreenIndicatorInactiveBackgroundColor),
+            ),
+        )
     }
 }
 
@@ -132,10 +128,30 @@ fun InitialOnboardingScreenView(
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun InitialOnboardingScreenViewPreview() {
-    InitialOnboardingScreenView(
-        numberOfScreens = 4,
-        indexOfScreen = 1,
-        navigateToEntities = {},
-    )
+private fun InitialOnboardingScreenLightModePreview() {
+    SmartHomeTheme(
+        darkMode = false,
+    ) {
+        InitialOnboardingScreenView(
+            numberOfScreens = 4,
+            indexOfScreen = 1,
+            navigateToEntities = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun InitialOnboardingScreenDarkModePreview() {
+    SmartHomeTheme(
+        darkMode = true,
+    ) {
+        InitialOnboardingScreenView(
+            numberOfScreens = 4,
+            indexOfScreen = 1,
+            navigateToEntities = {},
+        )
+    }
 }

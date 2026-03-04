@@ -4,6 +4,7 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import com.composeunstyled.LocalTextStyle
+import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import com.composeunstyled.Text as UnstyledText
 
 @Composable
@@ -41,7 +43,7 @@ fun Text(
     fontSize = fontSize,
     letterSpacing = letterSpacing,
     fontWeight = fontWeight,
-    color = color,
+    color = color.takeOrElse { LocalContentColor.current },
     fontFamily = fontFamily,
     singleLine = singleLine,
     minLines = minLines,
