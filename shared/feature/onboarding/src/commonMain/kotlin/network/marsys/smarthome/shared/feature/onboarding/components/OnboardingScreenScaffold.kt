@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -38,11 +40,16 @@ fun OnboardingScreenScaffold(
             .background(backgroundColor),
         contentAlignment = Alignment.TopCenter,
     ) {
+        val maxWidthConstraint = when {
+            maxHeight < maxWidth && maxWidth > 800.dp -> 500.dp
+            else -> 400.dp
+        }
+
         centeredSlot.invoke(this)
 
         SubcomposeLayout(
             modifier = Modifier
-                .widthIn(max = 400.dp)
+                .widthIn(max = maxWidthConstraint)
                 .fillMaxWidth(),
         ) { constraints ->
             val measureConstraints = Constraints(maxWidth = constraints.maxWidth)
@@ -106,7 +113,7 @@ private fun ScrollableLayout(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .safeDrawingPadding()
+            .systemBarsPadding()
             .padding(top = 20.dp)
             .padding(horizontal = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -125,7 +132,8 @@ private fun FittedLayout(
 ) {
     Column(
         modifier = Modifier
-            .safeDrawingPadding()
+            .fillMaxSize()
+            .systemBarsPadding()
             .padding(top = 20.dp)
             .padding(horizontal = 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
