@@ -19,6 +19,8 @@ data class ColorScheme internal constructor(
     private val backgroundBrandSecondary: Color,
     private val backgroundDisabled: Color,
     private val borderPrimary: Color,
+    private val borderBrandPrimary: Color,
+    private val borderBrandPrimaryDimmed: Color,
     private val foregroundPrimary: Color,
     private val foregroundPrimaryAlternative: Color,
     private val foregroundBrandPrimary: Color,
@@ -38,6 +40,8 @@ data class ColorScheme internal constructor(
         ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
         ColorKeyToken.BackgroundDisabled -> backgroundDisabled
         ColorKeyToken.BorderPrimary -> borderPrimary
+        ColorKeyToken.BorderBrandPrimary -> borderBrandPrimary
+        ColorKeyToken.BorderBrandPrimaryDimmed -> borderBrandPrimaryDimmed
         ColorKeyToken.ForegroundPrimary -> foregroundPrimary
         ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
         ColorKeyToken.ForegroundBrandPrimary -> foregroundBrandPrimary
@@ -74,6 +78,8 @@ internal fun darkColorScheme(
     backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
     backgroundDisabled: Color = DarkColorSchemeTokens.BackgroundDisabled,
     borderPrimary: Color = DarkColorSchemeTokens.BorderPrimary,
+    borderBrandPrimary: Color = DarkColorSchemeTokens.BorderBrandPrimary,
+    borderBrandPrimaryDimmed: Color = DarkColorSchemeTokens.BorderBrandPrimaryDimmed,
     foregroundPrimary: Color = DarkColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundBrandPrimary: Color = DarkColorSchemeTokens.ForegroundBrandPrimary,
@@ -91,6 +97,8 @@ internal fun darkColorScheme(
     backgroundBrandSecondary = backgroundBrandSecondary,
     backgroundDisabled = backgroundDisabled,
     borderPrimary = borderPrimary,
+    borderBrandPrimary = borderBrandPrimary,
+    borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundBrandPrimary = foregroundBrandPrimary,
@@ -110,6 +118,8 @@ internal fun lightColorScheme(
     backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
     backgroundDisabled: Color = LightColorSchemeTokens.BackgroundDisabled,
     borderPrimary: Color = LightColorSchemeTokens.BorderPrimary,
+    borderBrandPrimary: Color = LightColorSchemeTokens.BorderBrandPrimary,
+    borderBrandPrimaryDimmed: Color = LightColorSchemeTokens.BorderBrandPrimaryDimmed,
     foregroundPrimary: Color = LightColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundBrandPrimary: Color = LightColorSchemeTokens.ForegroundBrandPrimary,
@@ -127,6 +137,8 @@ internal fun lightColorScheme(
     backgroundBrandSecondary = backgroundBrandSecondary,
     backgroundDisabled = backgroundDisabled,
     borderPrimary = borderPrimary,
+    borderBrandPrimary = borderBrandPrimary,
+    borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundBrandPrimary = foregroundBrandPrimary,

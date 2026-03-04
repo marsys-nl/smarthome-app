@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -54,7 +51,7 @@ fun OnboardingLightEntity(
     val cardColors = if (state) {
         CardDefaults.colors(
             backgroundColor = LocalColorScheme.current[GradientKeyToken.DimmedPrimaryToSecondary],
-            borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
+            borderColor = LocalColorScheme.current[ColorKeyToken.BorderBrandPrimaryDimmed],
         )
     } else {
         CardDefaults.colors()
