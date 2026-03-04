@@ -11,6 +11,7 @@ import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
+import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.Text
 
 private val config = SavedStateConfiguration {
@@ -33,42 +34,44 @@ fun OnboardingScreenView(
         elements = arrayOf(OnboardingScreens.Initial),
     )
 
-    NavDisplay(
-        modifier = modifier
-            .fillMaxSize(),
-        backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
-        entryProvider = entryProvider {
-            entry<OnboardingScreens.Initial> {
-                InitialOnboardingScreenView(
-                    numberOfScreens = OnboardingScreens.SCREEN_COUNT,
-                    indexOfScreen = 1,
-                    navigateToEntities = {
-                        backStack += OnboardingScreens.Entities
-                    },
-                )
-            }
+    SmartHomeTheme {
+        NavDisplay(
+            modifier = modifier
+                .fillMaxSize(),
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            entryProvider = entryProvider {
+                entry<OnboardingScreens.Initial> {
+                    InitialOnboardingScreenView(
+                        numberOfScreens = OnboardingScreens.SCREEN_COUNT,
+                        indexOfScreen = 1,
+                        navigateToEntities = {
+                            backStack += OnboardingScreens.Entities
+                        },
+                    )
+                }
 
-            entry<OnboardingScreens.Entities> {
-                EntitiesOnboardingScreenView(
-                    numberOfScreens = OnboardingScreens.SCREEN_COUNT,
-                    indexOfScreen = 2,
-                    navigateToScenes = {
-                        backStack += OnboardingScreens.Scenes
-                    },
-                    navigateBack = {
-                        backStack.removeLast()
-                    },
-                )
-            }
+                entry<OnboardingScreens.Entities> {
+                    EntitiesOnboardingScreenView(
+                        numberOfScreens = OnboardingScreens.SCREEN_COUNT,
+                        indexOfScreen = 2,
+                        navigateToScenes = {
+                            backStack += OnboardingScreens.Scenes
+                        },
+                        navigateBack = {
+                            backStack.removeLast()
+                        },
+                    )
+                }
 
-            entry<OnboardingScreens.Scenes> {
-                Text("Not yet implemented")
-            }
+                entry<OnboardingScreens.Scenes> {
+                    Text("Not yet implemented")
+                }
 
-            entry<OnboardingScreens.Configuration> {
-                Text("Not yet implemented")
-            }
-        },
-    )
+                entry<OnboardingScreens.Configuration> {
+                    Text("Not yet implemented")
+                }
+            },
+        )
+    }
 }
