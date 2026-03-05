@@ -8,6 +8,15 @@
     <string name="onboarding_entities_subtitle">Je kunt apparaten, lampen, thermostaten en meer bedienen</string>
     <string name="onboarding_entities_interaction">Met sommige entiteiten is te interageren\nEntiteiten kunnen ook op basis van inkomende updates veranderen</string>
 
+    <string name="onboarding_appearance_title">Kies het uiterlijk</string>
+    <string name="onboarding_appearance_subtitle">Hoe wil je dat de app eruitziet?</string>
+    <string name="onboarding_appearance_system">Systeemstandaard</string>
+    <string name="onboarding_appearance_system_subtitle">Volgt de instellingen van je apparaat</string>
+    <string name="onboarding_appearance_light">Lichte modus</string>
+    <string name="onboarding_appearance_light_subtitle">Altijd de lichte modus gebruiken</string>
+    <string name="onboarding_appearance_dark">Donkere modus</string>
+    <string name="onboarding_appearance_dark_subtitle">Altijd de donkere modus gebruiken</string>
+
     <string name="entity_lamp_dining_table">Eetkamer</string>
     <string name="entity_thermostat_nursery">Babykamer</string>
 

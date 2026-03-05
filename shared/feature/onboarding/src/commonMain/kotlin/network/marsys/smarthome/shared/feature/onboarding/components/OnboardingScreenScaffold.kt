@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.feature.onboarding.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
@@ -22,6 +23,8 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+
+private const val CONTENT_WIDTH_FRACTION = .95f
 
 @Composable
 fun OnboardingScreenScaffold(
@@ -144,7 +147,15 @@ private fun FittedLayout(
                 .weight(1f),
             contentAlignment = Alignment.Center,
         ) {
-            content.invoke(this@Column)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(CONTENT_WIDTH_FRACTION)
+                    .padding(vertical = 24.dp),
+                verticalArrangement = Arrangement
+                    .spacedBy(12.dp),
+            ) {
+                content.invoke(this)
+            }
         }
 
         footer.invoke(this)

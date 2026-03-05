@@ -1,9 +1,7 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +50,6 @@ private val BrandPrimaryToSecondaryGradient
     @Composable
     get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
 
-private const val ENTITY_WIDTH_FRACTION = .95f
 private const val THERMOSTAT_DELAY_MULTIPLIER = 500L
 
 @Composable
@@ -131,45 +128,33 @@ internal fun EntitiesOnboardingScreenView(
             )
         },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(ENTITY_WIDTH_FRACTION)
-                .padding(vertical = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            var light by retain { mutableStateOf(false) }
+        var light by retain { mutableStateOf(false) }
 
-            OnboardingLightEntity(
-                state = light,
-                modifier = Modifier
-                    .padding(bottom = 12.dp),
-                onStateChange = { light = it },
-            )
+        OnboardingLightEntity(
+            state = light,
+            onStateChange = { light = it },
+        )
 
-            var thermostat by retain { mutableStateOf(Random.nextBoolean()) }
+        var thermostat by retain { mutableStateOf(Random.nextBoolean()) }
 
-            LaunchedEffect(key1 = Unit) {
-                while (true) {
-                    val delayInMillis = Random.nextInt(from = 10, until = 30) * THERMOSTAT_DELAY_MULTIPLIER
-                    delay(delayInMillis)
-                    thermostat = !thermostat
-                }
+        LaunchedEffect(key1 = Unit) {
+            while (true) {
+                val delayInMillis = Random.nextInt(from = 10, until = 30) * THERMOSTAT_DELAY_MULTIPLIER
+                delay(delayInMillis)
+                thermostat = !thermostat
             }
-
-            OnboardingThermostatEntity(
-                state = thermostat,
-                modifier = Modifier
-                    .padding(bottom = 12.dp),
-            )
-
-            Text(
-                text = stringResource(Res.string.onboarding_entities_interaction),
-                textAlign = TextAlign.Center,
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-            )
         }
+
+        OnboardingThermostatEntity(
+            state = thermostat,
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_entities_interaction),
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
     }
 }
 
