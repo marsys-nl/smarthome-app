@@ -9,6 +9,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
+import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -19,7 +20,7 @@ private val config = SavedStateConfiguration {
         polymorphic(OnboardingScreens::class) {
             subclass(OnboardingScreens.Initial::class, OnboardingScreens.Initial.serializer())
             subclass(OnboardingScreens.Entities::class, OnboardingScreens.Entities.serializer())
-            subclass(OnboardingScreens.Scenes::class, OnboardingScreens.Scenes.serializer())
+            subclass(OnboardingScreens.Appearance::class, OnboardingScreens.Appearance.serializer())
             subclass(OnboardingScreens.Configuration::class, OnboardingScreens.Configuration.serializer())
         }
     }
@@ -43,8 +44,6 @@ fun OnboardingScreenView(
             entryProvider = entryProvider {
                 entry<OnboardingScreens.Initial> {
                     InitialOnboardingScreenView(
-                        numberOfScreens = OnboardingScreens.SCREEN_COUNT,
-                        indexOfScreen = 1,
                         navigateToEntities = {
                             backStack += OnboardingScreens.Entities
                         },
@@ -53,10 +52,8 @@ fun OnboardingScreenView(
 
                 entry<OnboardingScreens.Entities> {
                     EntitiesOnboardingScreenView(
-                        numberOfScreens = OnboardingScreens.SCREEN_COUNT,
-                        indexOfScreen = 2,
                         navigateToScenes = {
-                            backStack += OnboardingScreens.Scenes
+                            backStack += OnboardingScreens.Appearance
                         },
                         navigateBack = {
                             backStack.removeLast()
@@ -64,8 +61,15 @@ fun OnboardingScreenView(
                     )
                 }
 
-                entry<OnboardingScreens.Scenes> {
-                    Text("Not yet implemented")
+                entry<OnboardingScreens.Appearance> {
+                    AppearanceOnboardingScreenView(
+                        navigateToConfiguration = {
+                            backStack += OnboardingScreens.Configuration
+                        },
+                        navigateBack = {
+                            backStack.removeLast()
+                        },
+                    )
                 }
 
                 entry<OnboardingScreens.Configuration> {
