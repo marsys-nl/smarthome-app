@@ -68,7 +68,7 @@ fun OnboardingScreenView(
                         },
                         navigateBack = {
                             backStack.removeLast()
-                        }
+                        },
                     )
                 }
 

@@ -22,7 +22,6 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
-import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.SunMoon
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
@@ -91,7 +90,7 @@ fun AppearanceOnboardingScreenView(
             )
         },
     ) {
-
+        // Not implemented yet
     }
 }
 

@@ -20,6 +20,7 @@ internal sealed interface OnboardingScreens : NavKey {
     companion object {
         const val SCREEN_COUNT = 4
 
+        @Suppress("MagicNumber")
         internal fun indexOf(screen: OnboardingScreens) = when (screen) {
             Initial -> 1
             Entities -> 2
