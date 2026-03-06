@@ -12,7 +12,6 @@ import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNav
 import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.Text
 
 private val config = SavedStateConfiguration {
@@ -35,47 +34,45 @@ fun OnboardingScreenView(
         elements = arrayOf(OnboardingScreens.Initial),
     )
 
-    SmartHomeTheme {
-        NavDisplay(
-            modifier = modifier
-                .fillMaxSize(),
-            backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
-            entryProvider = entryProvider {
-                entry<OnboardingScreens.Initial> {
-                    InitialOnboardingScreenView(
-                        navigateToEntities = {
-                            backStack += OnboardingScreens.Entities
-                        },
-                    )
-                }
+    NavDisplay(
+        modifier = modifier
+            .fillMaxSize(),
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = entryProvider {
+            entry<OnboardingScreens.Initial> {
+                InitialOnboardingScreenView(
+                    navigateToEntities = {
+                        backStack += OnboardingScreens.Entities
+                    },
+                )
+            }
 
-                entry<OnboardingScreens.Entities> {
-                    EntitiesOnboardingScreenView(
-                        navigateToScenes = {
-                            backStack += OnboardingScreens.Appearance
-                        },
-                        navigateBack = {
-                            backStack.removeLast()
-                        },
-                    )
-                }
+            entry<OnboardingScreens.Entities> {
+                EntitiesOnboardingScreenView(
+                    navigateToScenes = {
+                        backStack += OnboardingScreens.Appearance
+                    },
+                    navigateBack = {
+                        backStack.removeLast()
+                    },
+                )
+            }
 
-                entry<OnboardingScreens.Appearance> {
-                    AppearanceOnboardingScreenView(
-                        navigateToConfiguration = {
-                            backStack += OnboardingScreens.Configuration
-                        },
-                        navigateBack = {
-                            backStack.removeLast()
-                        },
-                    )
-                }
+            entry<OnboardingScreens.Appearance> {
+                AppearanceOnboardingScreenView(
+                    navigateToConfiguration = {
+                        backStack += OnboardingScreens.Configuration
+                    },
+                    navigateBack = {
+                        backStack.removeLast()
+                    },
+                )
+            }
 
-                entry<OnboardingScreens.Configuration> {
-                    Text("Not yet implemented")
-                }
-            },
-        )
-    }
+            entry<OnboardingScreens.Configuration> {
+                Text("Not yet implemented")
+            }
+        },
+    )
 }
