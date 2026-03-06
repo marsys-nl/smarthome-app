@@ -4,6 +4,6 @@ import androidx.compose.runtime.Composable
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreenView
 
 @Composable
-fun App() {
+fun SmartHomeApp() {
     OnboardingScreenView()
 }
