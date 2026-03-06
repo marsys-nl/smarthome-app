@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreens
@@ -31,6 +32,8 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.theme.ColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -130,23 +133,11 @@ fun InitialOnboardingScreenView(
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun InitialOnboardingScreenLightModePreview() {
+private fun InitialOnboardingScreenPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
     SmartHomeTheme(
-        darkMode = false,
-    ) {
-        InitialOnboardingScreenView(
-            navigateToEntities = {},
-        )
-    }
-}
-
-@PreviewLocales
-@PreviewFontScales
-@PreviewScreenSizes
-@Composable
-private fun InitialOnboardingScreenDarkModePreview() {
-    SmartHomeTheme(
-        darkMode = true,
+        scheme = scheme,
     ) {
         InitialOnboardingScreenView(
             navigateToEntities = {},

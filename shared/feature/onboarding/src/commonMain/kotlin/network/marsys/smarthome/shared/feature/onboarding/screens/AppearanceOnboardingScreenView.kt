@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreens
@@ -52,6 +53,8 @@ import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Moon
 import network.marsys.smarthome.shared.library.design.icons.Sun
 import network.marsys.smarthome.shared.library.design.icons.SunMoon
+import network.marsys.smarthome.shared.library.design.theme.ColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
@@ -280,24 +283,11 @@ private fun SelectedThemeIcon() {
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun AppearanceOnboardingScreenLightModePreview() {
+private fun AppearanceOnboardingScreenPreview(
+    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+) {
     SmartHomeTheme(
-        darkMode = false,
-    ) {
-        AppearanceOnboardingScreenView(
-            navigateToConfiguration = {},
-            navigateBack = {},
-        )
-    }
-}
-
-@PreviewLocales
-@PreviewFontScales
-@PreviewScreenSizes
-@Composable
-private fun AppearanceOnboardingScreenDarkModePreview() {
-    SmartHomeTheme(
-        darkMode = true,
+        scheme = scheme,
     ) {
         AppearanceOnboardingScreenView(
             navigateToConfiguration = {},
