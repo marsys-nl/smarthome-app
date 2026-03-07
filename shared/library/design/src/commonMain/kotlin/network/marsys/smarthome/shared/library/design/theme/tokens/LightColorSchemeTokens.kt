@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.Color
 internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundPrimary: Color = PaletteTokens.Slate.Slate50
     override val BackgroundSecondary: Color = PaletteTokens.Base.White
+    override val BackgroundSecondarySelected: Color = PaletteTokens.Amber.Amber50
     override val BackgroundTertiary: Color = PaletteTokens.Slate.Slate200
     override val BackgroundBrandPrimary: Color = PaletteTokens.Amber.Amber500
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500

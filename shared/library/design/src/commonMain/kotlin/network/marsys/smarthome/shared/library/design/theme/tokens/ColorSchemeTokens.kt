@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 internal interface ColorSchemeTokens {
     val BackgroundPrimary: Color
     val BackgroundSecondary: Color
+    val BackgroundSecondarySelected: Color
     val BackgroundTertiary: Color
     val BackgroundBrandPrimary: Color
     val BackgroundBrandSecondary: Color

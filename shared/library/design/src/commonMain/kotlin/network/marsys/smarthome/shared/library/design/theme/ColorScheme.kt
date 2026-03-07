@@ -14,6 +14,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.LightColorSch
 data class ColorScheme internal constructor(
     private val backgroundPrimary: Color,
     private val backgroundSecondary: Color,
+    private val backgroundSecondarySelected: Color,
     private val backgroundTertiary: Color,
     private val backgroundBrandPrimary: Color,
     private val backgroundBrandSecondary: Color,
@@ -35,6 +36,7 @@ data class ColorScheme internal constructor(
     operator fun get(token: ColorKeyToken): Color = when (token) {
         ColorKeyToken.BackgroundPrimary -> backgroundPrimary
         ColorKeyToken.BackgroundSecondary -> backgroundSecondary
+        ColorKeyToken.BackgroundSecondarySelected -> backgroundSecondarySelected
         ColorKeyToken.BackgroundTertiary -> backgroundTertiary
         ColorKeyToken.BackgroundBrandPrimary -> backgroundBrandPrimary
         ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
@@ -73,6 +75,7 @@ val LocalContentColor = staticCompositionLocalOf<Color> {
 internal fun darkColorScheme(
     backgroundPrimary: Color = DarkColorSchemeTokens.BackgroundPrimary,
     backgroundSecondary: Color = DarkColorSchemeTokens.BackgroundSecondary,
+    backgroundSecondarySelected: Color = DarkColorSchemeTokens.BackgroundSecondarySelected,
     backgroundTertiary: Color = DarkColorSchemeTokens.BackgroundTertiary,
     backgroundBrandPrimary: Color = DarkColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
@@ -92,6 +95,7 @@ internal fun darkColorScheme(
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
     backgroundSecondary = backgroundSecondary,
+    backgroundSecondarySelected = backgroundSecondarySelected,
     backgroundTertiary = backgroundTertiary,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
@@ -113,6 +117,7 @@ internal fun darkColorScheme(
 internal fun lightColorScheme(
     backgroundPrimary: Color = LightColorSchemeTokens.BackgroundPrimary,
     backgroundSecondary: Color = LightColorSchemeTokens.BackgroundSecondary,
+    backgroundSecondarySelected: Color = LightColorSchemeTokens.BackgroundSecondarySelected,
     backgroundTertiary: Color = LightColorSchemeTokens.BackgroundTertiary,
     backgroundBrandPrimary: Color = LightColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
@@ -132,6 +137,7 @@ internal fun lightColorScheme(
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
     backgroundSecondary = backgroundSecondary,
+    backgroundSecondarySelected = backgroundSecondarySelected,
     backgroundTertiary = backgroundTertiary,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
