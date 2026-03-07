@@ -17,9 +17,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
@@ -78,10 +78,10 @@ object OnboardingProgressIndicatorDefaults {
 @Preview
 @Composable
 private fun OnboardingProgressIndicatorNoProgressPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingProgressIndicator(
             progress = 0f,
@@ -92,10 +92,10 @@ private fun OnboardingProgressIndicatorNoProgressPreview(
 @Preview
 @Composable
 private fun OnboardingProgressIndicatorSomeProgressPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingProgressIndicator(
             progress = .5f,
@@ -106,10 +106,10 @@ private fun OnboardingProgressIndicatorSomeProgressPreview(
 @Preview
 @Composable
 private fun OnboardingProgressIndicatorFullProgressPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingProgressIndicator(
             progress = 1f,

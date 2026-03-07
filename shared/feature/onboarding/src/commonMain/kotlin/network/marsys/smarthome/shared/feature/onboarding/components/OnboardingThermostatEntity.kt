@@ -22,15 +22,15 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_idle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_thermostat_nursery
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import org.jetbrains.compose.resources.stringResource
@@ -136,10 +136,10 @@ private fun ThermostatEntityIcon(
 @PreviewLocales
 @Composable
 private fun OnboardingEntitiesThermostatIdlePreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingThermostatEntity(
             state = false,
@@ -150,10 +150,10 @@ private fun OnboardingEntitiesThermostatIdlePreview(
 @PreviewLocales
 @Composable
 private fun OnboardingEntitiesThermostatHeatingPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingThermostatEntity(
             state = true,

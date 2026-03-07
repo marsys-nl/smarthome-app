@@ -33,14 +33,20 @@ fun SmartHomeTheme(
         else -> ColorScheme.lightColorScheme
     }
 
-    SmartHomeTheme(
-        scheme = scheme,
-        content = content,
-    )
+    CompositionLocalProvider(
+        values = arrayOf(
+            LocalThemeSelection provides theme,
+        ),
+    ) {
+        SmartHomeTheme(
+            scheme = scheme,
+            content = content,
+        )
+    }
 }
 
 @Composable
-fun SmartHomeTheme(
+private fun SmartHomeTheme(
     scheme: ColorScheme,
     content: @Composable () -> Unit,
 ) {
@@ -55,14 +61,14 @@ fun SmartHomeTheme(
 
 @Composable
 fun SmartHomeComponentPreview(
-    scheme: ColorScheme,
+    theme: ThemeSelection,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
-        scheme = scheme,
+        theme = theme,
     ) {
         Column(
             modifier = modifier
@@ -74,9 +80,18 @@ fun SmartHomeComponentPreview(
     }
 }
 
+private val LocalThemeSelection = compositionLocalOf<ThemeSelection> {
+    error("No selected theme provided")
+}
+
 object SmartHomeTheme {
     val colors: ColorScheme
         @Composable
         @ReadOnlyComposable
         get() = LocalColorScheme.current
+
+    val current: ThemeSelection
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalThemeSelection.current
 }

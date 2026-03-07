@@ -26,8 +26,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.DpSize
 import com.composeunstyled.ToggleSwitch
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.SwitchTokens
 
 @Composable
@@ -183,10 +183,10 @@ object SwitchDefaults {
 @Preview
 @Composable
 private fun CheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = true,
@@ -198,10 +198,10 @@ private fun CheckedSwitchPreview(
 @Preview
 @Composable
 private fun UncheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = false,
@@ -213,10 +213,10 @@ private fun UncheckedSwitchPreview(
 @Preview
 @Composable
 private fun DisabledCheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = true,
@@ -228,10 +228,10 @@ private fun DisabledCheckedSwitchPreview(
 @Preview
 @Composable
 private fun DisabledUncheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = false,
@@ -243,10 +243,10 @@ private fun DisabledUncheckedSwitchPreview(
 @Preview
 @Composable
 private fun SmallCheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = true,
@@ -259,10 +259,10 @@ private fun SmallCheckedSwitchPreview(
 @Preview
 @Composable
 private fun SmallUncheckedSwitchPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Switch(
             checked = false,

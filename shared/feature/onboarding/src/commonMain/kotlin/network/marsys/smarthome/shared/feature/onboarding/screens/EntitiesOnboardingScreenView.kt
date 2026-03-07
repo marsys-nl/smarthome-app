@@ -34,6 +34,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_entities_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -41,9 +42,8 @@ import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.stringResource
@@ -166,10 +166,10 @@ internal fun EntitiesOnboardingScreenView(
 @PreviewScreenSizes
 @Composable
 private fun EntitiesOnboardingScreenPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeTheme(
-        scheme = scheme,
+        theme = theme,
     ) {
         EntitiesOnboardingScreenView(
             navigateToScenes = {},
