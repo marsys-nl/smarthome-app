@@ -27,13 +27,13 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -134,10 +134,10 @@ fun InitialOnboardingScreenView(
 @PreviewScreenSizes
 @Composable
 private fun InitialOnboardingScreenPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeTheme(
-        scheme = scheme,
+        theme = theme,
     ) {
         InitialOnboardingScreenView(
             navigateToEntities = {},

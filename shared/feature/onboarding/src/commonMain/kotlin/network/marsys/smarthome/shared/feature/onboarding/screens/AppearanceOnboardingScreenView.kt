@@ -40,6 +40,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_system_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -53,9 +54,8 @@ import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Moon
 import network.marsys.smarthome.shared.library.design.icons.Sun
 import network.marsys.smarthome.shared.library.design.icons.SunMoon
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
@@ -145,21 +145,21 @@ fun AppearanceOnboardingScreenView(
             title = stringResource(Res.string.onboarding_appearance_system),
             subtitle = stringResource(Res.string.onboarding_appearance_system_subtitle),
             icon = Icons.Monitor,
-            state = true,
+            state = SmartHomeTheme.current == ThemeSelection.SystemDefault,
         )
 
         SelectableThemeOption(
             title = stringResource(Res.string.onboarding_appearance_light),
             subtitle = stringResource(Res.string.onboarding_appearance_light_subtitle),
             icon = Icons.Sun,
-            state = false,
+            state = SmartHomeTheme.current == ThemeSelection.LightMode,
         )
 
         SelectableThemeOption(
             title = stringResource(Res.string.onboarding_appearance_dark),
             subtitle = stringResource(Res.string.onboarding_appearance_dark_subtitle),
             icon = Icons.Moon,
-            state = false,
+            state = SmartHomeTheme.current == ThemeSelection.DarkMode,
         )
     }
 }
@@ -284,10 +284,10 @@ private fun SelectedThemeIcon() {
 @PreviewScreenSizes
 @Composable
 private fun AppearanceOnboardingScreenPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeTheme(
-        scheme = scheme,
+        theme = theme,
     ) {
         AppearanceOnboardingScreenView(
             navigateToConfiguration = {},

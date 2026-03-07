@@ -1,15 +1,16 @@
 package network.marsys.smarthome.shared.library.design.theme
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 
-class ColorSchemePreviewParameterProvider : PreviewParameterProvider<ColorScheme> {
+class ThemeSelectionPreviewParameterProvider : PreviewParameterProvider<ThemeSelection> {
     private val schemes = sequenceOf(
-        "Light color scheme" to ColorScheme.lightColorScheme,
-        "Dark color scheme" to ColorScheme.darkColorScheme,
+        "Light mode" to ThemeSelection.LightMode,
+        "Dark mode" to ThemeSelection.DarkMode,
     )
 
-    override val values: Sequence<ColorScheme> = schemes
-        .map(Pair<String, ColorScheme>::second)
+    override val values: Sequence<ThemeSelection> = schemes
+        .map(Pair<String, ThemeSelection>::second)
 
     override fun getDisplayName(index: Int): String? = schemes
         .map(Pair<String, *>::first)

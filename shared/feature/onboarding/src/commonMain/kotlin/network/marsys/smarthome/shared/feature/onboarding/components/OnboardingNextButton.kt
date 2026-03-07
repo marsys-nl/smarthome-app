@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_button_next
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonColors
@@ -29,9 +30,8 @@ import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.ArrowRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -83,10 +83,10 @@ fun OnboardingNextButton(
 @PreviewLocales
 @Composable
 private fun OnboardingNextButtonPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingNextButton(
             onClick = {},

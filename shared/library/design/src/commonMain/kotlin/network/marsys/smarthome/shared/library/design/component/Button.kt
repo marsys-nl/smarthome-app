@@ -23,10 +23,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.composeunstyled.UnstyledButton
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 
@@ -153,10 +153,10 @@ object ButtonDefaults {
 @Preview
 @Composable
 private fun ButtonPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Button(
             onClick = {},
@@ -170,10 +170,10 @@ private fun ButtonPreview(
 @Preview
 @Composable
 private fun DisabledButtonPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Button(
             onClick = {},
@@ -187,10 +187,10 @@ private fun DisabledButtonPreview(
 @Preview
 @Composable
 private fun BorderedButtonPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Button(
             onClick = {},
@@ -208,10 +208,10 @@ private fun BorderedButtonPreview(
 @Preview
 @Composable
 private fun BorderedDisabledButtonPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         Button(
             onClick = {},

@@ -26,6 +26,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_off
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.entity_state_on
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
@@ -33,9 +34,8 @@ import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Lightbulb
-import network.marsys.smarthome.shared.library.design.theme.ColorScheme
-import network.marsys.smarthome.shared.library.design.theme.ColorSchemePreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import org.jetbrains.compose.resources.stringResource
@@ -157,10 +157,10 @@ private fun LightEntityIcon(
 @PreviewLocales
 @Composable
 private fun OnboardingEntitiesLightOffPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingLightEntity(
             state = false,
@@ -171,10 +171,10 @@ private fun OnboardingEntitiesLightOffPreview(
 @PreviewLocales
 @Composable
 private fun OnboardingEntitiesLightOnPreview(
-    @PreviewParameter(ColorSchemePreviewParameterProvider::class) scheme: ColorScheme,
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
-        scheme = scheme,
+        theme = theme,
     ) {
         OnboardingLightEntity(
             state = true,

@@ -33,7 +33,7 @@ complexity:
 
 Compose:
     CompositionLocalAllowlist:
-        allowedCompositionLocals: LocalColorScheme, LocalContentColor
+        allowedCompositionLocals: LocalColorScheme, LocalContentColor, LocalThemeSelection
 
 naming:
     FunctionNameMaxLength:
