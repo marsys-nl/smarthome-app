@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -18,9 +19,15 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
 fun SmartHomeTheme(
-    darkMode: Boolean = isSystemInDarkTheme(),
+    theme: ThemeSelection,
     content: @Composable () -> Unit,
 ) {
+    val darkMode = when (theme) {
+        ThemeSelection.LightMode -> false
+        ThemeSelection.DarkMode -> true
+        ThemeSelection.SystemDefault -> isSystemInDarkTheme()
+    }
+
     val scheme = when (darkMode) {
         true -> ColorScheme.darkColorScheme
         else -> ColorScheme.lightColorScheme
