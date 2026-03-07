@@ -174,7 +174,7 @@ private fun SelectableThemeOption(
 ) {
     val cardColors = if (state) {
         CardDefaults.colors(
-            backgroundColor = SolidColor(PaletteTokens.Amber.Amber50),
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondarySelected]),
             borderColor = LocalColorScheme.current[ColorKeyToken.BorderBrandPrimaryDimmed],
         )
     } else {

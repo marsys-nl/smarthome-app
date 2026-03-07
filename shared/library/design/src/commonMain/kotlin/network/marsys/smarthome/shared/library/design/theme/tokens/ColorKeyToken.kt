@@ -7,6 +7,7 @@ import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 enum class ColorKeyToken {
     BackgroundPrimary,
     BackgroundSecondary,
+    BackgroundSecondarySelected,
     BackgroundTertiary,
     BackgroundBrandPrimary,
     BackgroundBrandSecondary,
