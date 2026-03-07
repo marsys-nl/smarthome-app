@@ -12,6 +12,7 @@ import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNav
 import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.component.Text
 
 private val config = SavedStateConfiguration {
@@ -27,6 +28,7 @@ private val config = SavedStateConfiguration {
 
 @Composable
 fun OnboardingScreenView(
+    onThemeSelected: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backStack = rememberNavBackStack<OnboardingScreens>(
@@ -61,6 +63,7 @@ fun OnboardingScreenView(
 
             entry<OnboardingScreens.Appearance> {
                 AppearanceOnboardingScreenView(
+                    onThemeSelected = onThemeSelected,
                     navigateToConfiguration = {
                         backStack += OnboardingScreens.Configuration
                     },
