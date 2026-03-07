@@ -37,6 +37,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.feature.onboarding)
+            implementation(projects.shared.library.design)
 
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
