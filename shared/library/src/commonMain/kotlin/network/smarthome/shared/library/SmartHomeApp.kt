@@ -15,7 +15,7 @@ fun SmartHomeApp() {
         theme = theme.value,
     ) {
         OnboardingScreenView(
-            onThemeSelected = {
+            onSelectTheme = {
                 theme.value = it
             },
         )

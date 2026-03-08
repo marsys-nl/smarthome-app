@@ -28,7 +28,7 @@ private val config = SavedStateConfiguration {
 
 @Composable
 fun OnboardingScreenView(
-    onThemeSelected: (ThemeSelection) -> Unit,
+    onSelectTheme: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val backStack = rememberNavBackStack<OnboardingScreens>(
@@ -63,7 +63,7 @@ fun OnboardingScreenView(
 
             entry<OnboardingScreens.Appearance> {
                 AppearanceOnboardingScreenView(
-                    onThemeSelected = onThemeSelected,
+                    onSelectTheme = onSelectTheme,
                     navigateToConfiguration = {
                         backStack += OnboardingScreens.Configuration
                     },

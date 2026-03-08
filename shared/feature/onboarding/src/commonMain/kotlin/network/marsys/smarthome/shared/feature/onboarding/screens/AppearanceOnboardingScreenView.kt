@@ -72,7 +72,7 @@ private val BrandPrimaryToSecondaryGradient
 @Composable
 @Suppress("LongMethod")
 fun AppearanceOnboardingScreenView(
-    onThemeSelected: (ThemeSelection) -> Unit,
+    onSelectTheme: (ThemeSelection) -> Unit,
     navigateToConfiguration: () -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -151,8 +151,8 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_system_subtitle),
             icon = Icons.Monitor,
             state = SmartHomeTheme.current == ThemeSelection.SystemDefault,
-            onThemeSelected = {
-                onThemeSelected(ThemeSelection.SystemDefault)
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.SystemDefault)
             },
         )
 
@@ -161,8 +161,8 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_light_subtitle),
             icon = Icons.Sun,
             state = SmartHomeTheme.current == ThemeSelection.LightMode,
-            onThemeSelected = {
-                onThemeSelected(ThemeSelection.LightMode)
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.LightMode)
             },
         )
 
@@ -171,8 +171,8 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_dark_subtitle),
             icon = Icons.Moon,
             state = SmartHomeTheme.current == ThemeSelection.DarkMode,
-            onThemeSelected = {
-                onThemeSelected(ThemeSelection.DarkMode)
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.DarkMode)
             },
         )
     }
@@ -184,7 +184,7 @@ private fun SelectableThemeOption(
     subtitle: String,
     icon: ImageVector,
     state: Boolean,
-    onThemeSelected: () -> Unit,
+    onSelectTheme: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val cardColors = if (state) {
@@ -207,7 +207,7 @@ private fun SelectableThemeOption(
                 role = Role.Button,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onThemeSelected,
+                onClick = onSelectTheme,
             ),
         colors = cardColors,
         borderWidth = borderWidth,
@@ -313,7 +313,7 @@ private fun AppearanceOnboardingScreenPreview(
         theme = theme,
     ) {
         AppearanceOnboardingScreenView(
-            onThemeSelected = {},
+            onSelectTheme = {},
             navigateToConfiguration = {},
             navigateBack = {},
         )
