@@ -2,6 +2,8 @@ package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,11 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -68,6 +72,7 @@ private val BrandPrimaryToSecondaryGradient
 @Composable
 @Suppress("LongMethod")
 fun AppearanceOnboardingScreenView(
+    onSelectTheme: (ThemeSelection) -> Unit,
     navigateToConfiguration: () -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
@@ -146,6 +151,9 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_system_subtitle),
             icon = Icons.Monitor,
             state = SmartHomeTheme.current == ThemeSelection.SystemDefault,
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.SystemDefault)
+            },
         )
 
         SelectableThemeOption(
@@ -153,6 +161,9 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_light_subtitle),
             icon = Icons.Sun,
             state = SmartHomeTheme.current == ThemeSelection.LightMode,
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.LightMode)
+            },
         )
 
         SelectableThemeOption(
@@ -160,6 +171,9 @@ fun AppearanceOnboardingScreenView(
             subtitle = stringResource(Res.string.onboarding_appearance_dark_subtitle),
             icon = Icons.Moon,
             state = SmartHomeTheme.current == ThemeSelection.DarkMode,
+            onSelectTheme = {
+                onSelectTheme(ThemeSelection.DarkMode)
+            },
         )
     }
 }
@@ -170,6 +184,7 @@ private fun SelectableThemeOption(
     subtitle: String,
     icon: ImageVector,
     state: Boolean,
+    onSelectTheme: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val cardColors = if (state) {
@@ -185,7 +200,15 @@ private fun SelectableThemeOption(
 
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable(
+                enabled = !state,
+                onClickLabel = "Select $title",
+                role = Role.Button,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onSelectTheme,
+            ),
         colors = cardColors,
         borderWidth = borderWidth,
     ) {
@@ -290,6 +313,7 @@ private fun AppearanceOnboardingScreenPreview(
         theme = theme,
     ) {
         AppearanceOnboardingScreenView(
+            onSelectTheme = {},
             navigateToConfiguration = {},
             navigateBack = {},
         )
