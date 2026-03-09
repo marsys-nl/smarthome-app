@@ -1,14 +1,20 @@
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +28,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_skip_setup
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -29,11 +36,13 @@ import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Server
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
@@ -48,7 +57,7 @@ private val BrandPrimaryToSecondaryGradient
 fun ConfigurationOnboardingScreenView(
     // validating: Boolean,
     finishOnboarding: () -> Unit,
-    // skipToDemo: () -> Unit,
+    skipToDemo: () -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier.Companion,
 ) {
@@ -109,6 +118,11 @@ fun ConfigurationOnboardingScreenView(
                 )
             }
 
+            OnboardingSkipConfigurationButton(
+                onClick = skipToDemo,
+                modifier = Modifier,
+            )
+
             OnboardingScreenIndicator(
                 screen = indexOfScreen,
                 screens = numberOfScreens,
@@ -125,6 +139,41 @@ fun ConfigurationOnboardingScreenView(
     }
 }
 
+@Composable
+fun OnboardingSkipConfigurationButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val skipConfigButtonStyle = if (!isPressed) {
+        LocalTextStyle.current.copy(
+            textDecoration = TextDecoration.Underline,
+        )
+    } else {
+        LocalTextStyle.current
+    }
+
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .padding(top = 24.dp),
+        colors = ButtonDefaults.colors(
+            backgroundColor = SolidColor(Color.Transparent),
+        ),
+        indication = null,
+        interactionSource = interactionSource,
+    ) {
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_skip_setup),
+            style = skipConfigButtonStyle,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+    }
+}
+
 @PreviewLocales
 @PreviewFontScales
 @PreviewScreenSizes
@@ -138,7 +187,7 @@ private fun ConfigurationOnboardingScreenPreview(
         ConfigurationOnboardingScreenView(
             // validating = false,
             finishOnboarding = {},
-            // skipToDemo = {},
+            skipToDemo = {},
             navigateBack = {},
         )
     }

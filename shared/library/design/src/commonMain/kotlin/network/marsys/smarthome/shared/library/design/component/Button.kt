@@ -3,7 +3,10 @@ package network.marsys.smarthome.shared.library.design.component
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.Transition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
@@ -39,6 +42,8 @@ fun Button(
     colors: ButtonColors = ButtonDefaults.colors(),
     contentPadding: PaddingValues = ButtonDefaults.contentPadding(),
     borderWidth: Dp = 0.dp,
+    indication: Indication? = LocalIndication.current,
+    interactionSource: MutableInteractionSource? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
     val background = colors.backgroundColor(enabled).value
@@ -69,6 +74,8 @@ fun Button(
         contentPadding = contentPadding,
         borderColor = borderColor,
         borderWidth = borderWidth,
+        indication = indication,
+        interactionSource = interactionSource,
         modifier = modifier
             .then(gradientModifier),
     ) {
