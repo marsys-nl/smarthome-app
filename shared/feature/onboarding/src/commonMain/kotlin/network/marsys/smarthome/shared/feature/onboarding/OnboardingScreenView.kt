@@ -10,10 +10,10 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnboardingScreenView
+import network.marsys.smarthome.shared.feature.onboarding.screens.ConfigurationOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.design.component.Text
 
 private val config = SavedStateConfiguration {
     serializersModule = SerializersModule {
@@ -74,7 +74,18 @@ fun OnboardingScreenView(
             }
 
             entry<OnboardingScreens.Configuration> {
-                Text("Not yet implemented")
+                ConfigurationOnboardingScreenView(
+                    // validating = false,
+                    finishOnboarding = {
+                        // Not implemented yet
+                    },
+                    // skipToDemo = {
+                    //     // Not implemented yet.
+                    // },
+                    navigateBack = {
+                        backStack.removeLast()
+                    },
+                )
             }
         },
     )
