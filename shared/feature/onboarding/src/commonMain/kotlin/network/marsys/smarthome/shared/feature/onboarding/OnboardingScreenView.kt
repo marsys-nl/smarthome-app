@@ -79,9 +79,9 @@ fun OnboardingScreenView(
                     finishOnboarding = {
                         // Not implemented yet
                     },
-                    // skipToDemo = {
-                    //     // Not implemented yet.
-                    // },
+                    skipToDemo = {
+                        // Not implemented yet.
+                    },
                     navigateBack = {
                         backStack.removeLast()
                     },

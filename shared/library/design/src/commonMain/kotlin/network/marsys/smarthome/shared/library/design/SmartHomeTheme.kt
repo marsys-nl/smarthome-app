@@ -11,10 +11,12 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
+import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
@@ -54,6 +56,7 @@ private fun SmartHomeTheme(
         values = arrayOf(
             LocalColorScheme provides scheme,
             LocalContentColor provides scheme[ColorKeyToken.TextPrimary],
+            LocalTextStyle provides TextStyle.Default,
         ),
         content = content,
     )
