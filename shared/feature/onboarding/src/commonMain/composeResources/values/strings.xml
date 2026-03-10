@@ -20,6 +20,7 @@
     <string name="onboarding_configuration_title">Connect your system</string>
     <string name="onboarding_configuration_subtitle">Enter your smart home backend URI to get started</string>
     <string name="onboarding_configuration_skip_setup">Skip to demo</string>
+    <string name="onboarding_configuration_get_started">Get started</string>
 
     <string name="entity_lamp_dining_table">Dining table</string>
     <string name="entity_thermostat_nursery">Nursery</string>
