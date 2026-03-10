@@ -20,6 +20,7 @@
     <string name="onboarding_configuration_title">Verbind met jouw systeem</string>
     <string name="onboarding_configuration_subtitle">Voer de URI van jouw smart home-backend in om te beginnen</string>
     <string name="onboarding_configuration_skip_setup">Ga direct naar de demo</string>
+    <string name="onboarding_configuration_get_started">Aan de slag</string>
 
     <string name="entity_lamp_dining_table">Eetkamer</string>
     <string name="entity_thermostat_nursery">Babykamer</string>

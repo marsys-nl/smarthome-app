@@ -75,7 +75,6 @@ fun OnboardingScreenView(
 
             entry<OnboardingScreens.Configuration> {
                 ConfigurationOnboardingScreenView(
-                    // validating = false,
                     finishOnboarding = {
                         // Not implemented yet
                     },
