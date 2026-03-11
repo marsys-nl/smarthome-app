@@ -53,32 +53,6 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.TextFieldTokens
 
-@Stable
-interface TextFieldScope {
-    val state: TextFieldState
-    val colors: TextFieldColors
-    val textStyle: TextStyle
-    val enabled: Boolean
-    val readOnly: Boolean
-    val isFocused: Boolean
-
-    @Composable
-    fun InnerTextField()
-}
-
-private class TextFieldScopeImpl(
-    override val state: TextFieldState,
-    override val colors: TextFieldColors,
-    override val textStyle: TextStyle,
-    override val enabled: Boolean,
-    override val readOnly: Boolean,
-    override val isFocused: Boolean,
-    private val innerTextField: @Composable () -> Unit,
-) : TextFieldScope {
-    @Composable
-    override fun InnerTextField() = innerTextField()
-}
-
 @Composable
 fun TextField(
     state: TextFieldState,
@@ -130,6 +104,32 @@ fun TextField(
     )
 }
 
+@Stable
+interface TextFieldScope {
+    val state: TextFieldState
+    val colors: TextFieldColors
+    val textStyle: TextStyle
+    val enabled: Boolean
+    val readOnly: Boolean
+    val isFocused: Boolean
+
+    @Composable
+    fun InnerTextField()
+}
+
+private class TextFieldScopeImpl(
+    override val state: TextFieldState,
+    override val colors: TextFieldColors,
+    override val textStyle: TextStyle,
+    override val enabled: Boolean,
+    override val readOnly: Boolean,
+    override val isFocused: Boolean,
+    private val innerTextField: @Composable () -> Unit,
+) : TextFieldScope {
+    @Composable
+    override fun InnerTextField() = innerTextField()
+}
+
 @Composable
 fun TextFieldScope.TextFieldDecorationBox(
     shape: Shape = TextFieldDefaults.textInputShape(),
@@ -177,7 +177,7 @@ fun TextFieldScope.TextFieldDecorationBox(
                         .weight(1f),
                     contentAlignment = Alignment.CenterStart,
                 ) {
-                    if (!readOnly) {
+                    if (!readOnly && !enabled) {
                         InnerTextField()
                     } else {
                         SelectionContainer {
@@ -339,7 +339,7 @@ private fun TextFieldFilledDisabledPreview(
         }
         TextField(
             state = state,
-            enabled = true,
+            enabled = false,
         )
     }
 }
