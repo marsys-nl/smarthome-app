@@ -18,9 +18,18 @@ object TextFieldTokens {
     val ContentColor: Color
         @Composable
         get() = color(ColorKeyToken.TextPrimary)
+    val PlaceholderColor: Color
+        @Composable
+        get() = color(ColorKeyToken.TextSecondary)
+    val SupportingTextColor: Color
+        @Composable
+        get() = color(ColorKeyToken.TextSecondary)
     val BorderColor: Color
         @Composable
         get() = color(ColorKeyToken.BorderPrimary)
+    val FocusedOutlineColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundPrimaryAlternative)
     val DisabledBackgroundColor: Brush
         @Composable
         get() = SolidColor(color(ColorKeyToken.BackgroundDisabled))
