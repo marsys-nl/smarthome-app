@@ -131,7 +131,9 @@ private class TextFieldScopeImpl(
 }
 
 @Composable
+@Suppress("LongMethod")
 fun TextFieldScope.TextFieldDecorationBox(
+    modifier: Modifier = Modifier,
     shape: Shape = TextFieldDefaults.textInputShape(),
     contentPadding: PaddingValues = TextFieldDefaults.contentPadding(),
     borderWidth: Dp = 1.dp,
@@ -153,7 +155,9 @@ fun TextFieldScope.TextFieldDecorationBox(
         .padding(outlinePadding)
 
     CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Column {
+        Column(
+            modifier = modifier,
+        ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -166,7 +170,7 @@ fun TextFieldScope.TextFieldDecorationBox(
                 leading?.let {
                     Box(
                         modifier = Modifier
-                            .padding(end = 8.dp)
+                            .padding(end = 8.dp),
                     ) {
                         it.invoke(this@TextFieldDecorationBox)
                     }
@@ -198,7 +202,7 @@ fun TextFieldScope.TextFieldDecorationBox(
                 trailing?.let {
                     Box(
                         modifier = Modifier
-                            .padding(start = 8.dp)
+                            .padding(start = 8.dp),
                     ) {
                         it.invoke(this@TextFieldDecorationBox)
                     }
@@ -319,7 +323,7 @@ private fun TextFieldFilledPreview(
     SmartHomeComponentPreview(theme = theme) {
         val state = remember {
             TextFieldState(
-                initialText = "SmartHome"
+                initialText = "SmartHome",
             )
         }
         TextField(state = state)
@@ -334,7 +338,7 @@ private fun TextFieldFilledDisabledPreview(
     SmartHomeComponentPreview(theme = theme) {
         val state = remember {
             TextFieldState(
-                initialText = "Disabled"
+                initialText = "Disabled",
             )
         }
         TextField(
@@ -352,7 +356,7 @@ private fun TextFieldReadOnlyPreview(
     SmartHomeComponentPreview(theme = theme) {
         val state = remember {
             TextFieldState(
-                initialText = "Read only text"
+                initialText = "Read only text",
             )
         }
         TextField(
@@ -375,7 +379,7 @@ private fun TextFieldWithPlaceholderPreview(
                 TextFieldDecorationBox(
                     placeholder = { Text("Enter text…") },
                 )
-            }
+            },
         )
     }
 }
@@ -399,7 +403,7 @@ private fun TextFieldWithLeadingIconPreview(
                         )
                     },
                 )
-            }
+            },
         )
     }
 }
@@ -423,20 +427,21 @@ private fun TextFieldWithTrailingIconPreview(
                         )
                     },
                 )
-            }
+            },
         )
     }
 }
 
 @Preview
 @Composable
+@Suppress("MagicNumber")
 private fun TextFieldWithHintPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(theme = theme) {
         val state = remember {
             TextFieldState(
-                initialText = "SmartHome"
+                initialText = "SmartHome",
             )
         }
 
@@ -456,7 +461,7 @@ private fun TextFieldWithHintPreview(
                         )
                     },
                 )
-            }
+            },
         )
     }
 }
@@ -469,7 +474,7 @@ private fun TextFieldWithErrorPreview(
     SmartHomeComponentPreview(theme = theme) {
         val state = remember {
             TextFieldState(
-                initialText = "SmartHome"
+                initialText = "SmartHome",
             )
         }
 
@@ -480,11 +485,11 @@ private fun TextFieldWithErrorPreview(
                     supportingText = {
                         Text(
                             text = "Please enter a valid URI (e.g., https://api.example.com)",
-                            color = Color(0xFFEF4444),
+                            color = Color(color = 0xFFEF4444),
                         )
                     },
                 )
-            }
+            },
         )
     }
 }
