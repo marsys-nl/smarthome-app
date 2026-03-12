@@ -8,10 +8,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -45,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import com.composeunstyled.outline
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.design.component.SupportingText
 import network.marsys.smarthome.shared.library.design.icons.Check
 import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -62,6 +62,8 @@ fun TextField(
     enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    onKeyboardAction: KeyboardActionHandler? = null,
     colors: TextFieldColors = TextFieldDefaults.colors(),
     shape: Shape = TextFieldDefaults.textInputShape(),
     contentPadding: PaddingValues = TextFieldDefaults.contentPadding(),
@@ -88,6 +90,8 @@ fun TextField(
         enabled = enabled,
         readOnly = readOnly,
         textStyle = mergedTextStyle,
+        keyboardOptions = keyboardOptions,
+        onKeyboardAction = onKeyboardAction,
         lineLimits = TextFieldLineLimits.SingleLine,
         interactionSource = interactionSource,
         cursorBrush = SolidColor(contentColor),
