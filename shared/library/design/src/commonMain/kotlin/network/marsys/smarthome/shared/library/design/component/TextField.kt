@@ -36,7 +36,6 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,7 +82,6 @@ fun TextField(
     BasicTextField(
         state = state,
         modifier = modifier
-            .semantics(mergeDescendants = true) {}
             .onFocusChanged {
                 isFocused = it.hasFocus
             },
@@ -216,12 +214,12 @@ private fun TextFieldScope.TextInput(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart,
     ) {
-        if (!readOnly && !enabled) {
-            InnerTextField()
-        } else {
+        if (readOnly || !enabled) {
             SelectionContainer {
                 Text(state.text.toString())
             }
+        } else {
+            InnerTextField()
         }
 
         if (placeholder != null && state.text.isEmpty()) {
