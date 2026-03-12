@@ -19,6 +19,12 @@
 
     <string name="onboarding_configuration_title">Connect your system</string>
     <string name="onboarding_configuration_subtitle">Enter your smart home backend URI to get started</string>
+    <string name="onboarding_configuration_backend_title">Connect to the backend</string>
+    <string name="onboarding_configuration_backend_description">This app needs to connect to your smart home system. Enter your backend URL below.</string>
+    <string name="onboarding_configuration_backend_label">Backend URL</string>
+    <string name="onboarding_configuration_backend_placeholder" translatable="false">https://api.yourdomain.com</string>
+    <string name="onboarding_configuration_backend_error_empty">This field cannot be empty</string>
+    <string name="onboarding_configuration_backend_error_invalid">Please enter a valid URL</string>
     <string name="onboarding_configuration_skip_setup">Skip to demo</string>
     <string name="onboarding_configuration_get_started">Get started</string>
 
