@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import com.composeunstyled.outline
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.component.SupportingText
 import network.marsys.smarthome.shared.library.design.icons.Check
 import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -147,8 +149,6 @@ fun TextFieldScope.TextFieldDecorationBox(
     val backgroundColor = colors.backgroundColor(enabled).value
     val borderColor = colors.borderColor(enabled).value
     val contentColor = colors.contentColor(enabled).value
-    val placeholderColor = colors.placeholderColor(enabled).value
-    val supportingTextColor = colors.supportingTextColor(enabled).value
 
     val outlineModifier = Modifier
         .outline(outlineWidth, PaletteTokens.Base.Black, shape)
@@ -176,28 +176,11 @@ fun TextFieldScope.TextFieldDecorationBox(
                     }
                 }
 
-                Box(
+                TextInput(
                     modifier = Modifier
                         .weight(1f),
-                    contentAlignment = Alignment.CenterStart,
-                ) {
-                    if (!readOnly && !enabled) {
-                        InnerTextField()
-                    } else {
-                        SelectionContainer {
-                            Text(state.text.toString())
-                        }
-                    }
-
-                    if (placeholder != null && state.text.isEmpty()) {
-                        CompositionLocalProvider(
-                            LocalContentColor provides placeholderColor,
-                            LocalTextStyle provides textStyle.copy(color = placeholderColor),
-                        ) {
-                            placeholder.invoke(this@TextFieldDecorationBox)
-                        }
-                    }
-                }
+                    placeholder = placeholder,
+                )
 
                 trailing?.let {
                     Box(
@@ -210,19 +193,61 @@ fun TextFieldScope.TextFieldDecorationBox(
             }
 
             supportingText?.let {
-                CompositionLocalProvider(
-                    LocalContentColor provides supportingTextColor,
-                    LocalTextStyle provides textStyle.copy(color = supportingTextColor),
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                    ) {
-                        it.invoke(this@TextFieldDecorationBox)
-                    }
-                }
+                SupportingText(
+                    content = it,
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun TextFieldScope.TextInput(
+    modifier: Modifier = Modifier,
+    placeholder: @Composable (TextFieldScope.() -> Unit)? = null,
+) {
+    val placeholderColor = colors.placeholderColor(enabled).value
+
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.CenterStart,
+    ) {
+        if (!readOnly && !enabled) {
+            InnerTextField()
+        } else {
+            SelectionContainer {
+                Text(state.text.toString())
+            }
+        }
+
+        if (placeholder != null && state.text.isEmpty()) {
+            CompositionLocalProvider(
+                LocalContentColor provides placeholderColor,
+                LocalTextStyle provides textStyle.copy(color = placeholderColor),
+            ) {
+                placeholder.invoke(this@TextInput)
+            }
+        }
+    }
+}
+
+@Composable
+private fun TextFieldScope.SupportingText(
+    modifier: Modifier = Modifier,
+    content: @Composable TextFieldScope.() -> Unit,
+) {
+    val supportingTextColor = colors.supportingTextColor(enabled).value
+
+    CompositionLocalProvider(
+        LocalContentColor provides supportingTextColor,
+        LocalTextStyle provides textStyle.copy(color = supportingTextColor),
+    ) {
+        Box(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 4.dp),
+        ) {
+            content.invoke(this@SupportingText)
         }
     }
 }
