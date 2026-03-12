@@ -1,6 +1,5 @@
 package network.marsys.smarthome.shared.feature.onboarding.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -26,6 +24,7 @@ import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
@@ -118,18 +117,16 @@ private fun ThermostatEntityIcon(
             ColorKeyToken.ForegroundPrimary
         }
 
-    Image(
-        imageVector = Icons.Thermostat,
+    Icon(
+        icon = Icons.Thermostat,
         modifier = modifier
             .background(
                 shape = RoundedCornerShape(16.dp),
                 color = LocalColorScheme.current[iconBackgroundColorKeyToken],
             )
             .padding(12.dp),
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(
-            color = LocalColorScheme.current[iconForegroundColorKeyToken],
-        ),
+        size = 24.dp,
+        tint = LocalColorScheme.current[iconForegroundColorKeyToken],
     )
 }
 
