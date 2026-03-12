@@ -12,7 +12,7 @@ android-sdk-compile = "36"
 android-sdk-min = "31"
 android-sdk-target = "36"
 
-androidx-activity = "1.12.4"
+androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
 androidx-navigation = "1.1.0-alpha04"
 
