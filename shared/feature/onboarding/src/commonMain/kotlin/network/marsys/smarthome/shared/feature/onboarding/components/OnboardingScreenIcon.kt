@@ -30,7 +30,7 @@ internal fun OnboardingScreenIcon(
     colors = CardDefaults.colors(
         backgroundColor = colors.backgroundColor,
         contentColor = colors.contentColor,
-    )
+    ),
 ) {
     Icon(
         icon = icon,
