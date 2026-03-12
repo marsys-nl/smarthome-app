@@ -8,6 +8,7 @@ plugins {
 
 group = "network.marsys.smarthome.shared.library.design"
 version = libs.versions.smarthome.app.name.get()
+
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 
