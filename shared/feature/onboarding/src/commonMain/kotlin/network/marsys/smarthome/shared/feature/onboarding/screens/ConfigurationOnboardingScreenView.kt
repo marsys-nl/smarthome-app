@@ -74,6 +74,7 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextField
 import network.marsys.smarthome.shared.library.design.component.TextFieldDecorationBox
+import network.marsys.smarthome.shared.library.design.component.TextFieldScope
 import network.marsys.smarthome.shared.library.design.icons.Check
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
@@ -198,29 +199,10 @@ fun ConfigurationOnboardingScreenView(
                     if (state !is ConfigurationOnboardingState.Processing) {
                         finishOnboarding.invoke()
                     }
-                }
+                },
             ) {
-                TextFieldDecorationBox(
-                    placeholder = {
-                        Text("https://api.yourdomain.com")
-                    },
-                    supportingText = {
-                        if (state is ConfigurationOnboardingState.Idle && state.backendUriError != null) {
-                            val message = when (state.backendUriError) {
-                                is BackendUriError.Empty ->
-                                    stringResource(Res.string.onboarding_configuration_backend_error_empty)
-
-                                is BackendUriError.Invalid ->
-                                    stringResource(Res.string.onboarding_configuration_backend_error_invalid)
-                            }
-
-                            CompositionLocalProvider(
-                                LocalContentColor provides Color.Red,
-                            ) {
-                                Text(text = message)
-                            }
-                        }
-                    },
+                OnboardingTextFieldDecorationBox(
+                    state = state,
                 )
             }
         }
@@ -264,6 +246,36 @@ private fun ConfigurationOnboardingScreenContent(
             textFieldContent.invoke()
         }
     }
+}
+
+@Composable
+private fun TextFieldScope.OnboardingTextFieldDecorationBox(
+    state: ConfigurationOnboardingState,
+    modifier: Modifier = Modifier,
+) {
+    TextFieldDecorationBox(
+        modifier = modifier,
+        placeholder = {
+            Text("https://api.yourdomain.com")
+        },
+        supportingText = {
+            if (state is ConfigurationOnboardingState.Idle && state.backendUriError != null) {
+                val message = when (state.backendUriError) {
+                    is BackendUriError.Empty ->
+                        stringResource(Res.string.onboarding_configuration_backend_error_empty)
+
+                    is BackendUriError.Invalid ->
+                        stringResource(Res.string.onboarding_configuration_backend_error_invalid)
+                }
+
+                CompositionLocalProvider(
+                    LocalContentColor provides Color.Red,
+                ) {
+                    Text(text = message)
+                }
+            }
+        },
+    )
 }
 
 @Composable

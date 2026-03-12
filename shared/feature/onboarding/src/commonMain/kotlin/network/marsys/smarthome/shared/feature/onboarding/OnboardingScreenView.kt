@@ -37,6 +37,7 @@ private val config = SavedStateConfiguration {
 }
 
 @Composable
+@Suppress("LongMethod")
 fun OnboardingScreenView(
     onSelectTheme: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
@@ -101,7 +102,7 @@ fun OnboardingScreenView(
                                 backendUri = uriTextFieldState.text.toString(),
                                 onStateChange = {
                                     state = it
-                                }
+                                },
                             )
                         }
                     },
@@ -122,14 +123,18 @@ private suspend fun determineConfigurationOnboardingState(
     onStateChange: (ConfigurationOnboardingState) -> Unit,
 ) {
     if (backendUri.isEmpty()) {
-        onStateChange.invoke(ConfigurationOnboardingState.Idle(
-            backendUriError = BackendUriError.Empty,
-        ))
+        onStateChange.invoke(
+            ConfigurationOnboardingState.Idle(
+                backendUriError = BackendUriError.Empty,
+            ),
+        )
     } else {
         onStateChange.invoke(ConfigurationOnboardingState.Processing)
-        delay(2500L)
-        onStateChange.invoke(ConfigurationOnboardingState.Idle(
-            backendUriError = BackendUriError.Invalid,
-        ))
+        delay(timeMillis = 2500L)
+        onStateChange.invoke(
+            ConfigurationOnboardingState.Idle(
+                backendUriError = BackendUriError.Invalid,
+            ),
+        )
     }
 }
