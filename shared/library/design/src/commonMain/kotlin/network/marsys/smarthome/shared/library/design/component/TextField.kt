@@ -216,12 +216,12 @@ private fun TextFieldScope.TextInput(
         modifier = modifier,
         contentAlignment = Alignment.CenterStart,
     ) {
-        if (!readOnly && !enabled) {
-            InnerTextField()
-        } else {
+        if (readOnly || !enabled) {
             SelectionContainer {
                 Text(state.text.toString())
             }
+        } else {
+            InnerTextField()
         }
 
         if (placeholder != null && state.text.isEmpty()) {
