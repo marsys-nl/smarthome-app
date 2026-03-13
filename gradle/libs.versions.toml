@@ -12,8 +12,9 @@ android-sdk-compile = "36"
 android-sdk-min = "31"
 android-sdk-target = "36"
 
-androidx-activity = "1.12.4"
+androidx-activity = "1.13.0"
 androidx-appcompat = "1.7.1"
+androidx-lifecycle-viewmodel = "2.9.6"
 androidx-navigation = "1.1.0-alpha04"
 
 compose-unstyled = "1.49.6"
@@ -33,6 +34,7 @@ ktlint = "1.8.0"
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle-viewmodel" }
 androidx-navigation-ui = { group = "org.jetbrains.androidx.navigation3", name = "navigation3-ui", version.ref = "androidx-navigation" }
 
 compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "jetbrains-compose" }
