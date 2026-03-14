@@ -13,7 +13,7 @@ import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.
 
 class OnboardingViewModel : ViewModel() {
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
-        value = ConfigurationOnboardingState.Idle()
+        value = ConfigurationOnboardingState.Idle(),
     )
     val configuration = configurationState.asStateFlow()
 
