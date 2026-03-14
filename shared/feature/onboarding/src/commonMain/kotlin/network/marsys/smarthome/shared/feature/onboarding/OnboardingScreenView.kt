@@ -3,12 +3,14 @@ package network.marsys.smarthome.shared.feature.onboarding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
@@ -41,6 +43,7 @@ private val config = SavedStateConfiguration {
 fun OnboardingScreenView(
     onSelectTheme: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
+    viewModel: OnboardingViewModel = viewModel { OnboardingViewModel() },
 ) {
     val backStack = rememberNavBackStack<OnboardingScreens>(
         configuration = config,
@@ -85,27 +88,12 @@ fun OnboardingScreenView(
             }
 
             entry<OnboardingScreens.Configuration> {
-                val coroutineScope = rememberCoroutineScope()
-
-                var state by retain {
-                    mutableStateOf<ConfigurationOnboardingState>(ConfigurationOnboardingState.Idle())
-                }
-
-                val uriTextFieldState = rememberTextFieldState()
+                val state by viewModel.configuration.collectAsState()
 
                 ConfigurationOnboardingScreenView(
                     state = state,
-                    uriTextFieldState = uriTextFieldState,
-                    finishOnboarding = {
-                        coroutineScope.launch {
-                            determineConfigurationOnboardingState(
-                                backendUri = uriTextFieldState.text.toString(),
-                                onStateChange = {
-                                    state = it
-                                },
-                            )
-                        }
-                    },
+                    uriTextFieldState = viewModel.uriTextFieldState,
+                    finishOnboarding = viewModel::finishOnboarding,
                     skipToDemo = {
                         // Not implemented yet.
                     },
@@ -116,25 +104,4 @@ fun OnboardingScreenView(
             }
         },
     )
-}
-
-private suspend fun determineConfigurationOnboardingState(
-    backendUri: String,
-    onStateChange: (ConfigurationOnboardingState) -> Unit,
-) {
-    if (backendUri.isEmpty()) {
-        onStateChange.invoke(
-            ConfigurationOnboardingState.Idle(
-                backendUriError = BackendUriError.Empty,
-            ),
-        )
-    } else {
-        onStateChange.invoke(ConfigurationOnboardingState.Processing)
-        delay(timeMillis = 2500L)
-        onStateChange.invoke(
-            ConfigurationOnboardingState.Idle(
-                backendUriError = BackendUriError.Invalid,
-            ),
-        )
-    }
 }
