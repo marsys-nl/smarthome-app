@@ -12,7 +12,7 @@ version = libs.versions.smarthome.app.name.get()
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 
-    androidLibrary {
+    android {
         namespace = "$group"
         compileSdk = libs.versions.android.sdk.compile.get().toInt()
 
