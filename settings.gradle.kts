@@ -29,4 +29,5 @@ include(
     ":shared:feature:onboarding",
     ":shared:library",
     ":shared:library:design",
+    ":shared:library:store",
 )
