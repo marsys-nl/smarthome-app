@@ -41,6 +41,9 @@ kotlin {
 
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
+
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
         }
     }
 }
