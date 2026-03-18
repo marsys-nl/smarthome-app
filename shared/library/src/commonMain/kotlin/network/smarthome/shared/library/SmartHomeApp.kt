@@ -12,7 +12,7 @@ import org.koin.dsl.koinConfiguration
 
 @Composable
 fun SmartHomeApp(
-    vararg applicationModules: Module
+    vararg applicationModules: Module,
 ) {
     KoinApplication(
         configuration = koinConfiguration {
