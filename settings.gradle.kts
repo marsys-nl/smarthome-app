@@ -30,4 +30,5 @@ include(
     ":shared:library",
     ":shared:library:design",
     ":shared:library:store",
+    ":shared:library:store:datastore",
 )
