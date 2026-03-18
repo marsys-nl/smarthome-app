@@ -32,7 +32,11 @@ android {
 
 dependencies {
     implementation(projects.shared.library)
+    implementation(projects.shared.library.store.datastore)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
+
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
 }

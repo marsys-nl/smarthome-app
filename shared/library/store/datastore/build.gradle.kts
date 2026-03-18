@@ -21,10 +21,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared.library.store)
             implementation(projects.shared.library.design)
+            api(projects.shared.library.store)
 
-            implementation(libs.androidx.datastore.preferences.core)
+            api(libs.androidx.datastore.preferences.core)
         }
     }
 }
