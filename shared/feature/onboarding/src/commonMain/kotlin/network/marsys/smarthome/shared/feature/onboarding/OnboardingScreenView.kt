@@ -66,7 +66,7 @@ fun OnboardingScreenView(
 
             entry<OnboardingScreens.Appearance> {
                 AppearanceOnboardingScreenView(
-                    onSelectTheme = viewModel::onSelectTheme,
+                    onSelectTheme = viewModel::selectTheme,
                     navigateToConfiguration = {
                         backStack += OnboardingScreens.Configuration
                     },
@@ -83,9 +83,7 @@ fun OnboardingScreenView(
                     state = state,
                     uriTextFieldState = viewModel.uriTextFieldState,
                     finishOnboarding = viewModel::finishOnboarding,
-                    skipToDemo = {
-                        // Not implemented yet.
-                    },
+                    skipToDemo = viewModel::skipToDemo,
                     navigateBack = {
                         backStack.removeLast()
                     },

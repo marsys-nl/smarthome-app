@@ -12,9 +12,13 @@ import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
+import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.OnboardingRepository
 
 class OnboardingViewModel(
     private val appearancePreferencesRepository: AppearancePreferencesRepository,
+    private val applicationConfigurationRepository: ApplicationConfigurationRepository,
+    private val onboardingRepository: OnboardingRepository,
 ) : ViewModel() {
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
         value = ConfigurationOnboardingState.Idle(),
@@ -33,9 +37,22 @@ class OnboardingViewModel(
         }
     }
 
-    fun onSelectTheme(theme: ThemeSelection) {
+    fun selectTheme(theme: ThemeSelection) {
         viewModelScope.launch {
             appearancePreferencesRepository.setTheme(theme)
+        }
+    }
+
+    fun skipToDemo() {
+        if (configurationState.value is ConfigurationOnboardingState.Processing) {
+            return
+        }
+
+        viewModelScope.launch {
+            configurationState.update { ConfigurationOnboardingState.Processing }
+
+            applicationConfigurationRepository.setDemoMode(true)
+            onboardingRepository.finishOnboarding()
         }
     }
 
@@ -51,10 +68,18 @@ class OnboardingViewModel(
 
             delay(timeMillis = 2500L)
 
-            configurationState.update {
-                ConfigurationOnboardingState.Idle(
-                    backendUriError = BackendUriError.Invalid,
-                )
+            val result = true
+            if (result) {
+                applicationConfigurationRepository.setBackendUri(uri)
+                applicationConfigurationRepository.setDemoMode(false)
+
+                onboardingRepository.finishOnboarding()
+            } else {
+                configurationState.update {
+                    ConfigurationOnboardingState.Idle(
+                        backendUriError = BackendUriError.Invalid,
+                    )
+                }
             }
         }
     }
