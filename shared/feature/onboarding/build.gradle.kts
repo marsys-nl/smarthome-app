@@ -26,6 +26,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.store)
 
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)
