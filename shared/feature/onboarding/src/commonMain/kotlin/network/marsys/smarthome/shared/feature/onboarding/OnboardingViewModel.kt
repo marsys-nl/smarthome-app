@@ -10,8 +10,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
+import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 
-class OnboardingViewModel : ViewModel() {
+class OnboardingViewModel(
+    private val appearancePreferencesRepository: AppearancePreferencesRepository,
+) : ViewModel() {
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
         value = ConfigurationOnboardingState.Idle(),
     )
@@ -26,6 +30,12 @@ class OnboardingViewModel : ViewModel() {
 
         viewModelScope.launch {
             validateBackendUri(uri = uriTextFieldState.text.toString())
+        }
+    }
+
+    fun onSelectTheme(theme: ThemeSelection) {
+        viewModelScope.launch {
+            appearancePreferencesRepository.setTheme(theme)
         }
     }
 

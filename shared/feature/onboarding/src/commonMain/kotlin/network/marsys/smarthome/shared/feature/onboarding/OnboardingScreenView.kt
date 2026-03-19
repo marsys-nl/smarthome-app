@@ -15,7 +15,6 @@ import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnbo
 import network.marsys.smarthome.shared.feature.onboarding.screens.ConfigurationOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
-import network.marsys.smarthome.shared.library.design.ThemeSelection
 import org.koin.compose.viewmodel.koinViewModel
 
 private val config = SavedStateConfiguration {
@@ -32,7 +31,6 @@ private val config = SavedStateConfiguration {
 @Composable
 @Suppress("LongMethod")
 fun OnboardingScreenView(
-    onSelectTheme: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = koinViewModel(),
 ) {
@@ -68,7 +66,7 @@ fun OnboardingScreenView(
 
             entry<OnboardingScreens.Appearance> {
                 AppearanceOnboardingScreenView(
-                    onSelectTheme = onSelectTheme,
+                    onSelectTheme = viewModel::onSelectTheme,
                     navigateToConfiguration = {
                         backStack += OnboardingScreens.Configuration
                     },
