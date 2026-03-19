@@ -29,7 +29,11 @@ kotlin {
 
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)
+
             implementation(libs.compose.resources)
+
+            implementation(libs.koin.compose.viewmodel)
+
             implementation(libs.kotlinx.serialization.json)
         }
     }
