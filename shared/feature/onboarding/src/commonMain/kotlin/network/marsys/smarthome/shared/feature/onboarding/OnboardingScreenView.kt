@@ -1,21 +1,13 @@
 package network.marsys.smarthome.shared.feature.onboarding
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.retain.retain
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
@@ -23,9 +15,8 @@ import network.marsys.smarthome.shared.feature.onboarding.screens.AppearanceOnbo
 import network.marsys.smarthome.shared.feature.onboarding.screens.ConfigurationOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.EntitiesOnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.screens.InitialOnboardingScreenView
-import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
-import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import org.koin.compose.viewmodel.koinViewModel
 
 private val config = SavedStateConfiguration {
     serializersModule = SerializersModule {
@@ -43,7 +34,7 @@ private val config = SavedStateConfiguration {
 fun OnboardingScreenView(
     onSelectTheme: (ThemeSelection) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: OnboardingViewModel = viewModel { OnboardingViewModel() },
+    viewModel: OnboardingViewModel = koinViewModel(),
 ) {
     val backStack = rememberNavBackStack<OnboardingScreens>(
         configuration = config,
