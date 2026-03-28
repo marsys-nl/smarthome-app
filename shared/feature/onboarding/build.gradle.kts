@@ -24,6 +24,11 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.compose.ui.tooling)
+            implementation(libs.compose.ui.tooling.preview)
+        }
+
         commonMain.dependencies {
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.store)
@@ -31,6 +36,8 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)
 
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.ui.tooling.preview)
             implementation(libs.compose.resources)
 
             implementation(libs.koin.compose.viewmodel)
