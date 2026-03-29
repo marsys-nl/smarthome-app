@@ -3,7 +3,6 @@ package network.smarthome.shared.library
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -34,7 +33,7 @@ fun SmartHomeApp(
         SmartHomeTheme(
             theme = theme,
         ) {
-            OnboardingScreenView()
+            SmartHomeNavigation()
         }
     }
 }

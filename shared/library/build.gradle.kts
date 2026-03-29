@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.marsys.smarthome.apply.ios.version)
     alias(libs.plugins.marsys.smarthome.detekt)
 }
@@ -41,11 +42,15 @@ kotlin {
             implementation(projects.shared.library.store)
             implementation(projects.shared.library.store.datastore)
 
+            implementation(libs.androidx.navigation.ui)
+
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
 
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.kotlinx.serialization.json)
         }
     }
 }
