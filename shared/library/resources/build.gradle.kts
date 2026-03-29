@@ -3,12 +3,18 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.marsys.smarthome.detekt)
 }
 
-group = "network.marsys.smarthome.shared.feature.onboarding"
+group = "network.marsys.smarthome.shared.library.resources"
 version = libs.versions.smarthome.app.name.get()
+
+compose.resources {
+    nameOfResClass = "SmartHomeRes"
+    packageOfResClass = "network.marsys.smarthome.shared.library.resources"
+    publicResClass = true
+}
+
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 
@@ -24,26 +30,9 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling)
-            implementation(libs.compose.ui.tooling.preview)
-        }
-
         commonMain.dependencies {
-            implementation(projects.shared.library.design)
-            implementation(projects.shared.library.resources)
-            implementation(projects.shared.library.store)
-
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.navigation.ui)
-
             implementation(libs.compose.foundation)
             implementation(libs.compose.resources)
-            implementation(libs.compose.ui.tooling.preview)
-
-            implementation(libs.koin.compose.viewmodel)
-
-            implementation(libs.kotlinx.serialization.json)
         }
     }
 }
