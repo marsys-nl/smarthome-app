@@ -10,9 +10,11 @@ import kotlinx.serialization.PolymorphicSerializer
 
 @Composable
 inline fun <reified T : NavKey> rememberNavBackStack(
+    vararg inputs: Any?,
     configuration: SavedStateConfiguration,
-    vararg elements: T,
+    elements: Array<T>,
 ): NavBackStack<T> = rememberSerializable(
+    inputs = inputs,
     configuration = configuration,
     serializer = NavBackStackSerializer(PolymorphicSerializer(T::class)),
 ) {

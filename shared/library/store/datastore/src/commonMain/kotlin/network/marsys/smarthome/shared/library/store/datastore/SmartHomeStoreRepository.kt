@@ -66,6 +66,12 @@ class SmartHomeStoreRepository(
         }
     }
 
+    override suspend fun resetOnboarding() {
+        dataStore.edit { preferences ->
+            preferences[Keys.isOnboardingFinished] = false
+        }
+    }
+
     private companion object Keys {
         private val backendUri = stringPreferencesKey("config.backend_uri")
         private val isDemoMode = booleanPreferencesKey("config.is_demo_mode")
