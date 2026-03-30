@@ -15,4 +15,9 @@ interface OnboardingRepository {
      * Finishes the onboarding flow and sets the [isOnboardingFinished] flag to true.
      */
     suspend fun finishOnboarding()
+
+    /**
+     * Resets the onboarding flow and sets the [isOnboardingFinished] to false.
+     */
+    suspend fun resetOnboarding()
 }
