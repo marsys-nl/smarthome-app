@@ -109,8 +109,6 @@ private fun SmartHomeDashboard(
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(.5f),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
@@ -122,7 +120,7 @@ private fun SmartHomeDashboard(
                     coroutineScope.launch {
                         onboardingRepository.resetOnboarding()
                     }
-                }
+                },
             ) {
                 Text(text = "Reset onboarding")
             }
