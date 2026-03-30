@@ -28,7 +28,7 @@ private val config = SavedStateConfiguration {
 @Composable
 fun SmartHomeNavigation(
     modifier: Modifier = Modifier,
-    onboardingRepository: OnboardingRepository = koinInject()
+    onboardingRepository: OnboardingRepository = koinInject(),
 ) {
     val isOnboardingFinished by onboardingRepository.isOnboardingFinished
         .collectAsStateWithLifecycle(initialValue = null)
