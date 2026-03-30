@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -54,6 +55,16 @@ fun SmartHomeNavigation(
         configuration = config,
         elements = arrayOf(initialScreen),
     )
+
+    LaunchedEffect(isOnboardingFinished) {
+        val targetScreen = when (isOnboardingFinished) {
+            true -> SmartHomeScreens.Dashboard
+            else -> SmartHomeScreens.Onboarding
+        }
+
+        backStack.clear()
+        backStack += targetScreen
+    }
 
     NavDisplay(
         modifier = modifier
