@@ -22,7 +22,6 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.logo
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_logo_description
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_initial_title
@@ -35,6 +34,8 @@ import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.resources.SmartHomeRes
+import network.marsys.smarthome.shared.library.resources.logo
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -65,7 +66,7 @@ fun InitialOnboardingScreenView(
         backgroundColor = OnboardingBackgroundColor,
         centeredSlot = {
             Image(
-                painter = painterResource(Res.drawable.logo),
+                painter = painterResource(SmartHomeRes.drawable.logo),
                 contentDescription = stringResource(Res.string.onboarding_initial_logo_description),
                 modifier = Modifier
                     .align(Alignment.Center)
