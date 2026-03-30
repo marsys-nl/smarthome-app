@@ -34,6 +34,7 @@ kotlin {
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
 
+            implementation(libs.androidx.lifecycle.runtime)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)
 

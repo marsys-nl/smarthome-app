@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -42,6 +45,8 @@ fun SmartHomeNavigation(
     modifier: Modifier = Modifier,
     onboardingRepository: OnboardingRepository = koinInject(),
 ) {
+    var onboardingSessionKey by remember { mutableIntStateOf(0) }
+
     val isOnboardingFinished by onboardingRepository.isOnboardingFinished
         .collectAsStateWithLifecycle(initialValue = null)
 
@@ -64,6 +69,10 @@ fun SmartHomeNavigation(
 
         backStack.clear()
         backStack += targetScreen
+
+        if (isOnboardingFinished == false) {
+            onboardingSessionKey++
+        }
     }
 
     NavDisplay(
@@ -73,7 +82,9 @@ fun SmartHomeNavigation(
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<SmartHomeScreens.Onboarding> {
-                OnboardingScreenView()
+                OnboardingScreenView(
+                    onboardingSessionKey = onboardingSessionKey,
+                )
             }
 
             entry<SmartHomeScreens.Dashboard> {

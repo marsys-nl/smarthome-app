@@ -2,9 +2,9 @@ package network.marsys.smarthome.shared.feature.onboarding
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
@@ -32,9 +32,11 @@ private val config = SavedStateConfiguration {
 @Suppress("LongMethod")
 fun OnboardingScreenView(
     modifier: Modifier = Modifier,
-    viewModel: OnboardingViewModel = koinViewModel(),
+    onboardingSessionKey: Int = 0,
+    viewModel: OnboardingViewModel = koinViewModel(key = "onboarding-session-$onboardingSessionKey"),
 ) {
     val backStack = rememberNavBackStack<OnboardingScreens>(
+        onboardingSessionKey,
         configuration = config,
         elements = arrayOf(OnboardingScreens.Initial),
     )
@@ -77,7 +79,8 @@ fun OnboardingScreenView(
             }
 
             entry<OnboardingScreens.Configuration> {
-                val state by viewModel.configuration.collectAsState()
+                val state by viewModel.configuration
+                    .collectAsStateWithLifecycle()
 
                 ConfigurationOnboardingScreenView(
                     state = state,
