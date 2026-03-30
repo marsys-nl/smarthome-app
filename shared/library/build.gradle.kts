@@ -39,12 +39,16 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
             implementation(projects.shared.library.store.datastore)
 
+            implementation(libs.androidx.lifecycle.runtime)
+            implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)
 
             implementation(libs.compose.foundation)
+            implementation(libs.compose.resources)
             implementation(libs.compose.runtime)
 
             implementation(libs.koin.compose)
