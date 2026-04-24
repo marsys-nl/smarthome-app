@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.marsys.smarthome.detekt)
+    alias(libs.plugins.test.balloon)
 }
 
 group = "network.marsys.smarthome.shared.feature.onboarding"
@@ -45,6 +46,13 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.kotlinx.serialization.json)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.expect.core)
+            implementation(libs.kotlin.test)
+
+            implementation(libs.test.balloon.core)
         }
     }
 }

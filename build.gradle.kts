@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.marsys.smarthome.apply.ios.version) apply false
     alias(libs.plugins.marsys.smarthome.detekt) apply false
+    alias(libs.plugins.test.balloon) apply false
 }
 
 val ktlint: Configuration by configurations.creating
