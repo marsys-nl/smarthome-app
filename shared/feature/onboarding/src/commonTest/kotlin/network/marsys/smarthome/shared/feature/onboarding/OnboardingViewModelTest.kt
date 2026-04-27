@@ -20,11 +20,11 @@ val OnboardingViewModelTest by testSuite {
     testFixture {
         startKoin {
             modules(
-                module {
+                modules = module {
                     single<AppearancePreferencesRepository> { FakeAppearancePreferencesRepository() }
                     single<ApplicationConfigurationRepository> { FakeApplicationConfigurationRepository() }
                     single<OnboardingRepository> { FakeOnboardingRepository() }
-                }
+                },
             )
         }.koin
     } closeWith {

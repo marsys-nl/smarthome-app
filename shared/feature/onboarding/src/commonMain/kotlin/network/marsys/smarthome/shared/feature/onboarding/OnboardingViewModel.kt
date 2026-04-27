@@ -24,8 +24,9 @@ class OnboardingViewModel(
     private val onboardingRepository: OnboardingRepository,
     coroutineScope: CoroutineScope? = null,
 ) : ViewModel(
-    viewModelScope = coroutineScope ?:
-        CoroutineScope(Dispatchers.Main.immediate + SupervisorJob()),
+    viewModelScope = coroutineScope ?: CoroutineScope(
+        context = Dispatchers.Main.immediate + SupervisorJob(),
+    ),
 ) {
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
         value = ConfigurationOnboardingState.Idle(),
