@@ -18,7 +18,7 @@ androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.10.0"
 androidx-navigation = "1.1.0"
 
-compose-unstyled = "1.49.6"
+compose-unstyled = "1.49.9"
 
 detekt = "2.0.0-alpha.2"
 detekt-compose-rules = "0.5.7"
