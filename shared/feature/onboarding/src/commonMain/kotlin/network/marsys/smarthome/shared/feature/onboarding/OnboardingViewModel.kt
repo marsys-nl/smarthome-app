@@ -3,6 +3,9 @@ package network.marsys.smarthome.shared.feature.onboarding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +22,12 @@ class OnboardingViewModel(
     private val appearancePreferencesRepository: AppearancePreferencesRepository,
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
     private val onboardingRepository: OnboardingRepository,
-) : ViewModel() {
+    coroutineScope: CoroutineScope? = null,
+) : ViewModel(
+    viewModelScope = coroutineScope ?: CoroutineScope(
+        context = Dispatchers.Main.immediate + SupervisorJob(),
+    ),
+) {
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
         value = ConfigurationOnboardingState.Idle(),
     )
