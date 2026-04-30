@@ -6,11 +6,11 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -22,6 +22,7 @@ class OnboardingViewModel(
     private val appearancePreferencesRepository: AppearancePreferencesRepository,
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
     private val onboardingRepository: OnboardingRepository,
+    private val validateBackendUriUseCase: ValidateBackendUriUseCase,
     coroutineScope: CoroutineScope? = null,
 ) : ViewModel(
     viewModelScope = coroutineScope ?: CoroutineScope(
@@ -74,9 +75,7 @@ class OnboardingViewModel(
         } else {
             configurationState.update { ConfigurationOnboardingState.Processing }
 
-            delay(timeMillis = 2500L)
-
-            val result = true
+            val result = validateBackendUriUseCase.invoke(uri)
             if (result) {
                 applicationConfigurationRepository.setBackendUri(uri)
                 applicationConfigurationRepository.setDemoMode(false)

@@ -31,6 +31,7 @@ kotlin {
         }
 
         commonMain.dependencies {
+            implementation(projects.shared.domain.connection)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
@@ -49,10 +50,8 @@ kotlin {
         }
 
         commonTest.dependencies {
-//            implementation(libs.koin.test)
             implementation(libs.kotlin.expect.core)
             implementation(libs.kotlin.test)
-//            implementation(libs.kotlinx.coroutines.test)
 
             implementation(libs.test.balloon.core)
         }
