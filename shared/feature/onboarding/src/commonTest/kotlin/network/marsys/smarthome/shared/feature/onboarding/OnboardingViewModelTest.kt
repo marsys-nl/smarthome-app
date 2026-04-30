@@ -9,9 +9,9 @@ import dev.nmarsman.expect.assertions.isNotNull
 import dev.nmarsman.expect.assertions.isTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
+import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeAppearancePreferencesRepository
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeApplicationConfigurationRepository
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeOnboardingRepository
@@ -34,6 +34,9 @@ val OnboardingViewModelTest by testSuite {
                     single<AppearancePreferencesRepository> { FakeAppearancePreferencesRepository() }
                     single<ApplicationConfigurationRepository> { FakeApplicationConfigurationRepository() }
                     single<OnboardingRepository> { FakeOnboardingRepository() }
+                    single<ValidateBackendUriUseCase> {
+                        ValidateBackendUriUseCase { true }
+                    }
                 },
             )
         }.koin
@@ -45,6 +48,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
             )
 
             expectThat(viewModel.configuration.value)
@@ -58,6 +62,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = appearancePreferencesRepository,
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -73,6 +78,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -90,6 +96,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -107,6 +114,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -124,6 +132,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = onboardingRepository,
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -140,6 +149,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -153,12 +163,35 @@ val OnboardingViewModelTest by testSuite {
                 .isA<BackendUriError.Empty>()
         }
 
+        test(name = "Should emit invalid uri error when finishing onboarding with invalid uri") {
+            val viewModel = OnboardingViewModel(
+                appearancePreferencesRepository = it.get(),
+                applicationConfigurationRepository = it.get(),
+                onboardingRepository = it.get(),
+                validateBackendUriUseCase = {
+                    false
+                },
+                coroutineScope = testScope,
+            )
+
+            viewModel.uriTextFieldState.edit { append("https://example.com") }
+            viewModel.finishOnboarding()
+            testScope.advanceUntilIdle()
+
+            expectThat(viewModel.configuration.value)
+                .isA<ConfigurationOnboardingState.Idle>()
+                .get(ConfigurationOnboardingState.Idle::backendUriError)
+                .isNotNull()
+                .isA<BackendUriError.Invalid>()
+        }
+
         test(name = "Should ignore finish onboarding call when already processing") {
             val applicationConfigurationRepository = it.get<ApplicationConfigurationRepository>()
             val viewModel = OnboardingViewModel(
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -180,6 +213,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -196,6 +230,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = onboardingRepository,
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 
@@ -212,6 +247,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 onboardingRepository = it.get(),
+                validateBackendUriUseCase = it.get(),
                 coroutineScope = testScope,
             )
 

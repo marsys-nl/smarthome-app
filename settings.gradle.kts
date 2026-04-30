@@ -41,6 +41,7 @@ includeBuild("build-logic")
 
 include(
     ":app:android",
+    ":shared:domain:connection",
     ":shared:feature:onboarding",
     ":shared:library",
     ":shared:library:design",

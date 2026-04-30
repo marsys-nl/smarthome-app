@@ -3,6 +3,7 @@ package network.smarthome.shared.library
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -15,6 +16,10 @@ import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 private val viewModelModule = module {
+    single {
+        ValidateBackendUriUseCase { true }
+    }
+
     viewModelOf(::OnboardingViewModel)
 }
 
