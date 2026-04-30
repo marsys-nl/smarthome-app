@@ -37,6 +37,8 @@ kotlinx-serialization = "1.11.0"
 
 ktlint = "1.8.0"
 
+ktor = "3.4.3"
+
 test-balloon = "0.8.4-K2.4.0-Beta2"
 
 [libraries]
@@ -68,6 +70,10 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
 ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
+
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
+ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 
 test-balloon-core = { group = "de.infix.testBalloon", name = "testBalloon-framework-core", version.ref = "test-balloon" }
 
