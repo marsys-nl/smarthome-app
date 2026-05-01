@@ -3,10 +3,11 @@ package network.smarthome.shared.library
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
+import network.marsys.smarthome.shared.data.connection.connectionDataModule
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
@@ -16,10 +17,6 @@ import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 private val viewModelModule = module {
-    single {
-        ValidateBackendUriUseCase { true }
-    }
-
     viewModelOf(::OnboardingViewModel)
 }
 
@@ -29,7 +26,7 @@ fun SmartHomeApp(
 ) {
     KoinApplication(
         configuration = koinConfiguration {
-            modules(*applicationModules, viewModelModule)
+            modules(*applicationModules, networkModule, connectionDataModule, viewModelModule)
         },
     ) {
         val appearancePreferencesRepository = koinInject<AppearancePreferencesRepository>()
