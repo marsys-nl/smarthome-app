@@ -12,12 +12,20 @@ import network.marsys.smarthome.shared.library.store.AppearancePreferencesReposi
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.Module
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
 private val viewModelModule = module {
-    viewModelOf(::OnboardingViewModel)
+    viewModel {
+        OnboardingViewModel(
+            appearancePreferencesRepository = get(),
+            applicationConfigurationRepository = get(),
+            onboardingRepository = get(),
+            validateBackendUriUseCase = get(),
+        )
+    }
 }
 
 @Composable
