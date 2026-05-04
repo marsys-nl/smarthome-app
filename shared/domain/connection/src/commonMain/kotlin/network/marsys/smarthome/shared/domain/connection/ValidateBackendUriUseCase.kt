@@ -6,7 +6,7 @@ fun interface ValidateBackendUriUseCase {
     suspend operator fun invoke(uri: String): Result<Unit, Reason>
 
     sealed interface Reason {
-        data class InvalidUri(val message: String) : Reason
+        data class InvalidUri(val message: String?) : Reason
         data object Unreachable : Reason
         data object InvalidBackend : Reason
     }

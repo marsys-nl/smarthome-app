@@ -56,7 +56,7 @@ internal class ValidateBackendUriUseCaseImpl(
 
         succeed(with = url)
     } catch (exception: IllegalArgumentException) {
-        fail(with = ValidateBackendUriUseCase.Reason.InvalidUri(exception.message ?: "Invalid uri"))
+        fail(with = ValidateBackendUriUseCase.Reason.InvalidUri(exception.message))
     }
 
     companion object {
