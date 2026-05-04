@@ -6,30 +6,16 @@ import dev.nmarsman.expect.assertions.isA
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.io.IOException
+import kotlinx.serialization.json.Json
 import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.library.core.Result
-
-private fun mockClient(
-    content: String = "",
-    handler: () -> HttpStatusCode,
-): HttpClient =
-    HttpClient(
-        engine = MockEngine {
-            respond(
-                content = content,
-                status = handler.invoke(),
-            )
-        },
-    )
-
-private fun mockFailingClient(exception: Exception): HttpClient =
-    HttpClient(
-        engine = MockEngine {
-            throw exception
-        },
-    )
 
 val validateBackendUriUseCaseTest by testSuite(
     displayName = "Validate backend uri use case tests",
@@ -119,4 +105,71 @@ val validateBackendUriUseCaseTest by testSuite(
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidUri>()
     }
+
+    test(name = "Should return failure if unexpected content is served") {
+        val client = mockClient(
+            content = "",
+            handler = { HttpStatusCode.OK },
+        )
+        val useCase = ValidateBackendUriUseCaseImpl(client)
+
+        expectThat(subject = useCase.invoke("http://example.com"))
+            .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
+            .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
+            .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
+    }
+
+    test(name = "Should return failure if content is served from unexpected backend") {
+        val client = mockClient(
+            content = """
+                {
+                    "app": "UnknownApp",
+                    "version": "1.0.0"
+                }
+            """.trimIndent(),
+            handler = { HttpStatusCode.OK },
+        )
+        val useCase = ValidateBackendUriUseCaseImpl(client)
+
+        expectThat(subject = useCase.invoke("http://example.com"))
+            .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
+            .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
+            .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
+    }
 }
+
+private const val HEALTH_ENDPOINT_RESPONSE_DEFAULT = """
+    {
+        "app": "SmartHomeBackend",
+        "version": "1.0.0"
+    }
+"""
+
+private fun mockClient(
+    content: String = HEALTH_ENDPOINT_RESPONSE_DEFAULT,
+    handler: () -> HttpStatusCode,
+): HttpClient =
+    HttpClient(
+        engine = MockEngine {
+            respond(
+                content = content,
+                status = handler.invoke(),
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
+            )
+        },
+    ) {
+        install(ContentNegotiation) {
+            json(
+                json = Json {
+                    ignoreUnknownKeys = true
+                },
+            )
+        }
+    }
+
+private fun mockFailingClient(exception: Exception): HttpClient =
+    HttpClient(
+        engine = MockEngine {
+            throw exception
+        },
+    )

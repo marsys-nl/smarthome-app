@@ -32,6 +32,7 @@ dependencyResolutionManagement {
 
             content {
                 includeModuleByRegex("dev\\.nmarsman\\.expect", "kotlin-expect-core.*")
+                includeModuleByRegex("network\\.marsys\\.smarthome", "smarthome-api.*")
             }
         }
     }

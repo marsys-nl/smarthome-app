@@ -1,11 +1,13 @@
 package network.marsys.smarthome.shared.data.connection
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.Url
 import io.ktor.http.isSuccess
+import io.ktor.serialization.ContentConvertException
 import kotlinx.io.IOException
-import kotlinx.serialization.SerializationException
+import network.marsys.smarthome.api.models.config.HealthResponse
 import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
@@ -20,12 +22,16 @@ internal class ValidateBackendUriUseCaseImpl(
             .onFailure { return it }
 
         with(client.get("${url}${HEALTH_ENDPOINT}")) {
-            when (status.isSuccess()) {
-                true -> succeed(with = Unit)
-                false -> fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
+            val response = body<HealthResponse>()
+
+            when {
+                status.isSuccess() && response.app == "SmartHomeBackend" ->
+                    succeed(with = Unit)
+
+                else -> fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
             }
         }
-    } catch (_: SerializationException) {
+    } catch (_: ContentConvertException) {
         fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
     } catch (_: IOException) {
         fail(with = ValidateBackendUriUseCase.Reason.Unreachable)
