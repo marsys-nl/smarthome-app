@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.marsys.smarthome.detekt)
     alias(libs.plugins.test.balloon)
 }
@@ -23,9 +24,12 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.domain.connection)
+            implementation(projects.shared.library.core)
             implementation(projects.shared.library.network)
 
             implementation(libs.koin.compose)
+
+            implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.ktor.client.core)
         }

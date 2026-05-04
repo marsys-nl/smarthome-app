@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
+import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
@@ -75,17 +76,20 @@ class OnboardingViewModel(
         } else {
             configurationState.update { ConfigurationOnboardingState.Processing }
 
-            val result = validateBackendUriUseCase.invoke(uri)
-            if (result) {
-                applicationConfigurationRepository.setBackendUri(uri)
-                applicationConfigurationRepository.setDemoMode(false)
+            when (validateBackendUriUseCase.invoke(uri)) {
+                is Result.Success -> {
+                    applicationConfigurationRepository.setBackendUri(uri)
+                    applicationConfigurationRepository.setDemoMode(false)
 
-                onboardingRepository.finishOnboarding()
-            } else {
-                configurationState.update {
-                    ConfigurationOnboardingState.Idle(
-                        backendUriError = BackendUriError.Invalid,
-                    )
+                    onboardingRepository.finishOnboarding()
+                }
+
+                is Result.Failure -> {
+                    configurationState.update {
+                        ConfigurationOnboardingState.Idle(
+                            backendUriError = BackendUriError.Invalid,
+                        )
+                    }
                 }
             }
         }
