@@ -45,6 +45,7 @@ include(
     ":shared:domain:connection",
     ":shared:feature:onboarding",
     ":shared:library",
+    ":shared:library:core",
     ":shared:library:design",
     ":shared:library:network",
     ":shared:library:resources",
