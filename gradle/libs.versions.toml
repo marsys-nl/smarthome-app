@@ -30,7 +30,7 @@ jvm-toolchain = "21"
 koin = "4.2.1"
 
 kotlin = "2.3.21"
-kotlin-expect = "0.1-SNAPSHOT"
+kotlin-expect = "0.1"
 kotlin-kover = "0.9.8"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.11.0"
