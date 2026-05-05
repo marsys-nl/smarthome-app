@@ -17,6 +17,8 @@ import network.marsys.smarthome.shared.feature.onboarding.fake.FakeApplicationCo
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeOnboardingRepository
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
+import network.marsys.smarthome.shared.library.core.Result.Companion.fail
+import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
@@ -35,7 +37,9 @@ val OnboardingViewModelTest by testSuite {
                     single<ApplicationConfigurationRepository> { FakeApplicationConfigurationRepository() }
                     single<OnboardingRepository> { FakeOnboardingRepository() }
                     single<ValidateBackendUriUseCase> {
-                        ValidateBackendUriUseCase { true }
+                        ValidateBackendUriUseCase {
+                            succeed(with = Unit)
+                        }
                     }
                 },
             )
@@ -169,7 +173,7 @@ val OnboardingViewModelTest by testSuite {
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
                 validateBackendUriUseCase = {
-                    false
+                    fail(with = ValidateBackendUriUseCase.Reason.InvalidUri("Invalid URI"))
                 },
                 coroutineScope = testScope,
             )

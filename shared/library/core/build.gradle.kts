@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.marsys.smarthome.detekt)
 }
 
-group = "network.marsys.smarthome.shared.domain.connection"
+group = "network.marsys.smarthome.shared.library.core"
 version = libs.versions.smarthome.app.name.get()
 
 kotlin {
@@ -18,12 +18,4 @@ kotlin {
     jvm()
     iosArm64()
     iosSimulatorArm64()
-
-    sourceSets {
-        commonMain.dependencies {
-            implementation(projects.shared.library.core)
-
-            implementation(libs.kotlinx.coroutines.core)
-        }
-    }
 }

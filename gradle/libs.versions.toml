@@ -5,7 +5,7 @@ smarthome-app-code = "26001001"
 smarthome-app-name = "2026.01-SNAPSHOT"
 
 smarthome-domain = "2026.01-SNAPSHOT"
-smarthome-api = "2026.01-SNAPSHOT"
+smarthome-api = "2026.03-SNAPSHOT"
 
 android-gradle-plugin = "9.2.0"
 android-sdk-compile = "37"
@@ -72,9 +72,13 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 ktlint = { group = "com.pinterest.ktlint", name = "ktlint-cli", version.ref = "ktlint" }
 
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktor" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktor" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktor" }
 ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
+
+marsys-smarthome-api = { group = "network.marsys.smarthome", name = "smarthome-api", version.ref = "smarthome-api" }
 
 test-balloon-core = { group = "de.infix.testBalloon", name = "testBalloon-framework-core", version.ref = "test-balloon" }
 
