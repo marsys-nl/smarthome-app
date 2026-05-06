@@ -5,7 +5,9 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -51,11 +53,17 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_api_key_description
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_api_key_error_invalid
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_api_key_label
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_api_key_placeholder
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_description
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_error_empty
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_error_invalid
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_label
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_optional
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_label
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_title
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_error_empty
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_error_invalid
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_placeholder
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_get_started
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_skip_setup
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_subtitle
@@ -76,6 +84,7 @@ import network.marsys.smarthome.shared.library.design.component.TextField
 import network.marsys.smarthome.shared.library.design.component.TextFieldDecorationBox
 import network.marsys.smarthome.shared.library.design.component.TextFieldScope
 import network.marsys.smarthome.shared.library.design.icons.Check
+import network.marsys.smarthome.shared.library.design.icons.ChevronDown
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
 import network.marsys.smarthome.shared.library.design.icons.Server
@@ -96,6 +105,7 @@ private val BrandPrimaryToSecondaryGradient
 fun ConfigurationOnboardingScreenView(
     state: ConfigurationOnboardingState,
     uriTextFieldState: TextFieldState,
+    apiKeyTextFieldState: TextFieldState,
     finishOnboarding: () -> Unit,
     skipToDemo: () -> Unit,
     navigateBack: () -> Unit,
@@ -176,6 +186,7 @@ fun ConfigurationOnboardingScreenView(
         ConfigurationOnboardingScreenContent(
             state = state,
             uriTextFieldState = uriTextFieldState,
+            apiKeyTextFieldState = apiKeyTextFieldState,
             finishOnboarding = finishOnboarding,
         )
     }
@@ -185,6 +196,7 @@ fun ConfigurationOnboardingScreenView(
 private fun ConfigurationOnboardingScreenContent(
     state: ConfigurationOnboardingState,
     uriTextFieldState: TextFieldState,
+    apiKeyTextFieldState: TextFieldState,
     finishOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -197,6 +209,12 @@ private fun ConfigurationOnboardingScreenContent(
             BackendConnectionUriTextField(
                 state = state,
                 uriTextFieldState = uriTextFieldState,
+                finishOnboarding = finishOnboarding,
+            )
+
+            BackendConnectionApiKeyTextField(
+                state = state,
+                apiKeyTextFieldState = apiKeyTextFieldState,
                 finishOnboarding = finishOnboarding,
             )
         }
@@ -237,7 +255,7 @@ private fun BackendConnectionUriTextField(
     finishOnboarding: () -> Unit,
 ) {
     Text(
-        text = stringResource(Res.string.onboarding_configuration_backend_label),
+        text = stringResource(Res.string.onboarding_configuration_backend_uri_label),
         modifier = Modifier
             .padding(bottom = 8.dp),
         lineHeight = 20.sp,
@@ -277,16 +295,16 @@ private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
     TextFieldDecorationBox(
         modifier = modifier,
         placeholder = {
-            Text("https://api.yourdomain.com")
+            Text(stringResource(Res.string.onboarding_configuration_backend_uri_placeholder))
         },
         supportingText = {
             if (state is ConfigurationOnboardingState.Idle && state.backendValidationError != null) {
                 val message = when (state.backendValidationError) {
                     is BackendValidationError.Empty ->
-                        stringResource(Res.string.onboarding_configuration_backend_error_empty)
+                        stringResource(Res.string.onboarding_configuration_backend_uri_error_empty)
 
                     is BackendValidationError.InvalidUri ->
-                        stringResource(Res.string.onboarding_configuration_backend_error_invalid)
+                        stringResource(Res.string.onboarding_configuration_backend_uri_error_invalid)
 
                     else -> null
                 }
@@ -301,6 +319,118 @@ private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
             }
         },
     )
+}
+
+@Composable
+private fun BackendConnectionApiKeyTextField(
+    state: ConfigurationOnboardingState,
+    apiKeyTextFieldState: TextFieldState,
+    finishOnboarding: () -> Unit,
+) {
+    var displayApiKeyTextField by remember {
+        mutableStateOf(apiKeyTextFieldState.text.isNotBlank())
+    }
+
+    val transition = updateTransition(displayApiKeyTextField, "chevron-animation")
+
+    /*
+    val trackColor by transition.animateColor(transitionSpec = SwitchDefaults.transition()) {
+        colors.trackColor(enabled, it).value
+    }
+     */
+
+    val rotation by transition.animateFloat(
+        transitionSpec = {
+            tween(durationMillis = 300)
+        },
+        label = "chevron-rotation-animation",
+    ) {
+        if (it) 0f else -90f
+    }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp, bottom = 8.dp)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {
+                    displayApiKeyTextField = !displayApiKeyTextField
+                }
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_api_key_label),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_optional),
+            modifier = Modifier
+                .padding(start = 8.dp),
+            lineHeight = 20.sp,
+            fontSize = 12.sp,
+        )
+
+        Icon(
+            icon = Icons.ChevronDown,
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .graphicsLayer {
+                    rotationZ = rotation
+                },
+            size = 10.dp,
+        )
+    }
+
+    if (displayApiKeyTextField) {
+        TextField(
+            state = apiKeyTextFieldState,
+            modifier = Modifier
+                .fillMaxWidth(),
+            enabled = state is ConfigurationOnboardingState.Idle,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrectEnabled = false,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                showKeyboardOnFocus = true,
+            ),
+            onKeyboardAction = {
+                if (state !is ConfigurationOnboardingState.Processing) {
+                    finishOnboarding.invoke()
+                }
+            },
+        ) {
+            TextFieldDecorationBox(
+                modifier = Modifier,
+                placeholder = {
+                    Text(stringResource(Res.string.onboarding_configuration_backend_api_key_placeholder))
+                },
+                supportingText = {
+                    if (state is ConfigurationOnboardingState.Idle && state.backendValidationError is BackendValidationError.InvalidApiKey) {
+                        CompositionLocalProvider(
+                            LocalContentColor provides Color.Red,
+                        ) {
+                            Text(text = stringResource(Res.string.onboarding_configuration_backend_api_key_error_invalid))
+                        }
+                    }
+                },
+            )
+        }
+
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_api_key_description),
+            modifier = Modifier
+                .padding(top = 8.dp),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+    }
 }
 
 @Composable
@@ -433,6 +563,7 @@ private fun ConfigurationOnboardingScreenIdlePreview(
         ConfigurationOnboardingScreenView(
             state = ConfigurationOnboardingState.Idle(),
             uriTextFieldState = rememberTextFieldState(),
+            apiKeyTextFieldState = rememberTextFieldState(),
             finishOnboarding = {},
             skipToDemo = {},
             navigateBack = {},
@@ -455,6 +586,7 @@ private fun ConfigurationOnboardingScreenEmptyBackendUriPreview(
                 backendValidationError = BackendValidationError.Empty,
             ),
             uriTextFieldState = rememberTextFieldState(),
+            apiKeyTextFieldState = rememberTextFieldState(),
             finishOnboarding = {},
             skipToDemo = {},
             navigateBack = {},
@@ -479,6 +611,59 @@ private fun ConfigurationOnboardingScreenInvalidBackendUriPreview(
             uriTextFieldState = rememberTextFieldState(
                 initialText = "invalid-uri",
             ),
+            apiKeyTextFieldState = rememberTextFieldState(),
+            finishOnboarding = {},
+            skipToDemo = {},
+            navigateBack = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ConfigurationOnboardingScreenFillingApiKeyPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ConfigurationOnboardingScreenView(
+            state = ConfigurationOnboardingState.Idle(),
+            uriTextFieldState = rememberTextFieldState(
+                initialText = "valid-uri",
+            ),
+            apiKeyTextFieldState = rememberTextFieldState(
+                initialText = "valid-api-key",
+            ),
+            finishOnboarding = {},
+            skipToDemo = {},
+            navigateBack = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ConfigurationOnboardingScreenInvalidApiKeyPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ConfigurationOnboardingScreenView(
+            state = ConfigurationOnboardingState.Idle(
+                backendValidationError = BackendValidationError.InvalidApiKey,
+            ),
+            uriTextFieldState = rememberTextFieldState(
+                initialText = "valid-uri",
+            ),
+            apiKeyTextFieldState = rememberTextFieldState(
+                initialText = "invalid-api-key",
+            ),
             finishOnboarding = {},
             skipToDemo = {},
             navigateBack = {},
@@ -499,6 +684,7 @@ private fun ConfigurationOnboardingScreenProcessingPreview(
         ConfigurationOnboardingScreenView(
             state = ConfigurationOnboardingState.Processing,
             uriTextFieldState = rememberTextFieldState(),
+            apiKeyTextFieldState = rememberTextFieldState(),
             finishOnboarding = {},
             skipToDemo = {},
             navigateBack = {},
