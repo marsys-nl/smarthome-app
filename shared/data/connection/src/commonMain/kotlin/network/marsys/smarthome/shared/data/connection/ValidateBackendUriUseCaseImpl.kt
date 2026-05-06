@@ -3,8 +3,9 @@ package network.marsys.smarthome.shared.data.connection
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
-import io.ktor.http.isSuccess
 import io.ktor.serialization.ContentConvertException
 import kotlinx.io.IOException
 import network.marsys.smarthome.api.models.config.HealthResponse
@@ -17,19 +18,25 @@ import network.marsys.smarthome.shared.library.core.onFailure
 internal class ValidateBackendUriUseCaseImpl(
     private val client: HttpClient,
 ) : ValidateBackendUriUseCase {
-    override suspend fun invoke(uri: String): Result<Unit, ValidateBackendUriUseCase.Reason> = try {
+    override suspend fun invoke(uri: String, apiKey: String?): Result<Unit, ValidateBackendUriUseCase.Reason> = try {
         val url = validateUri(uri)
             .onFailure { return it }
 
-        with(client.get("${url}${HEALTH_ENDPOINT}")) {
-            val response = body<HealthResponse>()
-
-            when {
-                status.isSuccess() && response.app == "SmartHomeBackend" ->
-                    succeed(with = Unit)
-
-                else -> fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
+        val response = client.get("${url}${HEALTH_ENDPOINT}") {
+            if (!apiKey.isNullOrBlank()) {
+                header(API_KEY_HEADER, apiKey)
             }
+        }
+
+        when(response.status) {
+            HttpStatusCode.OK if response.body<HealthResponse>().app == "SmartHomeBackend" ->
+                succeed(with = Unit)
+
+            HttpStatusCode.Unauthorized ->
+                fail(with = ValidateBackendUriUseCase.Reason.Unauthenticated)
+
+            else ->
+                fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
         }
     } catch (_: ContentConvertException) {
         fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
@@ -60,6 +67,7 @@ internal class ValidateBackendUriUseCaseImpl(
     }
 
     companion object {
+        private const val API_KEY_HEADER = "X-Api-Key"
         private const val HEALTH_ENDPOINT = "api/health"
 
         private val validSchemes = setOf("http", "https")

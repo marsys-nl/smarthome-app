@@ -24,15 +24,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.OK }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://example.com"))
-            .isA<Result.Success<Unit>>()
-    }
-
-    test(name = "Should return failure if the uri returns an other 2xx status code") {
-        val client = mockClient { HttpStatusCode.NoContent }
-        val useCase = ValidateBackendUriUseCaseImpl(client)
-
-        expectThat(subject = useCase.invoke("https://example.com"))
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = null))
             .isA<Result.Success<Unit>>()
     }
 
@@ -40,7 +32,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.OK }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("ftp://example.com"))
+        expectThat(subject = useCase.invoke("ftp://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidUri>()
@@ -50,7 +42,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.OK }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://invaliddomain"))
+        expectThat(subject = useCase.invoke("https://invaliddomain", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidUri>()
@@ -60,7 +52,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.NotFound }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://example.com"))
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
@@ -70,7 +62,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.InternalServerError }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://example.com"))
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
@@ -80,7 +72,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockFailingClient(IOException("Connection refused"))
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://example.com"))
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.Unreachable>()
@@ -90,7 +82,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockFailingClient(IllegalArgumentException("Invalid URL"))
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("https://example.com"))
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.Unreachable>()
@@ -100,7 +92,7 @@ val validateBackendUriUseCaseTest by testSuite(
         val client = mockClient { HttpStatusCode.OK }
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke(""))
+        expectThat(subject = useCase.invoke("", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidUri>()
@@ -113,7 +105,7 @@ val validateBackendUriUseCaseTest by testSuite(
         )
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("http://example.com"))
+        expectThat(subject = useCase.invoke("http://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
@@ -131,10 +123,44 @@ val validateBackendUriUseCaseTest by testSuite(
         )
         val useCase = ValidateBackendUriUseCaseImpl(client)
 
-        expectThat(subject = useCase.invoke("http://example.com"))
+        expectThat(subject = useCase.invoke("http://example.com", apiKey = null))
             .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
             .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
             .isA<ValidateBackendUriUseCase.Reason.InvalidBackend>()
+    }
+
+    test(name = "Should return success if the uri returns a success response") {
+        val client = mockClient { HttpStatusCode.OK }
+        val useCase = ValidateBackendUriUseCaseImpl(client)
+
+        expectThat(subject = useCase.invoke("https://example.com", apiKey = "valid_api_key"))
+            .isA<Result.Success<Unit>>()
+    }
+
+    test(name = "Should return failure if api key is required but not provided") {
+        val client = mockClient(
+            content = "".trimIndent(),
+            handler = { HttpStatusCode.Unauthorized },
+        )
+        val useCase = ValidateBackendUriUseCaseImpl(client)
+
+        expectThat(subject = useCase.invoke("http://example.com", apiKey = null))
+            .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
+            .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
+            .isA<ValidateBackendUriUseCase.Reason.Unauthenticated>()
+    }
+
+    test(name = "Should return failure if api key is required but other is provided") {
+        val client = mockClient(
+            content = "".trimIndent(),
+            handler = { HttpStatusCode.Unauthorized },
+        )
+        val useCase = ValidateBackendUriUseCaseImpl(client)
+
+        expectThat(subject = useCase.invoke("http://example.com", apiKey = "invalid_api_key"))
+            .isA<Result.Failure<ValidateBackendUriUseCase.Reason>>()
+            .get(Result.Failure<ValidateBackendUriUseCase.Reason>::value)
+            .isA<ValidateBackendUriUseCase.Reason.Unauthenticated>()
     }
 }
 
