@@ -173,83 +173,104 @@ fun ConfigurationOnboardingScreenView(
             )
         },
     ) {
-        ConfigurationOnboardingScreenContent {
-            Text(
-                text = stringResource(Res.string.onboarding_configuration_backend_label),
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-
-            TextField(
-                state = uriTextFieldState,
-                modifier = Modifier
-                    .fillMaxWidth(),
-                enabled = state is ConfigurationOnboardingState.Idle,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    capitalization = KeyboardCapitalization.None,
-                    autoCorrectEnabled = false,
-                    keyboardType = KeyboardType.Uri,
-                    imeAction = ImeAction.Done,
-                    showKeyboardOnFocus = true,
-                ),
-                onKeyboardAction = {
-                    if (state !is ConfigurationOnboardingState.Processing) {
-                        finishOnboarding.invoke()
-                    }
-                },
-            ) {
-                OnboardingTextFieldDecorationBox(
-                    state = state,
-                )
-            }
-        }
+        ConfigurationOnboardingScreenContent(
+            state = state,
+            uriTextFieldState = uriTextFieldState,
+            finishOnboarding = finishOnboarding,
+        )
     }
 }
 
 @Composable
 private fun ConfigurationOnboardingScreenContent(
+    state: ConfigurationOnboardingState,
+    uriTextFieldState: TextFieldState,
+    finishOnboarding: () -> Unit,
     modifier: Modifier = Modifier,
-    textFieldContent: @Composable () -> Unit,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth(),
     ) {
         Column {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(Res.string.onboarding_configuration_backend_title),
-                    modifier = Modifier
-                        .padding(bottom = 8.dp),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 24.sp,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                )
-
-                Text(
-                    text = stringResource(Res.string.onboarding_configuration_backend_description),
-                    textAlign = TextAlign.Center,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
-            }
-
-            textFieldContent.invoke()
+            BackendConnectionConfigurationExplainer()
+            BackendConnectionUriTextField(
+                state = state,
+                uriTextFieldState = uriTextFieldState,
+                finishOnboarding = finishOnboarding,
+            )
         }
     }
 }
 
 @Composable
-private fun TextFieldScope.OnboardingTextFieldDecorationBox(
+private fun BackendConnectionConfigurationExplainer() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_title),
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+            textAlign = TextAlign.Center,
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_description),
+            textAlign = TextAlign.Center,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+    }
+}
+
+@Composable
+private fun BackendConnectionUriTextField(
+    state: ConfigurationOnboardingState,
+    uriTextFieldState: TextFieldState,
+    finishOnboarding: () -> Unit,
+) {
+    Text(
+        text = stringResource(Res.string.onboarding_configuration_backend_label),
+        modifier = Modifier
+            .padding(bottom = 8.dp),
+        lineHeight = 20.sp,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.SemiBold,
+    )
+
+    TextField(
+        state = uriTextFieldState,
+        modifier = Modifier
+            .fillMaxWidth(),
+        enabled = state is ConfigurationOnboardingState.Idle,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            capitalization = KeyboardCapitalization.None,
+            autoCorrectEnabled = false,
+            keyboardType = KeyboardType.Uri,
+            imeAction = ImeAction.Done,
+            showKeyboardOnFocus = true,
+        ),
+        onKeyboardAction = {
+            if (state !is ConfigurationOnboardingState.Processing) {
+                finishOnboarding.invoke()
+            }
+        },
+    ) {
+        BackendConnectionUriTextFieldDecorationBox(
+            state = state,
+        )
+    }
+}
+
+@Composable
+private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
     state: ConfigurationOnboardingState,
     modifier: Modifier = Modifier,
 ) {

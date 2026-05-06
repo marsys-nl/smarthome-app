@@ -36,6 +36,7 @@ class OnboardingViewModel(
     val configuration = configurationState.asStateFlow()
 
     val uriTextFieldState = TextFieldState()
+    val apiKeyTextFieldState = TextFieldState()
 
     fun finishOnboarding() {
         if (configurationState.value is ConfigurationOnboardingState.Processing) {
