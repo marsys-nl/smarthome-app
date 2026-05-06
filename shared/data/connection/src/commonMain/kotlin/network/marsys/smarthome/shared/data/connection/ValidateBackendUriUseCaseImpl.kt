@@ -33,7 +33,7 @@ internal class ValidateBackendUriUseCaseImpl(
             }
         }
 
-        when(response.status) {
+        when (response.status) {
             HttpStatusCode.OK if response.body<HealthResponse>().app == "SmartHomeBackend" ->
                 succeed(with = Unit)
 
@@ -56,7 +56,13 @@ internal class ValidateBackendUriUseCaseImpl(
             "URI cannot be blank"
         }
 
-        val url = Url(uri)
+        val url = Url(
+            urlString = uri.trim()
+                .let { trimmed ->
+                    if (!trimmed.contains("://")) "https://$trimmed" else trimmed
+                }
+                .trimEnd('/'),
+        )
 
         require(url.protocol.name in validSchemes) {
             "Invalid scheme: ${url.protocol.name}. Valid schemes are: $validSchemes"
@@ -73,7 +79,7 @@ internal class ValidateBackendUriUseCaseImpl(
 
     companion object {
         private const val API_KEY_HEADER = "X-Api-Key"
-        private const val HEALTH_ENDPOINT = "api/health"
+        private const val HEALTH_ENDPOINT = "/api/health"
 
         private val validSchemes = setOf("http", "https")
     }
