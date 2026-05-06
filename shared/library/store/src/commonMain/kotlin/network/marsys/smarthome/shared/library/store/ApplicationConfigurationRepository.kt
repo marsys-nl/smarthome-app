@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ApplicationConfigurationRepository {
     /**
+     * The API key to connect to the backend with. Null until the user completed the backend configuration,
+     * or if the user chose to skip the API key input during onboarding.
+     */
+    val apiKey: Flow<String?>
+
+    /**
      * The backend URI to connect to.
      * Null until the user completed the backend configuration
      */
@@ -18,6 +24,11 @@ interface ApplicationConfigurationRepository {
      * Mutually exclusive with [backendUri] in practice, but stored independently.
      */
     val isDemoMode: Flow<Boolean>
+
+    /**
+     * Stores the [apiKey] to connect to the backend with.
+     */
+    suspend fun setApiKey(apiKey: String?)
 
     /**
      * Stores the [backendUri] to connect to.

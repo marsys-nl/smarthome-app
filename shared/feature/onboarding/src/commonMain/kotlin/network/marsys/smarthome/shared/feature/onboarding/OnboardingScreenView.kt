@@ -85,6 +85,7 @@ fun OnboardingScreenView(
                 ConfigurationOnboardingScreenView(
                     state = state,
                     uriTextFieldState = viewModel.uriTextFieldState,
+                    apiKeyTextFieldState = viewModel.apiKeyTextFieldState,
                     finishOnboarding = viewModel::finishOnboarding,
                     skipToDemo = viewModel::skipToDemo,
                     navigateBack = {

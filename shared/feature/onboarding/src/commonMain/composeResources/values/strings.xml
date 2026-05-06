@@ -21,10 +21,15 @@
     <string name="onboarding_configuration_subtitle">Enter your smart home backend URI to get started</string>
     <string name="onboarding_configuration_backend_title">Connect to the backend</string>
     <string name="onboarding_configuration_backend_description">This app needs to connect to your smart home system. Enter your backend URL below.</string>
-    <string name="onboarding_configuration_backend_label">Backend URL</string>
-    <string name="onboarding_configuration_backend_placeholder" translatable="false">https://api.yourdomain.com</string>
-    <string name="onboarding_configuration_backend_error_empty">This field cannot be empty</string>
-    <string name="onboarding_configuration_backend_error_invalid">Please enter a valid URL</string>
+    <string name="onboarding_configuration_backend_uri_label">Backend URL</string>
+    <string name="onboarding_configuration_backend_uri_placeholder" translatable="false">https://api.yourdomain.com</string>
+    <string name="onboarding_configuration_backend_uri_error_empty">This field cannot be empty.</string>
+    <string name="onboarding_configuration_backend_uri_error_invalid">Please enter a valid URL.</string>
+    <string name="onboarding_configuration_backend_api_key_label">API key</string>
+    <string name="onboarding_configuration_backend_api_key_placeholder">Your API key</string>
+    <string name="onboarding_configuration_backend_api_key_description">Used for authentication when communicating with your backend.</string>
+    <string name="onboarding_configuration_backend_api_key_error_invalid">Authentication failed, please enter a valid API key.</string>
+    <string name="onboarding_configuration_backend_optional">optional</string>
     <string name="onboarding_configuration_skip_setup">Skip to demo</string>
     <string name="onboarding_configuration_get_started">Get started</string>
 

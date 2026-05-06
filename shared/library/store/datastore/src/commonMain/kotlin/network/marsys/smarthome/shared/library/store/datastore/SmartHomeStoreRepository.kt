@@ -27,6 +27,11 @@ class SmartHomeStoreRepository(
             }
         }
 
+    override val apiKey: Flow<String?> =
+        dataStore.data.map { preferences ->
+            preferences[Keys.apiKey]
+        }
+
     override val backendUri: Flow<String?> =
         dataStore.data.map { preferences ->
             preferences[Keys.backendUri]
@@ -45,6 +50,16 @@ class SmartHomeStoreRepository(
     override suspend fun setTheme(theme: ThemeSelection) {
         dataStore.edit { preferences ->
             preferences[Keys.theme] = theme.name
+        }
+    }
+
+    override suspend fun setApiKey(apiKey: String?) {
+        dataStore.edit { preferences ->
+            if (apiKey == null) {
+                preferences.remove(Keys.apiKey)
+            } else {
+                preferences[Keys.apiKey] = apiKey
+            }
         }
     }
 
@@ -73,6 +88,7 @@ class SmartHomeStoreRepository(
     }
 
     private companion object Keys {
+        private val apiKey = stringPreferencesKey("config.api_key")
         private val backendUri = stringPreferencesKey("config.backend_uri")
         private val isDemoMode = booleanPreferencesKey("config.is_demo_mode")
         private val isOnboardingFinished = booleanPreferencesKey("onboarding.is_finished")

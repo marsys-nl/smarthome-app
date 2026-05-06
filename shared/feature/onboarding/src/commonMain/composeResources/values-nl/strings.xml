@@ -21,9 +21,14 @@
     <string name="onboarding_configuration_subtitle">Voer de URI van jouw smart home-backend in om te beginnen</string>
     <string name="onboarding_configuration_backend_title">Verbind met de backend</string>
     <string name="onboarding_configuration_backend_description">Deze app heeft een connectie nodig met jouw smart home systeem. Vul hieronder je backend URL in.</string>
-    <string name="onboarding_configuration_backend_label">Backend URL</string>
-    <string name="onboarding_configuration_backend_error_empty">Dit veld kan niet leeg zijn</string>
-    <string name="onboarding_configuration_backend_error_invalid">Geef a.u.b. een valide URL op</string>
+    <string name="onboarding_configuration_backend_uri_label">Backend URL</string>
+    <string name="onboarding_configuration_backend_uri_error_empty">Dit veld kan niet leeg zijn.</string>
+    <string name="onboarding_configuration_backend_uri_error_invalid">Geef a.u.b. een valide URL op.</string>
+    <string name="onboarding_configuration_backend_api_key_label">API key</string>
+    <string name="onboarding_configuration_backend_api_key_placeholder">Jouw API key</string>
+    <string name="onboarding_configuration_backend_api_key_description">Wordt gebruikt voor authenticatie, bij communicatie met je backend.</string>
+    <string name="onboarding_configuration_backend_api_key_error_invalid">Authenticatie mislukt, voer een geldige API key in.</string>
+    <string name="onboarding_configuration_backend_optional">optioneel</string>
     <string name="onboarding_configuration_skip_setup">Ga direct naar de demo</string>
     <string name="onboarding_configuration_get_started">Aan de slag</string>
 

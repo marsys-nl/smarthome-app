@@ -15,7 +15,7 @@ import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCa
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeAppearancePreferencesRepository
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeApplicationConfigurationRepository
 import network.marsys.smarthome.shared.feature.onboarding.fake.FakeOnboardingRepository
-import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
+import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendValidationError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
 import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
@@ -37,7 +37,7 @@ val OnboardingViewModelTest by testSuite {
                     single<ApplicationConfigurationRepository> { FakeApplicationConfigurationRepository() }
                     single<OnboardingRepository> { FakeOnboardingRepository() }
                     single<ValidateBackendUriUseCase> {
-                        ValidateBackendUriUseCase {
+                        ValidateBackendUriUseCase { _, _ ->
                             succeed(with = Unit)
                         }
                     }
@@ -162,9 +162,9 @@ val OnboardingViewModelTest by testSuite {
 
             expectThat(viewModel.configuration.value)
                 .isA<ConfigurationOnboardingState.Idle>()
-                .get(ConfigurationOnboardingState.Idle::backendUriError)
+                .get(ConfigurationOnboardingState.Idle::backendValidationError)
                 .isNotNull()
-                .isA<BackendUriError.Empty>()
+                .isA<BackendValidationError.Empty>()
         }
 
         test(name = "Should emit invalid uri error when finishing onboarding with invalid uri") {
@@ -172,7 +172,7 @@ val OnboardingViewModelTest by testSuite {
                 appearancePreferencesRepository = it.get(),
                 applicationConfigurationRepository = it.get(),
                 onboardingRepository = it.get(),
-                validateBackendUriUseCase = {
+                validateBackendUriUseCase = { _, _ ->
                     fail(with = ValidateBackendUriUseCase.Reason.InvalidUri("Invalid URI"))
                 },
                 coroutineScope = testScope,
@@ -184,9 +184,32 @@ val OnboardingViewModelTest by testSuite {
 
             expectThat(viewModel.configuration.value)
                 .isA<ConfigurationOnboardingState.Idle>()
-                .get(ConfigurationOnboardingState.Idle::backendUriError)
+                .get(ConfigurationOnboardingState.Idle::backendValidationError)
                 .isNotNull()
-                .isA<BackendUriError.Invalid>()
+                .isA<BackendValidationError.InvalidUri>()
+        }
+
+        test(name = "Should emit invalid api key error when finishing onboarding with invalid api key") {
+            val viewModel = OnboardingViewModel(
+                appearancePreferencesRepository = it.get(),
+                applicationConfigurationRepository = it.get(),
+                onboardingRepository = it.get(),
+                validateBackendUriUseCase = { _, _ ->
+                    fail(with = ValidateBackendUriUseCase.Reason.Unauthenticated)
+                },
+                coroutineScope = testScope,
+            )
+
+            viewModel.apiKeyTextFieldState.edit { append("invalid-api-key") }
+            viewModel.uriTextFieldState.edit { append("https://example.com") }
+            viewModel.finishOnboarding()
+            testScope.advanceUntilIdle()
+
+            expectThat(viewModel.configuration.value)
+                .isA<ConfigurationOnboardingState.Idle>()
+                .get(ConfigurationOnboardingState.Idle::backendValidationError)
+                .isNotNull()
+                .isA<BackendValidationError.InvalidApiKey>()
         }
 
         test(name = "Should ignore finish onboarding call when already processing") {
