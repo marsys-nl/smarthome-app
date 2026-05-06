@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
-import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
+import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendValidationError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -71,7 +71,7 @@ class OnboardingViewModel(
         if (uri.isBlank()) {
             configurationState.update {
                 ConfigurationOnboardingState.Idle(
-                    backendUriError = BackendUriError.Empty,
+                    backendValidationError = BackendValidationError.Empty,
                 )
             }
         } else {
@@ -88,7 +88,7 @@ class OnboardingViewModel(
                 is Result.Failure -> {
                     configurationState.update {
                         ConfigurationOnboardingState.Idle(
-                            backendUriError = BackendUriError.Invalid,
+                            backendValidationError = BackendValidationError.InvalidUri,
                         )
                     }
                 }

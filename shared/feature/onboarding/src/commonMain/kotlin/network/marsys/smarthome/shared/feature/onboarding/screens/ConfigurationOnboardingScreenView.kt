@@ -60,7 +60,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_skip_setup
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_title
-import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendUriError
+import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.BackendValidationError
 import network.marsys.smarthome.shared.feature.onboarding.screens.configuration.ConfigurationOnboardingState
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -280,19 +280,23 @@ private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
             Text("https://api.yourdomain.com")
         },
         supportingText = {
-            if (state is ConfigurationOnboardingState.Idle && state.backendUriError != null) {
-                val message = when (state.backendUriError) {
-                    is BackendUriError.Empty ->
+            if (state is ConfigurationOnboardingState.Idle && state.backendValidationError != null) {
+                val message = when (state.backendValidationError) {
+                    is BackendValidationError.Empty ->
                         stringResource(Res.string.onboarding_configuration_backend_error_empty)
 
-                    is BackendUriError.Invalid ->
+                    is BackendValidationError.InvalidUri ->
                         stringResource(Res.string.onboarding_configuration_backend_error_invalid)
+
+                    else -> null
                 }
 
-                CompositionLocalProvider(
-                    LocalContentColor provides Color.Red,
-                ) {
-                    Text(text = message)
+                message?.let {
+                    CompositionLocalProvider(
+                        LocalContentColor provides Color.Red,
+                    ) {
+                        Text(text = message)
+                    }
                 }
             }
         },
@@ -448,7 +452,7 @@ private fun ConfigurationOnboardingScreenEmptyBackendUriPreview(
     ) {
         ConfigurationOnboardingScreenView(
             state = ConfigurationOnboardingState.Idle(
-                backendUriError = BackendUriError.Empty,
+                backendValidationError = BackendValidationError.Empty,
             ),
             uriTextFieldState = rememberTextFieldState(),
             finishOnboarding = {},
@@ -470,7 +474,7 @@ private fun ConfigurationOnboardingScreenInvalidBackendUriPreview(
     ) {
         ConfigurationOnboardingScreenView(
             state = ConfigurationOnboardingState.Idle(
-                backendUriError = BackendUriError.Invalid,
+                backendValidationError = BackendValidationError.InvalidUri,
             ),
             uriTextFieldState = rememberTextFieldState(
                 initialText = "invalid-uri",
