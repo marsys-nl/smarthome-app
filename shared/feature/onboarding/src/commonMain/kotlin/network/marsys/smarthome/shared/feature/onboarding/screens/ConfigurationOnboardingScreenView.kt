@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.animation.core.LinearEasing
@@ -12,6 +14,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,10 +62,10 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_api_key_placeholder
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_description
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_optional
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_label
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_title
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_error_empty
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_error_invalid
+import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_label
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_backend_uri_placeholder
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_get_started
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_configuration_skip_setup
@@ -206,6 +209,7 @@ private fun ConfigurationOnboardingScreenContent(
     ) {
         Column {
             BackendConnectionConfigurationExplainer()
+
             BackendConnectionUriTextField(
                 state = state,
                 uriTextFieldState = uriTextFieldState,
@@ -249,7 +253,7 @@ private fun BackendConnectionConfigurationExplainer() {
 }
 
 @Composable
-private fun BackendConnectionUriTextField(
+private fun ColumnScope.BackendConnectionUriTextField(
     state: ConfigurationOnboardingState,
     uriTextFieldState: TextFieldState,
     finishOnboarding: () -> Unit,
@@ -281,21 +285,25 @@ private fun BackendConnectionUriTextField(
             }
         },
     ) {
-        BackendConnectionUriTextFieldDecorationBox(
+        UriTextFieldDecorationBox(
             state = state,
         )
     }
 }
 
 @Composable
-private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
+private fun TextFieldScope.UriTextFieldDecorationBox(
     state: ConfigurationOnboardingState,
     modifier: Modifier = Modifier,
 ) {
     TextFieldDecorationBox(
         modifier = modifier,
         placeholder = {
-            Text(stringResource(Res.string.onboarding_configuration_backend_uri_placeholder))
+            Text(
+                text = stringResource(
+                    resource = Res.string.onboarding_configuration_backend_uri_placeholder,
+                ),
+            )
         },
         supportingText = {
             if (state is ConfigurationOnboardingState.Idle && state.backendValidationError != null) {
@@ -322,23 +330,68 @@ private fun TextFieldScope.BackendConnectionUriTextFieldDecorationBox(
 }
 
 @Composable
-private fun BackendConnectionApiKeyTextField(
+private fun ColumnScope.BackendConnectionApiKeyTextField(
     state: ConfigurationOnboardingState,
     apiKeyTextFieldState: TextFieldState,
     finishOnboarding: () -> Unit,
 ) {
     var displayApiKeyTextField by remember {
-        mutableStateOf(apiKeyTextFieldState.text.isNotBlank())
+        mutableStateOf(
+            value = apiKeyTextFieldState.text.isNotBlank() || (
+                state is ConfigurationOnboardingState.Idle &&
+                    state.backendValidationError is BackendValidationError.InvalidApiKey
+                ),
+        )
     }
 
+    BackendConnectionApiKeyTextFieldLabel(
+        displayApiKeyTextField = displayApiKeyTextField,
+        onApiKeyTextFieldLabelClick = {
+            displayApiKeyTextField = it
+        },
+    )
+
+    if (displayApiKeyTextField) {
+        TextField(
+            state = apiKeyTextFieldState,
+            modifier = Modifier
+                .fillMaxWidth(),
+            enabled = state is ConfigurationOnboardingState.Idle,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                capitalization = KeyboardCapitalization.None,
+                autoCorrectEnabled = false,
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done,
+                showKeyboardOnFocus = true,
+            ),
+            onKeyboardAction = {
+                if (state !is ConfigurationOnboardingState.Processing) {
+                    finishOnboarding.invoke()
+                }
+            },
+        ) {
+            ApiKeyTextFieldDecorationBox(
+                state = state,
+            )
+        }
+
+        Text(
+            text = stringResource(Res.string.onboarding_configuration_backend_api_key_description),
+            modifier = Modifier
+                .padding(top = 8.dp),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+        )
+    }
+}
+
+@Composable
+private fun BackendConnectionApiKeyTextFieldLabel(
+    displayApiKeyTextField: Boolean,
+    onApiKeyTextFieldLabelClick: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val transition = updateTransition(displayApiKeyTextField, "chevron-animation")
-
-    /*
-    val trackColor by transition.animateColor(transitionSpec = SwitchDefaults.transition()) {
-        colors.trackColor(enabled, it).value
-    }
-     */
-
     val rotation by transition.animateFloat(
         transitionSpec = {
             tween(durationMillis = 300)
@@ -349,15 +402,15 @@ private fun BackendConnectionApiKeyTextField(
     }
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 16.dp, bottom = 8.dp)
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
                 onClick = {
-                    displayApiKeyTextField = !displayApiKeyTextField
-                }
+                    onApiKeyTextFieldLabelClick.invoke(!displayApiKeyTextField)
+                },
             ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -386,51 +439,35 @@ private fun BackendConnectionApiKeyTextField(
             size = 10.dp,
         )
     }
+}
 
-    if (displayApiKeyTextField) {
-        TextField(
-            state = apiKeyTextFieldState,
-            modifier = Modifier
-                .fillMaxWidth(),
-            enabled = state is ConfigurationOnboardingState.Idle,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                capitalization = KeyboardCapitalization.None,
-                autoCorrectEnabled = false,
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done,
-                showKeyboardOnFocus = true,
-            ),
-            onKeyboardAction = {
-                if (state !is ConfigurationOnboardingState.Processing) {
-                    finishOnboarding.invoke()
+@Composable
+private fun TextFieldScope.ApiKeyTextFieldDecorationBox(
+    state: ConfigurationOnboardingState,
+    modifier: Modifier = Modifier,
+) {
+    TextFieldDecorationBox(
+        modifier = modifier,
+        placeholder = {
+            Text(stringResource(Res.string.onboarding_configuration_backend_api_key_placeholder))
+        },
+        supportingText = {
+            if (
+                state is ConfigurationOnboardingState.Idle &&
+                state.backendValidationError is BackendValidationError.InvalidApiKey
+            ) {
+                CompositionLocalProvider(
+                    LocalContentColor provides Color.Red,
+                ) {
+                    Text(
+                        text = stringResource(
+                            resource = Res.string.onboarding_configuration_backend_api_key_error_invalid,
+                        ),
+                    )
                 }
-            },
-        ) {
-            TextFieldDecorationBox(
-                modifier = Modifier,
-                placeholder = {
-                    Text(stringResource(Res.string.onboarding_configuration_backend_api_key_placeholder))
-                },
-                supportingText = {
-                    if (state is ConfigurationOnboardingState.Idle && state.backendValidationError is BackendValidationError.InvalidApiKey) {
-                        CompositionLocalProvider(
-                            LocalContentColor provides Color.Red,
-                        ) {
-                            Text(text = stringResource(Res.string.onboarding_configuration_backend_api_key_error_invalid))
-                        }
-                    }
-                },
-            )
-        }
-
-        Text(
-            text = stringResource(Res.string.onboarding_configuration_backend_api_key_description),
-            modifier = Modifier
-                .padding(top = 8.dp),
-            lineHeight = 20.sp,
-            fontSize = 14.sp,
-        )
-    }
+            }
+        },
+    )
 }
 
 @Composable

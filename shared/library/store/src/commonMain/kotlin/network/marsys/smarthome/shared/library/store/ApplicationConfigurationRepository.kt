@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.Flow
  */
 interface ApplicationConfigurationRepository {
     /**
-     * The API key to connect to the backend with.
-     * Null until the user completed the backend configuration, or if the user chose to skip the API key input during onboarding.
+     * The API key to connect to the backend with. Null until the user completed the backend configuration,
+     * or if the user chose to skip the API key input during onboarding.
      */
     val apiKey: Flow<String?>
 
