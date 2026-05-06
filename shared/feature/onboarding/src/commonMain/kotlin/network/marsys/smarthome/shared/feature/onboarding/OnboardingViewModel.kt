@@ -44,7 +44,11 @@ class OnboardingViewModel(
         }
 
         viewModelScope.launch {
-            validateBackendUri(uri = uriTextFieldState.text.toString())
+            validateBackendUri(
+                uri = uriTextFieldState.text.toString(),
+                apiKey = apiKeyTextFieldState.text.toString()
+                    .takeIf { it.isNotBlank() },
+            )
         }
     }
 
@@ -67,7 +71,7 @@ class OnboardingViewModel(
         }
     }
 
-    private suspend fun validateBackendUri(uri: String) {
+    private suspend fun validateBackendUri(uri: String, apiKey: String?) {
         if (uri.isBlank()) {
             configurationState.update {
                 ConfigurationOnboardingState.Idle(
@@ -77,8 +81,9 @@ class OnboardingViewModel(
         } else {
             configurationState.update { ConfigurationOnboardingState.Processing }
 
-            when (validateBackendUriUseCase.invoke(uri)) {
+            when (val result = validateBackendUriUseCase.invoke(uri, apiKey)) {
                 is Result.Success -> {
+                    applicationConfigurationRepository.setApiKey(apiKey)
                     applicationConfigurationRepository.setBackendUri(uri)
                     applicationConfigurationRepository.setDemoMode(false)
 
@@ -88,7 +93,13 @@ class OnboardingViewModel(
                 is Result.Failure -> {
                     configurationState.update {
                         ConfigurationOnboardingState.Idle(
-                            backendValidationError = BackendValidationError.InvalidUri,
+                            backendValidationError = when (result.value) {
+                                ValidateBackendUriUseCase.Reason.Unauthenticated ->
+                                    BackendValidationError.InvalidApiKey
+
+                                else ->
+                                    BackendValidationError.InvalidUri
+                            },
                         )
                     }
                 }
