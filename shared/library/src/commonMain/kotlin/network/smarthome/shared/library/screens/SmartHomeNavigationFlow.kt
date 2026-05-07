@@ -4,10 +4,10 @@ import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal sealed interface SmartHomeScreens : NavKey {
+internal sealed interface SmartHomeNavigationFlow : NavKey {
     @Serializable
-    data object Onboarding : SmartHomeScreens
+    data object Onboarding : SmartHomeNavigationFlow
 
     @Serializable
-    data object Dashboard : SmartHomeScreens
+    data object Main : SmartHomeNavigationFlow
 }

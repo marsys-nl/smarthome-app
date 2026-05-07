@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,14 +27,14 @@ import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
-import network.smarthome.shared.library.screens.SmartHomeScreens
+import network.smarthome.shared.library.screens.SmartHomeNavigationFlow
 import org.koin.compose.koinInject
 
 private val config = SavedStateConfiguration {
     serializersModule = SerializersModule {
-        polymorphic(SmartHomeScreens::class) {
-            subclass(SmartHomeScreens.Onboarding::class, SmartHomeScreens.Onboarding.serializer())
-            subclass(SmartHomeScreens.Dashboard::class, SmartHomeScreens.Dashboard.serializer())
+        polymorphic(SmartHomeNavigationFlow::class) {
+            subclass(SmartHomeNavigationFlow.Onboarding::class, SmartHomeNavigationFlow.Onboarding.serializer())
+            subclass(SmartHomeNavigationFlow.Main::class, SmartHomeNavigationFlow.Main.serializer())
         }
     }
 }
@@ -51,20 +50,20 @@ fun SmartHomeNavigation(
         .collectAsStateWithLifecycle(initialValue = null)
 
     val initialScreen = when (isOnboardingFinished) {
-        true -> SmartHomeScreens.Dashboard
-        false -> SmartHomeScreens.Onboarding
+        true -> SmartHomeNavigationFlow.Main
+        false -> SmartHomeNavigationFlow.Onboarding
         else -> return SmartHomeLoadingScreen()
     }
 
-    val backStack = rememberNavBackStack<SmartHomeScreens>(
+    val backStack = rememberNavBackStack<SmartHomeNavigationFlow>(
         configuration = config,
         elements = arrayOf(initialScreen),
     )
 
     LaunchedEffect(isOnboardingFinished) {
         val targetScreen = when (isOnboardingFinished) {
-            true -> SmartHomeScreens.Dashboard
-            else -> SmartHomeScreens.Onboarding
+            true -> SmartHomeNavigationFlow.Main
+            else -> SmartHomeNavigationFlow.Onboarding
         }
 
         backStack.clear()
@@ -81,21 +80,21 @@ fun SmartHomeNavigation(
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
-            entry<SmartHomeScreens.Onboarding> {
+            entry<SmartHomeNavigationFlow.Onboarding> {
                 OnboardingScreenView(
                     onboardingSessionKey = onboardingSessionKey,
                 )
             }
 
-            entry<SmartHomeScreens.Dashboard> {
-                SmartHomeDashboard()
+            entry<SmartHomeNavigationFlow.Main> {
+                MainScreenView()
             }
         },
     )
 }
 
 @Composable
-private fun SmartHomeDashboard(
+private fun MainScreenView(
     modifier: Modifier = Modifier,
     applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
     onboardingRepository: OnboardingRepository = koinInject(),
