@@ -17,6 +17,7 @@ import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.smarthome.shared.library.main.MainScreenView
 import org.koin.compose.koinInject
 
 private val config = SavedStateConfiguration {

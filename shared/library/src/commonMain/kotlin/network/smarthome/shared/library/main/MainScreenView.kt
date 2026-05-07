@@ -1,4 +1,4 @@
-package network.smarthome.shared.library
+package network.smarthome.shared.library.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,29 +24,31 @@ internal fun MainScreenView(
     applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
     onboardingRepository: OnboardingRepository = koinInject(),
 ) {
-    val demoMode by applicationConfigurationRepository.isDemoMode
-        .collectAsStateWithLifecycle(initialValue = false)
+    WithRequireConnection {
+        val demoMode by applicationConfigurationRepository.isDemoMode
+            .collectAsStateWithLifecycle(initialValue = false)
 
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+        Box(
+            modifier = modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
         ) {
-            val coroutineScope = rememberCoroutineScope()
-
-            Text(text = "Dashboard" + if (demoMode) " (demo)" else "")
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        onboardingRepository.resetOnboarding()
-                    }
-                },
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
-                Text(text = "Reset onboarding")
+                val coroutineScope = rememberCoroutineScope()
+
+                Text(text = "Dashboard" + if (demoMode) " (demo)" else "")
+                Button(
+                    onClick = {
+                        coroutineScope.launch {
+                            onboardingRepository.resetOnboarding()
+                        }
+                    },
+                ) {
+                    Text(text = "Reset onboarding")
+                }
             }
         }
     }
