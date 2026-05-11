@@ -1,16 +1,20 @@
 package network.marsys.smarthome.shared.library.design.component
 
+import androidx.compose.animation.core.animateIntOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -27,7 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -50,12 +58,14 @@ fun <T : Any> BottomNavigation(
     colors: BottomNavigationColors = BottomNavigationDefaults.colors(),
     navigationItemProvider: BottomNavigationItemProviderScope<T>.() -> Unit,
 ) {
-    Column(
+    val positions = remember { mutableStateMapOf<T, Int>() }
+
+    Box(
         modifier = modifier
             .fillMaxWidth()
             .height(BottomNavigationDefaults.height())
             .background(colors.navigationBarBackgroundColor),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        contentAlignment = Alignment.TopCenter,
     ) {
         Box(
             modifier = Modifier
@@ -64,50 +74,69 @@ fun <T : Any> BottomNavigation(
                 .background(colors.navigationBarBorderColor),
         )
 
-        Row(
+        val scope = BottomNavigationItemProviderScope<T>(colors = colors)
+            .apply(navigationItemProvider)
+
+        Box(
             modifier = Modifier
                 .width(BottomNavigationDefaults.width())
                 .fillMaxHeight(),
-            horizontalArrangement = Arrangement.SpaceAround,
         ) {
-            BottomNavigationItemProviderScope<T>(
+            SelectedNavigationItemIndicator(
+                selectedItemOffset = selectedNavigationItem?.let { positions[it] },
                 colors = colors,
             )
-                .apply(navigationItemProvider)
-                .items
-                .forEach { item ->
-                    Box(
+
+            Row(
+                modifier = Modifier
+                    .fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceAround,
+            ) {
+                scope.items.forEach { navigationItem ->
+                    NavigationItem(
+                        text = navigationItem.value.text,
+                        icon = navigationItem.value.icon,
+                        selected = navigationItem.value.screen == selectedNavigationItem,
+                        colors = colors,
                         modifier = Modifier
                             .width(BottomNavigationDefaults.itemWidth())
+                            .onGloballyPositioned { coordinates ->
+                                positions[navigationItem.key] = coordinates.boundsInParent().left.toInt()
+                            }
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = null,
-                                onClick = { onNavigationItemSelect.invoke(item.value.screen) },
+                                onClick = { onNavigationItemSelect.invoke(navigationItem.value.screen) },
                             ),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        NavigationItem(
-                            text = item.value.text,
-                            icon = item.value.icon,
-                            selected = item.value.screen == selectedNavigationItem,
-                            colors = colors,
-                        )
-
-                        if (item.value.screen == selectedNavigationItem) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(4.dp)
-                                    .background(
-                                        brush = colors.selectedNavigationItemColor,
-                                        shape = CircleShape,
-                                    )
-                                    .align(Alignment.TopCenter),
-                            )
-                        }
-                    }
+                    )
                 }
+            }
         }
+    }
+}
+
+@Composable
+private fun BoxScope.SelectedNavigationItemIndicator(
+    selectedItemOffset: Int?,
+    colors: BottomNavigationColors,
+) {
+    if (selectedItemOffset != null) {
+        val animatedOffset by animateIntOffsetAsState(
+            targetValue = IntOffset(selectedItemOffset, 0),
+            animationSpec = tween(durationMillis = 200),
+        )
+
+        Box(
+            modifier = Modifier
+                .offset { animatedOffset }
+                .width(BottomNavigationDefaults.itemWidth())
+                .height(4.dp)
+                .background(
+                    brush = colors.selectedNavigationItemColor,
+                    shape = CircleShape,
+                )
+                .align(Alignment.TopStart),
+        )
     }
 }
 
@@ -122,25 +151,30 @@ private fun NavigationItem(
     val iconTintColor = colors.navigationItemIconColor(selected).value
     val contentColor = colors.navigationItemContentColor(selected).value
 
-    Column(
-        modifier = modifier
-            .padding(vertical = 16.dp)
-            .height(60.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center,
     ) {
-        Icon(
-            icon = icon,
+        Column(
             modifier = Modifier
-                .padding(bottom = 4.dp),
-            size = 24.dp,
-            tint = iconTintColor,
-        )
+                .padding(vertical = 16.dp)
+                .height(60.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Icon(
+                icon = icon,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+                size = 24.dp,
+                tint = iconTintColor,
+            )
 
-        Text(
-            text = text,
-            fontSize = 10.sp,
-            color = contentColor,
-        )
+            Text(
+                text = text,
+                fontSize = 10.sp,
+                color = contentColor,
+            )
+        }
     }
 }
 
