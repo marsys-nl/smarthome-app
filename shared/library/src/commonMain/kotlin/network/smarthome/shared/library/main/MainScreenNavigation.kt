@@ -22,6 +22,7 @@ import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
+import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
@@ -97,33 +98,35 @@ internal fun MainScreenNavigation(
                 backStack.clear()
                 backStack += screen
             },
-            navigationItemProvider = {
-                item(
-                    screen = SmartHomeScreen.Dashboard,
-                    text = "Home",
-                    icon = Icons.House,
-                )
-
-                item(
-                    screen = SmartHomeScreen.Rooms,
-                    text = "Rooms",
-                    icon = Icons.Grid,
-                )
-
-                item(
-                    screen = SmartHomeScreen.Scenes,
-                    text = "Scenes",
-                    icon = Icons.Zap,
-                )
-
-                item(
-                    screen = SmartHomeScreen.Profile,
-                    text = "Profile",
-                    icon = Icons.User,
-                )
-            },
+            navigationItemProvider = bottomNavigationItemProvider,
         )
     }
+}
+
+private val bottomNavigationItemProvider: BottomNavigationItemProviderScope<SmartHomeScreen>.() -> Unit = {
+    item(
+        screen = SmartHomeScreen.Dashboard,
+        text = "Home",
+        icon = Icons.House,
+    )
+
+    item(
+        screen = SmartHomeScreen.Rooms,
+        text = "Rooms",
+        icon = Icons.Grid,
+    )
+
+    item(
+        screen = SmartHomeScreen.Scenes,
+        text = "Scenes",
+        icon = Icons.Zap,
+    )
+
+    item(
+        screen = SmartHomeScreen.Profile,
+        text = "Profile",
+        icon = Icons.User,
+    )
 }
 
 @Composable
