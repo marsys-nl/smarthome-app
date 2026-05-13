@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_navigation_item_rooms">Kamers</string>
+    <string name="bottom_navigation_item_scenes">Scènes</string>
+    <string name="bottom_navigation_item_profile">Profiel</string>
+</resources>

@@ -27,14 +27,19 @@ import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
-import network.marsys.smarthome.shared.library.design.icons.HousePlug
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.resources.SmartHomeRes
+import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
+import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
+import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
+import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.smarthome.shared.library.screens.SmartHomeScreen
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 
 private val config = SavedStateConfiguration {
@@ -98,35 +103,43 @@ internal fun MainScreenNavigation(
                 backStack.clear()
                 backStack += screen
             },
-            navigationItemProvider = bottomNavigationItemProvider,
+            navigationItemProvider = bottomNavigationItems(),
         )
     }
 }
 
-private val bottomNavigationItemProvider: BottomNavigationItemProviderScope<SmartHomeScreen>.() -> Unit = {
-    item(
-        screen = SmartHomeScreen.Dashboard,
-        text = "Home",
-        icon = Icons.House,
-    )
+@Composable
+private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHomeScreen>.() -> Unit {
+    val homeNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_home)
+    val roomsNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_rooms)
+    val scenesNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_scenes)
+    val profileNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_profile)
 
-    item(
-        screen = SmartHomeScreen.Rooms,
-        text = "Rooms",
-        icon = Icons.Grid,
-    )
+    return {
+        item(
+            screen = SmartHomeScreen.Dashboard,
+            text = homeNavigationItemTextResource,
+            icon = Icons.House,
+        )
 
-    item(
-        screen = SmartHomeScreen.Scenes,
-        text = "Scenes",
-        icon = Icons.Zap,
-    )
+        item(
+            screen = SmartHomeScreen.Rooms,
+            text = roomsNavigationItemTextResource,
+            icon = Icons.Grid,
+        )
 
-    item(
-        screen = SmartHomeScreen.Profile,
-        text = "Profile",
-        icon = Icons.User,
-    )
+        item(
+            screen = SmartHomeScreen.Scenes,
+            text = scenesNavigationItemTextResource,
+            icon = Icons.Zap,
+        )
+
+        item(
+            screen = SmartHomeScreen.Profile,
+            text = profileNavigationItemTextResource,
+            icon = Icons.User,
+        )
+    }
 }
 
 @Composable
