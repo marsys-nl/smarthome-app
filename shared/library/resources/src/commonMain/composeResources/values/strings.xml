@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bottom_navigation_item_home" translatable="false">Home</string>
+    <string name="bottom_navigation_item_rooms">Rooms</string>
+    <string name="bottom_navigation_item_scenes">Scenes</string>
+    <string name="bottom_navigation_item_profile">Profile</string>
+</resources>
