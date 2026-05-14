@@ -44,6 +44,7 @@ include(
     ":app:android",
     ":shared:data:connection",
     ":shared:domain:connection",
+    ":shared:feature:dashboard",
     ":shared:feature:onboarding",
     ":shared:library",
     ":shared:library:core",

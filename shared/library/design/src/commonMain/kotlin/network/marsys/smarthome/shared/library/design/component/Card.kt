@@ -3,12 +3,14 @@ package network.marsys.smarthome.shared.library.design.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Brush
@@ -37,7 +39,8 @@ fun Card(
     shape: Shape = CardDefaults.shape(),
     contentPadding: PaddingValues = CardDefaults.contentPadding(),
     borderWidth: Dp = 0.dp,
-    content: @Composable () -> Unit,
+    contentAlignment: Alignment = Alignment.TopStart,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     val borderModifier =
         if (borderWidth > 0.dp && colors.borderColor.isSpecified) {
@@ -68,10 +71,13 @@ fun Card(
             )
             .then(borderModifier)
             .padding(contentPadding),
+        contentAlignment = contentAlignment,
     ) {
         CompositionLocalProvider(
             value = LocalContentColor provides colors.contentColor,
-            content = content,
+            content = {
+                content.invoke(this)
+            },
         )
     }
 }
