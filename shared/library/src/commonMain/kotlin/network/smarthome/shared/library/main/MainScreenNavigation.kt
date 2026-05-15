@@ -4,13 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.entryProvider
@@ -19,11 +25,13 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
+import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
@@ -36,6 +44,7 @@ import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
+import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.smarthome.shared.library.screens.SmartHomeScreen
@@ -68,6 +77,8 @@ internal fun MainScreenNavigation(
     ) {
         NavDisplay(
             modifier = Modifier
+                .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundPrimary])
+                .safeContentPadding()
                 .fillMaxWidth()
                 .weight(1f),
             backStack = backStack,
@@ -151,28 +162,30 @@ private fun MainScreenDashboardScreenView(
     val demoMode by applicationConfigurationRepository.isDemoMode
         .collectAsStateWithLifecycle(initialValue = false)
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundPrimary]),
-        contentAlignment = Alignment.Center,
+    DashboardScreenView(
+        name = if (demoMode) {
+            stringResource(SmartHomeRes.string.demo_user)
+        } else {
+            "Niels"
+        },
+        modifier = modifier,
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            val coroutineScope = rememberCoroutineScope()
+        val coroutineScope = rememberCoroutineScope()
 
-            Text(text = "Dashboard" + if (demoMode) " (demo)" else "")
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        onboardingRepository.resetOnboarding()
-                    }
-                },
-            ) {
-                Text(text = "Reset onboarding")
-            }
+        Button(
+            modifier = Modifier
+                .padding(top = 32.dp),
+            contentPadding = PaddingValues(
+                horizontal = 16.dp,
+                vertical = 8.dp,
+            ),
+            onClick = {
+                coroutineScope.launch {
+                    onboardingRepository.resetOnboarding()
+                }
+            },
+        ) {
+            Text(text = "Reset onboarding")
         }
     }
 }

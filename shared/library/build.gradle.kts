@@ -39,6 +39,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.data.connection)
             implementation(projects.shared.domain.connection)
+            implementation(projects.shared.feature.dashboard)
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.network)
