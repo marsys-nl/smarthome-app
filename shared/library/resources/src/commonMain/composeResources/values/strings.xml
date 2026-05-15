@@ -4,4 +4,6 @@
     <string name="bottom_navigation_item_rooms">Rooms</string>
     <string name="bottom_navigation_item_scenes">Scenes</string>
     <string name="bottom_navigation_item_profile">Profile</string>
+
+    <string name="demo_user">Demo user</string>
 </resources>

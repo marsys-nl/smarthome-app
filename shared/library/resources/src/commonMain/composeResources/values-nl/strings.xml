@@ -3,4 +3,6 @@
     <string name="bottom_navigation_item_rooms">Kamers</string>
     <string name="bottom_navigation_item_scenes">Scènes</string>
     <string name="bottom_navigation_item_profile">Profiel</string>
+
+    <string name="demo_user">Demo gebruiker</string>
 </resources>
