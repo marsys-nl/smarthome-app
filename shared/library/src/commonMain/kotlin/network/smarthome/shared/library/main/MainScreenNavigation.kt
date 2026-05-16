@@ -5,20 +5,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
@@ -31,7 +30,6 @@ import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
@@ -71,42 +69,71 @@ internal fun MainScreenNavigation(
         elements = arrayOf(SmartHomeScreen.Dashboard),
     )
 
-    Column(
+    NavDisplay(
         modifier = modifier
             .fillMaxSize(),
-    ) {
-        NavDisplay(
-            modifier = Modifier
-                .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundPrimary])
-                .safeContentPadding()
-                .fillMaxWidth()
-                .weight(1f),
-            backStack = backStack,
-            onBack = { backStack.removeLastOrNull() },
-            entryProvider = entryProvider {
-                entry<SmartHomeScreen.Dashboard> {
+        backStack = backStack,
+        onBack = { backStack.removeLastOrNull() },
+        entryProvider = entryProvider {
+            entry<SmartHomeScreen.Dashboard> {
+                MainScreenNavigationItemWrapper(
+                    backStack = backStack,
+                ) {
                     MainScreenDashboardScreenView()
                 }
+            }
 
-                entry<SmartHomeScreen.Rooms> {
+            entry<SmartHomeScreen.Rooms> {
+                MainScreenNavigationItemWrapper(
+                    backStack = backStack,
+                ) {
                     MainScreenPlaceholderScreenView(
                         screen = SmartHomeScreen.Rooms,
                     )
                 }
+            }
 
-                entry<SmartHomeScreen.Scenes> {
+            entry<SmartHomeScreen.Scenes> {
+                MainScreenNavigationItemWrapper(
+                    backStack = backStack,
+                ) {
                     MainScreenPlaceholderScreenView(
                         screen = SmartHomeScreen.Scenes,
                     )
                 }
+            }
 
-                entry<SmartHomeScreen.Profile> {
+            entry<SmartHomeScreen.Profile> {
+                MainScreenNavigationItemWrapper(
+                    backStack = backStack,
+                ) {
                     MainScreenPlaceholderScreenView(
                         screen = SmartHomeScreen.Profile,
                     )
                 }
-            },
-        )
+            }
+        },
+    )
+}
+
+@Composable
+private fun MainScreenNavigationItemWrapper(
+    backStack: NavBackStack<SmartHomeScreen>,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .safeContentPadding()
+                .weight(1f),
+        ) {
+            content.invoke()
+        }
 
         BottomNavigation(
             selectedNavigationItem = backStack.firstOrNull(),
