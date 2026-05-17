@@ -5,7 +5,7 @@ import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.assertions.isEqualTo
 
 val OnboardingScreensOrderTest by testSuite(
-    displayName = "Onboarding screens order tests",
+    name = "Onboarding screens order tests",
 ) {
     test(name = "Should return 1 when index of initial screen is requested") {
         expectThat(OnboardingScreens.indexOf(OnboardingScreens.Initial))

@@ -18,7 +18,7 @@ import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCa
 import network.marsys.smarthome.shared.library.core.Result
 
 val validateBackendUriUseCaseTest by testSuite(
-    displayName = "Validate backend uri use case tests",
+    name = "Validate backend uri use case tests",
 ) {
     test(name = "Should return success if the uri returns a success response") {
         val client = mockClient { HttpStatusCode.OK }
