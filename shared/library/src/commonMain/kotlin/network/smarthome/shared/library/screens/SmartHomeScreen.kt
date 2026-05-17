@@ -16,4 +16,9 @@ internal sealed interface SmartHomeScreen : NavKey {
 
     @Serializable
     data object Profile : SmartHomeScreen
+
+    sealed interface Modal : SmartHomeScreen
+
+    @Serializable
+    data object AppAppearance : Modal
 }

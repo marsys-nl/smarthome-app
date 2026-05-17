@@ -57,6 +57,7 @@ private const val DASHBOARD_BUTTON_ALPHA_DISABLED = 0.5f
 internal fun DashboardHeader(
     instant: Instant,
     name: String,
+    onChangeAppearanceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -69,7 +70,9 @@ internal fun DashboardHeader(
             instant = instant,
             name = name,
         )
-        DashboardHeaderQuickActions()
+        DashboardHeaderQuickActions(
+            onChangeAppearanceClick = onChangeAppearanceClick,
+        )
     }
 }
 
@@ -127,6 +130,7 @@ private fun determinePersonalizedGreeting(
 
 @Composable
 private fun DashboardHeaderQuickActions(
+    onChangeAppearanceClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -138,7 +142,7 @@ private fun DashboardHeaderQuickActions(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DashboardHeaderQuickActionButton(
-            onClick = {},
+            onClick = onChangeAppearanceClick,
             icon = Icons.SunMoon,
         )
 
@@ -214,6 +218,7 @@ private fun DashboardScreenViewMorningPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T08:00:00Z"),
+            onChangeAppearanceClick = {},
         )
     }
 }
@@ -229,6 +234,7 @@ private fun DashboardScreenViewAfternoonPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T15:00:00Z"),
+            onChangeAppearanceClick = {},
         )
     }
 }
@@ -244,6 +250,7 @@ private fun DashboardScreenViewEveningPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T19:00:00Z"),
+            onChangeAppearanceClick = {},
         )
     }
 }
@@ -259,6 +266,7 @@ private fun DashboardScreenViewNightPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T23:00:00Z"),
+            onChangeAppearanceClick = {},
         )
     }
 }
