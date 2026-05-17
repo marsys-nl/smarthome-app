@@ -2,6 +2,7 @@ package network.marsys.smarthome.shared.library.design
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -53,13 +54,17 @@ private fun SmartHomeTheme(
     content: @Composable () -> Unit,
 ) {
     CompositionLocalProvider(
-        values = arrayOf(
-            LocalColorScheme provides scheme,
-            LocalContentColor provides scheme[ColorKeyToken.TextPrimary],
-            LocalTextStyle provides TextStyle.Default,
-        ),
-        content = content,
-    )
+        LocalColorScheme provides scheme,
+        LocalContentColor provides scheme[ColorKeyToken.TextPrimary],
+        LocalTextStyle provides TextStyle.Default,
+    ) {
+        Box(
+            modifier = Modifier
+                .background(LocalColorScheme.current[ColorKeyToken.BackgroundPrimary]),
+        ) {
+            content.invoke()
+        }
+    }
 }
 
 @Composable
