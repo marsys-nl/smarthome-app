@@ -1,6 +1,5 @@
 package network.marsys.smarthome.shared.feature.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -13,7 +12,6 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import kotlin.time.Clock
 import kotlin.time.Instant
 
@@ -26,8 +24,7 @@ fun DashboardScreenView(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundPrimary]),
+            .fillMaxSize(),
     ) {
         DashboardHeader(
             instant = instant,

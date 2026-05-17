@@ -1,6 +1,5 @@
 package network.smarthome.shared.library.main
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
@@ -36,7 +34,6 @@ import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
@@ -224,8 +221,7 @@ private fun MainScreenPlaceholderScreenView(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundPrimary]),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Column(
