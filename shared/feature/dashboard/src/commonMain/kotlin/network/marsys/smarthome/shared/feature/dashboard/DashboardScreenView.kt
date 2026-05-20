@@ -18,6 +18,7 @@ import kotlin.time.Instant
 @Composable
 fun DashboardScreenView(
     name: String,
+    onChangeAppearanceClick: () -> Unit,
     modifier: Modifier = Modifier,
     instant: Instant = Clock.System.now(),
     content: @Composable () -> Unit,
@@ -29,6 +30,7 @@ fun DashboardScreenView(
         DashboardHeader(
             instant = instant,
             name = name,
+            onChangeAppearanceClick = onChangeAppearanceClick,
         )
 
         content.invoke()
@@ -47,6 +49,7 @@ private fun DashboardScreenViewPreview(
     ) {
         DashboardScreenView(
             name = "John",
+            onChangeAppearanceClick = {},
         ) {
             // No-op for now
         }

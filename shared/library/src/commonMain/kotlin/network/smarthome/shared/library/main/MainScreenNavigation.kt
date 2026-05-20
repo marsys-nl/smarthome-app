@@ -11,9 +11,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
@@ -28,6 +30,7 @@ import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNav
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
+import network.marsys.smarthome.shared.library.design.component.Modal
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
@@ -58,9 +61,11 @@ private val config = SavedStateConfiguration {
 }
 
 @Composable
+@Suppress("LongMethod")
 internal fun MainScreenNavigation(
     modifier: Modifier = Modifier,
 ) {
+    val modalStrategy = remember { ModalSceneStrategy<SmartHomeScreen>() }
     val backStack = rememberNavBackStack<SmartHomeScreen>(
         configuration = config,
         elements = arrayOf(SmartHomeScreen.Dashboard),
@@ -71,12 +76,17 @@ internal fun MainScreenNavigation(
             .fillMaxSize(),
         backStack = backStack,
         onBack = { backStack.removeLastOrNull() },
+        sceneStrategies = listOf(modalStrategy),
         entryProvider = entryProvider {
             entry<SmartHomeScreen.Dashboard> {
                 MainScreenNavigationItemWrapper(
                     backStack = backStack,
                 ) {
-                    MainScreenDashboardScreenView()
+                    MainScreenDashboardScreenView(
+                        onChangeAppearanceClick = {
+                            backStack += SmartHomeScreen.AppAppearance
+                        },
+                    )
                 }
             }
 
@@ -109,6 +119,12 @@ internal fun MainScreenNavigation(
                     )
                 }
             }
+
+            entry<SmartHomeScreen.AppAppearance>(
+                metadata = ModalSceneStrategy.modal(),
+            ) {
+                Text(text = "Modal preview")
+            }
         },
     )
 }
@@ -119,9 +135,15 @@ private fun MainScreenNavigationItemWrapper(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
+    val blurModifier = when (backStack.lastOrNull() is SmartHomeScreen.Modal) {
+        true -> Modifier.blur(4.dp)
+        false -> Modifier
+    }
+
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .then(blurModifier),
     ) {
         Column(
             modifier = Modifier
@@ -179,6 +201,7 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
 
 @Composable
 private fun MainScreenDashboardScreenView(
+    onChangeAppearanceClick: () -> Unit,
     modifier: Modifier = Modifier,
     applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
     onboardingRepository: OnboardingRepository = koinInject(),
@@ -192,6 +215,7 @@ private fun MainScreenDashboardScreenView(
         } else {
             "Niels"
         },
+        onChangeAppearanceClick = onChangeAppearanceClick,
         modifier = modifier,
     ) {
         val coroutineScope = rememberCoroutineScope()
