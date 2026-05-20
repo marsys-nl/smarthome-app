@@ -35,13 +35,7 @@ import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingS
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
 import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_dark
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_dark_subtitle
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_light
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_light_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_subtitle
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_system
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_system_subtitle
 import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -63,6 +57,13 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.resources.SmartHomeRes
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_dark_description
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_dark_title
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_light_description
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_light_title
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_description
+import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_title
 import org.jetbrains.compose.resources.stringResource
 
 private val BrandPrimaryToSecondaryGradient
@@ -147,8 +148,8 @@ fun AppearanceOnboardingScreenView(
         },
     ) {
         SelectableThemeOption(
-            title = stringResource(Res.string.onboarding_appearance_system),
-            subtitle = stringResource(Res.string.onboarding_appearance_system_subtitle),
+            title = stringResource(SmartHomeRes.string.app_appearance_mode_system_title),
+            subtitle = stringResource(SmartHomeRes.string.app_appearance_mode_system_description),
             icon = Icons.Monitor,
             state = SmartHomeTheme.current == ThemeSelection.SystemDefault,
             onSelectTheme = {
@@ -157,8 +158,8 @@ fun AppearanceOnboardingScreenView(
         )
 
         SelectableThemeOption(
-            title = stringResource(Res.string.onboarding_appearance_light),
-            subtitle = stringResource(Res.string.onboarding_appearance_light_subtitle),
+            title = stringResource(SmartHomeRes.string.app_appearance_mode_light_title),
+            subtitle = stringResource(SmartHomeRes.string.app_appearance_mode_light_description),
             icon = Icons.Sun,
             state = SmartHomeTheme.current == ThemeSelection.LightMode,
             onSelectTheme = {
@@ -167,8 +168,8 @@ fun AppearanceOnboardingScreenView(
         )
 
         SelectableThemeOption(
-            title = stringResource(Res.string.onboarding_appearance_dark),
-            subtitle = stringResource(Res.string.onboarding_appearance_dark_subtitle),
+            title = stringResource(SmartHomeRes.string.app_appearance_mode_dark_title),
+            subtitle = stringResource(SmartHomeRes.string.app_appearance_mode_dark_description),
             icon = Icons.Moon,
             state = SmartHomeTheme.current == ThemeSelection.DarkMode,
             onSelectTheme = {
