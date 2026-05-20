@@ -133,7 +133,7 @@ internal fun MainScreenNavigation(
                         coroutineScope.launch {
                             appearancePreferencesRepository.setTheme(it)
                         }
-                    }
+                    },
                 )
             }
         },
