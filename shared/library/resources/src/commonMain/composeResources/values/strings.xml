@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_appearance_mode_system_title">System default</string>
+    <string name="app_appearance_mode_system_description">Follows your device settings</string>
+    <string name="app_appearance_mode_light_title">Light mode</string>
+    <string name="app_appearance_mode_light_description">Always use light mode</string>
+    <string name="app_appearance_mode_dark_title">Dark mode</string>
+    <string name="app_appearance_mode_dark_description">Always use dark mode</string>
+
     <string name="bottom_navigation_item_home" translatable="false">Home</string>
     <string name="bottom_navigation_item_rooms">Rooms</string>
     <string name="bottom_navigation_item_scenes">Scenes</string>

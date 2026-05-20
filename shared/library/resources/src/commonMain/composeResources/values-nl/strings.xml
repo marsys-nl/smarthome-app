@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_appearance_mode_system_title">Systeemstandaard</string>
+    <string name="app_appearance_mode_system_description">Volgt de instellingen van je apparaat</string>
+    <string name="app_appearance_mode_light_title">Lichte modus</string>
+    <string name="app_appearance_mode_light_description">Altijd de lichte modus gebruiken</string>
+    <string name="app_appearance_mode_dark_title">Donkere modus</string>
+    <string name="app_appearance_mode_dark_description">Altijd de donkere modus gebruiken</string>
+
     <string name="bottom_navigation_item_rooms">Kamers</string>
     <string name="bottom_navigation_item_scenes">Scènes</string>
     <string name="bottom_navigation_item_profile">Profiel</string>

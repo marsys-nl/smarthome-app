@@ -1,4 +1,4 @@
-package network.marsys.smarthome.shared.feature.onboarding.screens
+package network.marsys.smarthome.shared.modal.appearance
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,41 +21,26 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreens
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingBackButton
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingNextButton
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicator
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingProgressIndicatorDefaults
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIcon
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicator
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenIndicatorDefaults
-import network.marsys.smarthome.shared.feature.onboarding.components.OnboardingScreenScaffold
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.Res
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_subtitle
-import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.resources.onboarding_appearance_title
+import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
-import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
-import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Check
+import network.marsys.smarthome.shared.library.design.icons.Close
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Moon
 import network.marsys.smarthome.shared.library.design.icons.Sun
-import network.marsys.smarthome.shared.library.design.icons.SunMoon
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
-import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_dark_description
@@ -66,87 +51,37 @@ import network.marsys.smarthome.shared.library.resources.app_appearance_mode_sys
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_title
 import org.jetbrains.compose.resources.stringResource
 
-private val BrandPrimaryToSecondaryGradient
-    @Composable
-    get() = LocalColorScheme.current[GradientKeyToken.BrandPrimaryToSecondary]
-
 @Composable
-@Suppress("LongMethod")
-fun AppearanceOnboardingScreenView(
+fun AppAppearanceModalContent(
+    onDismissRequest: () -> Unit,
     onSelectTheme: (ThemeSelection) -> Unit,
-    navigateToConfiguration: () -> Unit,
-    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val numberOfScreens: Int = OnboardingScreens.SCREEN_COUNT
-    val indexOfScreen: Int = OnboardingScreens.indexOf(OnboardingScreens.Appearance)
-
-    OnboardingScreenScaffold(
-        modifier = modifier,
-        header = {
-            OnboardingProgressIndicator(
-                numberOfScreens = numberOfScreens,
-                indexOfScreen = indexOfScreen,
-                colors = OnboardingProgressIndicatorDefaults.colors(
-                    foreground = BrandPrimaryToSecondaryGradient,
-                ),
-                modifier = Modifier
-                    .padding(bottom = 40.dp),
-            )
-
-            OnboardingScreenIcon(
-                icon = Icons.SunMoon,
-                modifier = Modifier
-                    .padding(bottom = 16.dp),
-            )
-
-            Text(
-                text = stringResource(Res.string.onboarding_appearance_title),
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                textAlign = TextAlign.Center,
-                lineHeight = 32.sp,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.W700,
-            )
-
-            Text(
-                text = stringResource(Res.string.onboarding_appearance_subtitle),
-                textAlign = TextAlign.Center,
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-            )
-        },
-        footer = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                OnboardingBackButton(
-                    onClick = navigateBack,
-                )
-
-                OnboardingNextButton(
-                    onClick = navigateToConfiguration,
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = BrandPrimaryToSecondaryGradient,
-                        contentColor = PaletteTokens.Base.White,
-                    ),
-                )
-            }
-
-            OnboardingScreenIndicator(
-                screen = indexOfScreen,
-                screens = numberOfScreens,
-                modifier = Modifier
-                    .padding(top = 24.dp),
-                colors = OnboardingScreenIndicatorDefaults.colors(
-                    activeScreenIndicatorColor = SolidColor(PaletteTokens.Emerald.Emerald500),
-                    currentScreenIndicatorColor = BrandPrimaryToSecondaryGradient,
-                ),
-            )
-        },
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement
+            .spacedBy(12.dp),
     ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = "Appearance",
+                lineHeight = 28.sp,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.W800,
+            )
+
+            CloseModalButton(
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
         SelectableThemeOption(
             title = stringResource(SmartHomeRes.string.app_appearance_mode_system_title),
             subtitle = stringResource(SmartHomeRes.string.app_appearance_mode_system_description),
@@ -180,6 +115,33 @@ fun AppearanceOnboardingScreenView(
 }
 
 @Composable
+fun CloseModalButton(
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .clickable(
+                interactionSource = null,
+                indication = null,
+                onClick = onDismissRequest,
+            ),
+        colors = CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
+        ),
+        contentPadding = CardDefaults.contentPadding(
+            horizontal = 8.dp,
+            vertical = 8.dp,
+        ),
+    ) {
+        Icon(
+            icon = Icons.Close,
+            size = 20.dp,
+        )
+    }
+}
+
+@Composable
 private fun SelectableThemeOption(
     title: String,
     subtitle: String,
@@ -194,7 +156,9 @@ private fun SelectableThemeOption(
             borderColor = LocalColorScheme.current[ColorKeyToken.BorderBrandPrimaryDimmed],
         )
     } else {
-        CardDefaults.colors()
+        CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
+        )
     }
 
     val borderWidth = if (state) 1.dp else 0.dp
@@ -303,20 +267,17 @@ private fun SelectedThemeIcon() {
     )
 }
 
-@PreviewLocales
-@PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun AppearanceOnboardingScreenPreview(
+private fun AppAppearanceModalContentPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
-    SmartHomeTheme(
+    SmartHomeModalPreview(
         theme = theme,
     ) {
-        AppearanceOnboardingScreenView(
+        AppAppearanceModalContent(
+            onDismissRequest = {},
             onSelectTheme = {},
-            navigateToConfiguration = {},
-            navigateBack = {},
         )
     }
 }

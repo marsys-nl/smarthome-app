@@ -10,12 +10,6 @@
 
     <string name="onboarding_appearance_title">Kies het uiterlijk</string>
     <string name="onboarding_appearance_subtitle">Hoe wil je dat de app eruitziet?</string>
-    <string name="onboarding_appearance_system">Systeemstandaard</string>
-    <string name="onboarding_appearance_system_subtitle">Volgt de instellingen van je apparaat</string>
-    <string name="onboarding_appearance_light">Lichte modus</string>
-    <string name="onboarding_appearance_light_subtitle">Altijd de lichte modus gebruiken</string>
-    <string name="onboarding_appearance_dark">Donkere modus</string>
-    <string name="onboarding_appearance_dark_subtitle">Altijd de donkere modus gebruiken</string>
 
     <string name="onboarding_configuration_title">Verbind met jouw systeem</string>
     <string name="onboarding_configuration_subtitle">Voer de URI van jouw smart home-backend in om te beginnen</string>

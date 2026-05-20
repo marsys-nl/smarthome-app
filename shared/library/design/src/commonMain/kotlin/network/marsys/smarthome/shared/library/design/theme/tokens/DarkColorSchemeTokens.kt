@@ -5,12 +5,14 @@ import androidx.compose.ui.graphics.Color
 @Suppress("PropertyName", "RedundantSuppression")
 internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundPrimary: Color = PaletteTokens.Slate.Slate950
-    override val BackgroundSecondary: Color = PaletteTokens.Slate.Slate900
+    override val BackgroundSecondary: Color = PaletteTokens.Slate.Slate800
+        .copy(alpha = .6f)
     override val BackgroundSecondarySelected: Color = PaletteTokens.Amber.Amber500
         .copy(alpha = .1f)
     override val BackgroundTertiary: Color = PaletteTokens.Slate.Slate700
     override val BackgroundBrandPrimary: Color = PaletteTokens.Amber.Amber500
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500
+    override val BackgroundModal: Color = PaletteTokens.Slate.Slate900
     override val BackgroundDisabled: Color = PaletteTokens.Slate.Slate800
     override val BorderPrimary: Color = PaletteTokens.Slate.Slate700
     override val BorderBrandPrimary: Color = PaletteTokens.Amber.Amber500
