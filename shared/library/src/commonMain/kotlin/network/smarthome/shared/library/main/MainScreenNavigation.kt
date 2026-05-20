@@ -30,7 +30,6 @@ import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNav
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.Modal
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
