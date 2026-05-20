@@ -148,6 +148,7 @@ private fun DashboardHeaderQuickActions(
 
         DashboardHeaderQuickActionButton(
             onClick = {},
+            enabled = false,
             icon = Icons.Bell,
         ) {
             Box(
