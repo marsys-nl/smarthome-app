@@ -46,6 +46,7 @@ kotlin {
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
             implementation(projects.shared.library.store.datastore)
+            implementation(projects.shared.modal.appearance)
 
             implementation(libs.androidx.lifecycle.runtime)
             implementation(libs.androidx.lifecycle.viewmodel)

@@ -53,4 +53,5 @@ include(
     ":shared:library:resources",
     ":shared:library:store",
     ":shared:library:store:datastore",
+    ":shared:modal:appearance",
 )

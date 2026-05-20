@@ -42,8 +42,10 @@ import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
 import network.marsys.smarthome.shared.library.resources.demo_user
+import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.smarthome.shared.library.screens.SmartHomeScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
@@ -63,6 +65,7 @@ private val config = SavedStateConfiguration {
 @Suppress("LongMethod")
 internal fun MainScreenNavigation(
     modifier: Modifier = Modifier,
+    appearancePreferencesRepository: AppearancePreferencesRepository = koinInject(),
 ) {
     val modalStrategy = remember { ModalSceneStrategy<SmartHomeScreen>() }
     val backStack = rememberNavBackStack<SmartHomeScreen>(
@@ -122,7 +125,16 @@ internal fun MainScreenNavigation(
             entry<SmartHomeScreen.AppAppearance>(
                 metadata = ModalSceneStrategy.modal(),
             ) {
-                Text(text = "Modal preview")
+                val coroutineScope = rememberCoroutineScope()
+
+                AppAppearanceModalContent(
+                    onDismissRequest = { backStack.removeLastOrNull() },
+                    onSelectTheme = {
+                        coroutineScope.launch {
+                            appearancePreferencesRepository.setTheme(it)
+                        }
+                    }
+                )
             }
         },
     )

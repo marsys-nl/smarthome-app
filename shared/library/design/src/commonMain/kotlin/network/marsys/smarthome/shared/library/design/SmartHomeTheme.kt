@@ -5,6 +5,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.shared.library.design.component.Modal
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
@@ -84,6 +86,30 @@ fun SmartHomeComponentPreview(
                 .padding(contentPadding),
         ) {
             content.invoke()
+        }
+    }
+}
+
+@Composable
+fun SmartHomeModalPreview(
+    theme: ThemeSelection,
+    modifier: Modifier = Modifier,
+    background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
+    content: @Composable () -> Unit,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(background.invoke()),
+        ) {
+            Modal(
+                onDismissRequest = {},
+            ) {
+                content.invoke()
+            }
         }
     }
 }
