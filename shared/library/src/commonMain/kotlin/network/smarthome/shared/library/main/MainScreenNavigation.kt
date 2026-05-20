@@ -1,22 +1,13 @@
 package network.smarthome.shared.library.main
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,15 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.coroutines.launch
@@ -40,22 +27,16 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.Card
-import network.marsys.smarthome.shared.library.design.component.CardDefaults
-import network.marsys.smarthome.shared.library.design.component.Icon
+import network.marsys.smarthome.shared.library.design.component.Modal
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.icons.Check
 import network.marsys.smarthome.shared.library.design.icons.Grid
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
-import network.marsys.smarthome.shared.library.design.icons.Sun
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
@@ -142,9 +123,7 @@ internal fun MainScreenNavigation(
             entry<SmartHomeScreen.AppAppearance>(
                 metadata = ModalSceneStrategy.modal(),
             ) {
-                MainScreenModal {
-                    Text(text = "Modal preview")
-                }
+                Text(text = "Modal preview")
             }
         },
     )
@@ -275,26 +254,5 @@ private fun MainScreenPlaceholderScreenView(
         ) {
             Text(text = screen.toString())
         }
-    }
-}
-
-@Composable
-private fun MainScreenModal(
-    modifier: Modifier = Modifier,
-    padding: PaddingValues = PaddingValues(16.dp),
-    content: @Composable () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    // Consume clicks and taps inside the modal to prevent pointer events to pass through
-                }
-            }
-            .background(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary])
-            .padding(padding),
-    ) {
-        content.invoke()
     }
 }

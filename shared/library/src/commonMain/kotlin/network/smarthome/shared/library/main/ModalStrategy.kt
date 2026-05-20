@@ -1,21 +1,6 @@
 package network.smarthome.shared.library.main
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavMetadataKey
 import androidx.navigation3.runtime.get
@@ -24,9 +9,8 @@ import androidx.navigation3.scene.OverlayScene
 import androidx.navigation3.scene.Scene
 import androidx.navigation3.scene.SceneStrategy
 import androidx.navigation3.scene.SceneStrategyScope
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
-import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.design.component.Modal
+import network.marsys.smarthome.shared.library.design.component.ModalProperties
 
 internal data class ModalScene<T : Any>(
     override val key: T,
@@ -39,13 +23,10 @@ internal data class ModalScene<T : Any>(
     override val entries: List<NavEntry<T>> = listOf(entry)
 
     override val content: @Composable (() -> Unit) = {
-        CompositionLocalProvider(
-            LocalModalDismissal provides onBack,
-        ) {
-            ModalOverlay(
-                content = entry::Content,
-            )
-        }
+        Modal(
+            onDismissRequest = onBack,
+            content = entry::Content,
+        )
     }
 }
 
@@ -73,34 +54,4 @@ internal class ModalSceneStrategy<T : Any> : SceneStrategy<T> {
 
         object ModalKey : NavMetadataKey<ModalProperties>
     }
-}
-
-@Immutable
-internal data class ModalProperties(
-    val overlayColor: Color = Color.Black.copy(alpha = 0.5f),
-    val overlayPadding: PaddingValues = PaddingValues(16.dp),
-)
-
-internal val LocalModalDismissal = compositionLocalOf<() -> Unit> {
-    error("No modal dismissal lambda provided")
-}
-
-@Composable
-private fun ModalScene<*>.ModalOverlay(
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .clickable(
-                interactionSource = null,
-                indication = null,
-                onClick = onBack,
-            )
-            .background(properties.overlayColor)
-            .padding(properties.overlayPadding),
-        contentAlignment = Alignment.Center,
-        content = { content.invoke() },
-    )
 }
