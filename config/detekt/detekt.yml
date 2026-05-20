@@ -35,7 +35,7 @@ complexity:
 
 Compose:
     CompositionLocalAllowlist:
-        allowedCompositionLocals: LocalColorScheme, LocalContentColor, LocalModalDismissal, LocalTextStyle, LocalThemeSelection
+        allowedCompositionLocals: LocalColorScheme, LocalContentColor, LocalTextStyle, LocalThemeSelection
 
 naming:
     FunctionNameMaxLength:
