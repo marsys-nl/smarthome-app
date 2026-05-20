@@ -36,7 +36,7 @@ fun Modal(
     onDismissRequest: () -> Unit,
     properties: ModalProperties = ModalProperties(),
     colors: ModalColors = ModalDefaults.colors(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ModalOverlay(
         onDismissRequest = onDismissRequest,
@@ -52,11 +52,12 @@ fun Modal(
 
 @Composable
 fun ModalOverlay(
+    modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
     properties: ModalProperties = ModalProperties(),
     colors: ModalColors = ModalDefaults.colors(),
     contentPadding: PaddingValues = ModalDefaults.overlayPadding(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val dismissOnClickOutsideModifier = if (properties.dismissOnClickOutside) {
         Modifier
@@ -70,7 +71,7 @@ fun ModalOverlay(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .then(dismissOnClickOutsideModifier)
             .background(
@@ -84,25 +85,26 @@ fun ModalOverlay(
 
 @Composable
 fun ModalContent(
+    modifier: Modifier = Modifier,
     colors: ModalColors = ModalDefaults.colors(),
     contentPadding: PaddingValues = ModalDefaults.modalPadding(),
     modalShape: Shape = ModalDefaults.modalShape(),
     content: @Composable () -> Unit,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .widthIn(max = 600.dp)
             .fillMaxWidth()
-            .clickable(
-                interactionSource = null,
-                indication = null,
-                onClick = { /* Consume clicks to prevent dismissing the modal when clicking inside the content */ },
-            )
             .background(
                 brush = colors.containerColor,
                 shape = modalShape,
             )
-            .padding(contentPadding),
+            .padding(contentPadding)
+            .clickable(
+                interactionSource = null,
+                indication = null,
+                onClick = { /* Consume clicks to prevent dismissing the modal when clicking inside the content */ },
+            ),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         content.invoke()
@@ -159,7 +161,7 @@ private fun ModalPreview(
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Modal(
                 onDismissRequest = { /* No-op for preview */ },
@@ -169,4 +171,3 @@ private fun ModalPreview(
         }
     }
 }
-
