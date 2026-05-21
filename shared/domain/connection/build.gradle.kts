@@ -15,7 +15,6 @@ kotlin {
         compileSdk = libs.versions.android.sdk.compile.get().toInt()
     }
 
-    jvm()
     iosArm64()
     iosSimulatorArm64()
 
