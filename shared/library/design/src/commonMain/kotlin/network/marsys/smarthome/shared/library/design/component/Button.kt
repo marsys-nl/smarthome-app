@@ -6,15 +6,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ShaderBrush
@@ -44,7 +45,7 @@ fun Button(
     borderWidth: Dp = 0.dp,
     indication: Indication? = LocalIndication.current,
     interactionSource: MutableInteractionSource? = null,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val background = colors.backgroundColor(enabled).value
 
@@ -68,21 +69,23 @@ fun Button(
     UnstyledButton(
         onClick = onClick,
         enabled = enabled,
-        shape = shape,
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
         contentPadding = contentPadding,
-        borderColor = borderColor,
-        borderWidth = borderWidth,
         indication = indication,
         interactionSource = interactionSource,
         modifier = modifier
+            .clip(shape)
+            .background(backgroundColor)
+            .border(
+                width = borderWidth,
+                color = borderColor,
+                shape = shape,
+            )
             .then(gradientModifier),
     ) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
         ) {
-            content.invoke(this)
+            content.invoke()
         }
     }
 }
