@@ -59,8 +59,7 @@ fun Switch(
             .clip(SwitchDefaults.trackShape())
             .background(trackColor)
             .size(SwitchDefaults.trackSize(size))
-            .padding(SwitchDefaults.trackPadding(size))
-        ,
+            .padding(SwitchDefaults.trackPadding(size)),
         enabled = enabled,
     ) {
         SwitchThumb(
