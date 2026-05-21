@@ -15,6 +15,7 @@ kotlin {
     android {
         namespace = "$group"
         compileSdk = libs.versions.android.sdk.compile.get().toInt()
+        minSdk = libs.versions.android.sdk.min.get().toInt()
 
         experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
@@ -24,6 +25,7 @@ kotlin {
 
     sourceSets {
         androidMain.dependencies {
+            implementation(libs.androidx.window)
             implementation(libs.compose.ui.tooling)
             implementation(libs.compose.ui.tooling.preview)
         }

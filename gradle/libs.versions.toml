@@ -17,6 +17,7 @@ androidx-appcompat = "1.7.1"
 androidx-datastore = "1.2.1"
 androidx-lifecycle = "2.10.0"
 androidx-navigation = "1.1.1"
+androidx-window = "1.5.1"
 
 compose-unstyled = "1.49.9"
 
@@ -49,6 +50,7 @@ androidx-datastore-preferences-core = { group = "androidx.datastore", name = "da
 androidx-lifecycle-runtime = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-navigation-ui = { group = "org.jetbrains.androidx.navigation3", name = "navigation3-ui", version.ref = "androidx-navigation" }
+androidx-window = { group = "androidx.window", name = "window", version.ref = "androidx-window" }
 
 compose-foundation = { group = "org.jetbrains.compose.foundation", name = "foundation", version.ref = "jetbrains-compose" }
 compose-resources = { group = "org.jetbrains.compose.components", name = "components-resources", version.ref = "jetbrains-compose" }
