@@ -16,11 +16,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import core.com.composeunstyled.detectTapGestures
-import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
@@ -155,19 +153,9 @@ object ModalDefaults {
 private fun ModalPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
-    SmartHomeTheme(
+    SmartHomeModalPreview(
         theme = theme,
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            Modal(
-                onDismissRequest = { /* No-op for preview */ },
-            ) {
-                Text(text = "This is a modal")
-            }
-        }
+        Text(text = "This is a modal")
     }
 }

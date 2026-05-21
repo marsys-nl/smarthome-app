@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -17,6 +18,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
@@ -24,7 +26,8 @@ import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.DpSize
-import com.composeunstyled.ToggleSwitch
+import com.composeunstyled.SwitchThumb
+import com.composeunstyled.UnstyledSwitch
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
@@ -49,17 +52,17 @@ fun Switch(
         colors.thumbColor(enabled, it).value
     }
 
-    ToggleSwitch(
-        toggled = checked,
+    UnstyledSwitch(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
         modifier = modifier
-            .size(SwitchDefaults.trackSize(size)),
+            .clip(SwitchDefaults.trackShape())
+            .background(trackColor)
+            .size(SwitchDefaults.trackSize(size))
+            .padding(SwitchDefaults.trackPadding(size)),
         enabled = enabled,
-        shape = SwitchDefaults.trackShape(),
-        backgroundColor = trackColor,
-        onToggled = onCheckedChange,
-        contentPadding = SwitchDefaults.trackPadding(size),
     ) {
-        Box(
+        SwitchThumb(
             modifier = Modifier
                 .fillMaxHeight(1f)
                 .aspectRatio(1f)
