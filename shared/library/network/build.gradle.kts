@@ -15,7 +15,6 @@ kotlin {
         compileSdk = libs.versions.android.sdk.compile.get().toInt()
     }
 
-    jvm()
     iosArm64()
     iosSimulatorArm64()
 
@@ -33,10 +32,6 @@ kotlin {
 
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
-        }
-
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.cio)
         }
     }
 }
