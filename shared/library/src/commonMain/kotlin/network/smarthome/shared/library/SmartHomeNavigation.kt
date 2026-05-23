@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.retain.retain
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,7 +34,7 @@ fun SmartHomeNavigation(
     modifier: Modifier = Modifier,
     onboardingRepository: OnboardingRepository = koinInject(),
 ) {
-    var onboardingSessionKey by remember { mutableIntStateOf(0) }
+    var onboardingSessionKey by retain { mutableIntStateOf(0) }
 
     val isOnboardingFinished by onboardingRepository.isOnboardingFinished
         .collectAsStateWithLifecycle(initialValue = null)
@@ -55,6 +55,8 @@ fun SmartHomeNavigation(
             true -> SmartHomeNavigationFlow.Main
             else -> SmartHomeNavigationFlow.Onboarding
         }
+
+        if (backStack.lastOrNull() == targetScreen && backStack.size == 1) return@LaunchedEffect
 
         backStack.clear()
         backStack += targetScreen
