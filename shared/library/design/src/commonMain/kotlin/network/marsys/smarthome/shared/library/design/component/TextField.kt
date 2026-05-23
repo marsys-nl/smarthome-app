@@ -38,6 +38,7 @@ import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -216,7 +217,11 @@ private fun TextFieldScope.TextInput(
     ) {
         if (readOnly || !enabled) {
             SelectionContainer {
-                Text(state.text.toString())
+                Text(
+                    text = state.text.toString(),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
         } else {
             InnerTextField()
@@ -536,6 +541,36 @@ private fun TextFieldWithFullDecorationBoxPreview(
                     leading = { Text("@") },
                     trailing = { Text("Clear") },
                     supportingText = { Text("This is a hint below the field.") },
+                )
+            },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun TextFieldWithContentsTooLongPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(theme = theme) {
+        val state = remember {
+            TextFieldState(
+                initialText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+                    "Sed eleifend dui non orci eleifend bibendum. Nulla varius ultricies " +
+                    "dolor sit amet semper. Sed accumsan, dolor id finibus rhoncus, nisi " +
+                    "nibh suscipit augue, vitae gravida dui justo et ex. Maecenas eget " +
+                    "suscipit lacus. Mauris ac rhoncus lacus. Suspendisse placerat " +
+                    "eleifend magna at ornare. Duis efficitur euismod felis, vel porttitor " +
+                    "eros hendrerit nec.",
+            )
+        }
+
+        TextField(
+            state = state,
+            readOnly = true,
+            decorationBox = {
+                TextFieldDecorationBox(
+                    placeholder = { Text("Enter text…") },
                 )
             },
         )
