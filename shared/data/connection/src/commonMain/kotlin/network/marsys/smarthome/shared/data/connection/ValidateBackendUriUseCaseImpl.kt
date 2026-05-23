@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.data.connection
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
@@ -43,6 +44,8 @@ internal class ValidateBackendUriUseCaseImpl(
             else ->
                 fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
         }
+    } catch (_: NoTransformationFoundException) {
+        fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
     } catch (_: ContentConvertException) {
         fail(with = ValidateBackendUriUseCase.Reason.InvalidBackend)
     } catch (_: IOException) {
