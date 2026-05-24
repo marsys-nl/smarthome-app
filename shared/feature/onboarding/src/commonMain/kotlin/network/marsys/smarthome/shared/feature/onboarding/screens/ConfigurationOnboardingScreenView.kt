@@ -549,6 +549,7 @@ private fun FinishOnboardingLoadingIndicator() {
                 rotationZ = angle.value
             },
         size = 16.dp,
+        tint = PaletteTokens.Base.White,
     )
 }
 
