@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +31,8 @@ class OnboardingViewModel(
         context = Dispatchers.Main.immediate + SupervisorJob(),
     ),
 ) {
+    private var validationJob: Job? = null
+
     private val configurationState = MutableStateFlow<ConfigurationOnboardingState>(
         value = ConfigurationOnboardingState.Idle(),
     )
@@ -38,12 +41,21 @@ class OnboardingViewModel(
     val uriTextFieldState = TextFieldState()
     val apiKeyTextFieldState = TextFieldState()
 
+    fun cancelValidation() {
+        validationJob?.cancel()
+        validationJob = null
+
+        if (configurationState.value is ConfigurationOnboardingState.Processing) {
+            configurationState.update { ConfigurationOnboardingState.Idle() }
+        }
+    }
+
     fun finishOnboarding() {
         if (configurationState.value is ConfigurationOnboardingState.Processing) {
             return
         }
 
-        viewModelScope.launch {
+        validationJob = viewModelScope.launch {
             validateBackendUri(
                 uri = uriTextFieldState.text.toString(),
                 apiKey = apiKeyTextFieldState.text.toString()
