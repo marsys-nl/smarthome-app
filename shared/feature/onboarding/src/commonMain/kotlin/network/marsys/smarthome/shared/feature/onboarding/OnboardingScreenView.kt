@@ -45,7 +45,10 @@ fun OnboardingScreenView(
         modifier = modifier
             .fillMaxSize(),
         backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = {
+            viewModel.cancelValidation()
+            backStack.removeLastOrNull()
+        },
         entryProvider = entryProvider {
             entry<OnboardingScreens.Initial> {
                 InitialOnboardingScreenView(
@@ -89,6 +92,7 @@ fun OnboardingScreenView(
                     finishOnboarding = viewModel::finishOnboarding,
                     skipToDemo = viewModel::skipToDemo,
                     navigateBack = {
+                        viewModel.cancelValidation()
                         backStack.removeLast()
                     },
                 )

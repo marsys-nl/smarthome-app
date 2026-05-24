@@ -335,7 +335,7 @@ private fun ColumnScope.BackendConnectionApiKeyTextField(
     apiKeyTextFieldState: TextFieldState,
     finishOnboarding: () -> Unit,
 ) {
-    var displayApiKeyTextField by remember {
+    var displayApiKeyTextField by remember(state) {
         mutableStateOf(
             value = apiKeyTextFieldState.text.isNotBlank() || (
                 state is ConfigurationOnboardingState.Idle &&
@@ -549,6 +549,7 @@ private fun FinishOnboardingLoadingIndicator() {
                 rotationZ = angle.value
             },
         size = 16.dp,
+        tint = PaletteTokens.Base.White,
     )
 }
 
