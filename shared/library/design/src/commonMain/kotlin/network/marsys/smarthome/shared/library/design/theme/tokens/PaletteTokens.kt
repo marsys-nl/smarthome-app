@@ -23,6 +23,11 @@ object PaletteTokens {
         val Amber950 = Color(0xFF411C07)
     }
 
+    object Blue {
+        val Blue400 = Color(0xFF60A5FA)
+        val Blue600 = Color(0xFF2563EB)
+    }
+
     object Emerald {
         val Emerald50 = Color(0xFFEFFDF6)
         val Emerald100 = Color(0xFFD8F9E6)
@@ -49,6 +54,11 @@ object PaletteTokens {
         val Neutral800 = Color(0xFF262626)
         val Neutral900 = Color(0xFF171717)
         val Neutral950 = Color(0xFF0A0A0A)
+    }
+
+    object Rose {
+        val Rose400 = Color(0xFFFB7185)
+        val Rose600 = Color(0xFFE11D48)
     }
 
     object Slate {
