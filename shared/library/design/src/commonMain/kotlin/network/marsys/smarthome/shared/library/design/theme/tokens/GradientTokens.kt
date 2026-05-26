@@ -16,4 +16,30 @@ object GradientTokens {
             )
         }
     }
+
+    object Blue {
+        object Blue400 {
+            val ToBlue600 = ToBlue600(1f)
+
+            fun ToBlue600(alpha: Float) = Brush.linearGradient(
+                colors = listOf(
+                    PaletteTokens.Blue.Blue400.copy(alpha = alpha),
+                    PaletteTokens.Blue.Blue600.copy(alpha = alpha),
+                ),
+            )
+        }
+    }
+
+    object Rose {
+        object Rose400 {
+            val ToRose600 = ToRose600(1f)
+
+            fun ToRose600(alpha: Float) = Brush.linearGradient(
+                colors = listOf(
+                    PaletteTokens.Rose.Rose400.copy(alpha = alpha),
+                    PaletteTokens.Rose.Rose600.copy(alpha = alpha),
+                ),
+            )
+        }
+    }
 }
