@@ -8,6 +8,7 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundSecondary: Color = PaletteTokens.Base.White
     override val BackgroundSecondarySelected: Color = PaletteTokens.Amber.Amber50
     override val BackgroundTertiary: Color = PaletteTokens.Slate.Slate200
+    override val BackgroundTertiaryDisabled: Color = PaletteTokens.Slate.Slate100
     override val BackgroundBrandPrimary: Color = PaletteTokens.Amber.Amber500
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500
     override val BackgroundModal: Color = PaletteTokens.Base.White
@@ -22,5 +23,6 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val ForegroundDisabled: Color = PaletteTokens.Slate.Slate50
     override val TextPrimary: Color = PaletteTokens.Slate.Slate800
     override val TextSecondary: Color = PaletteTokens.Slate.Slate500
+    override val TextSecondaryAlternative: Color = PaletteTokens.Slate.Slate50
     override val TextDisabled: Color = PaletteTokens.Slate.Slate400
 }

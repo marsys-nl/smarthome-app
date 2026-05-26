@@ -10,6 +10,7 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundSecondarySelected: Color = PaletteTokens.Amber.Amber500
         .copy(alpha = .1f)
     override val BackgroundTertiary: Color = PaletteTokens.Slate.Slate700
+    override val BackgroundTertiaryDisabled: Color = PaletteTokens.Slate.Slate700
     override val BackgroundBrandPrimary: Color = PaletteTokens.Amber.Amber500
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500
     override val BackgroundModal: Color = PaletteTokens.Slate.Slate900
@@ -24,5 +25,6 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val ForegroundDisabled: Color = PaletteTokens.Slate.Slate700
     override val TextPrimary: Color = PaletteTokens.Base.White
     override val TextSecondary: Color = PaletteTokens.Slate.Slate400
+    override val TextSecondaryAlternative: Color = PaletteTokens.Slate.Slate400
     override val TextDisabled: Color = PaletteTokens.Slate.Slate600
 }
