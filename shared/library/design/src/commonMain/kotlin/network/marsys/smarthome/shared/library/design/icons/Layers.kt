@@ -52,10 +52,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-private object GridVector {
+private object LayersVector {
     val vector: ImageVector by lazy {
         ImageVector.Builder(
-            name = "grid",
+            name = "layers",
             defaultWidth = 24.dp,
             defaultHeight = 24.dp,
             viewportWidth = 24f,
@@ -68,15 +68,14 @@ private object GridVector {
                 strokeLineCap = StrokeCap.Round,
                 strokeLineJoin = StrokeJoin.Round,
             ) {
-                moveTo(4f, 3f)
-                horizontalLineTo(9f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 10f, y1 = 4f)
-                verticalLineTo(9f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 9f, y1 = 10f)
-                horizontalLineTo(4f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 3f, y1 = 9f)
-                verticalLineTo(4f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 4f, y1 = 3f)
+                moveTo(12.83f, 2.18f)
+                arcToRelative(2f, 2f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = -1.66f, dy1 = 0f)
+                lineTo(2.6f, 6.08f)
+                arcToRelative(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 0f, dy1 = 1.83f)
+                lineToRelative(8.58f, 3.91f)
+                arcToRelative(2f, 2f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 1.66f, dy1 = 0f)
+                lineToRelative(8.58f, -3.9f)
+                arcToRelative(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 0f, dy1 = -1.83f)
                 close()
             }
 
@@ -87,16 +86,12 @@ private object GridVector {
                 strokeLineCap = StrokeCap.Round,
                 strokeLineJoin = StrokeJoin.Round,
             ) {
-                moveTo(15f, 3f)
-                horizontalLineTo(20f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 21f, y1 = 4f)
-                verticalLineTo(9f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 20f, y1 = 10f)
-                horizontalLineTo(15f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 14f, y1 = 9f)
-                verticalLineTo(4f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 15f, y1 = 3f)
-                close()
+                moveTo(2f, 12f)
+                arcToRelative(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 0.58f, dy1 = 0.91f)
+                lineToRelative(8.6f, 3.91f)
+                arcToRelative(2f, 2f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 1.65f, dy1 = 0f)
+                lineToRelative(8.58f, -3.9f)
+                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, x1 = 22f, y1 = 12f)
             }
 
             path(
@@ -106,39 +101,16 @@ private object GridVector {
                 strokeLineCap = StrokeCap.Round,
                 strokeLineJoin = StrokeJoin.Round,
             ) {
-                moveTo(15f, 14f)
-                horizontalLineTo(20f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 21f, y1 = 15f)
-                verticalLineTo(20f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 20f, y1 = 21f)
-                horizontalLineTo(15f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 14f, y1 = 20f)
-                verticalLineTo(15f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 15f, y1 = 14f)
-                close()
-            }
-
-            path(
-                fill = SolidColor(Color.Transparent),
-                stroke = SolidColor(Color.Black),
-                strokeLineWidth = 2f,
-                strokeLineCap = StrokeCap.Round,
-                strokeLineJoin = StrokeJoin.Round,
-            ) {
-                moveTo(4f, 14f)
-                horizontalLineTo(9f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 10f, y1 = 15f)
-                verticalLineTo(20f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 9f, y1 = 21f)
-                horizontalLineTo(4f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 3f, y1 = 20f)
-                verticalLineTo(15f)
-                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = true, x1 = 4f, y1 = 14f)
-                close()
+                moveTo(2f, 17f)
+                arcToRelative(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 0.58f, dy1 = 0.91f)
+                lineToRelative(8.6f, 3.91f)
+                arcToRelative(2f, 2f, 0f, isMoreThanHalf = false, isPositiveArc = false, dx1 = 1.65f, dy1 = 0f)
+                lineToRelative(8.58f, -3.9f)
+                arcTo(1f, 1f, 0f, isMoreThanHalf = false, isPositiveArc = false, x1 = 22f, y1 = 17f)
             }
         }.build()
     }
 }
 
-val Icons.Grid: ImageVector
-    get() = GridVector.vector
+val Icons.Layers: ImageVector
+    get() = LayersVector.vector
