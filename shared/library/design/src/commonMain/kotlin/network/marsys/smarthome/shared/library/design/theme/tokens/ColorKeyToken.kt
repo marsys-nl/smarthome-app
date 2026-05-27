@@ -28,6 +28,7 @@ enum class ColorKeyToken {
     TextPrimary,
     TextSecondary,
     TextSecondaryAlternative,
+    TextBrandOnBrand,
     TextDisabled,
 }
 

@@ -24,5 +24,6 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val TextPrimary: Color = PaletteTokens.Slate.Slate800
     override val TextSecondary: Color = PaletteTokens.Slate.Slate500
     override val TextSecondaryAlternative: Color = PaletteTokens.Slate.Slate50
+    override val TextBrandOnBrand: Color = PaletteTokens.Amber.Amber700
     override val TextDisabled: Color = PaletteTokens.Slate.Slate400
 }

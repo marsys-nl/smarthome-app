@@ -30,5 +30,6 @@ internal interface ColorSchemeTokens {
     val TextPrimary: Color
     val TextSecondary: Color
     val TextSecondaryAlternative: Color
+    val TextBrandOnBrand: Color
     val TextDisabled: Color
 }
