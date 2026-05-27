@@ -193,7 +193,7 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
         item(
             screen = SmartHomeScreen.Rooms,
             text = roomsNavigationItemTextResource,
-            icon = Icons.Grid,
+            icon = Icons.Grid3x3,
         )
 
         item(
