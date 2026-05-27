@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
-import network.marsys.smarthome.shared.library.design.icons.Grid
+import network.marsys.smarthome.shared.library.design.icons.Grid3x3
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
@@ -305,7 +305,7 @@ private fun BottomNavigationPreview(
                 item(
                     screen = "rooms",
                     text = "Rooms",
-                    icon = Icons.Grid,
+                    icon = Icons.Grid3x3,
                 )
 
                 item(
