@@ -34,6 +34,7 @@ data class ColorScheme internal constructor(
     private val textPrimary: Color,
     private val textSecondary: Color,
     private val textSecondaryAlternative: Color,
+    private val textBrandOnBrand: Color,
     private val textDisabled: Color,
 ) {
     @Suppress("CyclomaticComplexMethod")
@@ -58,6 +59,7 @@ data class ColorScheme internal constructor(
         ColorKeyToken.TextPrimary -> textPrimary
         ColorKeyToken.TextSecondary -> textSecondary
         ColorKeyToken.TextSecondaryAlternative -> textSecondaryAlternative
+        ColorKeyToken.TextBrandOnBrand -> textBrandOnBrand
         ColorKeyToken.TextDisabled -> textDisabled
     }
 
@@ -103,6 +105,7 @@ internal fun darkColorScheme(
     textPrimary: Color = DarkColorSchemeTokens.TextPrimary,
     textSecondary: Color = DarkColorSchemeTokens.TextSecondary,
     textSecondaryAlternative: Color = DarkColorSchemeTokens.TextSecondaryAlternative,
+    textBrandOnBrand: Color = DarkColorSchemeTokens.TextBrandOnBrand,
     textDisabled: Color = DarkColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -127,6 +130,7 @@ internal fun darkColorScheme(
     textPrimary = textPrimary,
     textSecondary = textSecondary,
     textSecondaryAlternative = textSecondaryAlternative,
+    textBrandOnBrand = textBrandOnBrand,
     textDisabled = textDisabled,
 )
 
@@ -153,6 +157,7 @@ internal fun lightColorScheme(
     textPrimary: Color = LightColorSchemeTokens.TextPrimary,
     textSecondary: Color = LightColorSchemeTokens.TextSecondary,
     textSecondaryAlternative: Color = LightColorSchemeTokens.TextSecondaryAlternative,
+    textBrandOnBrand: Color = LightColorSchemeTokens.TextBrandOnBrand,
     textDisabled: Color = LightColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -177,5 +182,6 @@ internal fun lightColorScheme(
     textPrimary = textPrimary,
     textSecondary = textSecondary,
     textSecondaryAlternative = textSecondaryAlternative,
+    textBrandOnBrand = textBrandOnBrand,
     textDisabled = textDisabled,
 )

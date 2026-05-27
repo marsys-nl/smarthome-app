@@ -4,4 +4,7 @@
     <string name="dashboard_greeting_evening">Goedenavond</string>
     <string name="dashboard_greeting_morning">Goedemorgen</string>
     <string name="dashboard_greeting_night">Goedenacht</string>
+
+    <string name="quick_control_group_button_title">Groeperen op type</string>
+    <string name="quick_control_ungroup_button_title">Degroeperen</string>
 </resources>

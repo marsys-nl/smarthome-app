@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composeunstyled.LocalContentColor
+import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 
 @Composable
 fun Icon(

@@ -26,5 +26,6 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val TextPrimary: Color = PaletteTokens.Base.White
     override val TextSecondary: Color = PaletteTokens.Slate.Slate400
     override val TextSecondaryAlternative: Color = PaletteTokens.Slate.Slate400
+    override val TextBrandOnBrand: Color = PaletteTokens.Amber.Amber300
     override val TextDisabled: Color = PaletteTokens.Slate.Slate600
 }
