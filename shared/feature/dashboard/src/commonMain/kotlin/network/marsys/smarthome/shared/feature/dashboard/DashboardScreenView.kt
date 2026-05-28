@@ -2,6 +2,7 @@ package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -65,7 +66,8 @@ private fun SinglePaneDashboard(
     content: @Composable () -> Unit,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth(),
     ) {
         QuickControlSection()
 
@@ -79,11 +81,13 @@ private fun SplitPaneDashboard(
     content: @Composable () -> Unit,
 ) {
     SplitPane(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth(),
         left = content,
         right = {
             Column(
-                modifier = modifier,
+                modifier = Modifier
+                    .fillMaxWidth(),
             ) {
                 QuickControlSection()
             }
