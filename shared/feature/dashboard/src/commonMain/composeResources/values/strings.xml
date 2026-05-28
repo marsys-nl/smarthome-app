@@ -6,6 +6,7 @@
     <string name="dashboard_greeting_morning">Good morning</string>
     <string name="dashboard_greeting_night">Good night</string>
 
+    <string name="quick_control_section_title">Quick controls</string>
     <string name="quick_control_group_button_title">Group by type</string>
     <string name="quick_control_ungroup_button_title">Ungroup</string>
 </resources>

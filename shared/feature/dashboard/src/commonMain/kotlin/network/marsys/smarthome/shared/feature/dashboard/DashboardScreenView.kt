@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
+import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.AdaptiveScaffold
@@ -16,7 +17,6 @@ import network.marsys.smarthome.shared.library.design.adaptive.SplitPane
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
-import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -46,24 +46,49 @@ fun DashboardScreenView(
                 minimumWidthDp = 1000,
             ),
             singlePane = {
-                Column {
-                    Text(text = "Single pane content")
-
-                    content.invoke()
-                }
+                SinglePaneDashboard(
+                    content = content,
+                )
             },
             splitPane = {
-                SplitPane(
-                    left = {
-                        content.invoke()
-                    },
-                    right = {
-                        Text(text = "Split pane content")
-                    },
+                SplitPaneDashboard(
+                    content = content,
                 )
             },
         )
     }
+}
+
+@Composable
+private fun SinglePaneDashboard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        QuickControlSection()
+
+        content.invoke()
+    }
+}
+
+@Composable
+private fun SplitPaneDashboard(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    SplitPane(
+        modifier = modifier,
+        left = content,
+        right = {
+            Column(
+                modifier = modifier,
+            ) {
+                QuickControlSection()
+            }
+        },
+    )
 }
 
 @PreviewLocales
