@@ -61,7 +61,7 @@ fun GroupedEntityHeader(
 
 @Preview
 @Composable
-fun GroupedEntityHeaderLightPreview(
+private fun GroupedEntityHeaderLightPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
@@ -76,7 +76,7 @@ fun GroupedEntityHeaderLightPreview(
 
 @Preview
 @Composable
-fun GroupedEntityHeaderThermostatPreview(
+private fun GroupedEntityHeaderThermostatPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
@@ -91,7 +91,7 @@ fun GroupedEntityHeaderThermostatPreview(
 
 @Preview
 @Composable
-fun GroupedEntityHeaderSmartPlugPreview(
+private fun GroupedEntityHeaderSmartPlugPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
@@ -106,7 +106,7 @@ fun GroupedEntityHeaderSmartPlugPreview(
 
 @Preview
 @Composable
-fun GroupedEntityHeaderBlindsPreview(
+private fun GroupedEntityHeaderBlindsPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(

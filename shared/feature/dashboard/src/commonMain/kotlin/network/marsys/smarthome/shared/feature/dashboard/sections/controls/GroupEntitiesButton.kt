@@ -73,7 +73,7 @@ fun GroupEntitiesButton(
     }
 }
 
-private object GroupEntitiesButtonDefaults {
+object GroupEntitiesButtonDefaults {
     @Composable
     fun contentPadding() = PaddingValues(
         horizontal = 12.dp,

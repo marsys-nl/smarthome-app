@@ -1,6 +1,5 @@
 package network.marsys.smarthome.shared.feature.dashboard.sections
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,7 +12,7 @@ import network.marsys.smarthome.shared.feature.dashboard.sections.controls.Group
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun ColumnScope.QuickControlSection(
+fun QuickControlSection(
     modifier: Modifier = Modifier,
 ) {
     var groupByType by remember { mutableStateOf(false) }
