@@ -28,6 +28,7 @@ import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Lightbulb
+import network.marsys.smarthome.shared.library.design.icons.Plug
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
@@ -59,6 +60,7 @@ fun QuickControlSection(
 
         Lights()
         Thermostats()
+        Plugs()
     }
 }
 
@@ -235,6 +237,69 @@ private fun ColumnScope.Thermostats() {
                 .weight(1f),
             activeColors = entityCardColors,
         )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+@Suppress("LongMethod")
+private fun ColumnScope.Plugs() {
+    val groupedEntityHeaderColors = GroupedEntityHeaderDefaults.colors(
+        markerBackgroundColor = GradientTokens.Blue.Blue400.ToBlue600,
+        textColor = PaletteTokens.Blue.Blue300,
+    )
+
+    val entityCardColors = EntityCardDefaults.activeCardColors(
+        background = GradientTokens.Blue.Blue400.ToBlue600,
+        border = PaletteTokens.Blue.Blue400
+            .copy(alpha = .4f),
+    )
+
+    GroupedEntityHeader(
+        title = "Plugs",
+        count = 2,
+        colors = groupedEntityHeaderColors,
+    )
+
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement
+            .spacedBy(16.dp),
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
+    ) {
+        EntityCard(
+            title = "Office plug",
+            subtitle = "On",
+            icon = Icons.Plug,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        ) {
+            EntityCardScope.Switch(
+                checked = true,
+                onCheckedChange = {},
+            )
+        }
+
+        EntityCard(
+            title = "Smart TV",
+            subtitle = "On",
+            icon = Icons.Plug,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        ) {
+            EntityCardScope.Switch(
+                checked = true,
+                onCheckedChange = {},
+            )
+        }
     }
 }
 
