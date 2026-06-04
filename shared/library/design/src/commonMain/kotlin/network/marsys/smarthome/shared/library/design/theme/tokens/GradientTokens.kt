@@ -1,18 +1,26 @@
 package network.marsys.smarthome.shared.library.design.theme.tokens
 
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 
 @Suppress("FunctionName")
 object GradientTokens {
     object Amber {
         object Amber400 {
-            val ToEmerald400 = ToEmerald400(1f)
+            val ToEmerald400 = linearGradient(
+                from = PaletteTokens.Amber.Amber400,
+                to = PaletteTokens.Emerald.Emerald400,
+            )
 
-            fun ToEmerald400(alpha: Float) = Brush.linearGradient(
-                colors = listOf(
-                    PaletteTokens.Amber.Amber400.copy(alpha = alpha),
-                    PaletteTokens.Emerald.Emerald400.copy(alpha = alpha),
-                ),
+            val ToOrange500 = linearGradient(
+                from = PaletteTokens.Amber.Amber400,
+                to = PaletteTokens.Orange.Orange500,
+            )
+
+            fun ToEmerald400(alpha: Float) = linearGradient(
+                from = PaletteTokens.Amber.Amber400,
+                to = PaletteTokens.Emerald.Emerald400,
+                alpha = alpha,
             )
         }
     }
@@ -42,4 +50,15 @@ object GradientTokens {
             )
         }
     }
+
+    private fun linearGradient(
+        from: Color,
+        to: Color,
+        alpha: Float = 1f,
+    ) = Brush.linearGradient(
+        colors = listOf(
+            from.copy(alpha = alpha),
+            to.copy(alpha = alpha),
+        ),
+    )
 }

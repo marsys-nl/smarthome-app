@@ -3,6 +3,7 @@ package network.marsys.smarthome.shared.library.design
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -64,6 +66,7 @@ fun EntityCard(
     Card(
         modifier = modifier,
         colors = cardColors,
+        contentPadding = EntityCardDefaults.contentPadding(),
         borderWidth = 1.dp,
     ) {
         Column(
@@ -86,27 +89,44 @@ fun EntityCard(
                 topRight?.invoke(EntityCardScope)
             }
 
-            Column(
-                modifier = Modifier,
-                verticalArrangement = Arrangement
-                    .spacedBy(4.dp),
-            ) {
-                Text(
-                    text = title,
-                    lineHeight = 24.sp,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = EntityCardDefaults.titleColor(active).value,
-                )
-
-                Text(
-                    text = subtitle,
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                    color = EntityCardDefaults.subtitleColor(active).value,
-                )
-            }
+            EntityCardTitle(
+                title = title,
+                subtitle = subtitle,
+                active = active,
+            )
         }
+    }
+}
+
+@Composable
+private fun EntityCardTitle(
+    title: String,
+    subtitle: String,
+    active: Boolean,
+) {
+    Column(
+        modifier = Modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = title,
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = EntityCardDefaults.titleColor(active).value,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Text(
+            text = subtitle,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            color = EntityCardDefaults.subtitleColor(active).value,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -117,6 +137,9 @@ data class ActiveEntityCardColors(
 )
 
 object EntityCardDefaults {
+    @Composable
+    fun contentPadding() = PaddingValues(20.dp)
+
     @Composable
     fun activeCardColors(
         background: Brush = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
@@ -175,8 +198,7 @@ object EntityCardDefaults {
     fun switchColors(): SwitchColors = SwitchDefaults.colors(
         checkedTrackColor = PaletteTokens.Base.White
             .copy(alpha = .3f),
-        checkedThumbColor = PaletteTokens.Base.White
-            .copy(alpha = .8f),
+        checkedThumbColor = PaletteTokens.Base.White,
     )
 }
 
