@@ -198,8 +198,7 @@ object EntityCardDefaults {
     fun switchColors(): SwitchColors = SwitchDefaults.colors(
         checkedTrackColor = PaletteTokens.Base.White
             .copy(alpha = .3f),
-        checkedThumbColor = PaletteTokens.Base.White
-            .copy(alpha = .8f),
+        checkedThumbColor = PaletteTokens.Base.White,
     )
 }
 
