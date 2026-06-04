@@ -3,7 +3,7 @@ package network.marsys.smarthome.shared.library.design.adaptive
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -34,7 +34,7 @@ fun AdaptiveScaffold(
 
     val safeAreaModifier = remember(safeDrawingExcludingIme) {
         modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .windowInsetsPadding(safeDrawingExcludingIme)
     }
 

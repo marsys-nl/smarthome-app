@@ -158,6 +158,7 @@ private fun MainScreenNavigationItemWrapper(
     ) {
         Column(
             modifier = Modifier
+                .verticalScroll(rememberScrollState())
                 .safeContentPadding()
                 .weight(1f),
         ) {

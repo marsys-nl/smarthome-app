@@ -3,8 +3,10 @@ package network.marsys.smarthome.shared.feature.dashboard.sections
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,6 +62,7 @@ fun QuickControlSection(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 @Suppress("LongMethod")
 private fun ColumnScope.Lights() {
@@ -80,81 +83,87 @@ private fun ColumnScope.Lights() {
         colors = groupedEntityHeaderColors,
     )
 
-    LazyVerticalGrid(
-        columns = GridCells
-            .Adaptive(minSize = 150.dp),
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement
             .spacedBy(16.dp),
         verticalArrangement = Arrangement
             .spacedBy(16.dp),
     ) {
-        item {
-            EntityCard(
-                title = "Bedroom lamp",
-                subtitle = "69% brightness",
-                icon = Icons.Lightbulb,
-                active = true,
-                activeColors = entityCardColors,
-            ) {
-                EntityCardScope.Switch(
-                    checked = true,
-                    onCheckedChange = {},
-                )
-            }
-        }
-
-        item {
-            EntityCard(
-                title = "Porch lamp",
-                subtitle = "On",
-                icon = Icons.Lightbulb,
-                active = true,
-                activeColors = entityCardColors,
-            ) {
-                EntityCardScope.Switch(
-                    checked = true,
-                    onCheckedChange = {},
-                )
-            }
-        }
-
-        item {
-            EntityCard(
-                title = "Kitchen light",
-                subtitle = "55% brightness",
-                icon = Icons.Lightbulb,
-                active = true,
-                activeColors = entityCardColors,
+        EntityCard(
+            title = "Bedroom lamp",
+            subtitle = "69% brightness",
+            icon = Icons.Lightbulb,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        ) {
+            EntityCardScope.Switch(
+                checked = true,
+                onCheckedChange = {},
             )
         }
 
-        item {
-            EntityCard(
-                title = "Ceiling light",
-                subtitle = "Off",
-                icon = Icons.Lightbulb,
-                active = false,
-                activeColors = entityCardColors,
-            ) {
-                EntityCardScope.Switch(
-                    checked = false,
-                    onCheckedChange = {},
-                )
-            }
-        }
-
-        item {
-            EntityCard(
-                title = "Bathroom light",
-                subtitle = "Off",
-                icon = Icons.Lightbulb,
-                active = false,
-                activeColors = entityCardColors,
+        EntityCard(
+            title = "Porch lamp",
+            subtitle = "On",
+            icon = Icons.Lightbulb,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        ) {
+            EntityCardScope.Switch(
+                checked = true,
+                onCheckedChange = {},
             )
         }
+
+        EntityCard(
+            title = "Kitchen light",
+            subtitle = "55% brightness",
+            icon = Icons.Lightbulb,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
+
+        EntityCard(
+            title = "Ceiling light",
+            subtitle = "Off",
+            icon = Icons.Lightbulb,
+            active = false,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        ) {
+            EntityCardScope.Switch(
+                checked = false,
+                onCheckedChange = {},
+            )
+        }
+
+        EntityCard(
+            title = "Bathroom light",
+            subtitle = "Off",
+            icon = Icons.Lightbulb,
+            active = false,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 @Suppress("LongMethod")
 private fun ColumnScope.Thermostats() {
@@ -175,53 +184,57 @@ private fun ColumnScope.Thermostats() {
         colors = groupedEntityHeaderColors,
     )
 
-    LazyVerticalGrid(
-        columns = GridCells
-            .Adaptive(minSize = 150.dp),
+    FlowRow(
+        modifier = Modifier
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement
             .spacedBy(16.dp),
         verticalArrangement = Arrangement
             .spacedBy(16.dp),
     ) {
-        item {
-            EntityCard(
-                title = "Office",
-                subtitle = "18°C",
-                icon = Icons.Thermostat,
-                active = true,
-                activeColors = entityCardColors,
-            )
-        }
+        EntityCard(
+            title = "Office",
+            subtitle = "18°C",
+            icon = Icons.Thermostat,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
 
-        item {
-            EntityCard(
-                title = "Nursery",
-                subtitle = "30°C • Idle",
-                icon = Icons.Thermostat,
-                active = true,
-                activeColors = entityCardColors,
-            )
-        }
+        EntityCard(
+            title = "Nursery",
+            subtitle = "30°C • Idle",
+            icon = Icons.Thermostat,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
 
-        item {
-            EntityCard(
-                title = "Main bedroom",
-                subtitle = "18°C • Heating",
-                icon = Icons.Thermostat,
-                active = true,
-                activeColors = entityCardColors,
-            )
-        }
+        EntityCard(
+            title = "Main bedroom",
+            subtitle = "18°C • Heating",
+            icon = Icons.Thermostat,
+            active = true,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
 
-        item {
-            EntityCard(
-                title = "Floor heating",
-                subtitle = "Idle",
-                icon = Icons.Thermostat,
-                active = false,
-                activeColors = entityCardColors,
-            )
-        }
+        EntityCard(
+            title = "Floor heating",
+            subtitle = "Idle",
+            icon = Icons.Thermostat,
+            active = false,
+            modifier = Modifier
+                .widthIn(min = 150.dp)
+                .weight(1f),
+            activeColors = entityCardColors,
+        )
     }
 }
 
