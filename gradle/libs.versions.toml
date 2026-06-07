@@ -1,10 +1,10 @@
 [versions]
 # year = major, month = minor
 # major * 1000000, minor * 1000, patch * 1
-smarthome-app-code = "26001001"
-smarthome-app-name = "2026.01-SNAPSHOT"
+smarthome-app-code = "26006001"
+smarthome-app-name = "2026.06-SNAPSHOT"
 
-smarthome-domain = "2026.01-SNAPSHOT"
+smarthome-domain = "2026.06-SNAPSHOT"
 smarthome-api = "2026.03-SNAPSHOT"
 
 android-gradle-plugin = "9.2.1"
@@ -84,6 +84,7 @@ ktor-client-mock = { group = "io.ktor", name = "ktor-client-mock", version.ref =
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
 marsys-smarthome-api = { group = "network.marsys.smarthome", name = "smarthome-api", version.ref = "smarthome-api" }
+marsys-smarthome-domain = { group = "network.marsys.smarthome", name = "smarthome-domain", version.ref = "smarthome-domain" }
 
 test-balloon-core = { group = "de.infix.testBalloon", name = "testBalloon-framework-core", version.ref = "test-balloon" }
 

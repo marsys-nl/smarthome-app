@@ -40,6 +40,7 @@ fun SmartHomeTheme(
 
     CompositionLocalProvider(
         values = arrayOf(
+            LocalDarkMode provides darkMode,
             LocalThemeSelection provides theme,
         ),
     ) {
@@ -112,6 +113,10 @@ fun SmartHomeModalPreview(
             }
         }
     }
+}
+
+val LocalDarkMode = compositionLocalOf<Boolean> {
+    error("No dark mode value provided")
 }
 
 private val LocalThemeSelection = compositionLocalOf<ThemeSelection> {

@@ -29,6 +29,7 @@ kotlin {
         }
 
         commonMain.dependencies {
+            implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.design)
 
             implementation(libs.compose.foundation)
@@ -36,6 +37,8 @@ kotlin {
             implementation(libs.compose.ui.tooling.preview)
 
             implementation(libs.kotlinx.datetime)
+
+            implementation(libs.marsys.smarthome.domain)
         }
     }
 }

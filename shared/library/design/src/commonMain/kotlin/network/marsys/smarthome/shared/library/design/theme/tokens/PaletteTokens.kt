@@ -43,6 +43,18 @@ object PaletteTokens {
         val Emerald950 = Color(0xFF0D2B22)
     }
 
+    object Green {
+        val Green300 = Color(0xFF86EFAC)
+        val Green400 = Color(0xFF4ADE80)
+        val Green600 = Color(0xFF16A34A)
+    }
+
+    object Indigo {
+        val Indigo300 = Color(0xFFA5B4FC)
+        val Indigo400 = Color(0xFF818CF8)
+        val Indigo600 = Color(0xFF4F46E5)
+    }
+
     object Neutral {
         val Neutral50 = Color(0xFFFAFAFA)
         val Neutral100 = Color(0xFFF5F5F5)
@@ -59,6 +71,10 @@ object PaletteTokens {
 
     object Orange {
         val Orange500 = Color(0xFFF97316)
+    }
+
+    object Purple {
+        val Purple600 = Color(0xFF9333EA)
     }
 
     object Rose {
@@ -79,5 +95,9 @@ object PaletteTokens {
         val Slate800 = Color(0xFF1F293B)
         val Slate900 = Color(0xFF10172A)
         val Slate950 = Color(0xFF020616)
+    }
+
+    object Teal {
+        val Teal600 = Color(0xFF0D9488)
     }
 }

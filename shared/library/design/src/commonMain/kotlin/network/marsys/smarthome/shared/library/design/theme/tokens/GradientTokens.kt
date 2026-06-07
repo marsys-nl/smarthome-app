@@ -38,6 +38,33 @@ object GradientTokens {
         }
     }
 
+    object Emerald {
+        object Emerald400 {
+            val ToTeal600 = linearGradient(
+                from = PaletteTokens.Emerald.Emerald400,
+                to = PaletteTokens.Teal.Teal600,
+            )
+        }
+    }
+
+    object Green {
+        object Green400 {
+            val ToEmerald600 = linearGradient(
+                from = PaletteTokens.Green.Green400,
+                to = PaletteTokens.Emerald.Emerald600,
+            )
+        }
+    }
+
+    object Indigo {
+        object Indigo400 {
+            val ToPurple600 = linearGradient(
+                from = PaletteTokens.Indigo.Indigo400,
+                to = PaletteTokens.Purple.Purple600,
+            )
+        }
+    }
+
     object Rose {
         object Rose400 {
             val ToRose600 = ToRose600(1f)
