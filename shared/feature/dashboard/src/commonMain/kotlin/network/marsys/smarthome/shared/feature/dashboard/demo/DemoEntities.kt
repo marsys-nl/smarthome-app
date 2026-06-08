@@ -21,21 +21,21 @@ internal val DemoEntities: List<Entity<*>> = listOf(
         state = Light.State.Known(
             isOn = true,
             brightness = 80.percent,
-        )
+        ),
     ),
     Light(
         identifier = EntityIdentifier("light.kitchen-light"),
         label = "Kitchen light",
         state = Light.State.Known(
             isOn = true,
-        )
+        ),
     ),
     Light(
         identifier = EntityIdentifier("light.ceiling-light"),
         label = "Ceiling light",
         state = Light.State.Known(
             isOn = false,
-        )
+        ),
     ),
     // Thermostats
     Thermostat(

@@ -135,8 +135,8 @@ private fun QuickControlSectionEntities(
                 title = entity.label,
                 subtitle = entity.description,
                 icon = entity.icon(),
-                active = entity is Entity.Activatable
-                    && entity.active,
+                active = entity is Entity.Activatable &&
+                    entity.active,
                 modifier = Modifier
                     .widthIn(min = 150.dp)
                     .weight(1f),
@@ -144,8 +144,8 @@ private fun QuickControlSectionEntities(
             ) {
                 if (entity is Entity.Toggleable) {
                     Switch(
-                        checked = entity is Entity.Activatable
-                            && entity.active,
+                        checked = entity is Entity.Activatable &&
+                            entity.active,
                         onCheckedChange = {
                             // NO-OP for now, implement toggle logic
                         },
