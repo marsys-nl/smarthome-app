@@ -22,7 +22,7 @@ androidx-window = "1.5.1"
 compose-unstyled = "2.5.0"
 
 detekt = "2.0.0-alpha.3"
-detekt-compose-rules = "0.5.9"
+detekt-compose-rules = "0.6.0"
 
 jetbrains-compose = "1.11.1"
 
