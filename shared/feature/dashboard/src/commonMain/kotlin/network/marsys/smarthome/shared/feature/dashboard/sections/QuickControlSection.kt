@@ -85,7 +85,7 @@ fun QuickControlSection(
 
 @Immutable
 data class EntityList(
-    val entities: List<Entity>,
+    val entities: List<Entity<*>>,
 )
 
 @Composable
@@ -135,17 +135,28 @@ private fun QuickControlSectionEntities(
                 title = entity.label,
                 subtitle = entity.description,
                 icon = entity.icon(),
-                active = true,
+                active = entity is Entity.Activatable
+                    && entity.active,
                 modifier = Modifier
                     .widthIn(min = 150.dp)
                     .weight(1f),
                 activeColors = entity.cardColors(),
-            )
+            ) {
+                if (entity is Entity.Toggleable) {
+                    Switch(
+                        checked = entity is Entity.Activatable
+                            && entity.active,
+                        onCheckedChange = {
+                            // NO-OP for now, implement toggle logic
+                        },
+                    )
+                }
+            }
         }
     }
 }
 
-private fun Entity.groupTitle(): String = when (this) {
+private fun Entity<*>.groupTitle(): String = when (this) {
     is Light -> "Lights"
     is Thermostat -> "Thermostats"
     is SmartPlug -> "Plugs"
@@ -157,7 +168,7 @@ private fun Entity.groupTitle(): String = when (this) {
     else -> "Devices"
 }
 
-private fun Entity.icon(): ImageVector = when (this) {
+private fun Entity<*>.icon(): ImageVector = when (this) {
     is Light -> Icons.Lightbulb
     is Thermostat -> Icons.Thermostat
     is SmartPlug -> Icons.Plug
@@ -168,7 +179,7 @@ private fun Entity.icon(): ImageVector = when (this) {
 
 @Composable
 @Suppress("CyclomaticComplexMethod")
-private fun Entity.headerColors(): GroupedEntityHeaderColors = when (this) {
+private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
     is Light -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Amber.Amber400.ToOrange500,
         textColor = when (LocalDarkMode.current) {
@@ -221,7 +232,7 @@ private fun Entity.headerColors(): GroupedEntityHeaderColors = when (this) {
 }
 
 @Composable
-private fun Entity.cardColors(): ActiveEntityCardColors = when (this) {
+private fun Entity<*>.cardColors(): ActiveEntityCardColors = when (this) {
     is Light -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Amber.Amber400.ToOrange500,
         border = PaletteTokens.Amber.Amber400
