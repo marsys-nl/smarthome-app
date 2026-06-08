@@ -12,6 +12,8 @@ internal interface ColorSchemeTokens {
     val BackgroundTertiaryDisabled: Color
     val BackgroundBrandPrimary: Color
     val BackgroundBrandSecondary: Color
+    val BackgroundError: Color get() =
+        PaletteTokens.Red.Red500.copy(alpha = .15f)
     val BackgroundModal: Color
     val BackgroundDimmed: Color get() =
         PaletteTokens.Base.White.copy(alpha = .2f)
@@ -22,6 +24,8 @@ internal interface ColorSchemeTokens {
     val ForegroundPrimary: Color
     val ForegroundPrimaryAlternative: Color
     val ForegroundBrandPrimary: Color
+    val ForegroundError: Color get() =
+        PaletteTokens.Red.Red400
     val ForegroundDisabled: Color
     val GradientBrandPrimaryToSecondary: Brush get() =
         GradientTokens.Amber.Amber400.ToEmerald400
@@ -31,5 +35,7 @@ internal interface ColorSchemeTokens {
     val TextSecondary: Color
     val TextSecondaryAlternative: Color
     val TextBrandOnBrand: Color
+    val TextError: Color get() =
+        PaletteTokens.Red.Red400
     val TextDisabled: Color
 }

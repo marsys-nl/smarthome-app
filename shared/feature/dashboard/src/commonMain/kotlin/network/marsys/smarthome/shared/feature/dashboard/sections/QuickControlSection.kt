@@ -33,13 +33,16 @@ import network.marsys.smarthome.shared.feature.dashboard.sections.controls.Group
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderDefaults
-import network.marsys.smarthome.shared.library.design.ActiveEntityCardColors
-import network.marsys.smarthome.shared.library.design.EntityCard
-import network.marsys.smarthome.shared.library.design.EntityCardDefaults
+import network.marsys.smarthome.shared.library.design.component.entity.ActiveEntityCardColors
+import network.marsys.smarthome.shared.library.design.component.entity.EntityCard
+import network.marsys.smarthome.shared.library.design.component.entity.EntityCardDefaults
 import network.marsys.smarthome.shared.library.design.LocalDarkMode
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.component.entity.EntityStateLabel
+import network.marsys.smarthome.shared.library.design.component.entity.EntityStateLabelDefaults
 import network.marsys.smarthome.shared.library.design.icons.Blinds
+import network.marsys.smarthome.shared.library.design.icons.CircleQuestionMark
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Lightbulb
@@ -142,13 +145,21 @@ private fun QuickControlSectionEntities(
                     .weight(1f),
                 activeColors = entity.cardColors(),
             ) {
-                if (entity is Entity.Toggleable) {
+                if (entity is Entity.Toggleable && entity.state is Entity.State.Known) {
                     Switch(
                         checked = entity is Entity.Activatable &&
                             entity.active,
                         onCheckedChange = {
                             // NO-OP for now, implement toggle logic
                         },
+                    )
+                }
+
+                if (entity.state is Entity.State.Unknown) {
+                    EntityStateLabel(
+                        icon = Icons.CircleQuestionMark,
+                        label = "Unknown",
+                        colors = EntityStateLabelDefaults.unknownColors,
                     )
                 }
             }

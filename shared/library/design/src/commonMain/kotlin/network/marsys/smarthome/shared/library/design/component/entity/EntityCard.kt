@@ -1,4 +1,4 @@
-package network.marsys.smarthome.shared.library.design
+package network.marsys.smarthome.shared.library.design.component.entity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -31,10 +34,12 @@ import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.SwitchColors
 import network.marsys.smarthome.shared.library.design.component.SwitchDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.icons.CircleQuestionMark
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Lightbulb
 import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
+import network.marsys.smarthome.shared.library.design.icons.WifiOff
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
@@ -334,6 +339,52 @@ private fun LightOffEntityCardPreview(
             EntityCardScope.Switch(
                 checked = false,
                 onCheckedChange = {},
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun StateUnavailableEntityCardPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        EntityCard(
+            title = "Kitchen light",
+            subtitle = "55% brightness",
+            icon = Icons.Lightbulb,
+            active = false,
+        ) {
+            EntityStateLabel(
+                icon = Icons.WifiOff,
+                label = "Unavailable",
+                colors = EntityStateLabelDefaults.unavailableColors,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun StateUnknownEntityCardPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        EntityCard(
+            title = "Kitchen light",
+            subtitle = "—",
+            icon = Icons.Lightbulb,
+            active = false,
+        ) {
+            EntityStateLabel(
+                icon = Icons.CircleQuestionMark,
+                label = "Unknown",
+                colors = EntityStateLabelDefaults.unknownColors,
             )
         }
     }

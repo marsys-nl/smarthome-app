@@ -71,9 +71,7 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     SmartPlug(
         identifier = EntityIdentifier("plug.smart-tv"),
         label = "Smart TV",
-        state = SmartPlug.State.Known(
-            isOn = true,
-        ),
+        state = SmartPlug.State.Unknown,
     ),
     // Blinds
     Blind(
