@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -41,9 +39,7 @@ import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
-import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
-import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.smarthome.shared.library.screens.SmartHomeScreen
@@ -214,18 +210,9 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
 private fun MainScreenDashboardScreenView(
     onChangeAppearanceClick: () -> Unit,
     modifier: Modifier = Modifier,
-    applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
     onboardingRepository: OnboardingRepository = koinInject(),
 ) {
-    val demoMode by applicationConfigurationRepository.isDemoMode
-        .collectAsStateWithLifecycle(initialValue = false)
-
     DashboardScreenView(
-        name = if (demoMode) {
-            stringResource(SmartHomeRes.string.demo_user)
-        } else {
-            "Niels"
-        },
         onChangeAppearanceClick = onChangeAppearanceClick,
         modifier = modifier,
     ) {

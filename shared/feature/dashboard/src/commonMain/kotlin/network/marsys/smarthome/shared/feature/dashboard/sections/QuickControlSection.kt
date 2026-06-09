@@ -8,10 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,11 +49,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun QuickControlSection(
+    groupEntitiesByType: Boolean,
+    onToggleGroupEntitiesClick: () -> Unit,
     modifier: Modifier = Modifier,
     entityList: EntityList = EntityList(entities = DemoEntities),
 ) {
-    var groupByType by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement
@@ -67,15 +63,13 @@ fun QuickControlSection(
             title = stringResource(Res.string.quick_control_section_title),
             right = {
                 GroupEntitiesButton(
-                    groupByType = groupByType,
-                    onClick = {
-                        groupByType = !groupByType
-                    },
+                    groupByType = groupEntitiesByType,
+                    onClick = onToggleGroupEntitiesClick,
                 )
             },
         )
 
-        if (groupByType) {
+        if (groupEntitiesByType) {
             QuickControlSectionGroupedEntities(entityList = entityList)
         } else {
             QuickControlSectionEntities(entityList = entityList)
@@ -280,6 +274,24 @@ private fun QuickControlSectionPreview(
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        QuickControlSection()
+        QuickControlSection(
+            groupEntitiesByType = false,
+            onToggleGroupEntitiesClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun GroupedQuickControlSectionPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        QuickControlSection(
+            groupEntitiesByType = true,
+            onToggleGroupEntitiesClick = {},
+        )
     }
 }
