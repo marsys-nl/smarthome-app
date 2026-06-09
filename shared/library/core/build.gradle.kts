@@ -1,5 +1,7 @@
 plugins {
     alias(libs.plugins.android.multiplatform.library)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.marsys.smarthome.detekt)
 }
@@ -17,4 +19,13 @@ kotlin {
 
     iosArm64()
     iosSimulatorArm64()
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.androidx.lifecycle.runtime)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.runtime)
+            implementation(libs.kotlinx.coroutines.core)
+        }
+    }
 }
