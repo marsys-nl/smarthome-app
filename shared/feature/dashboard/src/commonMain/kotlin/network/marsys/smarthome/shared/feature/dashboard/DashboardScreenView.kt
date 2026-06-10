@@ -10,7 +10,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
 import network.marsys.smarthome.shared.feature.dashboard.entity.Action
+import network.marsys.smarthome.shared.feature.dashboard.entity.Effect
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
+import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -34,14 +36,16 @@ fun DashboardScreenView(
     content: @Composable () -> Unit,
 ) {
     val state = viewModel.produceStateWithLifecycle()
+    viewModel.collectEffectsWithLifecycle { effect ->
+        when (effect) {
+            is Effect.OpenAppearanceModal -> onChangeAppearanceClick()
+        }
+    }
 
     DashboardScreenViewScreen(
         name = state.user,
         groupEntitiesByType = state.quickControlState.groupedEntitiesByType,
-        onChangeAppearanceClick = onChangeAppearanceClick,
-        onToggleGroupEntitiesClick = {
-            viewModel.accept(Action.ToggleGroupEntitiesByType)
-        },
+        onAction = viewModel.accept,
         modifier = modifier,
         instant = instant,
         content = content,
@@ -52,8 +56,7 @@ fun DashboardScreenView(
 private fun DashboardScreenViewScreen(
     name: String,
     groupEntitiesByType: Boolean,
-    onChangeAppearanceClick: () -> Unit,
-    onToggleGroupEntitiesClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
     instant: Instant = Clock.System.now(),
     content: @Composable () -> Unit,
@@ -65,7 +68,7 @@ private fun DashboardScreenViewScreen(
         DashboardHeader(
             instant = instant,
             name = name,
-            onChangeAppearanceClick = onChangeAppearanceClick,
+            onAction = onAction,
         )
 
         AdaptiveScaffold(
@@ -77,14 +80,14 @@ private fun DashboardScreenViewScreen(
             singlePane = {
                 SinglePaneDashboard(
                     groupEntitiesByType = groupEntitiesByType,
-                    onToggleGroupEntitiesClick = onToggleGroupEntitiesClick,
+                    onAction = onAction,
                     content = content,
                 )
             },
             splitPane = {
                 SplitPaneDashboard(
                     groupEntitiesByType = groupEntitiesByType,
-                    onToggleGroupEntitiesClick = onToggleGroupEntitiesClick,
+                    onAction = onAction,
                     content = content,
                 )
             },
@@ -95,7 +98,7 @@ private fun DashboardScreenViewScreen(
 @Composable
 private fun SinglePaneDashboard(
     groupEntitiesByType: Boolean,
-    onToggleGroupEntitiesClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -105,7 +108,7 @@ private fun SinglePaneDashboard(
     ) {
         QuickControlSection(
             groupEntitiesByType = groupEntitiesByType,
-            onToggleGroupEntitiesClick = onToggleGroupEntitiesClick,
+            onAction = onAction,
         )
 
         content.invoke()
@@ -115,7 +118,7 @@ private fun SinglePaneDashboard(
 @Composable
 private fun SplitPaneDashboard(
     groupEntitiesByType: Boolean,
-    onToggleGroupEntitiesClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -130,7 +133,7 @@ private fun SplitPaneDashboard(
             ) {
                 QuickControlSection(
                     groupEntitiesByType = groupEntitiesByType,
-                    onToggleGroupEntitiesClick = onToggleGroupEntitiesClick,
+                    onAction = onAction,
                 )
             }
         },
@@ -150,8 +153,7 @@ private fun DashboardScreenViewPreview(
         DashboardScreenViewScreen(
             name = "John",
             groupEntitiesByType = false,
-            onChangeAppearanceClick = {},
-            onToggleGroupEntitiesClick = {},
+            onAction = {},
         ) {
             // No-op for now
         }

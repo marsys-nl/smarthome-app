@@ -17,5 +17,10 @@ interface State {
 }
 
 sealed class Action(val key: String) {
+    data object ChangeAppAppearance : Action("ChangeAppAppearance")
     data object ToggleGroupEntitiesByType : Action("ToggleGroupEntitiesByType")
+}
+
+sealed interface Effect {
+    data object OpenAppearanceModal : Effect
 }
