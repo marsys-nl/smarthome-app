@@ -18,6 +18,11 @@ interface State {
 
 sealed class Action(val key: String) {
     data object ChangeAppAppearance : Action("ChangeAppAppearance")
+
+    data class ToggleEntityState(
+        val entity: EntityIdentifier,
+    ) : Action("ToggleEntityState[$entity]")
+
     data object ToggleGroupEntitiesByType : Action("ToggleGroupEntitiesByType")
 }
 

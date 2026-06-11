@@ -8,7 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
+import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
 import network.marsys.smarthome.shared.feature.dashboard.entity.Action
 import network.marsys.smarthome.shared.feature.dashboard.entity.Effect
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
@@ -42,8 +45,9 @@ fun DashboardScreenView(
         }
     }
 
-    DashboardScreenViewScreen(
+    DashboardScreenViewContent(
         name = state.user,
+        entities = state.quickControlState.entities,
         groupEntitiesByType = state.quickControlState.groupedEntitiesByType,
         onAction = viewModel.accept,
         modifier = modifier,
@@ -53,8 +57,10 @@ fun DashboardScreenView(
 }
 
 @Composable
-private fun DashboardScreenViewScreen(
+private fun DashboardScreenViewContent(
     name: String,
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
@@ -79,6 +85,7 @@ private fun DashboardScreenViewScreen(
             ),
             singlePane = {
                 SinglePaneDashboard(
+                    entities = entities,
                     groupEntitiesByType = groupEntitiesByType,
                     onAction = onAction,
                     content = content,
@@ -86,6 +93,7 @@ private fun DashboardScreenViewScreen(
             },
             splitPane = {
                 SplitPaneDashboard(
+                    entities = entities,
                     groupEntitiesByType = groupEntitiesByType,
                     onAction = onAction,
                     content = content,
@@ -97,6 +105,8 @@ private fun DashboardScreenViewScreen(
 
 @Composable
 private fun SinglePaneDashboard(
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
@@ -107,6 +117,7 @@ private fun SinglePaneDashboard(
             .fillMaxWidth(),
     ) {
         QuickControlSection(
+            entities = entities,
             groupEntitiesByType = groupEntitiesByType,
             onAction = onAction,
         )
@@ -117,6 +128,8 @@ private fun SinglePaneDashboard(
 
 @Composable
 private fun SplitPaneDashboard(
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
@@ -132,6 +145,7 @@ private fun SplitPaneDashboard(
                     .fillMaxWidth(),
             ) {
                 QuickControlSection(
+                    entities = entities,
                     groupEntitiesByType = groupEntitiesByType,
                     onAction = onAction,
                 )
@@ -150,8 +164,10 @@ private fun DashboardScreenViewPreview(
     SmartHomeTheme(
         theme = theme,
     ) {
-        DashboardScreenViewScreen(
+        DashboardScreenViewContent(
             name = "John",
+            entities = DemoEntities
+                .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
         ) {
