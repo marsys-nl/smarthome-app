@@ -28,5 +28,7 @@ interface Entity<S : Entity.State> {
         val active: Boolean
     }
 
-    interface Toggleable
+    interface Toggleable {
+        fun toggle(): Entity<*>
+    }
 }

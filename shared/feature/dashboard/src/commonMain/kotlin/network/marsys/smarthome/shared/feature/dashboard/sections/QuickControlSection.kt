@@ -2,17 +2,23 @@ package network.marsys.smarthome.shared.feature.dashboard.sections
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -47,13 +53,15 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import org.jetbrains.compose.resources.stringResource
+import kotlin.reflect.KClass
 
 @Composable
 fun QuickControlSection(
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
     onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
-    entityList: EntityList = EntityList(entities = DemoEntities),
 ) {
     Column(
         modifier = modifier,
@@ -73,51 +81,67 @@ fun QuickControlSection(
         )
 
         if (groupEntitiesByType) {
-            QuickControlSectionGroupedEntities(entityList = entityList)
+            QuickControlSectionGroupedEntities(
+                entities = entities,
+                onAction = onAction,
+            )
         } else {
-            QuickControlSectionEntities(entityList = entityList)
+            val identifiers by remember(entities) {
+                derivedStateOf { entities.keys.toImmutableList() }
+            }
+
+            QuickControlSectionEntities(
+                entities = entities,
+                identifiers = identifiers,
+                onAction = onAction,
+            )
         }
     }
 }
 
-@Immutable
-data class EntityList(
-    val entities: List<Entity<*>>,
-)
-
 @Composable
 private fun QuickControlSectionGroupedEntities(
-    entityList: EntityList,
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
+    onAction: (Action) -> Unit,
 ) {
-    entityList.entities
-        .groupBy { it::class }
-        .map { EntityList(it.value) }
-        .forEach {
-            QuickControlSectionEntityGroup(entityList = it)
+    val groupedIds: Map<KClass<out Entity<*>>, ImmutableList<EntityIdentifier>> by
+        remember(entities) {
+            derivedStateOf {
+                entities.entries
+                    .groupBy(
+                        keySelector = { it.value::class },
+                        valueTransform = { it.key },
+                    )
+                    .mapValues { (_, identifiers) ->
+                        identifiers.toImmutableList()
+                    }
+            }
         }
-}
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun QuickControlSectionEntityGroup(
-    entityList: EntityList,
-) {
-    val representative = entityList.entities.first()
+    groupedIds.forEach { (type, identifiers) ->
+        key(type) {
+            GroupedEntityHeader(
+                title = type.groupTitle(),
+                count = identifiers.size,
+                colors = type.headerColors(),
+            )
 
-    GroupedEntityHeader(
-        title = representative.groupTitle(),
-        count = entityList.entities.size,
-        colors = representative.headerColors(),
-    )
-
-    QuickControlSectionEntities(
-        entityList = entityList,
-    )
+            QuickControlSectionEntities(
+                entities = entities,
+                identifiers = identifiers,
+                onAction = onAction,
+            )
+        }
+    }
 }
 
 @Composable
 private fun QuickControlSectionEntities(
-    entityList: EntityList,
+    @Suppress("UnstableCollections")
+    entities: Map<EntityIdentifier, Entity<*>>,
+    identifiers: ImmutableList<EntityIdentifier>,
+    onAction: (Action) -> Unit,
 ) {
     FlowRow(
         modifier = Modifier
@@ -127,57 +151,76 @@ private fun QuickControlSectionEntities(
         verticalArrangement = Arrangement
             .spacedBy(16.dp),
     ) {
-        entityList.entities.forEach { entity ->
-            EntityCard(
-                title = entity.label,
-                subtitle = entity.description,
-                icon = entity.icon(),
-                active = entity is Entity.Activatable &&
-                    entity.active,
-                modifier = Modifier
-                    .widthIn(min = 150.dp)
-                    .weight(1f),
-                activeColors = entity.cardColors(),
-            ) {
-                if (entity is Entity.Toggleable) {
-                    Switch(
-                        checked = entity is Entity.Activatable &&
-                            entity.active,
-                        onCheckedChange = {
-                            // NO-OP for now, implement toggle logic
-                        },
-                    )
-                }
+        identifiers.forEach { identifier ->
+            key(identifier) {
+                val entity = entities.getValue(identifier)
+
+                QuickControlSectionEntityCard(
+                    entity = entity,
+                    onAction = onAction,
+                )
             }
         }
     }
 }
 
-private fun Entity<*>.groupTitle(): String = when (this) {
-    is Light -> "Lights"
-    is Thermostat -> "Thermostats"
-    is SmartPlug -> "Plugs"
-    is Blind -> "Blinds"
-    is Fan -> "Fans"
-    is Speaker -> "Speakers"
-    is Camera -> "Cameras"
-    is Lock -> "Locks"
+@Composable
+private fun FlowRowScope.QuickControlSectionEntityCard(
+    entity: Entity<*>,
+    onAction: (Action) -> Unit,
+) {
+    val type = entity::class
+    val icon = remember(type) { type.icon() }
+    val colors = type.cardColors()
+
+    val active = entity is Entity.Activatable && entity.active
+
+    EntityCard(
+        title = entity.label,
+        subtitle = entity.description,
+        icon = icon,
+        active = active,
+        modifier = Modifier
+            .widthIn(min = 150.dp)
+            .weight(1f),
+        activeColors = colors,
+    ) {
+        if (entity is Entity.Toggleable) {
+            Switch(
+                checked = active,
+                onCheckedChange = {
+                    onAction.invoke(Action.ToggleEntityState(entity = entity.identifier))
+                },
+            )
+        }
+    }
+}
+
+private fun KClass<out Entity<*>>.groupTitle(): String = when (this) {
+    Light::class -> "Lights"
+    Thermostat::class -> "Thermostats"
+    SmartPlug::class -> "Plugs"
+    Blind::class -> "Blinds"
+    Fan::class -> "Fans"
+    Speaker::class -> "Speakers"
+    Camera::class -> "Cameras"
+    Lock::class -> "Locks"
     else -> "Devices"
 }
 
-private fun Entity<*>.icon(): ImageVector = when (this) {
-    is Light -> Icons.Lightbulb
-    is Thermostat -> Icons.Thermostat
-    is SmartPlug -> Icons.Plug
-    is Blind -> Icons.Blinds
-    is Camera -> Icons.Monitor
+private fun KClass<out Entity<*>>.icon(): ImageVector = when (this) {
+    Light::class -> Icons.Lightbulb
+    Thermostat::class -> Icons.Thermostat
+    SmartPlug::class -> Icons.Plug
+    Blind::class -> Icons.Blinds
+    Camera::class -> Icons.Monitor
     else -> Icons.Component
 }
 
 @Composable
 @Suppress("CyclomaticComplexMethod")
-private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
-    is Light -> GroupedEntityHeaderDefaults.colors(
+private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = when (this) {
+    Light::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Amber.Amber400.ToOrange500,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Amber.Amber300
@@ -185,7 +228,7 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
         },
     )
 
-    is Thermostat -> GroupedEntityHeaderDefaults.colors(
+    Thermostat::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Rose.Rose400.ToRose600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Rose.Rose300
@@ -193,7 +236,7 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
         },
     )
 
-    is SmartPlug -> GroupedEntityHeaderDefaults.colors(
+    SmartPlug::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Blue.Blue400.ToBlue600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Blue.Blue300
@@ -201,7 +244,7 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
         },
     )
 
-    is Blind, is Speaker -> GroupedEntityHeaderDefaults.colors(
+    Blind::class, Speaker::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Indigo.Indigo400.ToPurple600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Indigo.Indigo300
@@ -209,7 +252,7 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
         },
     )
 
-    is Lock, is Camera -> GroupedEntityHeaderDefaults.colors(
+    Lock::class, Camera::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Emerald.Emerald400.ToTeal600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Emerald.Emerald300
@@ -217,7 +260,7 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
         },
     )
 
-    is Fan -> GroupedEntityHeaderDefaults.colors(
+    Fan::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Green.Green400.ToEmerald600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Green.Green300
@@ -229,38 +272,38 @@ private fun Entity<*>.headerColors(): GroupedEntityHeaderColors = when (this) {
 }
 
 @Composable
-private fun Entity<*>.cardColors(): ActiveEntityCardColors = when (this) {
-    is Light -> EntityCardDefaults.activeCardColors(
+private fun KClass<out Entity<*>>.cardColors(): ActiveEntityCardColors = when (this) {
+    Light::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Amber.Amber400.ToOrange500,
         border = PaletteTokens.Amber.Amber400
             .copy(alpha = .4f),
     )
 
-    is Thermostat -> EntityCardDefaults.activeCardColors(
+    Thermostat::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Rose.Rose400.ToRose600,
         border = PaletteTokens.Rose.Rose400
             .copy(alpha = .4f),
     )
 
-    is SmartPlug -> EntityCardDefaults.activeCardColors(
+    SmartPlug::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Blue.Blue400.ToBlue600,
         border = PaletteTokens.Blue.Blue400
             .copy(alpha = .4f),
     )
 
-    is Blind, is Speaker -> EntityCardDefaults.activeCardColors(
+    Blind::class, Speaker::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Indigo.Indigo400.ToPurple600,
         border = PaletteTokens.Indigo.Indigo400
             .copy(alpha = .4f),
     )
 
-    is Lock, is Camera -> EntityCardDefaults.activeCardColors(
+    Lock::class, Camera::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Emerald.Emerald400.ToTeal600,
         border = PaletteTokens.Emerald.Emerald400
             .copy(alpha = .4f),
     )
 
-    is Fan -> EntityCardDefaults.activeCardColors(
+    Fan::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Green.Green400.ToEmerald600,
         border = PaletteTokens.Green.Green400
             .copy(alpha = .4f),
@@ -278,6 +321,8 @@ private fun QuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
+            entities = DemoEntities
+                .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
         )
@@ -293,6 +338,7 @@ private fun GroupedQuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
+            entities = emptyMap<EntityIdentifier, Entity<*>>(),
             groupEntitiesByType = true,
             onAction = {},
         )

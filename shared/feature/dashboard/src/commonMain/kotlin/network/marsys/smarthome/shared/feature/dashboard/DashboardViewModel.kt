@@ -1,13 +1,16 @@
 package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
 import network.marsys.smarthome.shared.feature.dashboard.entity.Action
 import network.marsys.smarthome.shared.feature.dashboard.entity.Effect
 import network.marsys.smarthome.shared.feature.dashboard.entity.State
@@ -28,7 +31,14 @@ class DashboardViewModel(
     DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableState(),
         producer = { state, actions, emitter ->
-            launchUserNameMutations(state, applicationConfigurationRepository)
+            launchEntityMutations(
+                state = state,
+            )
+
+            launchUserNameMutations(
+                state = state,
+                applicationConfigurationRepository = applicationConfigurationRepository,
+            )
 
             actions.handle(
                 scope = this,
@@ -39,6 +49,13 @@ class DashboardViewModel(
                         emitter.emit(Effect.OpenAppearanceModal)
                     }
 
+                    is Action.ToggleEntityState -> action.flow.collect {
+                        val entity = state.quickControlState.entities[action.entity] as? Entity.Toggleable
+                            ?: return@collect
+
+                        state.quickControlState.entities[action.entity] = entity.toggle()
+                    }
+
                     Action.ToggleGroupEntitiesByType -> action.flow.collect {
                         state.quickControlState.groupedEntitiesByType = !state.quickControlState.groupedEntitiesByType
                     }
@@ -46,6 +63,17 @@ class DashboardViewModel(
             }
         },
     )
+
+private fun CoroutineScope.launchEntityMutations(
+    state: MutableState,
+) {
+    state.quickControlState.entities
+        .putAll(DemoEntities.associateBy { it.identifier })
+
+    launch {
+        // No-op for now; this will listen to SSE updates for entities.
+    }
+}
 
 private fun CoroutineScope.launchUserNameMutations(
     state: MutableState,
@@ -69,6 +97,6 @@ private class MutableState(
 }
 
 private class MutableQuickControlState : State.QuickControlState {
-    override var entities: MutableMap<EntityIdentifier, Entity<*>> by mutableStateOf(mutableMapOf())
+    override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
     override var groupedEntitiesByType: Boolean by mutableStateOf(false)
 }
