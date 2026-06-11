@@ -33,6 +33,7 @@ kotlin {
             implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.navigation)
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
 

@@ -12,8 +12,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
 import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
-import network.marsys.smarthome.shared.feature.dashboard.entity.Action
-import network.marsys.smarthome.shared.feature.dashboard.entity.Effect
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
@@ -26,13 +24,14 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
+import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
 import kotlin.time.Instant
 
 @Composable
 fun DashboardScreenView(
-    onChangeAppearanceClick: () -> Unit,
+    onNavigate: (NavigationDestination) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = koinViewModel(),
     instant: Instant = Clock.System.now(),
@@ -41,7 +40,7 @@ fun DashboardScreenView(
     val state = viewModel.produceStateWithLifecycle()
     viewModel.collectEffectsWithLifecycle { effect ->
         when (effect) {
-            is Effect.OpenAppearanceModal -> onChangeAppearanceClick()
+            is DashboardScreenEffect.Navigate -> onNavigate(effect.target)
         }
     }
 
@@ -62,7 +61,7 @@ private fun DashboardScreenViewContent(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     instant: Instant = Clock.System.now(),
     content: @Composable () -> Unit,
@@ -108,7 +107,7 @@ private fun SinglePaneDashboard(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
@@ -131,7 +130,7 @@ private fun SplitPaneDashboard(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {

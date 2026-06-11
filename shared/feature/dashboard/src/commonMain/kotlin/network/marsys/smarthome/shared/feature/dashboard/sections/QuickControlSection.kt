@@ -1,5 +1,6 @@
 package network.marsys.smarthome.shared.feature.dashboard.sections
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -31,7 +32,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
-import network.marsys.smarthome.shared.feature.dashboard.entity.Action
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
@@ -60,7 +61,7 @@ fun QuickControlSection(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
     groupEntitiesByType: Boolean,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -74,7 +75,7 @@ fun QuickControlSection(
                 GroupEntitiesButton(
                     groupByType = groupEntitiesByType,
                     onClick = {
-                        onAction.invoke(Action.ToggleGroupEntitiesByType)
+                        onAction.invoke(DashboardScreenAction.ToggleGroupEntitiesByType)
                     },
                 )
             },
@@ -103,7 +104,7 @@ fun QuickControlSection(
 private fun QuickControlSectionGroupedEntities(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
 ) {
     val groupedIds: Map<KClass<out Entity<*>>, ImmutableList<EntityIdentifier>> by
         remember(entities) {
@@ -141,7 +142,7 @@ private fun QuickControlSectionEntities(
     @Suppress("UnstableCollections")
     entities: Map<EntityIdentifier, Entity<*>>,
     identifiers: ImmutableList<EntityIdentifier>,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
 ) {
     FlowRow(
         modifier = Modifier
@@ -167,13 +168,26 @@ private fun QuickControlSectionEntities(
 @Composable
 private fun FlowRowScope.QuickControlSectionEntityCard(
     entity: Entity<*>,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
 ) {
     val type = entity::class
     val icon = remember(type) { type.icon() }
     val colors = type.cardColors()
 
     val active = entity is Entity.Activatable && entity.active
+
+    val clickModifier = remember(entity.identifier) {
+        Modifier.clickable(
+            interactionSource = null,
+            indication = null,
+        ) {
+            onAction.invoke(
+                DashboardScreenAction.OpenEntityDetailModal(
+                    entity = entity.identifier,
+                ),
+            )
+        }
+    }
 
     EntityCard(
         title = entity.label,
@@ -182,14 +196,15 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
         active = active,
         modifier = Modifier
             .widthIn(min = 150.dp)
-            .weight(1f),
+            .weight(1f)
+            .then(clickModifier),
         activeColors = colors,
     ) {
         if (entity is Entity.Toggleable) {
             Switch(
                 checked = active,
                 onCheckedChange = {
-                    onAction.invoke(Action.ToggleEntityState(entity = entity.identifier))
+                    onAction.invoke(DashboardScreenAction.ToggleEntityState(entity = entity.identifier))
                 },
             )
         }
