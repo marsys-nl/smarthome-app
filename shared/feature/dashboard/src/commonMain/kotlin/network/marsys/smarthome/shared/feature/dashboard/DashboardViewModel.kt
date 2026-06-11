@@ -9,24 +9,25 @@ import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.dashboard.entity.Action
+import network.marsys.smarthome.shared.feature.dashboard.entity.Effect
 import network.marsys.smarthome.shared.feature.dashboard.entity.State
-import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
+import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
-import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
+import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import org.jetbrains.compose.resources.getString
 
-internal typealias DashboardStateHolder = SuspendingActionStateMutator<Action, State>
+internal typealias DashboardStateHolder = SuspendingActionStateEffectMutator<Action, State, Effect>
 
 class DashboardViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
-    DashboardStateHolder by coroutineScope.suspendingActionStateMutator(
+    DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableState(),
-        producer = { state, actions ->
+        producer = { state, actions, emitter ->
             launchUserNameMutations(state, applicationConfigurationRepository)
 
             actions.handle(
@@ -34,6 +35,10 @@ class DashboardViewModel(
                 keySelector = Action::key,
             ) {
                 when (val action = type()) {
+                    Action.ChangeAppAppearance -> action.flow.collect {
+                        emitter.emit(Effect.OpenAppearanceModal)
+                    }
+
                     Action.ToggleGroupEntitiesByType -> action.flow.collect {
                         state.quickControlState.groupedEntitiesByType = !state.quickControlState.groupedEntitiesByType
                     }

@@ -1,10 +1,8 @@
 package network.marsys.smarthome.shared.library.core.coroutines
 
-import androidx.compose.ui.graphics.drawscope.DrawTransform
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +14,18 @@ import kotlinx.coroutines.launch
 
 typealias SuspendingStateProducer<S> = suspend CoroutineScope.(S) -> Unit
 typealias SuspendingActionStateProducer<A, S> = suspend CoroutineScope.(S, Flow<A>) -> Unit
+typealias SuspendingActionStateEffectProducer<A, S, E> = suspend CoroutineScope.(S, Flow<A>, EffectEmitter<E>) -> Unit
+
+fun interface EffectEmitter<in E : Any> {
+    suspend fun emit(effect: E)
+}
 
 interface StateMutator<out S : Any> {
     val state: S
+}
+
+interface EffectMutator<out E : Any> {
+    val effect: Flow<E>
 }
 
 interface ActionStateMutator<in A : Any, out S : Any> : StateMutator<S> {
@@ -97,7 +104,7 @@ fun <A : Any, S : Any> CoroutineScope.suspendingActionStateMutator(
         producer = producer,
     )
 
-private class DelegatedSuspendingActionStateMutator<A : Any, S : Any>(
+private open class DelegatedSuspendingActionStateMutator<A : Any, S : Any>(
     coroutineScope: CoroutineScope,
     state: S,
     started: SharingStarted = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
@@ -115,6 +122,63 @@ private class DelegatedSuspendingActionStateMutator<A : Any, S : Any>(
             actions.receiveAsFlow(),
         )
     }
+
+    override val state: S
+        get() = mutator.state
+
+    override val accept: (A) -> Unit = { action ->
+        coroutineScope.launch {
+            actions.send(action)
+        }
+    }
+
+    override suspend fun collect() =
+        mutator.collect()
+}
+
+interface SuspendingActionStateEffectMutator<in A : Any, out S : Any, out E : Any> :
+    SuspendingActionStateMutator<A, S>,
+    EffectMutator<E>
+
+fun <A : Any, S : Any, E : Any> CoroutineScope.suspendingActionStateEffectMutator(
+    state: S,
+    started: SharingStarted = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
+    producer: SuspendingActionStateEffectProducer<A, S, E>,
+): SuspendingActionStateEffectMutator<A, S, E> =
+    DelegatedSuspendingActionStateEffectMutator(
+        coroutineScope = this,
+        state = state,
+        started = started,
+        producer = producer,
+    )
+
+private class DelegatedSuspendingActionStateEffectMutator<A : Any, S : Any, E : Any>(
+    coroutineScope: CoroutineScope,
+    state: S,
+    started: SharingStarted = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
+    producer: SuspendingActionStateEffectProducer<A, S, E>,
+) : SuspendingActionStateEffectMutator<A, S, E> {
+    private val actions = Channel<A>()
+    private val effects = Channel<E>()
+
+    private val emitter = EffectEmitter<E> { effect ->
+        effects.send(effect)
+    }
+
+    private val mutator = coroutineScope.suspendingStateMutator(
+        state = state,
+        started = started,
+    ) { state ->
+        producer.invoke(
+            this,
+            state,
+            actions.receiveAsFlow(),
+            emitter,
+        )
+    }
+
+    override val effect: Flow<E>
+        get() = effects.receiveAsFlow()
 
     override val state: S
         get() = mutator.state

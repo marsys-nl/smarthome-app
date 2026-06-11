@@ -25,6 +25,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
+import network.marsys.smarthome.shared.feature.dashboard.entity.Action
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
@@ -50,7 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun QuickControlSection(
     groupEntitiesByType: Boolean,
-    onToggleGroupEntitiesClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
     entityList: EntityList = EntityList(entities = DemoEntities),
 ) {
@@ -64,7 +65,9 @@ fun QuickControlSection(
             right = {
                 GroupEntitiesButton(
                     groupByType = groupEntitiesByType,
-                    onClick = onToggleGroupEntitiesClick,
+                    onClick = {
+                        onAction.invoke(Action.ToggleGroupEntitiesByType)
+                    },
                 )
             },
         )
@@ -276,7 +279,7 @@ private fun QuickControlSectionPreview(
     ) {
         QuickControlSection(
             groupEntitiesByType = false,
-            onToggleGroupEntitiesClick = {},
+            onAction = {},
         )
     }
 }
@@ -291,7 +294,7 @@ private fun GroupedQuickControlSectionPreview(
     ) {
         QuickControlSection(
             groupEntitiesByType = true,
-            onToggleGroupEntitiesClick = {},
+            onAction = {},
         )
     }
 }

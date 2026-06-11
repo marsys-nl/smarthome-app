@@ -34,6 +34,7 @@ import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_evening
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_morning
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_night
+import network.marsys.smarthome.shared.feature.dashboard.entity.Action
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -57,7 +58,7 @@ private const val DASHBOARD_BUTTON_ALPHA_DISABLED = 0.5f
 internal fun DashboardHeader(
     instant: Instant,
     name: String,
-    onChangeAppearanceClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -70,8 +71,9 @@ internal fun DashboardHeader(
             instant = instant,
             name = name,
         )
+
         DashboardHeaderQuickActions(
-            onChangeAppearanceClick = onChangeAppearanceClick,
+            onAction = onAction,
         )
     }
 }
@@ -130,7 +132,7 @@ private fun determinePersonalizedGreeting(
 
 @Composable
 private fun DashboardHeaderQuickActions(
-    onChangeAppearanceClick: () -> Unit,
+    onAction: (Action) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -142,7 +144,9 @@ private fun DashboardHeaderQuickActions(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         DashboardHeaderQuickActionButton(
-            onClick = onChangeAppearanceClick,
+            onClick = {
+                onAction.invoke(Action.ChangeAppAppearance)
+            },
             icon = Icons.SunMoon,
         )
 
@@ -219,7 +223,7 @@ private fun DashboardScreenViewMorningPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T08:00:00Z"),
-            onChangeAppearanceClick = {},
+            onAction = {},
         )
     }
 }
@@ -235,7 +239,7 @@ private fun DashboardScreenViewAfternoonPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T15:00:00Z"),
-            onChangeAppearanceClick = {},
+            onAction = {},
         )
     }
 }
@@ -251,7 +255,7 @@ private fun DashboardScreenViewEveningPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T19:00:00Z"),
-            onChangeAppearanceClick = {},
+            onAction = {},
         )
     }
 }
@@ -267,7 +271,7 @@ private fun DashboardScreenViewNightPreview(
         DashboardHeader(
             name = "John",
             instant = Instant.parse("2026-05-01T23:00:00Z"),
-            onChangeAppearanceClick = {},
+            onAction = {},
         )
     }
 }
