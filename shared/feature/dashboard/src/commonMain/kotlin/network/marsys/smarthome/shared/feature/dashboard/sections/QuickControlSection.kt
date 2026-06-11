@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.FlowRowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -84,8 +86,8 @@ fun QuickControlSection(
                 onAction = onAction,
             )
         } else {
-            val identifiers = remember(entities.keys) {
-                entities.keys.toImmutableList()
+            val identifiers by remember(entities) {
+                derivedStateOf { entities.keys.toImmutableList() }
             }
 
             QuickControlSectionEntities(
@@ -103,16 +105,18 @@ private fun QuickControlSectionGroupedEntities(
     entities: Map<EntityIdentifier, Entity<*>>,
     onAction: (Action) -> Unit,
 ) {
-    val groupedIds: Map<KClass<out Entity<*>>, ImmutableList<EntityIdentifier>> =
-        remember(entities.keys) {
-            entities.entries
-                .groupBy(
-                    keySelector = { it.value::class },
-                    valueTransform = { it.key },
-                )
-                .mapValues { (_, identifiers) ->
-                    identifiers.toImmutableList()
-                }
+    val groupedIds: Map<KClass<out Entity<*>>, ImmutableList<EntityIdentifier>> by
+        remember(entities) {
+            derivedStateOf {
+                entities.entries
+                    .groupBy(
+                        keySelector = { it.value::class },
+                        valueTransform = { it.key },
+                    )
+                    .mapValues { (_, identifiers) ->
+                        identifiers.toImmutableList()
+                    }
+            }
         }
 
     groupedIds.forEach { (type, identifiers) ->
