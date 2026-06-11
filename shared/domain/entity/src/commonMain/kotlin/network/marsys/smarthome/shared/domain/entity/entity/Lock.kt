@@ -10,6 +10,14 @@ data class Lock(
     override val active: Boolean
         get() = state is State.Known && state.isOn
 
+    override fun toggle(): Lock = when (val current = state) {
+        is State.Known -> copy(
+            state = current.copy(isOn = !current.isOn),
+        )
+
+        is State.Unknown -> this
+    }
+
     sealed interface State : Entity.State {
         data class Known(
             val isOn: Boolean,
