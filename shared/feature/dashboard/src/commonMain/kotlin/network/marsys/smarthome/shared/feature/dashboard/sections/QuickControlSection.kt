@@ -29,10 +29,10 @@ import network.marsys.smarthome.shared.domain.entity.entity.Lock
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
-import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors

@@ -20,7 +20,8 @@ import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import org.jetbrains.compose.resources.getString
 
-internal typealias DashboardStateHolder = SuspendingActionStateEffectMutator<DashboardScreenAction, DashboardScreenState, DashboardScreenEffect>
+internal typealias DashboardStateHolder =
+    SuspendingActionStateEffectMutator<DashboardScreenAction, DashboardScreenState, DashboardScreenEffect>
 
 class DashboardViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
@@ -45,7 +46,9 @@ class DashboardViewModel(
                 when (val action = type()) {
                     DashboardScreenAction.ChangeAppAppearance -> action.flow.collect {
                         emitter.emit(
-                            effect = DashboardScreenEffect.Navigate(target = NavigationDestination.ChangeAppAppearanceModal),
+                            effect = DashboardScreenEffect.Navigate(
+                                target = NavigationDestination.ChangeAppAppearanceModal,
+                            ),
                         )
                     }
 
