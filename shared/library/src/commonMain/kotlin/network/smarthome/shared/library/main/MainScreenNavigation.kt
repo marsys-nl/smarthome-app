@@ -34,6 +34,7 @@ import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
+import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
@@ -53,6 +54,9 @@ private val config = SavedStateConfiguration {
             subclass(SmartHomeScreen.Rooms::class, SmartHomeScreen.Rooms.serializer())
             subclass(SmartHomeScreen.Scenes::class, SmartHomeScreen.Scenes.serializer())
             subclass(SmartHomeScreen.Profile::class, SmartHomeScreen.Profile.serializer())
+
+            subclass(SmartHomeScreen.AppAppearance::class, SmartHomeScreen.AppAppearance.serializer())
+            subclass(SmartHomeScreen.EntityDetails::class, SmartHomeScreen.EntityDetails.serializer())
         }
     }
 }
@@ -81,8 +85,14 @@ internal fun MainScreenNavigation(
                     backStack = backStack,
                 ) {
                     MainScreenDashboardScreenView(
-                        onChangeAppearanceClick = {
-                            backStack += SmartHomeScreen.AppAppearance
+                        onNavigate = { target ->
+                            backStack += when (target) {
+                                is NavigationDestination.ChangeAppAppearanceModal ->
+                                    SmartHomeScreen.AppAppearance
+
+                                is NavigationDestination.EntityDetailModal ->
+                                    SmartHomeScreen.EntityDetails(target.entity)
+                            }
                         },
                     )
                 }
@@ -131,6 +141,12 @@ internal fun MainScreenNavigation(
                         }
                     },
                 )
+            }
+
+            entry<SmartHomeScreen.EntityDetails>(
+                metadata = ModalSceneStrategy.modal(),
+            ) {
+                Text(text = "Entity details for ${it.entity}")
             }
         },
     )
@@ -208,12 +224,12 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
 
 @Composable
 private fun MainScreenDashboardScreenView(
-    onChangeAppearanceClick: () -> Unit,
+    onNavigate: (NavigationDestination) -> Unit,
     modifier: Modifier = Modifier,
     onboardingRepository: OnboardingRepository = koinInject(),
 ) {
     DashboardScreenView(
-        onChangeAppearanceClick = onChangeAppearanceClick,
+        onNavigate = onNavigate,
         modifier = modifier,
     ) {
         val coroutineScope = rememberCoroutineScope()

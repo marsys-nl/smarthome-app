@@ -28,13 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_afternoon
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_appendix
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_evening
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_morning
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.dashboard_greeting_night
-import network.marsys.smarthome.shared.feature.dashboard.entity.Action
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -58,7 +58,7 @@ private const val DASHBOARD_BUTTON_ALPHA_DISABLED = 0.5f
 internal fun DashboardHeader(
     instant: Instant,
     name: String,
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -132,7 +132,7 @@ private fun determinePersonalizedGreeting(
 
 @Composable
 private fun DashboardHeaderQuickActions(
-    onAction: (Action) -> Unit,
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -145,7 +145,7 @@ private fun DashboardHeaderQuickActions(
     ) {
         DashboardHeaderQuickActionButton(
             onClick = {
-                onAction.invoke(Action.ChangeAppAppearance)
+                onAction.invoke(DashboardScreenAction.ChangeAppAppearance)
             },
             icon = Icons.SunMoon,
         )

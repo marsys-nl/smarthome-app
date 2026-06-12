@@ -50,6 +50,7 @@ include(
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",
+    ":shared:library:navigation",
     ":shared:library:network",
     ":shared:library:resources",
     ":shared:library:store",

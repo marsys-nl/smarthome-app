@@ -1,7 +1,9 @@
 package network.smarthome.shared.library.screens
 
 import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import network.marsys.smarthome.domain.EntityIdentifier
 
 @Serializable
 internal sealed interface SmartHomeScreen : NavKey {
@@ -21,4 +23,9 @@ internal sealed interface SmartHomeScreen : NavKey {
 
     @Serializable
     data object AppAppearance : Modal
+
+    @Serializable
+    data class EntityDetails(
+        val entity: @Contextual EntityIdentifier,
+    ) : Modal
 }

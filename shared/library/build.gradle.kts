@@ -41,6 +41,7 @@ kotlin {
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.navigation)
             implementation(projects.shared.library.network)
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)
@@ -59,6 +60,8 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.kotlinx.serialization.json)
+
+            implementation(libs.marsys.smarthome.domain)
         }
     }
 }
