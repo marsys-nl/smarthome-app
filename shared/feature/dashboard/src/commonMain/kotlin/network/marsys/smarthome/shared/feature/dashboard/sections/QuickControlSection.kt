@@ -53,6 +53,16 @@ import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.resources.SmartHomeRes
+import network.marsys.smarthome.shared.library.resources.entity_category_blinds
+import network.marsys.smarthome.shared.library.resources.entity_category_cameras
+import network.marsys.smarthome.shared.library.resources.entity_category_fans
+import network.marsys.smarthome.shared.library.resources.entity_category_lights
+import network.marsys.smarthome.shared.library.resources.entity_category_locks
+import network.marsys.smarthome.shared.library.resources.entity_category_other
+import network.marsys.smarthome.shared.library.resources.entity_category_smartplugs
+import network.marsys.smarthome.shared.library.resources.entity_category_speakers
+import network.marsys.smarthome.shared.library.resources.entity_category_thermostats
 import org.jetbrains.compose.resources.stringResource
 import kotlin.reflect.KClass
 
@@ -211,17 +221,21 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
     }
 }
 
-private fun KClass<out Entity<*>>.groupTitle(): String = when (this) {
-    Light::class -> "Lights"
-    Thermostat::class -> "Thermostats"
-    SmartPlug::class -> "Plugs"
-    Blind::class -> "Blinds"
-    Fan::class -> "Fans"
-    Speaker::class -> "Speakers"
-    Camera::class -> "Cameras"
-    Lock::class -> "Locks"
-    else -> "Devices"
-}
+@Composable
+private fun KClass<out Entity<*>>.groupTitle(): String =
+    stringResource(
+        resource = when (this) {
+            Blind::class -> SmartHomeRes.string.entity_category_blinds
+            Camera::class -> SmartHomeRes.string.entity_category_cameras
+            Fan::class -> SmartHomeRes.string.entity_category_fans
+            Light::class -> SmartHomeRes.string.entity_category_lights
+            Lock::class -> SmartHomeRes.string.entity_category_locks
+            SmartPlug::class -> SmartHomeRes.string.entity_category_smartplugs
+            Speaker::class -> SmartHomeRes.string.entity_category_speakers
+            Thermostat::class -> SmartHomeRes.string.entity_category_thermostats
+            else -> SmartHomeRes.string.entity_category_other
+        },
+    )
 
 private fun KClass<out Entity<*>>.icon(): ImageVector = when (this) {
     Light::class -> Icons.Lightbulb

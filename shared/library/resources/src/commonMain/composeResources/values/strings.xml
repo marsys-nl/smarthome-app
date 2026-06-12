@@ -13,4 +13,14 @@
     <string name="bottom_navigation_item_profile">Profile</string>
 
     <string name="demo_user">Demo user</string>
+
+    <string name="entity_category_blinds">Blinds</string>
+    <string name="entity_category_cameras">Cameras</string>
+    <string name="entity_category_fans">Fans</string>
+    <string name="entity_category_lights">Lights</string>
+    <string name="entity_category_locks">Locks</string>
+    <string name="entity_category_smartplugs">Plugs</string>
+    <string name="entity_category_speakers">Speakers</string>
+    <string name="entity_category_thermostats">Thermostats</string>
+    <string name="entity_category_other">Devices</string>
 </resources>
