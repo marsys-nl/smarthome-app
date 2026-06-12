@@ -13,6 +13,56 @@ import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 
+val DemoEntityTranslations = mapOf(
+    "light.bedroom-lamp" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "light.kitchen-light" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "light.ceiling-light" to mapOf(
+        "en" to "Ceiling hallway",
+        "nl" to "Plafond hal",
+    ),
+    "thermostat.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+    "thermostat.main-bedroom" to mapOf(
+        "en" to "Main bedroom",
+        "nl" to "Hoofdslaapkamer",
+    ),
+    "plug.office-plug" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+    "plug.smart-tv" to mapOf(
+        "en" to "Smart TV",
+    ),
+    "blind.living-room" to mapOf(
+        "en" to "Living room",
+        "nl" to "Woonkamer",
+    ),
+    "fan.bedroom" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "speaker.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "camera.front-door" to mapOf(
+        "en" to "Front door",
+        "nl" to "Voordeur",
+    ),
+    "lock.front-door" to mapOf(
+        "en" to "Front door",
+        "nl" to "Voordeur",
+    ),
+)
+
 internal val DemoEntities: List<Entity<*>> = listOf(
     // Lights
     Light(
