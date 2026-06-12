@@ -23,4 +23,6 @@
     <string name="entity_category_speakers">Speakers</string>
     <string name="entity_category_thermostats">Thermostats</string>
     <string name="entity_category_other">Devices</string>
+
+    <string name="unknown_entity">Unknown device</string>
 </resources>

@@ -22,4 +22,6 @@
     <string name="entity_category_speakers">Luidsprekers</string>
     <string name="entity_category_thermostats">Thermostaten</string>
     <string name="entity_category_other">Apparaten</string>
+
+    <string name="unknown_entity">Onbekend apparaat</string>
 </resources>
