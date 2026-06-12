@@ -25,7 +25,7 @@ import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Layers
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
 fun GroupEntitiesButton(

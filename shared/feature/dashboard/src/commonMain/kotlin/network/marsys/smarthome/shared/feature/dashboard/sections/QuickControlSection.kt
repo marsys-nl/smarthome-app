@@ -63,7 +63,7 @@ import network.marsys.smarthome.shared.library.resources.entity_category_other
 import network.marsys.smarthome.shared.library.resources.entity_category_smartplugs
 import network.marsys.smarthome.shared.library.resources.entity_category_speakers
 import network.marsys.smarthome.shared.library.resources.entity_category_thermostats
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import kotlin.reflect.KClass
 
 @Composable
@@ -200,7 +200,7 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
     }
 
     EntityCard(
-        title = entity.label,
+        title = stringResource(entity.identifier),
         subtitle = entity.description,
         icon = icon,
         active = active,

@@ -37,7 +37,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.logo
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 private val OnboardingBackgroundColor = Color(color = 0xFFF1BF42)
 private val OnboardingContentColor = PaletteTokens.Slate.Slate800

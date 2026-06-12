@@ -145,9 +145,7 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     Speaker(
         identifier = EntityIdentifier("speaker.kitchen"),
         label = "Kitchen speaker",
-        state = Speaker.State.Known(
-            isOn = true,
-        ),
+        state = Speaker.State.Unknown,
     ),
     // Cameras
     Camera(

@@ -49,7 +49,7 @@ import network.marsys.smarthome.shared.library.resources.app_appearance_mode_lig
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_light_title
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_description
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_title
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
 fun AppAppearanceModalContent(

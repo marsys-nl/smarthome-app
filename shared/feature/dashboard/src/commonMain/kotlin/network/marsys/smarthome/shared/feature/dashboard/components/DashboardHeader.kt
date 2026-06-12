@@ -48,7 +48,7 @@ import network.marsys.smarthome.shared.library.design.icons.SunMoon
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import kotlin.time.Instant
 
 private const val DASHBOARD_BUTTON_ALPHA_ENABLED = 1f

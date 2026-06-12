@@ -44,7 +44,7 @@ import network.marsys.smarthome.shared.library.store.AppearancePreferencesReposi
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.smarthome.shared.library.screens.SmartHomeScreen
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import org.koin.compose.koinInject
 
 private val config = SavedStateConfiguration {

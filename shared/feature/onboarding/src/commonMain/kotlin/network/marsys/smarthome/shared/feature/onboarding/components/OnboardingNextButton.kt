@@ -32,7 +32,7 @@ import network.marsys.smarthome.shared.library.design.icons.ArrowRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
 fun OnboardingNextButton(

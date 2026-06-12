@@ -46,7 +46,7 @@ import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import kotlin.random.Random
 
 private val BrandPrimaryToSecondaryGradient

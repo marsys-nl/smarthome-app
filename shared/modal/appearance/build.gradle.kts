@@ -30,6 +30,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.i18n)
             implementation(projects.shared.library.resources)
 
             implementation(libs.compose.foundation)
