@@ -53,6 +53,7 @@ import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_category_blinds
 import network.marsys.smarthome.shared.library.resources.entity_category_cameras
@@ -63,7 +64,6 @@ import network.marsys.smarthome.shared.library.resources.entity_category_other
 import network.marsys.smarthome.shared.library.resources.entity_category_smartplugs
 import network.marsys.smarthome.shared.library.resources.entity_category_speakers
 import network.marsys.smarthome.shared.library.resources.entity_category_thermostats
-import network.marsys.smarthome.shared.library.i18n.stringResource
 import kotlin.reflect.KClass
 
 @Composable

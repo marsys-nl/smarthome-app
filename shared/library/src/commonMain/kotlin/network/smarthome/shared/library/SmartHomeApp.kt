@@ -69,8 +69,6 @@ private val smartHomeApplicationModule = module {
 fun SmartHomeApp(
     applicationModule: Module,
 ) {
-
-
     KoinApplication(
         configuration = koinConfiguration {
             modules(

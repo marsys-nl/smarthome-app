@@ -34,6 +34,7 @@ import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
@@ -44,7 +45,6 @@ import network.marsys.smarthome.shared.library.store.AppearancePreferencesReposi
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.smarthome.shared.library.screens.SmartHomeScreen
-import network.marsys.smarthome.shared.library.i18n.stringResource
 import org.koin.compose.koinInject
 
 private val config = SavedStateConfiguration {

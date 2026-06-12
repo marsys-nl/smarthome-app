@@ -57,6 +57,7 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_dark_description
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_dark_title
@@ -64,7 +65,6 @@ import network.marsys.smarthome.shared.library.resources.app_appearance_mode_lig
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_light_title
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_description
 import network.marsys.smarthome.shared.library.resources.app_appearance_mode_system_title
-import network.marsys.smarthome.shared.library.i18n.stringResource
 
 private val BrandPrimaryToSecondaryGradient
     @Composable
