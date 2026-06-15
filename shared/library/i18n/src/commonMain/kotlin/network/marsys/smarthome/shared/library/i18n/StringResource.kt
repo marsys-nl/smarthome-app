@@ -5,12 +5,19 @@ import androidx.compose.ui.platform.LocalLocale
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.unknown_entity
+import org.jetbrains.compose.resources.PluralStringResource
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.pluralStringResource as composePluralStringResource
 import org.jetbrains.compose.resources.stringResource as composeStringResource
 
 private val STRING_FORMAT_REGEX = Regex("""%(\d+)\$[ds]""")
 private fun String.replaceWithArgs(args: List<String>) = STRING_FORMAT_REGEX.replace(this) { matchResult ->
     args[matchResult.groupValues[1].toInt() - 1]
+}
+
+@Composable
+fun pluralStringResource(resource: PluralStringResource, quantity: Int): String {
+    return composePluralStringResource(resource, quantity, quantity)
 }
 
 @Composable

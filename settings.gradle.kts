@@ -58,4 +58,5 @@ include(
     ":shared:library:store",
     ":shared:library:store:datastore",
     ":shared:modal:appearance",
+    ":shared:modal:entity",
 )

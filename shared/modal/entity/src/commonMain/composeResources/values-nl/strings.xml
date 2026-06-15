@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="entity_capability_on_off">Aan/uit</string>
+
+    <string name="entity_state_on">Aan</string>
+    <string name="entity_state_off">Uit</string>
+
+    <string name="entity_state_updated">%1$s geleden geüpdatet</string>
+    <string name="entity_state_update_now">Zojuist geüpdatet</string>
+    <string name="entity_state_update_max">99+ dagen geleden geüpdatet</string>
+
+    <plurals name="entity_state_updated_seconds">
+        <item quantity="one">%1$d seconde</item>
+        <item quantity="other">%1$d seconden</item>
+    </plurals>
+    <plurals name="entity_state_updated_minutes">
+        <item quantity="one">%1$d minuut</item>
+        <item quantity="other">%1$d minuten</item>
+    </plurals>
+    <plurals name="entity_state_updated_hours">
+        <item quantity="one">%1$d uur</item>
+        <item quantity="other">%1$d uren</item>
+    </plurals>
+    <plurals name="entity_state_updated_days">
+        <item quantity="one">%1$d dag</item>
+        <item quantity="other">%1$d dagen</item>
+    </plurals>
+</resources>
