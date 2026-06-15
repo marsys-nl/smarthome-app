@@ -41,6 +41,8 @@ kotlin {
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.i18n)
+            implementation(projects.shared.library.i18n.memory)
             implementation(projects.shared.library.navigation)
             implementation(projects.shared.library.network)
             implementation(projects.shared.library.resources)
@@ -48,6 +50,7 @@ kotlin {
             implementation(projects.shared.library.store.datastore)
             implementation(projects.shared.modal.appearance)
 
+            implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.androidx.lifecycle.runtime)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.navigation.ui)

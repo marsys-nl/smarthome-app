@@ -4,11 +4,11 @@ plugins {
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.marsys.smarthome.detekt)
-    alias(libs.plugins.test.balloon)
 }
 
-group = "network.marsys.smarthome.shared.modal.appearance"
+group = "network.marsys.smarthome.shared.library.i18n"
 version = libs.versions.smarthome.app.name.get()
+
 kotlin {
     jvmToolchain(libs.versions.jvm.toolchain.get().toInt())
 
@@ -23,19 +23,14 @@ kotlin {
     iosSimulatorArm64()
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling)
-            implementation(libs.compose.ui.tooling.preview)
-        }
-
         commonMain.dependencies {
-            implementation(projects.shared.library.design)
-            implementation(projects.shared.library.i18n)
             implementation(projects.shared.library.resources)
 
+            implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.resources)
-            implementation(libs.compose.ui.tooling.preview)
+
+            implementation(libs.marsys.smarthome.domain)
         }
     }
 }

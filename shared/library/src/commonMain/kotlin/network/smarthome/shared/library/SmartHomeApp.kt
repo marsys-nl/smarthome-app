@@ -1,20 +1,30 @@
 package network.smarthome.shared.library
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
+import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntityTranslations
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
+import network.marsys.smarthome.shared.library.i18n.TranslationCache
+import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationCache
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
+import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.library.store.datastore.SmartHomeStoreRepository
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.binds
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
@@ -36,23 +46,54 @@ private val viewModelModule = module {
     }
 }
 
+private val smartHomeApplicationModule = module {
+    single {
+        SmartHomeStoreRepository(
+            dataStore = get(),
+        )
+    } binds arrayOf(
+        AppearancePreferencesRepository::class,
+        ApplicationConfigurationRepository::class,
+        OnboardingRepository::class,
+    )
+
+    single<TranslationCache> {
+        InMemoryTranslationCache(
+            translations = DemoEntityTranslations,
+        )
+    }
+}
+
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SmartHomeApp(
-    vararg applicationModules: Module,
+    applicationModule: Module,
 ) {
     KoinApplication(
         configuration = koinConfiguration {
-            modules(*applicationModules, networkModule, connectionDataModule, viewModelModule)
+            modules(
+                applicationModule,
+                connectionDataModule,
+                networkModule,
+                smartHomeApplicationModule,
+                viewModelModule,
+            )
         },
     ) {
+        val translationCache = koinInject<TranslationCache>()
+
         val appearancePreferencesRepository = koinInject<AppearancePreferencesRepository>()
         val theme by appearancePreferencesRepository.theme
             .collectAsStateWithLifecycle(ThemeSelection.SystemDefault)
 
-        SmartHomeTheme(
-            theme = theme,
+        CompositionLocalProvider(
+            LocalTranslationCache provides translationCache,
         ) {
-            SmartHomeNavigation()
+            SmartHomeTheme(
+                theme = theme,
+            ) {
+                SmartHomeNavigation()
+            }
         }
     }
 }

@@ -12,4 +12,16 @@
     <string name="bottom_navigation_item_profile">Profiel</string>
 
     <string name="demo_user">Demo gebruiker</string>
+
+    <string name="entity_category_blinds">Jaloezieen</string>
+    <string name="entity_category_cameras">Camera's</string>
+    <string name="entity_category_fans">Ventilatoren</string>
+    <string name="entity_category_lights">Lampen</string>
+    <string name="entity_category_locks">Sloten</string>
+    <string name="entity_category_smartplugs">Stekkers</string>
+    <string name="entity_category_speakers">Luidsprekers</string>
+    <string name="entity_category_thermostats">Thermostaten</string>
+    <string name="entity_category_other">Apparaten</string>
+
+    <string name="unknown_entity">Onbekend apparaat</string>
 </resources>

@@ -97,7 +97,7 @@ import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-import org.jetbrains.compose.resources.stringResource
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 private val BrandPrimaryToSecondaryGradient
     @Composable
