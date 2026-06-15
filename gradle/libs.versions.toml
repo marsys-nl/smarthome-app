@@ -28,7 +28,7 @@ jetbrains-compose = "1.11.1"
 
 jvm-toolchain = "21"
 
-koin = "4.2.1"
+koin = "4.2.2"
 
 kotlin = "2.4.0"
 kotlin-expect = "0.1"
