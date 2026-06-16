@@ -317,7 +317,7 @@ private fun entityUpdatedLabel(elapsed: Duration): String = when {
 
 @PreviewScreenSizes
 @Composable
-private fun LoadingEntityDetailModalContentPreview(
+private fun LoadingEntityDetailModalPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeModalPreview(
@@ -333,7 +333,7 @@ private fun LoadingEntityDetailModalContentPreview(
 
 @PreviewScreenSizes
 @Composable
-private fun LoadedLightEntityDetailModalContentPreview(
+private fun LoadedLightEntityDetailModalPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeModalPreview(
@@ -351,7 +351,7 @@ private fun LoadedLightEntityDetailModalContentPreview(
 
 @PreviewScreenSizes
 @Composable
-private fun LoadedThermostatEntityDetailModalContentPreview(
+private fun LoadedThermostatEntityDetailModalPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeModalPreview(
