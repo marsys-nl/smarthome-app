@@ -16,9 +16,8 @@ private fun String.replaceWithArgs(args: List<String>) = STRING_FORMAT_REGEX.rep
 }
 
 @Composable
-fun pluralStringResource(resource: PluralStringResource, quantity: Int): String {
-    return composePluralStringResource(resource, quantity, quantity)
-}
+fun pluralStringResource(resource: PluralStringResource, quantity: Int): String =
+    composePluralStringResource(resource, quantity, quantity)
 
 @Composable
 fun stringResource(identifier: EntityIdentifier): String {

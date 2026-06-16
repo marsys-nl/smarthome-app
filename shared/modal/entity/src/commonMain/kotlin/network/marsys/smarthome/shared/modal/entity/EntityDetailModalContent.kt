@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -108,46 +107,53 @@ fun EntityDetailModalContent(
             }
         }
 
+        EntityDetailOnOffSection()
+    }
+}
+
+@Composable
+private fun EntityDetailOnOffSection(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                shape = CardDefaults.shape(),
+                color = SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryDisabled],
+            )
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(Res.string.entity_capability_on_off),
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W500,
+        )
+
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(
-                    shape = CardDefaults.shape(),
-                    color = SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryDisabled],
-                )
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            horizontalArrangement = Arrangement
+                .spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(Res.string.entity_capability_on_off),
-                lineHeight = 24.sp,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.W500,
+                text = stringResource(Res.string.entity_state_on),
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
             )
 
-            Row(
-                horizontalArrangement = Arrangement
-                    .spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = stringResource(Res.string.entity_state_on),
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                )
-
-                Switch(
-                    checked = true,
-                    onCheckedChange = {},
-                )
-            }
+            Switch(
+                checked = true,
+                onCheckedChange = {},
+            )
         }
     }
 }
 
 @Composable
-fun CloseModalButton(
+private fun CloseModalButton(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -173,40 +179,47 @@ fun CloseModalButton(
     }
 }
 
+private const val MINIMUM_SECONDS = 10
+private const val MAXIMUM_DAYS = 99
+
 @Composable
-private fun entityUpdatedLabel(elapsed: Duration): String {
-    if (elapsed.inWholeSeconds < 10)
-        return stringResource(Res.string.entity_state_update_now)
-
-    if (elapsed.inWholeDays > 99)
-        return stringResource(Res.string.entity_state_update_max)
-
-    val duration = when {
-        elapsed.inWholeSeconds < 60 -> pluralStringResource(
-            resource = Res.plurals.entity_state_updated_seconds,
-            quantity = elapsed.inWholeSeconds.toInt()
-        )
-
-        elapsed.inWholeMinutes < 60 -> pluralStringResource(
-            resource = Res.plurals.entity_state_updated_minutes,
-            quantity = elapsed.inWholeMinutes.toInt()
-        )
-
-        elapsed.inWholeHours < 24 -> pluralStringResource(
-            resource = Res.plurals.entity_state_updated_hours,
-            quantity = elapsed.inWholeHours.toInt()
-        )
-
-        else -> pluralStringResource(
-            resource = Res.plurals.entity_state_updated_days,
-            quantity = elapsed.inWholeDays.toInt()
-        )
+private fun entityUpdatedLabel(elapsed: Duration): String = when {
+    elapsed.inWholeSeconds < MINIMUM_SECONDS -> {
+        stringResource(Res.string.entity_state_update_now)
     }
 
-    return stringResource(
-        resource = Res.string.entity_state_updated,
-        formatArgs = arrayOf(duration),
-    )
+    elapsed.inWholeDays > MAXIMUM_DAYS -> {
+        stringResource(Res.string.entity_state_update_max)
+    }
+
+    else -> {
+        val duration = when {
+            elapsed.inWholeSeconds < 60 -> pluralStringResource(
+                resource = Res.plurals.entity_state_updated_seconds,
+                quantity = elapsed.inWholeSeconds.toInt(),
+            )
+
+            elapsed.inWholeMinutes < 60 -> pluralStringResource(
+                resource = Res.plurals.entity_state_updated_minutes,
+                quantity = elapsed.inWholeMinutes.toInt(),
+            )
+
+            elapsed.inWholeHours < 24 -> pluralStringResource(
+                resource = Res.plurals.entity_state_updated_hours,
+                quantity = elapsed.inWholeHours.toInt(),
+            )
+
+            else -> pluralStringResource(
+                resource = Res.plurals.entity_state_updated_days,
+                quantity = elapsed.inWholeDays.toInt(),
+            )
+        }
+
+        stringResource(
+            resource = Res.string.entity_state_updated,
+            formatArgs = arrayOf(duration),
+        )
+    }
 }
 
 @PreviewScreenSizes
