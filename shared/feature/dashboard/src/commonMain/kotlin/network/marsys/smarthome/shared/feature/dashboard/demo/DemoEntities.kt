@@ -67,7 +67,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Lights
     Light(
         identifier = EntityIdentifier("light.bedroom-lamp"),
-        label = "Bedroom lamp",
         state = Light.State.Known(
             isOn = true,
             brightness = 80.percent,
@@ -75,14 +74,12 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     ),
     Light(
         identifier = EntityIdentifier("light.kitchen-light"),
-        label = "Kitchen light",
         state = Light.State.Known(
             isOn = true,
         ),
     ),
     Light(
         identifier = EntityIdentifier("light.ceiling-light"),
-        label = "Ceiling light",
         state = Light.State.Known(
             isOn = false,
         ),
@@ -90,7 +87,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Thermostats
     Thermostat(
         identifier = EntityIdentifier("thermostat.office"),
-        label = "Office",
         state = Thermostat.State.Known(
             mode = Thermostat.ThermostatMode.Off,
             temperatures = Thermostat.Temperatures(
@@ -101,7 +97,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     ),
     Thermostat(
         identifier = EntityIdentifier("thermostat.main-bedroom"),
-        label = "Main bedroom",
         state = Thermostat.State.Known(
             mode = Thermostat.ThermostatMode.Auto,
             temperatures = Thermostat.Temperatures(
@@ -113,14 +108,12 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Plugs
     SmartPlug(
         identifier = EntityIdentifier("plug.office-plug"),
-        label = "Office plug",
         state = SmartPlug.State.Known(
             isOn = true,
         ),
     ),
     SmartPlug(
         identifier = EntityIdentifier("plug.smart-tv"),
-        label = "Smart TV",
         state = SmartPlug.State.Known(
             isOn = true,
         ),
@@ -128,7 +121,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Blinds
     Blind(
         identifier = EntityIdentifier("blind.living-room"),
-        label = "Living room blind",
         state = Blind.State.Known(
             position = 0.percent,
         ),
@@ -136,7 +128,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Fans
     Fan(
         identifier = EntityIdentifier("fan.bedroom"),
-        label = "Bedroom fan",
         state = Fan.State.Known(
             isOn = true,
         ),
@@ -144,13 +135,11 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Speakers
     Speaker(
         identifier = EntityIdentifier("speaker.kitchen"),
-        label = "Kitchen speaker",
         state = Speaker.State.Unknown,
     ),
     // Cameras
     Camera(
         identifier = EntityIdentifier("camera.front-door"),
-        label = "Front door camera",
         state = Camera.State.Known(
             isOn = true,
         ),
@@ -158,7 +147,6 @@ internal val DemoEntities: List<Entity<*>> = listOf(
     // Locks
     Lock(
         identifier = EntityIdentifier("lock.front-door"),
-        label = "Front door lock",
         state = Lock.State.Known(
             isOn = true,
         ),

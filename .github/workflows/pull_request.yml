@@ -10,6 +10,9 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.ref }}
     cancel-in-progress: true
 
+permissions:
+    contents: read
+
 jobs:
     quality-checks:
         runs-on: macos-latest
@@ -23,6 +26,8 @@ jobs:
               with:
                   java-version: '21'
                   distribution: 'jetbrains'
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Set up gradle
               uses: gradle/actions/setup-gradle@v4

@@ -6,7 +6,6 @@ import network.marsys.smarthome.domain.unit.Quantity
 
 data class Light(
     override val identifier: EntityIdentifier,
-    override val label: String,
     override val state: State = State.Unknown,
 ) : Entity<Light.State>, Entity.Activatable, Entity.Toggleable {
     override val active: Boolean

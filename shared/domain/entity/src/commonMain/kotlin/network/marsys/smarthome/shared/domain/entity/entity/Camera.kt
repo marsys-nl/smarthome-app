@@ -4,7 +4,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 
 data class Camera(
     override val identifier: EntityIdentifier,
-    override val label: String,
     override val state: State = State.Unknown,
 ) : Entity<Camera.State>, Entity.Activatable {
     override val active: Boolean

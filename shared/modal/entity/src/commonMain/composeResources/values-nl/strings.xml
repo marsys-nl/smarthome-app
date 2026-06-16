@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="entity_capability_on_off">Aan/uit</string>
+    <string name="entity_capability_on_off">Power</string>
 
     <string name="entity_state_on">Aan</string>
     <string name="entity_state_off">Uit</string>
