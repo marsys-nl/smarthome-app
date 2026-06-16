@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="entity_capability_on_off">On/off</string>
+    <string name="entity_capability_on_off">Power</string>
 
     <string name="entity_state_on">On</string>
     <string name="entity_state_off">Off</string>
