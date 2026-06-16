@@ -6,7 +6,6 @@ import network.marsys.smarthome.domain.unit.Quantity
 
 data class Blind(
     override val identifier: EntityIdentifier,
-    override val label: String,
     override val state: State = State.Unknown,
 ) : Entity<Blind.State> {
     sealed interface State : Entity.State {

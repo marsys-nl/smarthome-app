@@ -6,7 +6,6 @@ import network.marsys.smarthome.domain.unit.Quantity
 
 data class Thermostat(
     override val identifier: EntityIdentifier,
-    override val label: String,
     override val state: State = State.Unknown,
 ) : Entity<Thermostat.State>, Entity.Activatable {
     override val active: Boolean

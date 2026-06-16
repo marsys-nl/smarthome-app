@@ -4,7 +4,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
-    val label: String
     val state: S
 
     val description: String

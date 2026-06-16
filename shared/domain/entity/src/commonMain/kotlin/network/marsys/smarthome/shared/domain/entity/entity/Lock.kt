@@ -4,7 +4,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 
 data class Lock(
     override val identifier: EntityIdentifier,
-    override val label: String,
     override val state: State = State.Unknown,
 ) : Entity<Lock.State>, Entity.Activatable, Entity.Toggleable {
     override val active: Boolean
