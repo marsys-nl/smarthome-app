@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
@@ -25,6 +25,7 @@ internal typealias DashboardStateHolder =
 
 class DashboardViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
+    private val entityRepository: EntityRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
@@ -32,6 +33,7 @@ class DashboardViewModel(
         producer = { state, actions, emitter ->
             launchEntityMutations(
                 state = state,
+                entityRepository = entityRepository,
             )
 
             launchUserNameMutations(
@@ -75,22 +77,33 @@ class DashboardViewModel(
         },
     )
 
-private fun CoroutineScope.launchEntityMutations(
+context(scope: CoroutineScope)
+private fun launchEntityMutations(
     state: MutableDashboardScreenState,
+    entityRepository: EntityRepository,
 ) {
-    state.quickControlState.entities
-        .putAll(DemoEntities.associateBy { it.identifier })
+    scope.launch {
+        entityRepository.entities.collect { entities ->
+            val current = state.quickControlState.entities
 
-    launch {
-        // No-op for now; this will listen to SSE updates for entities.
+            entities.forEach {
+                if (current[it.identifier] != it) {
+                    current[it.identifier] = it
+                }
+            }
+
+            val removed = current.keys - entities.map { it.identifier }
+            removed.forEach(current::remove)
+        }
     }
 }
 
-private fun CoroutineScope.launchUserNameMutations(
+context(scope: CoroutineScope)
+private fun launchUserNameMutations(
     state: MutableDashboardScreenState,
     applicationConfigurationRepository: ApplicationConfigurationRepository,
 ) {
-    launch {
+    scope.launch {
         applicationConfigurationRepository.isDemoMode.collect {
             state.user = when (it) {
                 true -> getString(SmartHomeRes.string.demo_user)

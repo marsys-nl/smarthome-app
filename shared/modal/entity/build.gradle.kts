@@ -46,4 +46,8 @@ kotlin {
             implementation(libs.marsys.smarthome.domain)
         }
     }
+
+    compilerOptions {
+        freeCompilerArgs.add("-Xcontext-parameters")
+    }
 }

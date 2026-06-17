@@ -5,6 +5,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
+import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntityTranslations
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
@@ -33,6 +34,7 @@ private val viewModelModule = module {
     viewModel {
         DashboardViewModel(
             applicationConfigurationRepository = get(),
+            entityRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
@@ -49,6 +51,7 @@ private val viewModelModule = module {
     viewModel {
         EntityDetailModalViewModel(
             identifier = it.get(),
+            entityRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
@@ -81,6 +84,7 @@ fun SmartHomeApp(
         configuration = koinConfiguration {
             modules(
                 applicationModule,
+                entityDataModule,
                 connectionDataModule,
                 networkModule,
                 smartHomeApplicationModule,
