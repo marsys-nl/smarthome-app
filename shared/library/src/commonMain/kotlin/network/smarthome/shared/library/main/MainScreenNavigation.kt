@@ -44,6 +44,7 @@ import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
+import network.marsys.smarthome.shared.modal.entity.EntityDetailModal
 import network.smarthome.shared.library.screens.SmartHomeScreen
 import org.koin.compose.koinInject
 
@@ -146,7 +147,10 @@ internal fun MainScreenNavigation(
             entry<SmartHomeScreen.EntityDetails>(
                 metadata = ModalSceneStrategy.modal(),
             ) {
-                Text(text = "Entity details for ${it.entity}")
+                EntityDetailModal(
+                    entity = it.entity,
+                    onDismissRequest = { backStack.removeLastOrNull() },
+                )
             }
         },
     )

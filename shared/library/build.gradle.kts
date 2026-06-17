@@ -49,6 +49,7 @@ kotlin {
             implementation(projects.shared.library.store)
             implementation(projects.shared.library.store.datastore)
             implementation(projects.shared.modal.appearance)
+            implementation(projects.shared.modal.entity)
 
             implementation(libs.androidx.datastore.preferences.core)
             implementation(libs.androidx.lifecycle.runtime)
