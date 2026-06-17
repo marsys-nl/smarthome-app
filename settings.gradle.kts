@@ -43,6 +43,7 @@ includeBuild("build-logic")
 include(
     ":app:android",
     ":shared:data:connection",
+    ":shared:data:entity",
     ":shared:domain:connection",
     ":shared:domain:entity",
     ":shared:feature:dashboard",

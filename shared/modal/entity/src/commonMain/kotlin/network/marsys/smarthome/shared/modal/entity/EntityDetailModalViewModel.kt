@@ -5,20 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
-import kotlin.time.Duration.Companion.milliseconds
 
 internal typealias EntityDetailModalStateHolder =
     SuspendingActionStateMutator<EntityDetailModalAction, EntityDetailModalState>
 
 class EntityDetailModalViewModel(
     private val identifier: EntityIdentifier,
+    private val entityRepository: EntityRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     EntityDetailModalStateHolder by coroutineScope.suspendingActionStateMutator(
@@ -27,24 +26,22 @@ class EntityDetailModalViewModel(
             launchEntityMutations(
                 identifier = identifier,
                 state = state,
+                entityRepository = entityRepository,
             )
         },
     )
 
-private fun CoroutineScope.launchEntityMutations(
+context(scope: CoroutineScope)
+private fun launchEntityMutations(
     identifier: EntityIdentifier,
     state: MutableEntityDetailModalState,
+    entityRepository: EntityRepository,
 ) {
-    println("[EntityDetailModalViewModel] Launching entity mutations for identifier: $identifier")
-
-    launch {
-        delay((100..1600).random().milliseconds)
-
-        state.isLoading = false
-        state.entity = Light(
-            identifier = identifier,
-            state = Light.State.Unknown,
-        )
+    scope.launch {
+        entityRepository.entity(identifier).collect { entity ->
+            state.entity = entity
+            state.isLoading = false
+        }
     }
 }
 

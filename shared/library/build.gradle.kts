@@ -36,7 +36,9 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.data.connection)
+            implementation(projects.shared.data.entity)
             implementation(projects.shared.domain.connection)
+            implementation(projects.shared.domain.entity)
             implementation(projects.shared.feature.dashboard)
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.library.core)

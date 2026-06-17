@@ -49,6 +49,7 @@ import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_on_off
+import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_off
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_on
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_max
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_now
@@ -213,7 +214,7 @@ private fun EntityDetailOnOffSection(
     entity: Entity<*>,
     modifier: Modifier = Modifier,
 ) {
-    if (entity !is Entity.Toggleable) {
+    if (entity !is Entity.Activatable || entity !is Entity.Toggleable) {
         return
     }
 
@@ -241,14 +242,21 @@ private fun EntityDetailOnOffSection(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(Res.string.entity_state_on),
+                text = stringResource(
+                    resource = when (entity.active) {
+                        true -> Res.string.entity_state_on
+                        false -> Res.string.entity_state_off
+                    },
+                ),
                 lineHeight = 20.sp,
                 fontSize = 14.sp,
             )
 
             Switch(
-                checked = true,
-                onCheckedChange = {},
+                checked = entity.active,
+                onCheckedChange = {
+                    // No-op for now
+                },
             )
         }
     }
