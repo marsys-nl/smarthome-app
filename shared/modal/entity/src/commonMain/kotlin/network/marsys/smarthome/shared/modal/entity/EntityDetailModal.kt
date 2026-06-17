@@ -28,6 +28,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -56,8 +57,12 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_hours
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
+import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 import kotlin.time.Clock
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @Composable
 fun EntityDetailModal(
@@ -65,9 +70,17 @@ fun EntityDetailModal(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val viewModel = koinViewModel<EntityDetailModalViewModel>(
+        key = "entity-detail-modal-$entity",
+    ) {
+        parametersOf(entity)
+    }
+
+    val state = viewModel.produceStateWithLifecycle()
+
     EntityDetailModalContent(
         title = stringResource(identifier = entity),
-        state = EntityDetailModalState.Loading,
+        state = state,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     )
@@ -108,23 +121,18 @@ private fun EntityDetailModalContent(
                 )
             }
 
-            when (state) {
-                is EntityDetailModalState.Loaded ->
-                    EntityDetailLastUpdated(
-                        state = state,
-                    )
-
-                else -> Unit
+            if (!state.isLoading) {
+                EntityDetailLastUpdated()
             }
         }
 
-        when (state) {
-            is EntityDetailModalState.Loading ->
+        when {
+            state.isLoading ->
                 EntityDetailLoadingModalContent()
 
-            is EntityDetailModalState.Loaded ->
+            state.entity != null ->
                 EntityDetailLoadedModalContent(
-                    state = state,
+                    entity = state.entity!!,
                 )
         }
     }
@@ -164,16 +172,17 @@ private fun EntityDetailLoadingModalContent() {
 
 @Composable
 private fun EntityDetailLoadedModalContent(
-    state: EntityDetailModalState.Loaded,
+    entity: Entity<*>,
 ) {
     EntityDetailOnOffSection(
-        entity = state.entity,
+        entity = entity,
     )
 }
 
 @Composable
 private fun EntityDetailLastUpdated(
-    state: EntityDetailModalState.Loaded,
+    lastUpdate: Instant = Clock.System.now()
+        .minus((0..3600).random().seconds),
 ) {
     Row(
         horizontalArrangement = Arrangement
@@ -190,7 +199,7 @@ private fun EntityDetailLastUpdated(
 
             Text(
                 text = entityUpdatedLabel(
-                    elapsed = Clock.System.now() - state.lastUpdate,
+                    elapsed = Clock.System.now() - lastUpdate,
                 ),
                 lineHeight = 16.sp,
                 fontSize = 12.sp,

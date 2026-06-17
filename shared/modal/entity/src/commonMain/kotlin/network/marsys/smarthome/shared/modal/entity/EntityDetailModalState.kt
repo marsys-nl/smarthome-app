@@ -1,14 +1,14 @@
 package network.marsys.smarthome.shared.modal.entity
 
+import androidx.compose.runtime.Stable
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import kotlin.time.Clock
-import kotlin.time.Instant
 
-sealed interface EntityDetailModalState {
-    data object Loading : EntityDetailModalState
+@Stable
+interface EntityDetailModalState {
+    val isLoading: Boolean
+    val entity: Entity<*>?
+}
 
-    data class Loaded(
-        val entity: Entity<*>,
-        val lastUpdate: Instant = Clock.System.now(),
-    ) : EntityDetailModalState
+sealed interface EntityDetailModalAction {
+    //
 }

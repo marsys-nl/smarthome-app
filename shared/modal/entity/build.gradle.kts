@@ -30,13 +30,18 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.shared.domain.entity)
+            implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.i18n)
             implementation(projects.shared.library.resources)
 
+            implementation(libs.androidx.lifecycle.viewmodel)
+
             implementation(libs.compose.foundation)
             implementation(libs.compose.resources)
             implementation(libs.compose.ui.tooling.preview)
+
+            implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.marsys.smarthome.domain)
         }

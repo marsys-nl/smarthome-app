@@ -19,6 +19,7 @@ import network.marsys.smarthome.shared.library.store.AppearancePreferencesReposi
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.library.store.datastore.SmartHomeStoreRepository
+import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
@@ -42,6 +43,13 @@ private val viewModelModule = module {
             applicationConfigurationRepository = get(),
             onboardingRepository = get(),
             validateBackendUriUseCase = get(),
+        )
+    }
+
+    viewModel {
+        EntityDetailModalViewModel(
+            identifier = it.get(),
+            coroutineScope = viewModelCoroutineScope(),
         )
     }
 }
