@@ -22,6 +22,7 @@ sealed class DashboardScreenAction(val key: String) {
 
     data class ToggleEntityState(
         val entity: EntityIdentifier,
+        val state: Boolean,
     ) : DashboardScreenAction("ToggleEntityState[$entity]")
 
     data class OpenEntityDetailModal(

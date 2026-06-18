@@ -8,4 +8,6 @@ interface EntityRepository {
     val entities: Flow<Collection<Entity<*>>>
 
     fun entity(identifier: EntityIdentifier): Flow<Entity<*>?>
+
+    suspend fun execute(action: Entity.Action)
 }

@@ -55,10 +55,12 @@ class DashboardViewModel(
                     }
 
                     is DashboardScreenAction.ToggleEntityState -> action.flow.collect {
-                        val entity = state.quickControlState.entities[action.entity] as? Entity.Toggleable
-                            ?: return@collect
-
-                        state.quickControlState.entities[action.entity] = entity.toggle()
+                        entityRepository.execute(
+                            action = when (action.state) {
+                                true -> Entity.Toggleable.Toggle.On(identifier = action.entity)
+                                false -> Entity.Toggleable.Toggle.Off(identifier = action.entity)
+                            },
+                        )
                     }
 
                     is DashboardScreenAction.OpenEntityDetailModal -> action.flow.collect {

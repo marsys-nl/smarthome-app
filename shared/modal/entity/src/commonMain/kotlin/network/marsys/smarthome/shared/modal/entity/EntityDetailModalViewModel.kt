@@ -10,6 +10,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
+import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
 
 internal typealias EntityDetailModalStateHolder =
@@ -28,6 +29,22 @@ class EntityDetailModalViewModel(
                 state = state,
                 entityRepository = entityRepository,
             )
+
+            actions.handle(
+                scope = this,
+                keySelector = EntityDetailModalAction::key,
+            ) {
+                when (val action = type()) {
+                    is EntityDetailModalAction.ToggleEntity -> action.flow.collect {
+                        entityRepository.execute(
+                            action = when (action.state) {
+                                true -> Entity.Toggleable.Toggle.On(identifier = action.entity)
+                                false -> Entity.Toggleable.Toggle.Off(identifier = action.entity)
+                            },
+                        )
+                    }
+                }
+            }
         },
     )
 
