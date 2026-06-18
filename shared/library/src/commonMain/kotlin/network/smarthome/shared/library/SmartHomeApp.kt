@@ -7,26 +7,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
-import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntityTranslations
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
 import network.marsys.smarthome.shared.library.i18n.TranslationCache
-import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationCache
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
-import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
-import network.marsys.smarthome.shared.library.store.OnboardingRepository
-import network.marsys.smarthome.shared.library.store.datastore.SmartHomeStoreRepository
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
+import network.smarthome.shared.library.di.smartHomeApplicationModule
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.viewModel
-import org.koin.dsl.binds
 import org.koin.dsl.koinConfiguration
 import org.koin.dsl.module
 
@@ -53,24 +48,6 @@ private val viewModelModule = module {
             identifier = it.get(),
             entityRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
-        )
-    }
-}
-
-private val smartHomeApplicationModule = module {
-    single {
-        SmartHomeStoreRepository(
-            dataStore = get(),
-        )
-    } binds arrayOf(
-        AppearancePreferencesRepository::class,
-        ApplicationConfigurationRepository::class,
-        OnboardingRepository::class,
-    )
-
-    single<TranslationCache> {
-        InMemoryTranslationCache(
-            translations = DemoEntityTranslations,
         )
     }
 }

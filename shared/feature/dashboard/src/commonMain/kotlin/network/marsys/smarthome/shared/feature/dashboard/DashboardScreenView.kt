@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
-import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
@@ -165,7 +164,7 @@ private fun DashboardScreenViewPreview(
     ) {
         DashboardScreenViewContent(
             name = "John",
-            entities = DemoEntities
+            entities = DashboardScreenPreviewData.entities
                 .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
