@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
@@ -31,6 +32,19 @@ class DemoEntityRepository(
         state
             .map { it[identifier] }
             .distinctUntilChanged()
+
+    override suspend fun execute(action: Entity.Action) = when (action) {
+        is Entity.Toggleable.Toggle -> toggle(action)
+    }
+
+    private fun toggle(action: Entity.Toggleable.Toggle) {
+        val entity = state.value[action.identifier] as? Entity.Toggleable
+            ?: return
+
+        state.update {
+            it + (action.identifier to entity.toggle())
+        }
+    }
 }
 
 val DemoEntities: List<Entity<*>> = listOf(

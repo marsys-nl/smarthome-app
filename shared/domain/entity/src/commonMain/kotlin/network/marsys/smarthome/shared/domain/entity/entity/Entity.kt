@@ -9,6 +9,10 @@ interface Entity<S : Entity.State> {
     val description: String
         get() = state.description
 
+    sealed interface Action {
+        val identifier: EntityIdentifier
+    }
+
     sealed interface State {
         val description: String
 
@@ -29,5 +33,15 @@ interface Entity<S : Entity.State> {
 
     interface Toggleable {
         fun toggle(): Entity<*>
+
+        sealed interface Toggle : Action {
+            data class On(
+                override val identifier: EntityIdentifier,
+            ) : Toggle
+
+            data class Off(
+                override val identifier: EntityIdentifier,
+            ) : Toggle
+        }
     }
 }

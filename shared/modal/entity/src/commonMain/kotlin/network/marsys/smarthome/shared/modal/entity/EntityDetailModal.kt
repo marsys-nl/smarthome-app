@@ -82,6 +82,7 @@ fun EntityDetailModal(
     EntityDetailModalContent(
         title = stringResource(identifier = entity),
         state = state,
+        onAction = viewModel.accept,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
     )
@@ -91,6 +92,7 @@ fun EntityDetailModal(
 private fun EntityDetailModalContent(
     title: String,
     state: EntityDetailModalState,
+    onAction: (EntityDetailModalAction) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -134,6 +136,7 @@ private fun EntityDetailModalContent(
             state.entity != null ->
                 EntityDetailLoadedModalContent(
                     entity = state.entity!!,
+                    onAction = onAction,
                 )
         }
     }
@@ -174,9 +177,11 @@ private fun EntityDetailLoadingModalContent() {
 @Composable
 private fun EntityDetailLoadedModalContent(
     entity: Entity<*>,
+    onAction: (EntityDetailModalAction) -> Unit,
 ) {
     EntityDetailOnOffSection(
         entity = entity,
+        onAction = onAction,
     )
 }
 
@@ -212,6 +217,7 @@ private fun EntityDetailLastUpdated(
 @Composable
 private fun EntityDetailOnOffSection(
     entity: Entity<*>,
+    onAction: (EntityDetailModalAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (entity !is Entity.Activatable || entity !is Entity.Toggleable) {
@@ -255,7 +261,12 @@ private fun EntityDetailOnOffSection(
             Switch(
                 checked = entity.active,
                 onCheckedChange = {
-                    // No-op for now
+                    onAction.invoke(
+                        EntityDetailModalAction.ToggleEntity(
+                            entity = entity.identifier,
+                            state = it,
+                        ),
+                    )
                 },
             )
         }
@@ -343,6 +354,7 @@ private fun LoadingEntityDetailModalPreview(
         EntityDetailModalContent(
             title = "Kitchen spots",
             state = EntityDetailModalPreviewData.loading,
+            onAction = {},
             onDismissRequest = {},
         )
     }
@@ -361,6 +373,7 @@ private fun LoadedLightEntityDetailModalPreview(
         EntityDetailModalContent(
             title = "Kitchen spots",
             state = state,
+            onAction = {},
             onDismissRequest = {},
         )
     }
@@ -379,6 +392,7 @@ private fun LoadedThermostatEntityDetailModalPreview(
         EntityDetailModalContent(
             title = "Living room",
             state = state,
+            onAction = {},
             onDismissRequest = {},
         )
     }
