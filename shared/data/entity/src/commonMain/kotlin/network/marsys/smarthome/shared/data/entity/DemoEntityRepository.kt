@@ -33,7 +33,7 @@ class DemoEntityRepository(
             .distinctUntilChanged()
 }
 
-internal val DemoEntities: List<Entity<*>> = listOf(
+val DemoEntities: List<Entity<*>> = listOf(
     // Lights
     Light(
         identifier = EntityIdentifier("light.bedroom-lamp"),

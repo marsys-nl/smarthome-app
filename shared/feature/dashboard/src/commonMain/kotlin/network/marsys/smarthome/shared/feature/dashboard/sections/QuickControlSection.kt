@@ -30,9 +30,9 @@ import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenPreviewData
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
-import network.marsys.smarthome.shared.feature.dashboard.demo.DemoEntities
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
@@ -350,7 +350,7 @@ private fun QuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
-            entities = DemoEntities
+            entities = DashboardScreenPreviewData.entities
                 .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
@@ -367,7 +367,7 @@ private fun GroupedQuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
-            entities = emptyMap<EntityIdentifier, Entity<*>>(),
+            entities = emptyMap(),
             groupEntitiesByType = true,
             onAction = {},
         )
