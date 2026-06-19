@@ -26,6 +26,7 @@ interface Entity<S : Entity.State> {
         }
 
         sealed interface Descriptor {
+            data object Empty : Descriptor
             data object Unknown : Descriptor
             data object On : Descriptor
             data object Off : Descriptor
@@ -51,6 +52,7 @@ interface Entity<S : Entity.State> {
                 constructor(vararg parts: Descriptor?) : this(
                     parts = parts
                         .filterNotNull()
+                        .filterNot { it is Empty }
                         .toList(),
                 )
             }

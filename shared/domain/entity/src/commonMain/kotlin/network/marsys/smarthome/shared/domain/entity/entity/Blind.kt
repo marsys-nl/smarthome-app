@@ -3,6 +3,8 @@ package network.marsys.smarthome.shared.domain.entity.entity
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
+import network.marsys.smarthome.shared.domain.entity.capability.Capability
+import network.marsys.smarthome.shared.domain.entity.capability.Position
 
 data class Blind(
     override val identifier: EntityIdentifier,
@@ -10,14 +12,10 @@ data class Blind(
 ) : Entity<Blind.State> {
     sealed interface State : Entity.State {
         data class Known(
-            val position: Quantity<Dimension.Ratio>,
+            val position: Capability.Required<Position>,
         ) : State, Entity.State.Known {
             override val descriptor: Entity.State.Descriptor
-                get() = when (position.value) {
-                    0.0 -> Entity.State.Descriptor.Closed
-                    1.0 -> Entity.State.Descriptor.Open
-                    else -> Entity.State.Descriptor.Opened(position)
-                }
+                get() = position.descriptor
         }
 
         data object Unknown : State, Entity.State.Unknown

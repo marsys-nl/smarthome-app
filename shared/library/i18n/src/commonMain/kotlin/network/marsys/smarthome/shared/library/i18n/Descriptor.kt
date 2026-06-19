@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.library.i18n
 
 import androidx.compose.runtime.Composable
+import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
@@ -15,6 +16,7 @@ import network.marsys.smarthome.shared.library.resources.entity_state_opened
 import network.marsys.smarthome.shared.library.resources.entity_state_separator
 
 @Composable
+@Suppress("CyclomaticComplexMethod")
 fun Entity.State.Descriptor.localized(): String = when (this) {
     Entity.State.Descriptor.On ->
         stringResource(SmartHomeRes.string.entity_state_on)
@@ -40,9 +42,9 @@ fun Entity.State.Descriptor.localized(): String = when (this) {
 
     is Entity.State.Descriptor.Enum<*> ->
         when (value) {
-            Thermostat.Status.Idle -> stringResource(SmartHomeRes.string.entity_state_idle)
-            Thermostat.Status.Cooling -> stringResource(SmartHomeRes.string.entity_state_cooling)
-            Thermostat.Status.Heating -> stringResource(SmartHomeRes.string.entity_state_heating)
+            ThermostatStatus.Status.Idle -> stringResource(SmartHomeRes.string.entity_state_idle)
+            ThermostatStatus.Status.Cooling -> stringResource(SmartHomeRes.string.entity_state_cooling)
+            ThermostatStatus.Status.Heating -> stringResource(SmartHomeRes.string.entity_state_heating)
             else -> value.toString()
         }
 
@@ -51,4 +53,7 @@ fun Entity.State.Descriptor.localized(): String = when (this) {
 
     Entity.State.Descriptor.Unknown ->
         "-"
+
+    Entity.State.Descriptor.Empty ->
+        ""
 }
