@@ -53,6 +53,7 @@ import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.i18n.localized
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_category_blinds
@@ -201,7 +202,8 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
 
     EntityCard(
         title = stringResource(entity.identifier),
-        subtitle = entity.description,
+        subtitle = entity.descriptor
+            .localized(),
         icon = icon,
         active = active,
         modifier = Modifier

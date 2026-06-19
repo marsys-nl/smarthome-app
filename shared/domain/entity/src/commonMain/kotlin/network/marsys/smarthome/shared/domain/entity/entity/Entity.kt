@@ -1,29 +1,59 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.unit.Dimension
+import network.marsys.smarthome.domain.unit.Quantity
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
     val state: S
 
-    val description: String
-        get() = state.description
+    val descriptor: State.Descriptor
+        get() = state.descriptor
 
     sealed interface Action {
         val identifier: EntityIdentifier
     }
 
     sealed interface State {
-        val description: String
+        val descriptor: Descriptor
 
-        sealed interface Known : State {
-            override val description: String
-                get() = "On"
-        }
+        sealed interface Known : State
 
         sealed interface Unknown : State {
-            override val description: String
-                get() = "—"
+            override val descriptor: Descriptor
+                get() = Descriptor.Unknown
+        }
+
+        sealed interface Descriptor {
+            data object Unknown : Descriptor
+            data object On : Descriptor
+            data object Off : Descriptor
+
+            data object Open : Descriptor
+            data object Closed : Descriptor
+            data class Opened(
+                val percentage: Quantity<Dimension.Ratio>,
+            ) : Descriptor
+
+            data class Value<T : Dimension>(
+                val value: Quantity<T>,
+            ) : Descriptor
+
+            data class Enum<T : Any>(
+                val value: T,
+            ) : Descriptor
+
+            @ConsistentCopyVisibility
+            data class Combined private constructor(
+                val parts: Collection<Descriptor>,
+            ) : Descriptor {
+                constructor(vararg parts: Descriptor?) : this(
+                    parts = parts
+                        .filterNotNull()
+                        .toList(),
+                )
+            }
         }
     }
 

@@ -32,14 +32,11 @@ data class Light(
             val onOff: Capability.Required<OnOff>,
             val brightness: Capability.Optional<Brightness> = Capability.NotSupported,
         ) : State, Entity.State.Known {
-            override val description: String
-                get() = buildString {
-                    append(if (onOff.value.current) "On" else "Off")
-                    if (brightness is Capability.Available<Brightness>) {
-                        append(" · ")
-                        append(brightness.value.current)
-                    }
-                }
+            override val descriptor: Entity.State.Descriptor
+                get() = Entity.State.Descriptor.Combined(
+                    onOff.descriptor,
+                    brightness.descriptor,
+                )
         }
 
         data object Unknown : State, Entity.State.Unknown

@@ -21,9 +21,10 @@ data class Speaker(
         data class Known(
             val isOn: Boolean,
         ) : State, Entity.State.Known {
-            override val description: String
-                get() = buildString {
-                    append(if (isOn) "On" else "Off")
+            override val descriptor: Entity.State.Descriptor
+                get() = when (isOn) {
+                    true -> Entity.State.Descriptor.On
+                    false -> Entity.State.Descriptor.Off
                 }
         }
 

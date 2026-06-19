@@ -5,6 +5,7 @@ import kotlin.time.Instant
 
 interface Capability<T> {
     val current: T
+    val descriptor: Entity.State.Descriptor
     val since: Instant
 
     fun updateWith(
@@ -12,9 +13,16 @@ interface Capability<T> {
         instant: Instant,
     ): Capability<T>
 
-    sealed interface Constraint<out T : Capability<*>>
+    sealed interface Constraint<out T : Capability<*>> {
+        val descriptor: Entity.State.Descriptor?
+            get() = null
+    }
+
     sealed interface Present<out T : Capability<*>> : Constraint<T> {
         val value: T
+
+        override val descriptor: Entity.State.Descriptor
+            get() = value.descriptor
     }
 
     data class Computed<C : Capability<T>, S : Entity.State.Known, T>(
