@@ -24,6 +24,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.resources)
 
             implementation(libs.compose.runtime)

@@ -16,15 +16,14 @@ data class Thermostat(
             val mode: ThermostatMode,
             val temperatures: Temperatures,
         ) : State, Entity.State.Known {
-            override val description: String
-                get() = buildString {
-                    if (status != Status.Idle) {
-                        append(status)
-                        append(" · ")
-                        append(temperatures.target)
-                    } else {
-                        append(temperatures.current)
-                    }
+            override val descriptor: Entity.State.Descriptor
+                get() = when (status) {
+                    Status.Idle -> Entity.State.Descriptor.Combined(
+                        Entity.State.Descriptor.Enum(status),
+                        Entity.State.Descriptor.Value(temperatures.target),
+                    )
+
+                    else -> Entity.State.Descriptor.Value(temperatures.current)
                 }
 
             val isOn: Boolean

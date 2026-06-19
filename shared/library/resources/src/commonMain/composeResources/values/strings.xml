@@ -24,5 +24,15 @@
     <string name="entity_category_thermostats">Thermostats</string>
     <string name="entity_category_other">Devices</string>
 
+    <string name="entity_state_separator" translatable="false"> • </string>
+    <string name="entity_state_idle">Idle</string>
+    <string name="entity_state_heating">Heating</string>
+    <string name="entity_state_cooling">Cooling</string>
+    <string name="entity_state_on">On</string>
+    <string name="entity_state_off">Off</string>
+    <string name="entity_state_closed">Closed</string>
+    <string name="entity_state_opened">Open</string>
+    <string name="entity_state_open_percentage">%1$s opened</string>
+
     <string name="unknown_entity">Unknown device</string>
 </resources>

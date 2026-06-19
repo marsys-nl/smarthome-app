@@ -23,5 +23,14 @@
     <string name="entity_category_thermostats">Thermostaten</string>
     <string name="entity_category_other">Apparaten</string>
 
+    <string name="entity_state_idle">Inactief</string>
+    <string name="entity_state_heating">Verwarmen</string>
+    <string name="entity_state_cooling">Koelen</string>
+    <string name="entity_state_on">Aan</string>
+    <string name="entity_state_off">Uit</string>
+    <string name="entity_state_closed">Gesloten</string>
+    <string name="entity_state_opened">Open</string>
+    <string name="entity_state_open_percentage">%1$s geopend</string>
+
     <string name="unknown_entity">Onbekend apparaat</string>
 </resources>

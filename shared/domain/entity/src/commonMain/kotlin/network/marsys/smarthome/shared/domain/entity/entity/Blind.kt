@@ -12,13 +12,11 @@ data class Blind(
         data class Known(
             val position: Quantity<Dimension.Ratio>,
         ) : State, Entity.State.Known {
-            override val description: String
-                get() = buildString {
-                    when (position.value) {
-                        0.0 -> append("Closed")
-                        1.0 -> append("Open")
-                        else -> append("$position open")
-                    }
+            override val descriptor: Entity.State.Descriptor
+                get() = when (position.value) {
+                    0.0 -> Entity.State.Descriptor.Closed
+                    1.0 -> Entity.State.Descriptor.Open
+                    else -> Entity.State.Descriptor.Opened(position)
                 }
         }
 
