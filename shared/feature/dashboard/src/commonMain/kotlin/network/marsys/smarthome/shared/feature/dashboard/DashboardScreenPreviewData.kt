@@ -3,6 +3,10 @@ package network.marsys.smarthome.shared.feature.dashboard
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
+import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
+import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
@@ -14,20 +18,20 @@ object DashboardScreenPreviewData {
         Light(
             identifier = EntityIdentifier("light.bedroom-lamp"),
             state = Light.State.Known(
-                isOn = true,
-                brightness = 80.percent,
+                onOff = required(OnOff(current = true)),
+                brightness = optional(Brightness(80.percent)),
             ),
         ),
         Light(
             identifier = EntityIdentifier("light.kitchen-light"),
             state = Light.State.Known(
-                isOn = true,
+                onOff = required(OnOff(current = true)),
             ),
         ),
         Light(
             identifier = EntityIdentifier("light.ceiling-light"),
             state = Light.State.Known(
-                isOn = false,
+                onOff = required(OnOff(current = false)),
             ),
         ),
         // Thermostats

@@ -2,6 +2,10 @@ package network.marsys.smarthome.shared.modal.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.percent
+import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
+import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -18,8 +22,8 @@ object EntityDetailModalPreviewData {
             override val entity: Entity<*> = Light(
                 identifier = EntityIdentifier("light.kitchen-light"),
                 state = Light.State.Known(
-                    isOn = true,
-                    brightness = 80.percent,
+                    onOff = required(OnOff(current = true)),
+                    brightness = optional(Brightness(80.percent)),
                 ),
             )
         },
