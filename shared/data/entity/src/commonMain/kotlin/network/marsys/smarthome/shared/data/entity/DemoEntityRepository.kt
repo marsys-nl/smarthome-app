@@ -12,7 +12,11 @@ import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
+import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
+import network.marsys.smarthome.shared.domain.entity.capability.Position
+import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -76,20 +80,20 @@ val DemoEntities: List<Entity<*>> = listOf(
     Thermostat(
         identifier = EntityIdentifier("thermostat.office"),
         state = Thermostat.State.Known(
-            mode = Thermostat.ThermostatMode.Off,
+            mode = required(ThermostatMode(current = ThermostatMode.Mode.Off)),
             temperatures = Thermostat.Temperatures(
-                current = 18.celsius,
-                target = 22.celsius,
+                current = required(MeasureTemperature(current = 18.celsius)),
+                target = required(TargetTemperature(current = 22.celsius)),
             ),
         ),
     ),
     Thermostat(
         identifier = EntityIdentifier("thermostat.main-bedroom"),
         state = Thermostat.State.Known(
-            mode = Thermostat.ThermostatMode.Auto,
+            mode = required(ThermostatMode(current = ThermostatMode.Mode.Auto)),
             temperatures = Thermostat.Temperatures(
-                current = 18.celsius,
-                target = 22.celsius,
+                current = required(MeasureTemperature(current = 18.celsius)),
+                target = required(TargetTemperature(current = 22.celsius)),
             ),
         ),
     ),
@@ -97,27 +101,27 @@ val DemoEntities: List<Entity<*>> = listOf(
     SmartPlug(
         identifier = EntityIdentifier("plug.office-plug"),
         state = SmartPlug.State.Known(
-            isOn = true,
+            onOff = required(OnOff(current = true)),
         ),
     ),
     SmartPlug(
         identifier = EntityIdentifier("plug.smart-tv"),
         state = SmartPlug.State.Known(
-            isOn = true,
+            onOff = required(OnOff(current = true)),
         ),
     ),
     // Blinds
     Blind(
         identifier = EntityIdentifier("blind.living-room"),
         state = Blind.State.Known(
-            position = 0.percent,
+            position = required(Position(0.percent)),
         ),
     ),
     // Fans
     Fan(
         identifier = EntityIdentifier("fan.bedroom"),
         state = Fan.State.Known(
-            isOn = true,
+            onOff = required(OnOff(current = true)),
         ),
     ),
     // Speakers
@@ -129,14 +133,14 @@ val DemoEntities: List<Entity<*>> = listOf(
     Camera(
         identifier = EntityIdentifier("camera.front-door"),
         state = Camera.State.Known(
-            isOn = true,
+            onOff = required(OnOff(current = true)),
         ),
     ),
     // Locks
     Lock(
         identifier = EntityIdentifier("lock.front-door"),
         state = Lock.State.Known(
-            isOn = true,
+            onOff = required(OnOff(current = true)),
         ),
     ),
 )

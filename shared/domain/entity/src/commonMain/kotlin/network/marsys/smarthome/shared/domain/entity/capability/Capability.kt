@@ -5,8 +5,10 @@ import kotlin.time.Instant
 
 interface Capability<T> {
     val current: T
-    val descriptor: Entity.State.Descriptor
     val since: Instant
+
+    val descriptor: Entity.State.Descriptor
+        get() = Entity.State.Descriptor.Empty
 
     fun updateWith(
         value: T,

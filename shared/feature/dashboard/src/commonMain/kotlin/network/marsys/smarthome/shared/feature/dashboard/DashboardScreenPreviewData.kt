@@ -6,7 +6,10 @@ import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
+import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
+import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
@@ -38,20 +41,20 @@ object DashboardScreenPreviewData {
         Thermostat(
             identifier = EntityIdentifier("thermostat.office"),
             state = Thermostat.State.Known(
-                mode = Thermostat.ThermostatMode.Off,
+                mode = required(ThermostatMode(current = ThermostatMode.Mode.Off)),
                 temperatures = Thermostat.Temperatures(
-                    current = 18.celsius,
-                    target = 22.celsius,
+                    current = required(MeasureTemperature(current = 18.celsius)),
+                    target = required(TargetTemperature(current = 22.celsius)),
                 ),
             ),
         ),
         Thermostat(
             identifier = EntityIdentifier("thermostat.main-bedroom"),
             state = Thermostat.State.Known(
-                mode = Thermostat.ThermostatMode.Auto,
+                mode = required(ThermostatMode(current = ThermostatMode.Mode.Auto)),
                 temperatures = Thermostat.Temperatures(
-                    current = 18.celsius,
-                    target = 22.celsius,
+                    current = required(MeasureTemperature(current = 18.celsius)),
+                    target = required(TargetTemperature(current = 22.celsius)),
                 ),
             ),
         ),
@@ -59,13 +62,13 @@ object DashboardScreenPreviewData {
         SmartPlug(
             identifier = EntityIdentifier("plug.office-plug"),
             state = SmartPlug.State.Known(
-                isOn = true,
+                onOff = required(OnOff(current = true)),
             ),
         ),
         SmartPlug(
             identifier = EntityIdentifier("plug.smart-tv"),
             state = SmartPlug.State.Known(
-                isOn = true,
+                onOff = required(OnOff(current = true)),
             ),
         ),
     )
