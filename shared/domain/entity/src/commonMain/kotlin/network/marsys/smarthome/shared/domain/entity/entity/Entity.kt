@@ -3,6 +3,7 @@ package network.marsys.smarthome.shared.domain.entity.entity
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
+import network.marsys.smarthome.shared.domain.entity.capability.Capability
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
@@ -18,7 +19,14 @@ interface Entity<S : Entity.State> {
     sealed interface State {
         val descriptor: Descriptor
 
-        sealed interface Known : State
+        sealed interface Known : State {
+            val constraints: Set<Capability.Constraint<*>>
+            val capabilities: Set<Capability<*>>
+                get() = constraints
+                    .filterIsInstance<Capability.Present<*>>()
+                    .map { it.value }
+                    .toSet()
+        }
 
         sealed interface Unknown : State {
             override val descriptor: Descriptor
@@ -77,3 +85,6 @@ interface Entity<S : Entity.State> {
         }
     }
 }
+
+inline fun <reified C : Capability<*>> Entity.State.Known.get(): C? =
+    capabilities.firstOrNull { it is C } as? C

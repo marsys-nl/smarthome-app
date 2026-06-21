@@ -21,6 +21,15 @@ data class Thermostat(
             val mode: Capability.Required<ThermostatMode>,
             val temperatures: Temperatures,
         ) : State, Entity.State.Known {
+            override val constraints: Set<Capability.Constraint<*>>
+                get() = setOf(
+                    mode,
+                    temperatures.target,
+                    temperatures.current,
+                    temperatures.outdoor,
+                    status,
+                )
+
             val status: Capability.Computed<ThermostatStatus, Known, ThermostatStatus.Status>
                 get() = computedStatus.copy(state = this)
 
