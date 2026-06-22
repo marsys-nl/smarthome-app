@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="entity_brightness_range">Range</string>
+
+    <string name="entity_capability_brightness">Brightness</string>
     <string name="entity_capability_on_off">Power</string>
 
     <string name="entity_state_on">On</string>
@@ -8,6 +11,7 @@
     <string name="entity_state_updated">Updated %1$s ago</string>
     <string name="entity_state_update_now">Updated just now</string>
     <string name="entity_state_update_max">Updated 99+ days ago</string>
+
 
     <plurals name="entity_state_updated_seconds">
         <item quantity="one">%1$d second</item>

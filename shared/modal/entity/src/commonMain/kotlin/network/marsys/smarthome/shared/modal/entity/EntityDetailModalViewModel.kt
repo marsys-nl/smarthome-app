@@ -43,6 +43,15 @@ class EntityDetailModalViewModel(
                             },
                         )
                     }
+
+                    is EntityDetailModalAction.AdjustBrightness -> action.flow.collect {
+                        entityRepository.execute(
+                            action = Entity.Dimmable.SetBrightness(
+                                identifier = it.entity,
+                                brightness = it.brightness,
+                            ),
+                        )
+                    }
                 }
             }
         },
