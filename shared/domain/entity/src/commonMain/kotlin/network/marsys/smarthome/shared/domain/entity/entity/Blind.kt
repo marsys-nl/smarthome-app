@@ -1,8 +1,6 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.domain.unit.Dimension
-import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 
@@ -14,6 +12,9 @@ data class Blind(
         data class Known(
             val position: Capability.Required<Position>,
         ) : State, Entity.State.Known {
+            override val constraints: Set<Capability.Constraint<*>>
+                get() = setOf(position)
+
             override val descriptor: Entity.State.Descriptor
                 get() = position.descriptor
         }

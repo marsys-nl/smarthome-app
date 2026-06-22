@@ -30,6 +30,9 @@ data class Fan(
         data class Known(
             val onOff: Capability.Required<OnOff>,
         ) : State, Entity.State.Known {
+            override val constraints: Set<Capability.Constraint<*>>
+                get() = setOf(onOff)
+
             override val descriptor: Entity.State.Descriptor
                 get() = onOff.descriptor
         }

@@ -32,6 +32,9 @@ data class Light(
             val onOff: Capability.Required<OnOff>,
             val brightness: Capability.Optional<Brightness> = Capability.NotSupported,
         ) : State, Entity.State.Known {
+            override val constraints: Set<Capability.Constraint<*>>
+                get() = setOf(onOff, brightness)
+
             override val descriptor: Entity.State.Descriptor
                 get() = Entity.State.Descriptor.Combined(
                     onOff.descriptor,
