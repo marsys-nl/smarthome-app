@@ -39,7 +39,6 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_off
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_on
 
-
 @Composable
 internal fun <T> OnOffSection(
     entity: T,
@@ -85,7 +84,7 @@ internal fun <T> OnOffSection(
                 checked = entity.active,
                 colors = SwitchDefaults.colors(
                     uncheckedTrackColor = PaletteTokens.Slate.Slate950
-                        .copy(alpha = .2f)
+                        .copy(alpha = .2f),
                 ),
                 onCheckedChange = {
                     onAction.invoke(
@@ -136,13 +135,13 @@ private object OnOffSectionPreviewData {
         state = Light.State.Known(
             onOff = required(OnOff(current = true)),
             brightness = optional(Brightness(80.percent)),
-        )
+        ),
     )
 
     val smartPlug = SmartPlug(
         identifier = EntityIdentifier("smart-plug.office"),
         state = SmartPlug.State.Known(
             onOff = required(OnOff(current = false)),
-        )
+        ),
     )
 }
