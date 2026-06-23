@@ -61,6 +61,7 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
 import network.marsys.smarthome.shared.modal.entity.helper.ifPresent
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
+import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Clock
@@ -182,12 +183,14 @@ private fun EntityDetailLoadedModalContent(
     entity: Entity<*>,
     onAction: (EntityDetailModalAction) -> Unit,
 ) {
-    EntityDetailOnOffSection(
-        entity = entity,
-        onAction = onAction,
-        modifier = Modifier
-            .fillMaxWidth(),
-    )
+    if (entity is Entity.Activatable && entity is Entity.Toggleable) {
+        OnOffSection(
+            entity = entity,
+            onAction = onAction,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
 
     entity.ifPresent<Brightness> {
         BrightnessSection(
@@ -224,65 +227,6 @@ private fun EntityDetailLastUpdated(
                 ),
                 lineHeight = 16.sp,
                 fontSize = 12.sp,
-            )
-        }
-    }
-}
-
-@Composable
-private fun EntityDetailOnOffSection(
-    entity: Entity<*>,
-    onAction: (EntityDetailModalAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    if (entity !is Entity.Activatable || entity !is Entity.Toggleable) {
-        return
-    }
-
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                shape = CardDefaults.shape(),
-                color = SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryDisabled],
-            )
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(
-            text = stringResource(Res.string.entity_capability_on_off),
-            lineHeight = 24.sp,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.W500,
-        )
-
-        Row(
-            horizontalArrangement = Arrangement
-                .spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(
-                    resource = when (entity.active) {
-                        true -> Res.string.entity_state_on
-                        false -> Res.string.entity_state_off
-                    },
-                ),
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-            )
-
-            Switch(
-                checked = entity.active,
-                onCheckedChange = {
-                    onAction.invoke(
-                        EntityDetailModalAction.ToggleEntity(
-                            entity = entity.identifier,
-                            state = it,
-                        ),
-                    )
-                },
             )
         }
     }
