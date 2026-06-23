@@ -23,7 +23,7 @@ data class Light(
                         updatedValue = brightness,
                         instant = Clock.System.now(),
                     ),
-            )
+            ),
         )
 
         is State.Unknown -> this

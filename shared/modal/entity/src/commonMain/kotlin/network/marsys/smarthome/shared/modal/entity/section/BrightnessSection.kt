@@ -39,6 +39,7 @@ import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -93,9 +94,20 @@ internal fun BrightnessSection(
     }
 }
 
+private fun adjustBrightness(
+    entity: EntityIdentifier,
+    onAction: (EntityDetailModalAction) -> Unit,
+): (Quantity<Dimension.Ratio>) -> Unit = {
+    onAction.invoke(
+        EntityDetailModalAction.AdjustBrightness(
+            entity = entity,
+            brightness = it.coerceIn(0.percent, 100.percent),
+        ),
+    )
+}
 
 @Composable
-internal fun BrightnessControl(
+private fun BrightnessControl(
     entity: EntityIdentifier,
     brightness: Brightness,
     onAction: (EntityDetailModalAction) -> Unit,
@@ -109,24 +121,9 @@ internal fun BrightnessControl(
     ) {
         BrightnessAdjustButton(
             symbol = "-",
-            onTap = {
-                onAction(
-                    EntityDetailModalAction.AdjustBrightness(
-                        entity = entity,
-                        brightness = (brightness.current - 1.percent)
-                            .coerceIn(0.percent, 100.percent),
-                    ),
-                )
-            },
-            onHold = {
-                onAction(
-                    EntityDetailModalAction.AdjustBrightness(
-                        entity = entity,
-                        brightness = nextTenDown(brightness.current.wholePercent).percent
-                            .coerceIn(0.percent, 100.percent),
-                    ),
-                )
-            },
+            onAdjust = adjustBrightness(entity, onAction),
+            onTap = { brightness.current - 1.percent },
+            onHold = { nextTenDown(brightness.current.wholePercent).percent },
         )
 
         Column(
@@ -153,24 +150,9 @@ internal fun BrightnessControl(
 
         BrightnessAdjustButton(
             symbol = "+",
-            onTap = {
-                onAction(
-                    EntityDetailModalAction.AdjustBrightness(
-                        entity = entity,
-                        brightness = (brightness.current + 1.percent)
-                            .coerceIn(0.percent, 100.percent),
-                    ),
-                )
-            },
-            onHold = {
-                onAction(
-                    EntityDetailModalAction.AdjustBrightness(
-                        entity = entity,
-                        brightness = nextTenUp(brightness.current.wholePercent).percent
-                            .coerceIn(0.percent, 100.percent),
-                    ),
-                )
-            },
+            onAdjust = adjustBrightness(entity, onAction),
+            onTap = { brightness.current + 1.percent },
+            onHold = { nextTenUp(brightness.current.wholePercent).percent },
         )
     }
 }
@@ -178,8 +160,9 @@ internal fun BrightnessControl(
 @Composable
 private fun BrightnessAdjustButton(
     symbol: String,
-    onTap: () -> Unit,
-    onHold: () -> Unit,
+    onAdjust: (Quantity<Dimension.Ratio>) -> Unit,
+    onTap: () -> Quantity<Dimension.Ratio>,
+    onHold: () -> Quantity<Dimension.Ratio>,
 ) {
     val currentOnTap by rememberUpdatedState(onTap)
     val currentOnHold by rememberUpdatedState(onHold)
@@ -195,11 +178,11 @@ private fun BrightnessAdjustButton(
                     awaitFirstDown()
 
                     if (waitForUp(delay = INITIAL_DELAY)) {
-                        currentOnTap.invoke()
+                        onAdjust.invoke(currentOnTap.invoke())
                     } else {
                         var delayInMillis = INITIAL_DELAY
                         while (true) {
-                            currentOnHold.invoke()
+                            onAdjust.invoke(currentOnHold.invoke())
 
                             if (waitForUp(delay = delayInMillis)) {
                                 break
@@ -233,8 +216,11 @@ private const val DECAY_FACTOR = .85
 private val Quantity<Dimension.Ratio>.wholePercent: Int
     get() = value.roundToInt()
 
+@Suppress("MagicNumber")
 private fun nextTenUp(percent: Int): Int = (percent / 10 + 1) * 10
-private fun nextTenDown(percent: Int): Int = ((percent - 1) / 10) * 10
+
+@Suppress("MagicNumber")
+private fun nextTenDown(percent: Int): Int = (percent - 1) / 10 * 10
 
 @Preview
 @Composable
