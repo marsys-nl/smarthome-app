@@ -1,6 +1,8 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.unit.Dimension
+import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
@@ -9,9 +11,23 @@ import kotlin.time.Clock
 data class Light(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
-) : Entity<Light.State>, Entity.Activatable, Entity.Toggleable {
+) : Entity<Light.State>, Entity.Activatable, Entity.Dimmable, Entity.Toggleable {
     override val active: Boolean
         get() = state is State.Known && state.onOff.value.current
+
+    override fun dim(brightness: Quantity<Dimension.Ratio>): Entity<*> = when (val current = state) {
+        is State.Known -> copy(
+            state = current.copy(
+                brightness = current.brightness
+                    .updateWith(
+                        updatedValue = brightness,
+                        instant = Clock.System.now(),
+                    ),
+            ),
+        )
+
+        is State.Unknown -> this
+    }
 
     override fun toggle(): Light = when (val current = state) {
         is State.Known -> copy(

@@ -84,6 +84,15 @@ interface Entity<S : Entity.State> {
             ) : Toggle
         }
     }
+
+    interface Dimmable {
+        fun dim(brightness: Quantity<Dimension.Ratio>): Entity<*>
+
+        data class SetBrightness(
+            override val identifier: EntityIdentifier,
+            val brightness: Quantity<Dimension.Ratio>,
+        ) : Action
+    }
 }
 
 inline fun <reified C : Capability<*>> Entity.State.Known.get(): C? =

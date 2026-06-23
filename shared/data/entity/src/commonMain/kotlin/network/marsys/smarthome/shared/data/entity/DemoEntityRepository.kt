@@ -42,7 +42,17 @@ class DemoEntityRepository(
             .distinctUntilChanged()
 
     override suspend fun execute(action: Entity.Action) = when (action) {
+        is Entity.Dimmable.SetBrightness -> dim(action)
         is Entity.Toggleable.Toggle -> toggle(action)
+    }
+
+    private fun dim(action: Entity.Dimmable.SetBrightness) {
+        val entity = state.value[action.identifier] as? Entity.Dimmable
+            ?: return
+
+        state.update {
+            it + (action.identifier to entity.dim(action.brightness))
+        }
     }
 
     private fun toggle(action: Entity.Toggleable.Toggle) {

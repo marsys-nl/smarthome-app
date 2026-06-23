@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -58,6 +59,8 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_hours
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
+import network.marsys.smarthome.shared.modal.entity.helper.ifPresent
+import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.time.Clock
@@ -182,7 +185,19 @@ private fun EntityDetailLoadedModalContent(
     EntityDetailOnOffSection(
         entity = entity,
         onAction = onAction,
+        modifier = Modifier
+            .fillMaxWidth(),
     )
+
+    entity.ifPresent<Brightness> {
+        BrightnessSection(
+            entity = entity.identifier,
+            brightness = it,
+            onAction = onAction,
+            modifier = Modifier
+                .fillMaxWidth(),
+        )
+    }
 }
 
 @Composable
