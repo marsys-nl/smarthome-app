@@ -2,10 +2,13 @@ package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
+import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
+import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
@@ -23,6 +26,9 @@ data class Thermostat(
         data class Known(
             val mode: Capability.Required<ThermostatMode>,
             val temperatures: Temperatures,
+            val childLock: Capability.Optional<ChildLock> = Capability.NotSupported,
+            val windowDetection: Capability.Optional<WindowDetection> = Capability.NotSupported,
+            val scheduledMode: Capability.Optional<ScheduledMode> = Capability.NotSupported,
         ) : State, Entity.State.Known {
             override val constraints: Set<Capability.Constraint<*>>
                 get() = setOf(
@@ -31,6 +37,9 @@ data class Thermostat(
                     temperatures.current,
                     temperatures.outdoor,
                     status,
+                    childLock,
+                    windowDetection,
+                    scheduledMode,
                 )
 
             val status: Capability.Computed<ThermostatStatus, Known, ThermostatStatus.Status>
@@ -60,6 +69,10 @@ data class Thermostat(
 
             override fun with(capability: WritableCapability<*>): Entity.State.Known =
                 when (capability) {
+                    is ChildLock -> copy(childLock = childLock.updateWith(capability))
+
+                    is ScheduledMode -> copy(scheduledMode = scheduledMode.updateWith(capability))
+
                     is ThermostatMode -> copy(mode = mode.updateWith(capability))
 
                     is TargetTemperature -> copy(
@@ -67,6 +80,8 @@ data class Thermostat(
                             target = temperatures.target.updateWith(capability),
                         ),
                     )
+
+                    is WindowDetection -> copy(windowDetection = windowDetection.updateWith(capability))
 
                     else -> this
                 }

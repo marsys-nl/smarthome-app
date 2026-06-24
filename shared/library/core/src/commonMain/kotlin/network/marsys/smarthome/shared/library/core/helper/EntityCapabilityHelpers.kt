@@ -9,3 +9,22 @@ import network.marsys.smarthome.shared.domain.entity.entity.get
 @Suppress("ComposableNaming")
 inline fun <reified C : Capability<*>> Entity<*>.ifPresent(block: @Composable (C) -> Unit): Unit =
     block.invoke(get<C>() ?: return)
+
+@Composable
+@Suppress("ComposableNaming")
+inline fun <reified C1 : Capability<*>, reified C2 : Capability<*>> Entity<*>.ifPresent(
+    block: @Composable (C1?, C2?) -> Unit,
+): Unit = block.invoke(
+    get<C1>(),
+    get<C2>(),
+)
+
+@Composable
+@Suppress("ComposableNaming")
+inline fun <reified C1 : Capability<*>, reified C2 : Capability<*>, reified C3 : Capability<*>> Entity<*>.ifPresent(
+    block: @Composable (C1?, C2?, C3?) -> Unit,
+): Unit = block.invoke(
+    get<C1>(),
+    get<C2>(),
+    get<C3>(),
+)
