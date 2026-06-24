@@ -94,12 +94,14 @@ abstract class AbstractEntity<S : Entity.State> : Entity<S> {
         }
 }
 
-inline fun <reified C : Capability<*>> Entity<*>.get(): C? =
+inline fun <reified C : Capability<*>> Entity<*>.get(
+    predicate: (C) -> Boolean = { true },
+): C? =
     when (val current = state) {
         is Entity.State.Known ->
             current.capabilities
                 .filterIsInstance<C>()
-                .firstOrNull()
+                .firstOrNull(predicate)
 
         else -> null
     }

@@ -12,6 +12,15 @@ inline fun <reified C : Capability<*>> Entity<*>.ifPresent(block: @Composable (C
 
 @Composable
 @Suppress("ComposableNaming")
+inline fun <reified C : Capability<*>> Entity<*>.ifPresent(
+    predicate: (C) -> Boolean,
+    block: @Composable (C) -> Unit,
+): Unit = block.invoke(
+    get<C>(predicate = predicate) ?: return,
+)
+
+@Composable
+@Suppress("ComposableNaming")
 inline fun <reified C1 : Capability<*>, reified C2 : Capability<*>> Entity<*>.ifPresent(
     block: @Composable (C1?, C2?) -> Unit,
 ): Unit = block.invoke(
