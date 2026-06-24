@@ -60,8 +60,8 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
-import network.marsys.smarthome.shared.modal.entity.section.TemperatureControlSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
+import network.marsys.smarthome.shared.modal.entity.section.TemperatureControlSection
 import network.marsys.smarthome.shared.modal.entity.section.ThermostatControlSection
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
