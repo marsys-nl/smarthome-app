@@ -29,9 +29,9 @@ interface Capability<T> {
 
     data class Computed<C : Capability<T>, S : Entity.State.Known, T>(
         override val value: C,
-        internal val compute: C.(S) -> C,
+        private val compute: C.(S) -> C,
     ) : Present<C>, Constraint<C> {
-        fun copy(state: S) = copy(
+        fun compute(state: S) = copy(
             value = compute.invoke(value, state),
         )
     }
@@ -121,3 +121,19 @@ interface Capability<T> {
         ) = "Mismatched type: '$expected' expected, but '$actual' provided."
     }
 }
+
+interface WritableCapability<T> : Capability<T>
+
+inline fun <reified C, reified X : WritableCapability<C>> Capability.Required<X>.updateWith(
+    value: X,
+): Capability.Required<X> = updateWith<C, X>(
+    updatedValue = value.current,
+    instant = value.since,
+)
+
+inline fun <reified C, reified X : WritableCapability<C>> Capability.Optional<X>.updateWith(
+    value: X,
+): Capability.Optional<X> = updateWith<C, X>(
+    updatedValue = value.current,
+    instant = value.since,
+)

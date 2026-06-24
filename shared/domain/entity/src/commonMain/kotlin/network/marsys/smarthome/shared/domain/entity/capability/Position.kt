@@ -9,7 +9,7 @@ import kotlin.time.Instant
 data class Position(
     override val current: Quantity<Dimension.Ratio>,
     override val since: Instant = Clock.System.now(),
-) : Capability<Quantity<Dimension.Ratio>> {
+) : WritableCapability<Quantity<Dimension.Ratio>> {
     override val descriptor: Entity.State.Descriptor
         get() = when (current.value) {
             0.0 -> Entity.State.Descriptor.Closed

@@ -1,20 +1,23 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.domain.unit.Dimension
-import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
+import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
+import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
 data class Thermostat(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
-) : Entity<Thermostat.State>, Entity.Activatable {
+) : AbstractEntity<Thermostat.State>(), Entity.Activatable {
     override val active: Boolean
         get() = state is State.Known && state.status.value.current !is ThermostatStatus.Status.Idle
+
+    override fun copyWithState(state: State): Entity<State> =
+        copy(state = state)
 
     sealed interface State : Entity.State {
         data class Known(
@@ -31,7 +34,7 @@ data class Thermostat(
                 )
 
             val status: Capability.Computed<ThermostatStatus, Known, ThermostatStatus.Status>
-                get() = computedStatus.copy(state = this)
+                get() = computeStatus.compute(state = this)
 
             override val descriptor: Entity.State.Descriptor
                 get() = when (status.value.current) {
@@ -43,7 +46,7 @@ data class Thermostat(
                     )
                 }
 
-            private val computedStatus =
+            private val computeStatus =
                 Capability.Computed<ThermostatStatus, Known, ThermostatStatus.Status>(
                     value = ThermostatStatus(ThermostatStatus.Status.Idle),
                     compute = { state ->
@@ -54,6 +57,19 @@ data class Thermostat(
                         )
                     },
                 )
+
+            override fun with(capability: WritableCapability<*>): Entity.State.Known =
+                when (capability) {
+                    is ThermostatMode -> copy(mode = mode.updateWith(capability))
+
+                    is TargetTemperature -> copy(
+                        temperatures = temperatures.copy(
+                            target = temperatures.target.updateWith(capability),
+                        ),
+                    )
+
+                    else -> this
+                }
         }
 
         data object Unknown : State, Entity.State.Unknown

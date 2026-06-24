@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -26,10 +24,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
+import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -37,7 +37,6 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSi
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
-import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Clock
 import network.marsys.smarthome.shared.library.design.icons.Close
@@ -49,9 +48,6 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
-import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_on_off
-import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_off
-import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_on
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_max
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_now
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated
@@ -59,7 +55,6 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_hours
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
-import network.marsys.smarthome.shared.modal.entity.helper.ifPresent
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
 import org.koin.compose.viewmodel.koinViewModel
@@ -183,9 +178,10 @@ private fun EntityDetailLoadedModalContent(
     entity: Entity<*>,
     onAction: (EntityDetailModalAction) -> Unit,
 ) {
-    if (entity is Entity.Activatable && entity is Entity.Toggleable) {
+    entity.ifPresent<OnOff> {
         OnOffSection(
-            entity = entity,
+            entity = entity.identifier,
+            onOff = it,
             onAction = onAction,
             modifier = Modifier
                 .fillMaxWidth(),

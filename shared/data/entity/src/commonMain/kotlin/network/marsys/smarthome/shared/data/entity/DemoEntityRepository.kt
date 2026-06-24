@@ -17,6 +17,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
+import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -41,26 +42,19 @@ class DemoEntityRepository(
             .map { it[identifier] }
             .distinctUntilChanged()
 
-    override suspend fun execute(action: Entity.Action) = when (action) {
-        is Entity.Dimmable.SetBrightness -> dim(action)
-        is Entity.Toggleable.Toggle -> toggle(action)
-    }
+    override suspend fun execute(action: Entity.Action) {
+        val entity = state.value[action.identifier] ?: return
 
-    private fun dim(action: Entity.Dimmable.SetBrightness) {
-        val entity = state.value[action.identifier] as? Entity.Dimmable
-            ?: return
-
-        state.update {
-            it + (action.identifier to entity.dim(action.brightness))
+        val capability: WritableCapability<*> = when (action) {
+            is Brightness.SetBrightness -> Brightness(current = action.brightness)
+            is OnOff.Toggle.On -> OnOff(current = true)
+            is OnOff.Toggle.Off -> OnOff(current = false)
+            else -> return
         }
-    }
 
-    private fun toggle(action: Entity.Toggleable.Toggle) {
-        val entity = state.value[action.identifier] as? Entity.Toggleable
-            ?: return
-
+        val updated = entity.update { it.with(capability) }
         state.update {
-            it + (action.identifier to entity.toggle())
+            it + (action.identifier to updated)
         }
     }
 }

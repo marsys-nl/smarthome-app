@@ -11,7 +11,7 @@ data class TargetTemperature(
     override val current: Quantity<Dimension.Temperature>,
     override val since: Instant = Clock.System.now(),
     private val range: ClosedRange<Quantity<Dimension.Temperature>> = defaultTemperatureRange,
-) : Capability<Quantity<Dimension.Temperature>> {
+) : WritableCapability<Quantity<Dimension.Temperature>> {
     override val descriptor: Entity.State.Descriptor
         get() = Entity.State.Descriptor.Value(current)
 
