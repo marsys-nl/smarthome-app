@@ -13,13 +13,28 @@ interface EntityDetailModalState {
 }
 
 sealed class EntityDetailModalAction(val key: String) {
+    data class AdjustBrightness(
+        val entity: EntityIdentifier,
+        val brightness: Quantity<Dimension.Ratio>,
+    ) : EntityDetailModalAction("AdjustBrightness[$entity]")
+
+    data class ToggleChildLock(
+        val entity: EntityIdentifier,
+        val state: Boolean,
+    ) : EntityDetailModalAction("ToggleChildLock[$entity]")
+
     data class ToggleEntity(
         val entity: EntityIdentifier,
         val state: Boolean,
     ) : EntityDetailModalAction("ToggleEntityState[$entity]")
 
-    data class AdjustBrightness(
+    data class ToggleScheduledMode(
         val entity: EntityIdentifier,
-        val brightness: Quantity<Dimension.Ratio>,
-    ) : EntityDetailModalAction("AdjustBrightness[$entity]")
+        val state: Boolean,
+    ) : EntityDetailModalAction("ToggleScheduledMode[$entity]")
+
+    data class ToggleWindowDetection(
+        val entity: EntityIdentifier,
+        val state: Boolean,
+    ) : EntityDetailModalAction("ToggleWindowDetection[$entity]")
 }

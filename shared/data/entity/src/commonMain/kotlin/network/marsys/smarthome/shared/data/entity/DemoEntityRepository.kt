@@ -12,11 +12,14 @@ import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
+import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.Position
+import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
+import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
@@ -47,8 +50,14 @@ class DemoEntityRepository(
 
         val capability: WritableCapability<*> = when (action) {
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
+            is ChildLock.Toggle.On -> ChildLock(current = true)
+            is ChildLock.Toggle.Off -> ChildLock(current = false)
             is OnOff.Toggle.On -> OnOff(current = true)
             is OnOff.Toggle.Off -> OnOff(current = false)
+            is ScheduledMode.Toggle.On -> ScheduledMode(current = true)
+            is ScheduledMode.Toggle.Off -> ScheduledMode(current = false)
+            is WindowDetection.Toggle.On -> WindowDetection(current = true)
+            is WindowDetection.Toggle.Off -> WindowDetection(current = false)
             else -> return
         }
 
@@ -99,6 +108,27 @@ val DemoEntities: List<Entity<*>> = listOf(
                 current = required(MeasureTemperature(current = 18.celsius)),
                 target = required(TargetTemperature(current = 22.celsius)),
             ),
+        ),
+    ),
+    Thermostat(
+        identifier = EntityIdentifier("thermostat.nursery"),
+        state = Thermostat.State.Known(
+            mode = required(
+                value = ThermostatMode(
+                    current = ThermostatMode.Mode.Heat,
+                    supported = setOf(
+                        ThermostatMode.Mode.Off,
+                        ThermostatMode.Mode.Heat,
+                    ),
+                ),
+            ),
+            temperatures = Thermostat.Temperatures(
+                current = required(MeasureTemperature(current = 19.celsius)),
+                target = required(TargetTemperature(current = 18.celsius)),
+            ),
+            childLock = optional(ChildLock(current = true)),
+            windowDetection = optional(WindowDetection(current = true)),
+            scheduledMode = optional(ScheduledMode(current = false)),
         ),
     ),
     // Plugs

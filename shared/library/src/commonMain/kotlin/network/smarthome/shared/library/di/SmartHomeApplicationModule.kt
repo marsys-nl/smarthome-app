@@ -48,6 +48,10 @@ private val DemoEntityTranslations = mapOf(
         "en" to "Main bedroom",
         "nl" to "Hoofdslaapkamer",
     ),
+    "thermostat.nursery" to mapOf(
+        "en" to "Nursery",
+        "nl" to "Babykamer",
+    ),
     "plug.office-plug" to mapOf(
         "en" to "Office",
         "nl" to "Kantoor",

@@ -9,7 +9,10 @@ import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
+import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
+import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
@@ -37,6 +40,24 @@ class EntityDetailModalViewModel(
                 keySelector = EntityDetailModalAction::key,
             ) {
                 when (val action = type()) {
+                    is EntityDetailModalAction.AdjustBrightness -> action.flow.collect {
+                        entityRepository.execute(
+                            action = Brightness.SetBrightness(
+                                identifier = it.entity,
+                                brightness = it.brightness,
+                            ),
+                        )
+                    }
+
+                    is EntityDetailModalAction.ToggleChildLock -> action.flow.collect {
+                        entityRepository.execute(
+                            action = when (it.state) {
+                                true -> ChildLock.Toggle.On(identifier = action.entity)
+                                false -> ChildLock.Toggle.Off(identifier = action.entity)
+                            },
+                        )
+                    }
+
                     is EntityDetailModalAction.ToggleEntity -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
@@ -46,12 +67,21 @@ class EntityDetailModalViewModel(
                         )
                     }
 
-                    is EntityDetailModalAction.AdjustBrightness -> action.flow.collect {
+                    is EntityDetailModalAction.ToggleScheduledMode -> action.flow.collect {
                         entityRepository.execute(
-                            action = Brightness.SetBrightness(
-                                identifier = it.entity,
-                                brightness = it.brightness,
-                            ),
+                            action = when (it.state) {
+                                true -> ScheduledMode.Toggle.On(identifier = action.entity)
+                                false -> ScheduledMode.Toggle.Off(identifier = action.entity)
+                            },
+                        )
+                    }
+
+                    is EntityDetailModalAction.ToggleWindowDetection -> action.flow.collect {
+                        entityRepository.execute(
+                            action = when (it.state) {
+                                true -> WindowDetection.Toggle.On(identifier = action.entity)
+                                false -> WindowDetection.Toggle.Off(identifier = action.entity)
+                            },
                         )
                     }
                 }
