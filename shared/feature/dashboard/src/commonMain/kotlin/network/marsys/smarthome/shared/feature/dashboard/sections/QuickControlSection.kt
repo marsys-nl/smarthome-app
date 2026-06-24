@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -37,6 +38,7 @@ import network.marsys.smarthome.shared.feature.dashboard.sections.controls.Group
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderDefaults
+import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.ActiveEntityCardColors
 import network.marsys.smarthome.shared.library.design.EntityCard
 import network.marsys.smarthome.shared.library.design.EntityCardDefaults
@@ -212,7 +214,7 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
             .then(clickModifier),
         activeColors = colors,
     ) {
-        if (entity is Entity.Toggleable) {
+        entity.ifPresent<OnOff> {
             Switch(
                 checked = active,
                 onCheckedChange = {

@@ -14,14 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.domain.unit.percent
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -40,11 +33,12 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_on
 
 @Composable
-internal fun <T> OnOffSection(
-    entity: T,
+internal fun OnOffSection(
+    entity: EntityIdentifier,
+    onOff: OnOff,
     onAction: (EntityDetailModalAction) -> Unit,
     modifier: Modifier = Modifier,
-) where T : Entity<*>, T : Entity.Activatable, T : Entity.Toggleable {
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -70,7 +64,7 @@ internal fun <T> OnOffSection(
         ) {
             Text(
                 text = stringResource(
-                    resource = when (entity.active) {
+                    resource = when (onOff.current) {
                         true -> Res.string.entity_state_on
                         false -> Res.string.entity_state_off
                     },
@@ -81,7 +75,7 @@ internal fun <T> OnOffSection(
             )
 
             Switch(
-                checked = entity.active,
+                checked = onOff.current,
                 colors = SwitchDefaults.colors(
                     uncheckedTrackColor = PaletteTokens.Slate.Slate950
                         .copy(alpha = .2f),
@@ -89,7 +83,7 @@ internal fun <T> OnOffSection(
                 onCheckedChange = {
                     onAction.invoke(
                         EntityDetailModalAction.ToggleEntity(
-                            entity = entity.identifier,
+                            entity = entity,
                             state = it,
                         ),
                     )
@@ -108,7 +102,8 @@ private fun TurnedOffSectionPreview(
         theme = theme,
     ) {
         OnOffSection(
-            entity = OnOffSectionPreviewData.light,
+            entity = EntityIdentifier("light.living-room"),
+            onOff = OnOffSectionPreviewData.light,
             onAction = {},
         )
     }
@@ -123,25 +118,14 @@ private fun TurnedOnSectionPreview(
         theme = theme,
     ) {
         OnOffSection(
-            entity = OnOffSectionPreviewData.smartPlug,
+            entity = EntityIdentifier("smart-plug.office"),
+            onOff = OnOffSectionPreviewData.smartPlug,
             onAction = {},
         )
     }
 }
 
 private object OnOffSectionPreviewData {
-    val light = Light(
-        identifier = EntityIdentifier("light.living-room"),
-        state = Light.State.Known(
-            onOff = required(OnOff(current = true)),
-            brightness = optional(Brightness(80.percent)),
-        ),
-    )
-
-    val smartPlug = SmartPlug(
-        identifier = EntityIdentifier("smart-plug.office"),
-        state = SmartPlug.State.Known(
-            onOff = required(OnOff(current = false)),
-        ),
-    )
+    val light = OnOff(current = true)
+    val smartPlug = OnOff(current = false)
 }

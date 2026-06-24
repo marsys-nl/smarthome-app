@@ -4,6 +4,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
+import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
@@ -12,12 +13,20 @@ interface Entity<S : Entity.State> {
     val descriptor: State.Descriptor
         get() = state.descriptor
 
-    sealed interface Action {
+    fun update(transform: (State.Known) -> State.Known): Entity<S>
+
+    interface Action {
         val identifier: EntityIdentifier
     }
 
     sealed interface State {
         val descriptor: Descriptor
+
+        fun with(capability: WritableCapability<*>): State =
+            when (this) {
+                is Known -> with(capability)
+                is Unknown -> this
+            }
 
         sealed interface Known : State {
             val constraints: Set<Capability.Constraint<*>>
@@ -26,6 +35,8 @@ interface Entity<S : Entity.State> {
                     .filterIsInstance<Capability.Present<*>>()
                     .map { it.value }
                     .toSet()
+
+            override fun with(capability: WritableCapability<*>): Known
         }
 
         sealed interface Unknown : State {
@@ -70,30 +81,25 @@ interface Entity<S : Entity.State> {
     interface Activatable {
         val active: Boolean
     }
-
-    interface Toggleable {
-        fun toggle(): Entity<*>
-
-        sealed interface Toggle : Action {
-            data class On(
-                override val identifier: EntityIdentifier,
-            ) : Toggle
-
-            data class Off(
-                override val identifier: EntityIdentifier,
-            ) : Toggle
-        }
-    }
-
-    interface Dimmable {
-        fun dim(brightness: Quantity<Dimension.Ratio>): Entity<*>
-
-        data class SetBrightness(
-            override val identifier: EntityIdentifier,
-            val brightness: Quantity<Dimension.Ratio>,
-        ) : Action
-    }
 }
 
-inline fun <reified C : Capability<*>> Entity.State.Known.get(): C? =
-    capabilities.firstOrNull { it is C } as? C
+abstract class AbstractEntity<S : Entity.State> : Entity<S> {
+    protected abstract fun copyWithState(state: S): Entity<S>
+
+    @Suppress("UNCHECKED_CAST")
+    override fun update(transform: (Entity.State.Known) -> Entity.State.Known): Entity<S> =
+        when (val current = state) {
+            is Entity.State.Known -> copyWithState(transform(current) as S)
+            is Entity.State.Unknown -> this
+        }
+}
+
+inline fun <reified C : Capability<*>> Entity<*>.get(): C? =
+    when (val current = state) {
+        is Entity.State.Known ->
+            current.capabilities
+                .filterIsInstance<C>()
+                .firstOrNull()
+
+        else -> null
+    }

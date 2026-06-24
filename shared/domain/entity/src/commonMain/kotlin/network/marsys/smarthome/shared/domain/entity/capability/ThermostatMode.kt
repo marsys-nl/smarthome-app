@@ -7,7 +7,7 @@ data class ThermostatMode(
     override val current: Mode,
     override val since: Instant = Clock.System.now(),
     private val supported: Set<Mode> = Mode.entries.toSet(),
-) : Capability<ThermostatMode.Mode> {
+) : WritableCapability<ThermostatMode.Mode> {
     init {
         require(current in supported) {
             "Current mode '$current' is not supported. Supported modes are: $supported."

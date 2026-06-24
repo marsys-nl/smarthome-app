@@ -8,6 +8,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
@@ -37,16 +39,16 @@ class EntityDetailModalViewModel(
                 when (val action = type()) {
                     is EntityDetailModalAction.ToggleEntity -> action.flow.collect {
                         entityRepository.execute(
-                            action = when (action.state) {
-                                true -> Entity.Toggleable.Toggle.On(identifier = action.entity)
-                                false -> Entity.Toggleable.Toggle.Off(identifier = action.entity)
+                            action = when (it.state) {
+                                true -> OnOff.Toggle.On(identifier = action.entity)
+                                false -> OnOff.Toggle.Off(identifier = action.entity)
                             },
                         )
                     }
 
                     is EntityDetailModalAction.AdjustBrightness -> action.flow.collect {
                         entityRepository.execute(
-                            action = Entity.Dimmable.SetBrightness(
+                            action = Brightness.SetBrightness(
                                 identifier = it.entity,
                                 brightness = it.brightness,
                             ),
