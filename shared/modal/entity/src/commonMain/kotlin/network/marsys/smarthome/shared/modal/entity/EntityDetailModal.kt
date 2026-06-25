@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
+import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
@@ -60,6 +61,7 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
+import network.marsys.smarthome.shared.modal.entity.section.TemperatureControlSection
 import network.marsys.smarthome.shared.modal.entity.section.ThermostatControlSection
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -211,6 +213,12 @@ private fun EntityDetailLoadedModalContent(
             onAction = onAction,
             modifier = Modifier
                 .fillMaxWidth(),
+        )
+    }
+
+    entity.ifPresent<MeasureTemperature> {
+        TemperatureControlSection(
+            measureTemperature = it,
         )
     }
 }

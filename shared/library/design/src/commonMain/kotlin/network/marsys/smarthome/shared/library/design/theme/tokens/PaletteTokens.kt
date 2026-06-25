@@ -78,6 +78,12 @@ object PaletteTokens {
         val Purple600 = Color(0xFF9333EA)
     }
 
+    object Red {
+        val Red400 = Color(0xFFF87171)
+        val Red500 = Color(0xFFF84444)
+        val Red600 = Color(0xFFF82626)
+    }
+
     object Rose {
         val Rose300 = Color(0xFFFDA4AF)
         val Rose400 = Color(0xFFFB7185)
