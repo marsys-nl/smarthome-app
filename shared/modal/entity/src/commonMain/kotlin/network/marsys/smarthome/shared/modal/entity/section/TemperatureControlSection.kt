@@ -32,6 +32,7 @@ import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -42,6 +43,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_current
+import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_target
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureGaugeDefaults.drawGauge
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureGaugeDefaults.drawPointer
 import kotlin.math.PI
@@ -51,38 +53,52 @@ import kotlin.math.sin
 @Composable
 internal fun TemperatureControlSection(
     measureTemperature: MeasureTemperature,
+    targetTemperature: TargetTemperature?,
     modifier: Modifier = Modifier,
-    range: ClosedRange<Quantity<Dimension.Temperature>> = 0.celsius..50.celsius,
+    range: ClosedRange<Quantity<Dimension.Temperature>> =
+        targetTemperature?.range ?: 0.celsius..50.celsius,
     colors: TemperatureGaugeColors = TemperatureGaugeDefaults.colors(),
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxWidth(),
-        contentAlignment = Alignment.Center,
     ) {
-        TemperatureGauge(
-            temperature = measureTemperature.current,
-            range = range,
-            colors = colors,
-        )
-
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement
-                .spacedBy(2.dp),
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
         ) {
-            Text(
-                text = "${measureTemperature.current}",
-                fontSize = 36.sp,
-                fontWeight = FontWeight.W700,
+            TemperatureGauge(
+                temperature = targetTemperature?.current ?: measureTemperature.current,
+                range = range,
+                colors = colors,
             )
 
-            Text(
-                text = stringResource(Res.string.entity_capability_temperature_current),
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement
+                    .spacedBy(2.dp),
+            ) {
+                Text(
+                    text = "${targetTemperature?.current ?: measureTemperature.current}",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.W700,
+                )
+
+                val description = stringResource(
+                    resource = when (targetTemperature) {
+                        null -> Res.string.entity_capability_temperature_current
+                        else -> Res.string.entity_capability_temperature_target
+                    },
+                )
+
+                Text(
+                    text = description,
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                )
+            }
         }
     }
 }
@@ -237,7 +253,8 @@ private fun TemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
-            measureTemperature = MeasureTemperatureSectionPreviewData.measurement,
+            measureTemperature = TemperatureControlSectionPreviewData.measurement,
+            targetTemperature = TemperatureControlSectionPreviewData.target(),
             range = (-30).celsius..50.celsius,
         )
     }
@@ -252,7 +269,8 @@ private fun SmallRangeTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
-            measureTemperature = MeasureTemperatureSectionPreviewData.measurement,
+            measureTemperature = TemperatureControlSectionPreviewData.measurement,
+            targetTemperature = TemperatureControlSectionPreviewData.target(),
             range = 15.celsius..30.celsius,
         )
     }
@@ -267,13 +285,16 @@ private fun OutOfRangeTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
-            measureTemperature = MeasureTemperatureSectionPreviewData.measurement
+            measureTemperature = TemperatureControlSectionPreviewData.measurement
                 .copy(current = 35.celsius),
+            targetTemperature = null,
             range = 15.celsius..30.celsius,
         )
     }
 }
 
-private object MeasureTemperatureSectionPreviewData {
+private object TemperatureControlSectionPreviewData {
     val measurement = MeasureTemperature(current = 22.5.celsius)
+    fun target(value: Quantity<Dimension.Temperature> = 25.celsius) =
+        TargetTemperature(current = value)
 }

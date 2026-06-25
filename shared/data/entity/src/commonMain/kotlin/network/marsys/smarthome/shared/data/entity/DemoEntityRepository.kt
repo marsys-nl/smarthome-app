@@ -124,7 +124,7 @@ val DemoEntities: List<Entity<*>> = listOf(
             ),
             temperatures = Thermostat.Temperatures(
                 current = required(MeasureTemperature(current = 19.celsius)),
-                target = required(TargetTemperature(current = 18.celsius)),
+                target = required(TargetTemperature(current = 21.celsius)),
             ),
             childLock = optional(ChildLock(current = true)),
             windowDetection = optional(WindowDetection(current = true)),

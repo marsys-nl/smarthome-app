@@ -28,6 +28,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
+import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
@@ -216,9 +217,12 @@ private fun EntityDetailLoadedModalContent(
         )
     }
 
-    entity.ifPresent<MeasureTemperature> {
+    entity.ifPresent<MeasureTemperature, TargetTemperature> { measureTemperature, targetTemperature ->
+        measureTemperature ?: return@ifPresent
+
         TemperatureControlSection(
-            measureTemperature = it,
+            measureTemperature = measureTemperature,
+            targetTemperature = targetTemperature,
         )
     }
 }
