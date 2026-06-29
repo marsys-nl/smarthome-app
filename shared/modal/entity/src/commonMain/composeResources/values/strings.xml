@@ -5,8 +5,9 @@
     <string name="entity_capability_brightness">Brightness</string>
     <string name="entity_capability_on_off">Power</string>
 
-    <string name="entity_capability_temperature_current">Current temperature</string>
-    <string name="entity_capability_temperature_target">Target temperature</string>
+    <string name="entity_capability_temperature_current">Current</string>
+    <string name="entity_capability_temperature_target">Target</string>
+    <string name="entity_capability_temperature_status">Status</string>
 
     <string name="entity_state_on">On</string>
     <string name="entity_state_off">Off</string>

@@ -1,11 +1,17 @@
 package network.marsys.smarthome.shared.modal.entity.section
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
@@ -33,16 +39,25 @@ import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
+import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.icons.Flame
+import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.Power
+import network.marsys.smarthome.shared.library.design.icons.Snowflake
+import network.marsys.smarthome.shared.library.design.icons.Wind
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_current
+import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_status
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_target
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureGaugeDefaults.drawGauge
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureGaugeDefaults.drawPointer
@@ -54,6 +69,7 @@ import kotlin.math.sin
 internal fun TemperatureControlSection(
     measureTemperature: MeasureTemperature,
     targetTemperature: TargetTemperature?,
+    thermostatStatus: ThermostatStatus?,
     modifier: Modifier = Modifier,
     range: ClosedRange<Quantity<Dimension.Temperature>> =
         targetTemperature?.range ?: 0.celsius..50.celsius,
@@ -62,6 +78,7 @@ internal fun TemperatureControlSection(
     Column(
         modifier = modifier
             .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
@@ -99,6 +116,13 @@ internal fun TemperatureControlSection(
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 )
             }
+        }
+
+        if (targetTemperature != null && thermostatStatus != null) {
+            CurrentThermostatStatus(
+                measureTemperature = measureTemperature,
+                thermostatStatus = thermostatStatus,
+            )
         }
     }
 }
@@ -148,6 +172,115 @@ private fun TemperatureGauge(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun CurrentThermostatStatus(
+    measureTemperature: MeasureTemperature,
+    thermostatStatus: ThermostatStatus,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .height(IntrinsicSize.Max),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement
+                .spacedBy(2.dp),
+        ) {
+            Text(
+                text = stringResource(Res.string.entity_capability_temperature_current),
+                lineHeight = 16.sp,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+            )
+
+            Text(
+                text = "${measureTemperature.current}",
+                lineHeight = 32.sp,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.W500,
+            )
+        }
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxHeight(1f)
+                .width(1.dp)
+                .background(SmartHomeTheme.colors[ColorKeyToken.BorderPrimary]),
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement
+                .spacedBy(2.dp),
+        ) {
+            Text(
+                text = stringResource(Res.string.entity_capability_temperature_status),
+                lineHeight = 16.sp,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W500,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+            )
+
+            ThermostatStatus(
+                thermostatStatus = thermostatStatus,
+                modifier = Modifier
+                    .weight(1f),
+            )
+        }
+    }
+}
+
+@Composable
+fun ThermostatStatus(
+    thermostatStatus: ThermostatStatus,
+    modifier: Modifier = Modifier,
+) {
+    val thermostatStatusIcon = remember(thermostatStatus) {
+        when (thermostatStatus.current) {
+            ThermostatStatus.Status.Off -> Icons.Power
+            ThermostatStatus.Status.Idle -> Icons.Wind
+            ThermostatStatus.Status.Heating -> Icons.Flame
+            ThermostatStatus.Status.Cooling -> Icons.Snowflake
+        }
+    }
+
+    val colors = SmartHomeTheme.colors
+    val thermostatStatusIconColor = remember(thermostatStatus) {
+        when (thermostatStatus.current) {
+            ThermostatStatus.Status.Off -> colors[ColorKeyToken.TextPrimary]
+            ThermostatStatus.Status.Idle -> PaletteTokens.Green.Green400
+            ThermostatStatus.Status.Heating -> PaletteTokens.Red.Red500
+            ThermostatStatus.Status.Cooling -> PaletteTokens.Blue.Blue500
+        }
+    }
+
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement
+            .spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            icon = thermostatStatusIcon,
+            size = 20.dp,
+            tint = thermostatStatusIconColor,
+        )
+
+        Text(
+            text = "${thermostatStatus.current}",
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.W600,
+        )
     }
 }
 
@@ -246,7 +379,26 @@ private const val DEGREES_TO_RADIANS = (PI / 180f).toFloat()
 
 @Preview
 @Composable
-private fun TemperatureControlSectionPreview(
+private fun IdleTemperatureControlSectionPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        TemperatureControlSection(
+            measureTemperature = TemperatureControlSectionPreviewData.measurement,
+            targetTemperature = TemperatureControlSectionPreviewData.target(value = 22.5.celsius),
+            thermostatStatus = TemperatureControlSectionPreviewData.status(
+                targetTemperature = TemperatureControlSectionPreviewData.target(value = 22.5.celsius),
+            ),
+            range = (-30).celsius..50.celsius,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HeatingTemperatureControlSectionPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
@@ -255,6 +407,26 @@ private fun TemperatureControlSectionPreview(
         TemperatureControlSection(
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(),
+            thermostatStatus = TemperatureControlSectionPreviewData.status(),
+            range = (-30).celsius..50.celsius,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun CoolingTemperatureControlSectionPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        TemperatureControlSection(
+            measureTemperature = TemperatureControlSectionPreviewData.measurement,
+            targetTemperature = TemperatureControlSectionPreviewData.target(value = 16.celsius),
+            thermostatStatus = TemperatureControlSectionPreviewData.status(
+                targetTemperature = TemperatureControlSectionPreviewData.target(value = 16.celsius),
+            ),
             range = (-30).celsius..50.celsius,
         )
     }
@@ -271,6 +443,7 @@ private fun SmallRangeTemperatureControlSectionPreview(
         TemperatureControlSection(
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(),
+            thermostatStatus = TemperatureControlSectionPreviewData.status(),
             range = 15.celsius..30.celsius,
         )
     }
@@ -284,10 +457,15 @@ private fun OutOfRangeTemperatureControlSectionPreview(
     SmartHomeComponentPreview(
         theme = theme,
     ) {
+        val measureTemperature = TemperatureControlSectionPreviewData.measurement
+            .copy(current = 35.celsius)
+
         TemperatureControlSection(
-            measureTemperature = TemperatureControlSectionPreviewData.measurement
-                .copy(current = 35.celsius),
+            measureTemperature = measureTemperature,
             targetTemperature = null,
+            thermostatStatus = TemperatureControlSectionPreviewData.status(
+                measureTemperature = measureTemperature,
+            ),
             range = 15.celsius..30.celsius,
         )
     }
@@ -297,4 +475,19 @@ private object TemperatureControlSectionPreviewData {
     val measurement = MeasureTemperature(current = 22.5.celsius)
     fun target(value: Quantity<Dimension.Temperature> = 25.celsius) =
         TargetTemperature(current = value)
+
+    fun mode(value: ThermostatMode.Mode = ThermostatMode.Mode.Auto) =
+        ThermostatMode(current = value)
+
+    fun status(
+        measureTemperature: MeasureTemperature = measurement,
+        targetTemperature: TargetTemperature = target(),
+        mode: ThermostatMode = mode(),
+    ): ThermostatStatus = ThermostatStatus(
+        current = ThermostatStatus.compute(
+            mode = mode,
+            targetTemperature = targetTemperature.current,
+            currentTemperature = measureTemperature.current,
+        ),
+    )
 }

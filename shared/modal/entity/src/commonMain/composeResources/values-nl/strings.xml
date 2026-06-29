@@ -5,8 +5,9 @@
     <string name="entity_capability_brightness">Helderheid</string>
     <string name="entity_capability_on_off">Power</string>
 
-    <string name="entity_capability_temperature_current">Huidige temperatuur</string>
-    <string name="entity_capability_temperature_target">Streeftemperatuur</string>
+    <string name="entity_capability_temperature_current">Huidig</string>
+    <string name="entity_capability_temperature_target">Streef</string>
+    <string name="entity_capability_temperature_status">Status</string>
 
     <string name="entity_state_on">Aan</string>
     <string name="entity_state_off">Uit</string>
