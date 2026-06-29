@@ -55,6 +55,11 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
+import network.marsys.smarthome.shared.library.resources.SmartHomeRes
+import network.marsys.smarthome.shared.library.resources.entity_state_cooling
+import network.marsys.smarthome.shared.library.resources.entity_state_heating
+import network.marsys.smarthome.shared.library.resources.entity_state_idle
+import network.marsys.smarthome.shared.library.resources.entity_state_off
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_current
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_status
@@ -240,7 +245,7 @@ private fun CurrentThermostatStatus(
 }
 
 @Composable
-fun ThermostatStatus(
+private fun ThermostatStatus(
     thermostatStatus: ThermostatStatus,
     modifier: Modifier = Modifier,
 ) {
@@ -276,13 +281,25 @@ fun ThermostatStatus(
         )
 
         Text(
-            text = "${thermostatStatus.current}",
+            text = thermostatStatus.current
+                .localized(),
             lineHeight = 20.sp,
             fontSize = 14.sp,
             fontWeight = FontWeight.W600,
         )
     }
 }
+
+@Composable
+private fun ThermostatStatus.Status.localized(): String =
+    stringResource(
+        resource = when (this) {
+            ThermostatStatus.Status.Off -> SmartHomeRes.string.entity_state_off
+            ThermostatStatus.Status.Idle -> SmartHomeRes.string.entity_state_idle
+            ThermostatStatus.Status.Heating -> SmartHomeRes.string.entity_state_heating
+            ThermostatStatus.Status.Cooling -> SmartHomeRes.string.entity_state_cooling
+        },
+    )
 
 private fun Quantity<Dimension.Temperature>.toGaugeOffset(
     range: ClosedRange<Quantity<Dimension.Temperature>>,
