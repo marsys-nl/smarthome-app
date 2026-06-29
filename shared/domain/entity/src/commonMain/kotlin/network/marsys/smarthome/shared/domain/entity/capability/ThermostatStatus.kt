@@ -36,6 +36,7 @@ data class ThermostatStatus(
     )
 
     sealed interface Status {
+        data object Off : Status
         data object Idle : Status
         data object Heating : Status
         data object Cooling : Status
@@ -47,7 +48,7 @@ data class ThermostatStatus(
             targetTemperature: Quantity<Dimension.Temperature>,
             currentTemperature: Quantity<Dimension.Temperature>,
         ): Status = when (mode.current) {
-            ThermostatMode.Mode.Off -> Status.Idle
+            ThermostatMode.Mode.Off -> Status.Off
 
             ThermostatMode.Mode.Heat -> when {
                 currentTemperature < targetTemperature -> Status.Heating
