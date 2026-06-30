@@ -223,9 +223,11 @@ private fun EntityDetailLoadedModalContent(
             measureTemperature ?: return@ifPresent
 
             TemperatureControlSection(
+                entity = entity.identifier,
                 measureTemperature = measureTemperature,
                 targetTemperature = targetTemperature,
                 thermostatStatus = thermostatStatus,
+                onAction = onAction,
             )
         },
     )

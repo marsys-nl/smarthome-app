@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.domain.unit.celsius
@@ -60,6 +61,9 @@ import network.marsys.smarthome.shared.library.resources.entity_state_cooling
 import network.marsys.smarthome.shared.library.resources.entity_state_heating
 import network.marsys.smarthome.shared.library.resources.entity_state_idle
 import network.marsys.smarthome.shared.library.resources.entity_state_off
+import network.marsys.smarthome.shared.modal.entity.EntityDetailModalAction
+import network.marsys.smarthome.shared.modal.entity.component.QuantityControl
+import network.marsys.smarthome.shared.modal.entity.component.temperatureQuantityControlStrategy
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_current
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_capability_temperature_status
@@ -72,9 +76,11 @@ import kotlin.math.sin
 
 @Composable
 internal fun TemperatureControlSection(
+    entity: EntityIdentifier,
     measureTemperature: MeasureTemperature,
     targetTemperature: TargetTemperature?,
     thermostatStatus: ThermostatStatus?,
+    onAction: (EntityDetailModalAction) -> Unit,
     modifier: Modifier = Modifier,
     range: ClosedRange<Quantity<Dimension.Temperature>> =
         targetTemperature?.range ?: 0.celsius..50.celsius,
@@ -127,6 +133,12 @@ internal fun TemperatureControlSection(
             CurrentThermostatStatus(
                 measureTemperature = measureTemperature,
                 thermostatStatus = thermostatStatus,
+            )
+
+            ThermostatTargetTemperature(
+                entity = entity,
+                targetTemperature = targetTemperature,
+                onAction = onAction,
             )
         }
     }
@@ -301,6 +313,31 @@ private fun ThermostatStatus.Status.localized(): String =
         },
     )
 
+@Composable
+private fun ThermostatTargetTemperature(
+    entity: EntityIdentifier,
+    targetTemperature: TargetTemperature,
+    onAction: (EntityDetailModalAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    QuantityControl(
+        quantity = targetTemperature.current,
+        range = targetTemperature.range,
+        onQuantityChange = {
+            onAction.invoke(
+                EntityDetailModalAction.AdjustTargetTemperature(
+                    entity = entity,
+                    temperature = it,
+                ),
+            )
+        },
+        modifier = modifier,
+        strategy = temperatureQuantityControlStrategy(
+            range = targetTemperature.range,
+        ),
+    )
+}
+
 private fun Quantity<Dimension.Temperature>.toGaugeOffset(
     range: ClosedRange<Quantity<Dimension.Temperature>>,
 ): Float = ((this - range.start).value / (range.endInclusive - range.start).value)
@@ -403,11 +440,13 @@ private fun IdleTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
+            entity = TemperatureControlSectionPreviewData.identifier,
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(value = 22.5.celsius),
             thermostatStatus = TemperatureControlSectionPreviewData.status(
                 targetTemperature = TemperatureControlSectionPreviewData.target(value = 22.5.celsius),
             ),
+            onAction = {},
             range = (-30).celsius..50.celsius,
         )
     }
@@ -422,9 +461,11 @@ private fun HeatingTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
+            entity = TemperatureControlSectionPreviewData.identifier,
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(),
             thermostatStatus = TemperatureControlSectionPreviewData.status(),
+            onAction = {},
             range = (-30).celsius..50.celsius,
         )
     }
@@ -439,11 +480,13 @@ private fun CoolingTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
+            entity = TemperatureControlSectionPreviewData.identifier,
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(value = 16.celsius),
             thermostatStatus = TemperatureControlSectionPreviewData.status(
                 targetTemperature = TemperatureControlSectionPreviewData.target(value = 16.celsius),
             ),
+            onAction = {},
             range = (-30).celsius..50.celsius,
         )
     }
@@ -458,9 +501,11 @@ private fun SmallRangeTemperatureControlSectionPreview(
         theme = theme,
     ) {
         TemperatureControlSection(
+            entity = TemperatureControlSectionPreviewData.identifier,
             measureTemperature = TemperatureControlSectionPreviewData.measurement,
             targetTemperature = TemperatureControlSectionPreviewData.target(),
             thermostatStatus = TemperatureControlSectionPreviewData.status(),
+            onAction = {},
             range = 15.celsius..30.celsius,
         )
     }
@@ -478,17 +523,21 @@ private fun OutOfRangeTemperatureControlSectionPreview(
             .copy(current = 35.celsius)
 
         TemperatureControlSection(
+            entity = TemperatureControlSectionPreviewData.identifier,
             measureTemperature = measureTemperature,
             targetTemperature = null,
             thermostatStatus = TemperatureControlSectionPreviewData.status(
                 measureTemperature = measureTemperature,
             ),
+            onAction = {},
             range = 15.celsius..30.celsius,
         )
     }
 }
 
 private object TemperatureControlSectionPreviewData {
+    val identifier = EntityIdentifier("thermostat.living-room")
+
     val measurement = MeasureTemperature(current = 22.5.celsius)
     fun target(value: Quantity<Dimension.Temperature> = 25.celsius) =
         TargetTemperature(current = value)

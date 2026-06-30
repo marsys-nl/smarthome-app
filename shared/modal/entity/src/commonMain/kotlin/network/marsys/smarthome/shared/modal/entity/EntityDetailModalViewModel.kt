@@ -12,6 +12,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
+import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
@@ -45,6 +46,15 @@ class EntityDetailModalViewModel(
                             action = Brightness.SetBrightness(
                                 identifier = it.entity,
                                 brightness = it.brightness,
+                            ),
+                        )
+                    }
+
+                    is EntityDetailModalAction.AdjustTargetTemperature -> action.flow.collect {
+                        entityRepository.execute(
+                            action = TargetTemperature.SetTargetTemperature(
+                                identifier = it.entity,
+                                targetTemperature = it.temperature,
                             ),
                         )
                     }
