@@ -56,6 +56,7 @@ class DemoEntityRepository(
             is OnOff.Toggle.Off -> OnOff(current = false)
             is ScheduledMode.Toggle.On -> ScheduledMode(current = true)
             is ScheduledMode.Toggle.Off -> ScheduledMode(current = false)
+            is TargetTemperature.SetTargetTemperature -> TargetTemperature(current = action.targetTemperature)
             is WindowDetection.Toggle.On -> WindowDetection(current = true)
             is WindowDetection.Toggle.Off -> WindowDetection(current = false)
             else -> return

@@ -18,6 +18,11 @@ sealed class EntityDetailModalAction(val key: String) {
         val brightness: Quantity<Dimension.Ratio>,
     ) : EntityDetailModalAction("AdjustBrightness[$entity]")
 
+    data class AdjustTargetTemperature(
+        val entity: EntityIdentifier,
+        val temperature: Quantity<Dimension.Temperature>,
+    ) : EntityDetailModalAction("AdjustTargetTemperature[$entity]")
+
     data class ToggleChildLock(
         val entity: EntityIdentifier,
         val state: Boolean,

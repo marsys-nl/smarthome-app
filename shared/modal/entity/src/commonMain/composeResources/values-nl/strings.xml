@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="entity_brightness_range">Bereik</string>
+    <string name="entity_quantity_range">Bereik</string>
 
     <string name="entity_capability_brightness">Helderheid</string>
     <string name="entity_capability_on_off">Power</string>
