@@ -216,7 +216,7 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
     ) {
         entity.ifPresent<OnOff> {
             Switch(
-                checked = active,
+                checked = it.current,
                 onCheckedChange = {
                     onAction.invoke(
                         DashboardScreenAction.ToggleEntityState(

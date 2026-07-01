@@ -94,7 +94,8 @@ val DemoEntities: List<Entity<*>> = listOf(
     Thermostat(
         identifier = EntityIdentifier("thermostat.office"),
         state = Thermostat.State.Known(
-            mode = required(ThermostatMode(current = ThermostatMode.Mode.Off)),
+            onOff = required(OnOff(current = false)),
+            mode = required(ThermostatMode(current = ThermostatMode.Mode.Heat)),
             temperatures = Thermostat.Temperatures(
                 current = required(MeasureTemperature(current = 18.celsius)),
                 target = required(TargetTemperature(current = 22.celsius)),
@@ -104,6 +105,7 @@ val DemoEntities: List<Entity<*>> = listOf(
     Thermostat(
         identifier = EntityIdentifier("thermostat.main-bedroom"),
         state = Thermostat.State.Known(
+            onOff = required(OnOff(current = true)),
             mode = required(ThermostatMode(current = ThermostatMode.Mode.Auto)),
             temperatures = Thermostat.Temperatures(
                 current = required(MeasureTemperature(current = 18.celsius)),
@@ -114,11 +116,11 @@ val DemoEntities: List<Entity<*>> = listOf(
     Thermostat(
         identifier = EntityIdentifier("thermostat.nursery"),
         state = Thermostat.State.Known(
+            onOff = required(OnOff(current = true)),
             mode = required(
                 value = ThermostatMode(
                     current = ThermostatMode.Mode.Heat,
                     supported = setOf(
-                        ThermostatMode.Mode.Off,
                         ThermostatMode.Mode.Heat,
                     ),
                 ),
