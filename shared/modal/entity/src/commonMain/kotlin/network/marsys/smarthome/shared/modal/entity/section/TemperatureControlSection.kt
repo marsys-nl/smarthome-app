@@ -39,6 +39,7 @@ import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
@@ -551,6 +552,7 @@ private object TemperatureControlSectionPreviewData {
         mode: ThermostatMode = mode(),
     ): ThermostatStatus = ThermostatStatus(
         current = ThermostatStatus.compute(
+            onOff = OnOff(current = true),
             mode = mode,
             targetTemperature = targetTemperature.current,
             currentTemperature = measureTemperature.current,

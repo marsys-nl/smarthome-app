@@ -4,6 +4,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
@@ -17,13 +18,14 @@ data class Thermostat(
     override val state: State = State.Unknown,
 ) : AbstractEntity<Thermostat.State>(), Entity.Activatable {
     override val active: Boolean
-        get() = state is State.Known && state.status.value.current !is ThermostatStatus.Status.Idle
+        get() = state is State.Known && state.onOff.value.current
 
     override fun copyWithState(state: State): Entity<State> =
         copy(state = state)
 
     sealed interface State : Entity.State {
         data class Known(
+            val onOff: Capability.Required<OnOff>,
             val mode: Capability.Required<ThermostatMode>,
             val temperatures: Temperatures,
             val childLock: Capability.Optional<ChildLock> = Capability.NotSupported,
@@ -32,6 +34,7 @@ data class Thermostat(
         ) : State, Entity.State.Known {
             override val constraints: Set<Capability.Constraint<*>>
                 get() = setOf(
+                    onOff,
                     mode,
                     temperatures.target,
                     temperatures.current,
@@ -47,7 +50,8 @@ data class Thermostat(
 
             override val descriptor: Entity.State.Descriptor
                 get() = when (status.value.current) {
-                    ThermostatStatus.Status.Idle -> temperatures.current.descriptor
+                    ThermostatStatus.Status.Off, ThermostatStatus.Status.Idle ->
+                        temperatures.current.descriptor
 
                     else -> Entity.State.Descriptor.Combined(
                         status.descriptor,
@@ -60,6 +64,7 @@ data class Thermostat(
                     value = ThermostatStatus(ThermostatStatus.Status.Idle),
                     compute = { state ->
                         updateWith(
+                            onOff = state.onOff.value,
                             mode = state.mode.value,
                             targetTemperature = state.temperatures.target.value,
                             currentTemperature = state.temperatures.current.value,
@@ -70,6 +75,8 @@ data class Thermostat(
             override fun with(capability: WritableCapability<*>): Entity.State.Known =
                 when (capability) {
                     is ChildLock -> copy(childLock = childLock.updateWith(capability))
+
+                    is OnOff -> copy(onOff = onOff.updateWith(capability))
 
                     is ScheduledMode -> copy(scheduledMode = scheduledMode.updateWith(capability))
 

@@ -23,7 +23,6 @@ data class ThermostatMode(
     )
 
     enum class Mode {
-        Off,
         Heat,
         Cool,
         Auto,
