@@ -124,14 +124,14 @@ interface Capability<T> {
 
 interface WritableCapability<T> : Capability<T>
 
-inline fun <reified C, reified X : WritableCapability<C>> Capability.Required<X>.updateWith(
+inline fun <reified C, reified X : Capability<C>> Capability.Required<X>.updateWith(
     value: X,
 ): Capability.Required<X> = updateWith<C, X>(
     updatedValue = value.current,
     instant = value.since,
 )
 
-inline fun <reified C, reified X : WritableCapability<C>> Capability.Optional<X>.updateWith(
+inline fun <reified C, reified X : Capability<C>> Capability.Optional<X>.updateWith(
     value: X,
 ): Capability.Optional<X> = updateWith<C, X>(
     updatedValue = value.current,

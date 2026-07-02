@@ -10,7 +10,6 @@ import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperatur
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
-import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
 data class Thermostat(
@@ -72,9 +71,15 @@ data class Thermostat(
                     },
                 )
 
-            override fun with(capability: WritableCapability<*>): Entity.State.Known =
+            override fun with(capability: Capability<*>): Entity.State.Known =
                 when (capability) {
                     is ChildLock -> copy(childLock = childLock.updateWith(capability))
+
+                    is MeasureTemperature -> copy(
+                        temperatures = temperatures.copy(
+                            current = temperatures.current.updateWith(capability),
+                        ),
+                    )
 
                     is OnOff -> copy(onOff = onOff.updateWith(capability))
 
