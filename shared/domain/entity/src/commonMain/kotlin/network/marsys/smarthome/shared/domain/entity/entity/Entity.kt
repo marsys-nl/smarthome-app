@@ -4,7 +4,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
-import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
@@ -22,7 +21,7 @@ interface Entity<S : Entity.State> {
     sealed interface State {
         val descriptor: Descriptor
 
-        fun with(capability: WritableCapability<*>): State =
+        fun with(capability: Capability<*>): State =
             when (this) {
                 is Known -> with(capability)
                 is Unknown -> this
@@ -36,7 +35,7 @@ interface Entity<S : Entity.State> {
                     .map { it.value }
                     .toSet()
 
-            override fun with(capability: WritableCapability<*>): Known
+            override fun with(capability: Capability<*>): Known
         }
 
         sealed interface Unknown : State {

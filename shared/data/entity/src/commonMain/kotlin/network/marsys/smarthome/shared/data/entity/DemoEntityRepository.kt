@@ -1,10 +1,15 @@
 package network.marsys.smarthome.shared.data.entity
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
@@ -30,15 +35,23 @@ import network.marsys.smarthome.shared.domain.entity.entity.Lock
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import kotlin.random.Random
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.seconds
 
 class DemoEntityRepository(
     seed: List<Entity<*>> = DemoEntities,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityRepository {
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
 
     override val entities: Flow<Collection<Entity<*>>> =
         state
             .map { it.values }
+
+    init {
+        initializeObservingSimulations()
+    }
 
     override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
         state
@@ -66,6 +79,64 @@ class DemoEntityRepository(
         state.update {
             it + (action.identifier to updated)
         }
+    }
+
+    /*
+     * Simulations
+     */
+
+    private fun initializeObservingSimulations() {
+        applyThermostatSimulations()
+    }
+
+    private fun applyThermostatSimulations() {
+        scope.launch {
+            while (true) {
+                delay(SIMULATION_TICK)
+
+                state.value.values.filterIsInstance<Thermostat>()
+                    .forEach { thermostat ->
+                        val thermostatState = thermostat.state as? Thermostat.State.Known ?: return@forEach
+
+                        val onOff = thermostatState.onOff.value
+                        val measured = thermostatState.temperatures.current.value
+                        val target = thermostatState.temperatures.target.value
+                        val mode = thermostatState.mode.value
+
+                        if (onOff.current && measured.current != target.current) {
+                            val step = randomizer.nextDouble(0.05, 0.15).celsius
+
+                            val adjusted = when {
+                                measured.current < target.current && mode.supports(ThermostatMode.Mode.Heat) ->
+                                    minOf(measured.current + step, target.current)
+
+                                measured.current > target.current && mode.supports(ThermostatMode.Mode.Cool) ->
+                                    maxOf(measured.current - step, target.current)
+
+                                else -> measured.current
+                            }
+
+                            val updated = thermostat.update {
+                                it.with(
+                                    capability = MeasureTemperature(
+                                        current = adjusted.coerceIn(target.range),
+                                    ),
+                                )
+                            }
+
+                            state.update {
+                                it + (thermostat.identifier to updated)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    companion object {
+        private val SIMULATION_TICK = 2.seconds
+
+        private val randomizer = Random(seed = Clock.System.now().epochSeconds)
     }
 }
 

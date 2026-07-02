@@ -14,6 +14,13 @@ data class ThermostatMode(
         }
     }
 
+    fun supports(mode: Mode): Boolean = when {
+        mode in supported -> true
+        mode == Mode.Heat && Mode.Auto in supported -> true
+        mode == Mode.Cool && Mode.Auto in supported -> true
+        else -> false
+    }
+
     override fun updateWith(
         value: Mode,
         instant: Instant,

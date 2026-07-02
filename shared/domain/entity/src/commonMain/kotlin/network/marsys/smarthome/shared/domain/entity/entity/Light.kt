@@ -4,7 +4,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
 data class Light(
@@ -31,7 +30,7 @@ data class Light(
                     brightness.descriptor,
                 )
 
-            override fun with(capability: WritableCapability<*>): Entity.State.Known =
+            override fun with(capability: Capability<*>): Entity.State.Known =
                 when (capability) {
                     is OnOff -> copy(onOff = onOff.updateWith(capability))
                     is Brightness -> copy(brightness = brightness.updateWith(capability))

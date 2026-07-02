@@ -3,7 +3,6 @@ package network.marsys.smarthome.shared.domain.entity.entity
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Position
-import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
 data class Blind(
@@ -23,7 +22,7 @@ data class Blind(
             override val descriptor: Entity.State.Descriptor
                 get() = position.descriptor
 
-            override fun with(capability: WritableCapability<*>): Entity.State.Known =
+            override fun with(capability: Capability<*>): Entity.State.Known =
                 when (capability) {
                     is Position -> copy(position = position.updateWith(capability))
                     else -> this
