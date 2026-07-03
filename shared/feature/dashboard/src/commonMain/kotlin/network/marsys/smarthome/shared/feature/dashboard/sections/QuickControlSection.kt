@@ -21,7 +21,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Blind
+import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
@@ -234,7 +234,7 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
 private fun KClass<out Entity<*>>.groupTitle(): String =
     stringResource(
         resource = when (this) {
-            Blind::class -> SmartHomeRes.string.entity_category_blinds
+            Cover::class -> SmartHomeRes.string.entity_category_blinds
             Camera::class -> SmartHomeRes.string.entity_category_cameras
             Fan::class -> SmartHomeRes.string.entity_category_fans
             Light::class -> SmartHomeRes.string.entity_category_lights
@@ -250,7 +250,7 @@ private fun KClass<out Entity<*>>.icon(): ImageVector = when (this) {
     Light::class -> Icons.Lightbulb
     Thermostat::class -> Icons.Thermostat
     SmartPlug::class -> Icons.Plug
-    Blind::class -> Icons.Blinds
+    Cover::class -> Icons.Blinds
     Camera::class -> Icons.Monitor
     else -> Icons.Component
 }
@@ -282,7 +282,7 @@ private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = wh
         },
     )
 
-    Blind::class, Speaker::class -> GroupedEntityHeaderDefaults.colors(
+    Cover::class, Speaker::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Indigo.Indigo400.ToPurple600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Indigo.Indigo300
@@ -329,7 +329,7 @@ private fun KClass<out Entity<*>>.cardColors(): ActiveEntityCardColors = when (t
             .copy(alpha = .4f),
     )
 
-    Blind::class, Speaker::class -> EntityCardDefaults.activeCardColors(
+    Cover::class, Speaker::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Indigo.Indigo400.ToPurple600,
         border = PaletteTokens.Indigo.Indigo400
             .copy(alpha = .4f),

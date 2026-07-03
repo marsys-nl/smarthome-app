@@ -5,10 +5,11 @@ import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
-data class Blind(
+data class Cover(
     override val identifier: EntityIdentifier,
+    val type: Type,
     override val state: State = State.Unknown,
-) : AbstractEntity<Blind.State>() {
+) : AbstractEntity<Cover.State>() {
     override fun copyWithState(state: State): Entity<State> =
         copy(state = state)
 
@@ -31,4 +32,34 @@ data class Blind(
 
         data object Unknown : State, Entity.State.Unknown
     }
+
+    sealed interface Orientation {
+        data object Horizontal : Orientation
+        data object Vertical : Orientation
+    }
+
+    sealed interface Type {
+        val orientation: Orientation
+            get() = Orientation.Horizontal
+
+        data object Blind : Type {
+            override val orientation: Orientation
+                get() = Orientation.Vertical
+        }
+
+        data object Curtain : Type
+
+        data class GarageDoor(
+            override val orientation: Orientation = Orientation.Vertical,
+        ) : Type
+
+        data object Gate : Type
+
+        data object Shutter : Type {
+            override val orientation: Orientation
+                get() = Orientation.Vertical
+        }
+    }
+
+
 }

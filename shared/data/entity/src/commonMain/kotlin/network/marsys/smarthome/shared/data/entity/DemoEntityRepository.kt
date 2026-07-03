@@ -26,7 +26,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperatur
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
-import network.marsys.smarthome.shared.domain.entity.entity.Blind
+import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
@@ -218,11 +218,26 @@ val DemoEntities: List<Entity<*>> = listOf(
             onOff = required(OnOff(current = true)),
         ),
     ),
-    // Blinds
-    Blind(
+    // Covers
+    Cover(
         identifier = EntityIdentifier("blind.living-room"),
-        state = Blind.State.Known(
-            position = required(Position(0.percent)),
+        type = Cover.Type.Blind,
+        state = Cover.State.Known(
+            position = required(Position(current = 0.percent)),
+        ),
+    ),
+    Cover(
+        identifier = EntityIdentifier("shutter.main-bedroom"),
+        type = Cover.Type.Shutter,
+        state = Cover.State.Known(
+            position = required(Position(current = 0.percent)),
+        ),
+    ),
+    Cover(
+        identifier = EntityIdentifier("garage-door"),
+        type = Cover.Type.GarageDoor(),
+        state = Cover.State.Known(
+            position = required(Position(current = 0.percent)),
         ),
     ),
     // Fans
