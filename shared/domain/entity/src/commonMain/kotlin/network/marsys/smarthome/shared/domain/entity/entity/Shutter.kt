@@ -5,10 +5,10 @@ import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
-data class Blind(
+data class Shutter(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
-) : Cover<Blind.State>() {
+) : Cover<Shutter.State>() {
     override val orientation: Orientation
         get() = Orientation.Vertical
 

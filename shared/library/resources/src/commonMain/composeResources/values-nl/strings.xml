@@ -15,9 +15,11 @@
 
     <string name="entity_category_blinds">Jaloezieen</string>
     <string name="entity_category_cameras">Camera's</string>
+    <string name="entity_category_curtains">Gordijnen</string>
     <string name="entity_category_fans">Ventilatoren</string>
     <string name="entity_category_lights">Lampen</string>
     <string name="entity_category_locks">Sloten</string>
+    <string name="entity_category_shutters">Rolluiken</string>
     <string name="entity_category_smartplugs">Stekkers</string>
     <string name="entity_category_speakers">Luidsprekers</string>
     <string name="entity_category_thermostats">Thermostaten</string>

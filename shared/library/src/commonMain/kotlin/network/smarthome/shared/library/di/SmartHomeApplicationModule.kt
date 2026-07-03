@@ -59,9 +59,17 @@ private val DemoEntityTranslations = mapOf(
     "plug.smart-tv" to mapOf(
         "en" to "Smart TV",
     ),
+    "shutter.main-bedroom" to mapOf(
+        "en" to "Main bedroom",
+        "nl" to "Hoofdslaapkamer",
+    ),
     "blind.living-room" to mapOf(
         "en" to "Living room",
         "nl" to "Woonkamer",
+    ),
+    "curtain.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
     ),
     "fan.bedroom" to mapOf(
         "en" to "Bedroom",

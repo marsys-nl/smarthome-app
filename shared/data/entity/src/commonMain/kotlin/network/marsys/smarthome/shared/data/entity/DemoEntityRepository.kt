@@ -28,10 +28,12 @@ import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
+import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Lock
+import network.marsys.smarthome.shared.domain.entity.entity.Shutter
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -218,11 +220,23 @@ val DemoEntities: List<Entity<*>> = listOf(
             onOff = required(OnOff(current = true)),
         ),
     ),
-    // Blinds
+    // Covers
     Blind(
         identifier = EntityIdentifier("blind.living-room"),
         state = Blind.State.Known(
-            position = required(Position(0.percent)),
+            position = required(Position(current = 0.percent)),
+        ),
+    ),
+    Shutter(
+        identifier = EntityIdentifier("shutter.main-bedroom"),
+        state = Shutter.State.Known(
+            position = required(Position(current = 0.percent)),
+        ),
+    ),
+    Curtain(
+        identifier = EntityIdentifier("curtain.kitchen"),
+        state = Curtain.State.Known(
+            position = required(Position(current = 0.percent)),
         ),
     ),
     // Fans
