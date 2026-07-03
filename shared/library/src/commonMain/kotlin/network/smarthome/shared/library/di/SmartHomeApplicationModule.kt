@@ -67,9 +67,9 @@ private val DemoEntityTranslations = mapOf(
         "en" to "Living room",
         "nl" to "Woonkamer",
     ),
-    "garage-door" to mapOf(
-        "en" to "Garage door",
-        "nl" to "Garagedeur",
+    "curtain.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
     ),
     "fan.bedroom" to mapOf(
         "en" to "Bedroom",

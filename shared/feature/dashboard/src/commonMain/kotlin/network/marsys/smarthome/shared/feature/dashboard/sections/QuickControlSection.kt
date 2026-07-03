@@ -21,12 +21,15 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
+import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
+import network.marsys.smarthome.shared.domain.entity.entity.Cover
+import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Lock
+import network.marsys.smarthome.shared.domain.entity.entity.Shutter
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -60,10 +63,12 @@ import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_category_blinds
 import network.marsys.smarthome.shared.library.resources.entity_category_cameras
+import network.marsys.smarthome.shared.library.resources.entity_category_curtains
 import network.marsys.smarthome.shared.library.resources.entity_category_fans
 import network.marsys.smarthome.shared.library.resources.entity_category_lights
 import network.marsys.smarthome.shared.library.resources.entity_category_locks
 import network.marsys.smarthome.shared.library.resources.entity_category_other
+import network.marsys.smarthome.shared.library.resources.entity_category_shutters
 import network.marsys.smarthome.shared.library.resources.entity_category_smartplugs
 import network.marsys.smarthome.shared.library.resources.entity_category_speakers
 import network.marsys.smarthome.shared.library.resources.entity_category_thermostats
@@ -234,11 +239,13 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
 private fun KClass<out Entity<*>>.groupTitle(): String =
     stringResource(
         resource = when (this) {
-            Cover::class -> SmartHomeRes.string.entity_category_blinds
+            Blind::class -> SmartHomeRes.string.entity_category_blinds
             Camera::class -> SmartHomeRes.string.entity_category_cameras
+            Curtain::class -> SmartHomeRes.string.entity_category_curtains
             Fan::class -> SmartHomeRes.string.entity_category_fans
             Light::class -> SmartHomeRes.string.entity_category_lights
             Lock::class -> SmartHomeRes.string.entity_category_locks
+            Shutter::class -> SmartHomeRes.string.entity_category_shutters
             SmartPlug::class -> SmartHomeRes.string.entity_category_smartplugs
             Speaker::class -> SmartHomeRes.string.entity_category_speakers
             Thermostat::class -> SmartHomeRes.string.entity_category_thermostats
@@ -250,7 +257,7 @@ private fun KClass<out Entity<*>>.icon(): ImageVector = when (this) {
     Light::class -> Icons.Lightbulb
     Thermostat::class -> Icons.Thermostat
     SmartPlug::class -> Icons.Plug
-    Cover::class -> Icons.Blinds
+    Blind::class, Curtain::class, Shutter::class -> Icons.Blinds
     Camera::class -> Icons.Monitor
     else -> Icons.Component
 }
@@ -282,7 +289,7 @@ private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = wh
         },
     )
 
-    Cover::class, Speaker::class -> GroupedEntityHeaderDefaults.colors(
+    Blind::class, Curtain::class, Shutter::class, Speaker::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Indigo.Indigo400.ToPurple600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Indigo.Indigo300

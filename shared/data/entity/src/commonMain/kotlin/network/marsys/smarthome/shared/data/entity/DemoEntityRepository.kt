@@ -26,12 +26,14 @@ import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperatur
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
+import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
+import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Lock
+import network.marsys.smarthome.shared.domain.entity.entity.Shutter
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -219,24 +221,21 @@ val DemoEntities: List<Entity<*>> = listOf(
         ),
     ),
     // Covers
-    Cover(
+    Blind(
         identifier = EntityIdentifier("blind.living-room"),
-        type = Cover.Type.Blind,
-        state = Cover.State.Known(
+        state = Blind.State.Known(
             position = required(Position(current = 0.percent)),
         ),
     ),
-    Cover(
+    Shutter(
         identifier = EntityIdentifier("shutter.main-bedroom"),
-        type = Cover.Type.Shutter,
-        state = Cover.State.Known(
+        state = Shutter.State.Known(
             position = required(Position(current = 0.percent)),
         ),
     ),
-    Cover(
-        identifier = EntityIdentifier("garage-door"),
-        type = Cover.Type.GarageDoor(),
-        state = Cover.State.Known(
+    Curtain(
+        identifier = EntityIdentifier("curtain.kitchen"),
+        state = Curtain.State.Known(
             position = required(Position(current = 0.percent)),
         ),
     ),
