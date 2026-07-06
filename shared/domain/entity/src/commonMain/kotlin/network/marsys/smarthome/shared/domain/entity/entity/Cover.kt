@@ -2,6 +2,7 @@ package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
+import network.marsys.smarthome.shared.domain.entity.capability.Movement
 import network.marsys.smarthome.shared.domain.entity.capability.Opened
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
@@ -26,9 +27,11 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
     sealed interface Control {
         val constraints: Set<Capability.Constraint<*>>
-            get() = setOf(position, opened)
+            get() = setOf(movement, opened, position)
 
         val descriptor: Entity.State.Descriptor
+
+        val movement: Capability.Constraint<Movement>
 
         val opened: Capability.Present<Opened>
 
@@ -39,9 +42,15 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
         data class WithPosition(
             override val position: Capability.Required<Position>,
+            override val movement: Capability.Optional<Movement> = Capability.NotSupported,
         ) : Control {
             override val descriptor: Entity.State.Descriptor
-                get() = position.descriptor
+                get() = when {
+                    movement is Capability.Present<*> && movement.value.current != Movement.Direction.Idle ->
+                        movement.descriptor
+
+                    else -> position.descriptor
+                }
 
             override val opened: Capability.Computed<Opened, WithPosition, Boolean>
                 get() = computeOpened.compute(state = this)
@@ -66,9 +75,15 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
         data class WithoutPosition(
             override val opened: Capability.Required<Opened>,
+            override val movement: Capability.Optional<Movement> = Capability.NotSupported,
         ) : Control {
             override val descriptor: Entity.State.Descriptor
-                get() = opened.descriptor
+                get() = when {
+                    movement is Capability.Present<*> && movement.value.current != Movement.Direction.Idle ->
+                        movement.descriptor
+
+                    else -> opened.descriptor
+                }
 
             override fun with(capability: Capability<*>): Control =
                 when (capability) {

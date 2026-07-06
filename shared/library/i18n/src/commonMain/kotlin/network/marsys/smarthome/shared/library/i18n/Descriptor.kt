@@ -3,9 +3,9 @@ package network.marsys.smarthome.shared.library.i18n
 import androidx.compose.runtime.Composable
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_state_closed
+import network.marsys.smarthome.shared.library.resources.entity_state_closing
 import network.marsys.smarthome.shared.library.resources.entity_state_cooling
 import network.marsys.smarthome.shared.library.resources.entity_state_heating
 import network.marsys.smarthome.shared.library.resources.entity_state_idle
@@ -13,6 +13,7 @@ import network.marsys.smarthome.shared.library.resources.entity_state_off
 import network.marsys.smarthome.shared.library.resources.entity_state_on
 import network.marsys.smarthome.shared.library.resources.entity_state_open_percentage
 import network.marsys.smarthome.shared.library.resources.entity_state_opened
+import network.marsys.smarthome.shared.library.resources.entity_state_opening
 import network.marsys.smarthome.shared.library.resources.entity_state_separator
 
 @Composable
@@ -32,6 +33,12 @@ fun Entity.State.Descriptor.localized(): String = when (this) {
 
     is Entity.State.Descriptor.Opened ->
         stringResource(SmartHomeRes.string.entity_state_open_percentage, percentage)
+
+    Entity.State.Descriptor.Opening ->
+        stringResource(SmartHomeRes.string.entity_state_opening)
+
+    Entity.State.Descriptor.Closing ->
+        stringResource(SmartHomeRes.string.entity_state_closing)
 
     is Entity.State.Descriptor.Combined ->
         parts

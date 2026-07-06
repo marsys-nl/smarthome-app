@@ -35,6 +35,8 @@
     <string name="entity_state_closed">Closed</string>
     <string name="entity_state_opened">Open</string>
     <string name="entity_state_open_percentage">%1$s opened</string>
+    <string name="entity_state_opening">Opening</string>
+    <string name="entity_state_closing">Shutting</string>
 
     <string name="unknown_entity">Unknown device</string>
 </resources>
