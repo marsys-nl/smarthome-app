@@ -46,12 +46,6 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
             override val opened: Capability.Computed<Opened, WithPosition, Boolean>
                 get() = computeOpened.compute(state = this)
 
-            override fun with(capability: Capability<*>): Control =
-                when (capability) {
-                    is Position -> copy(position = position.updateWith(capability))
-                    else -> this
-                }
-
             private val computeOpened: Capability.Computed<Opened, WithPosition, Boolean>
                 get() = Capability.Computed(
                     value = Opened(false),
@@ -62,6 +56,12 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
                         )
                     },
                 )
+
+            override fun with(capability: Capability<*>): Control =
+                when (capability) {
+                    is Position -> copy(position = position.updateWith(capability))
+                    else -> this
+                }
         }
 
         data class WithoutPosition(
