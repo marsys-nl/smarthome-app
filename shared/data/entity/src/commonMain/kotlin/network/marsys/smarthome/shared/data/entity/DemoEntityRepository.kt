@@ -20,6 +20,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.Capability.Compa
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
+import network.marsys.smarthome.shared.domain.entity.capability.Opened
 import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
@@ -28,6 +29,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
+import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
@@ -224,19 +226,33 @@ val DemoEntities: List<Entity<*>> = listOf(
     Blind(
         identifier = EntityIdentifier("blind.living-room"),
         state = Blind.State.Known(
-            position = required(Position(current = 0.percent)),
+            control = Cover.Control.WithPosition(
+                position = required(Position(current = 0.percent)),
+            ),
+        ),
+    ),
+    Blind(
+        identifier = EntityIdentifier("blind.office"),
+        state = Blind.State.Known(
+            control = Cover.Control.WithoutPosition(
+                opened = required(Opened(current = false)),
+            ),
         ),
     ),
     Shutter(
         identifier = EntityIdentifier("shutter.main-bedroom"),
         state = Shutter.State.Known(
-            position = required(Position(current = 0.percent)),
+            control = Cover.Control.WithPosition(
+                position = required(Position(current = 50.percent)),
+            ),
         ),
     ),
     Curtain(
         identifier = EntityIdentifier("curtain.kitchen"),
         state = Curtain.State.Known(
-            position = required(Position(current = 0.percent)),
+            control = Cover.Control.WithoutPosition(
+                opened = required(Opened(current = true)),
+            ),
         ),
     ),
     // Fans
