@@ -33,6 +33,8 @@
     <string name="entity_state_closed">Gesloten</string>
     <string name="entity_state_opened">Open</string>
     <string name="entity_state_open_percentage">%1$s geopend</string>
+    <string name="entity_state_opening">Openend</string>
+    <string name="entity_state_closing">Sluitend</string>
 
     <string name="unknown_entity">Onbekend apparaat</string>
 </resources>

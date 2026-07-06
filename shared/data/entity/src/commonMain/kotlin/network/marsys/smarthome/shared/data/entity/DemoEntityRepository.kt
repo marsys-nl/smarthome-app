@@ -19,6 +19,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.Capability.Compa
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.Movement
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.Opened
 import network.marsys.smarthome.shared.domain.entity.capability.Position
@@ -228,6 +229,7 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Blind.State.Known(
             control = Cover.Control.WithPosition(
                 position = required(Position(current = 0.percent)),
+                movement = optional(Movement(current = Movement.Direction.Idle)),
             ),
         ),
     ),
@@ -252,6 +254,7 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Curtain.State.Known(
             control = Cover.Control.WithoutPosition(
                 opened = required(Opened(current = true)),
+                movement = optional(Movement(current = Movement.Direction.Idle)),
             ),
         ),
     ),

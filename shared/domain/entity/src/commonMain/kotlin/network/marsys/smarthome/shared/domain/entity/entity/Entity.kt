@@ -49,11 +49,13 @@ interface Entity<S : Entity.State> {
             data object On : Descriptor
             data object Off : Descriptor
 
-            data object Open : Descriptor
             data object Closed : Descriptor
+            data object Closing : Descriptor
+            data object Open : Descriptor
             data class Opened(
                 val percentage: Quantity<Dimension.Ratio>,
             ) : Descriptor
+            data object Opening : Descriptor
 
             data class Value<T : Dimension>(
                 val value: Quantity<T>,
