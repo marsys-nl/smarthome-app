@@ -2,8 +2,8 @@ package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
+import network.marsys.smarthome.shared.domain.entity.capability.Opened
 import network.marsys.smarthome.shared.domain.entity.capability.Position
-import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 
 data class Blind(
     override val identifier: EntityIdentifier,
@@ -17,17 +17,12 @@ data class Blind(
 
     sealed interface State : Entity.State {
         data class Known(
-            val position: Capability.Required<Position>,
-        ) : State, Entity.State.Known {
-            override val constraints: Set<Capability.Constraint<*>>
-                get() = setOf(position)
-
-            override val descriptor: Entity.State.Descriptor
-                get() = position.descriptor
-
+            override val control: Control,
+        ) : State, Cover.State {
             override fun with(capability: Capability<*>): Entity.State.Known =
                 when (capability) {
-                    is Position -> copy(position = position.updateWith(capability))
+                    is Opened -> copy(control = control.with(capability))
+                    is Position -> copy(control = control.with(capability))
                     else -> this
                 }
         }

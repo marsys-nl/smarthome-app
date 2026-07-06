@@ -27,7 +27,7 @@ interface Capability<T> {
             get() = value.descriptor
     }
 
-    data class Computed<C : Capability<T>, S : Entity.State.Known, T>(
+    data class Computed<C : Capability<T>, S, T>(
         override val value: C,
         private val compute: C.(S) -> C,
     ) : Present<C>, Constraint<C> {
