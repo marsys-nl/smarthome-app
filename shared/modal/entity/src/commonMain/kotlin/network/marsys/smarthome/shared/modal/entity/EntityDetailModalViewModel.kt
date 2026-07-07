@@ -10,6 +10,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
+import network.marsys.smarthome.shared.domain.entity.capability.Movement
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
@@ -55,6 +56,30 @@ class EntityDetailModalViewModel(
                             action = TargetTemperature.SetTargetTemperature(
                                 identifier = it.entity,
                                 targetTemperature = it.temperature,
+                            ),
+                        )
+                    }
+
+                    is EntityDetailModalAction.MoveCover.Open -> action.flow.collect {
+                        entityRepository.execute(
+                            action = Movement.Move.Open(
+                                identifier = it.entity,
+                            ),
+                        )
+                    }
+
+                    is EntityDetailModalAction.MoveCover.Close -> action.flow.collect {
+                        entityRepository.execute(
+                            action = Movement.Move.Close(
+                                identifier = it.entity,
+                            ),
+                        )
+                    }
+
+                    is EntityDetailModalAction.MoveCover.Stop -> action.flow.collect {
+                        entityRepository.execute(
+                            action = Movement.Move.Stop(
+                                identifier = it.entity,
                             ),
                         )
                     }

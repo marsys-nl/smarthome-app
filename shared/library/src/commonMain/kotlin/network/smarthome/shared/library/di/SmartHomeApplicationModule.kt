@@ -67,6 +67,10 @@ private val DemoEntityTranslations = mapOf(
         "en" to "Living room",
         "nl" to "Woonkamer",
     ),
+    "blind.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
     "curtain.kitchen" to mapOf(
         "en" to "Kitchen",
         "nl" to "Keuken",

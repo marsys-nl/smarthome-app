@@ -1,5 +1,6 @@
 package network.marsys.smarthome.shared.domain.entity.capability
 
+import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import kotlin.time.Clock
 import kotlin.time.Instant
@@ -27,5 +28,19 @@ data class Movement(
         Idle,
         Opening,
         Closing,
+    }
+
+    sealed interface Move : Entity.Action {
+        data class Open(
+            override val identifier: EntityIdentifier,
+        ) : Move
+
+        data class Close(
+            override val identifier: EntityIdentifier,
+        ) : Move
+
+        data class Stop(
+            override val identifier: EntityIdentifier,
+        ) : Move
     }
 }

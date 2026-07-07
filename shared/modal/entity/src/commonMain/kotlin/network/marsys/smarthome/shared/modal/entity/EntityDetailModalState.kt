@@ -23,6 +23,20 @@ sealed class EntityDetailModalAction(val key: String) {
         val temperature: Quantity<Dimension.Temperature>,
     ) : EntityDetailModalAction("AdjustTargetTemperature[$entity]")
 
+    sealed class MoveCover(key: String) : EntityDetailModalAction(key) {
+        data class Open(
+            val entity: EntityIdentifier,
+        ) : MoveCover("MoveCover.Open[$entity]")
+
+        data class Close(
+            val entity: EntityIdentifier,
+        ) : MoveCover("MoveCover.Close[$entity]")
+
+        data class Stop(
+            val entity: EntityIdentifier,
+        ) : MoveCover("MoveCover.Stop[$entity]")
+    }
+
     data class ToggleChildLock(
         val entity: EntityIdentifier,
         val state: Boolean,

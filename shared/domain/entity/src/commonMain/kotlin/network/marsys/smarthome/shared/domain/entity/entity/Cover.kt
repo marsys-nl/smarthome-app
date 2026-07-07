@@ -68,6 +68,7 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
             override fun with(capability: Capability<*>): Control =
                 when (capability) {
+                    is Movement -> copy(movement = movement.updateWith(capability))
                     is Position -> copy(position = position.updateWith(capability))
                     else -> this
                 }
@@ -87,6 +88,7 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
             override fun with(capability: Capability<*>): Control =
                 when (capability) {
+                    is Movement -> copy(movement = movement.updateWith(capability))
                     is Opened -> copy(opened = opened.updateWith(capability))
                     else -> this
                 }

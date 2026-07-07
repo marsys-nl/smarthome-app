@@ -70,6 +70,9 @@ class DemoEntityRepository(
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
             is ChildLock.Toggle.On -> ChildLock(current = true)
             is ChildLock.Toggle.Off -> ChildLock(current = false)
+            is Movement.Move.Close -> Movement(current = Movement.Direction.Closing)
+            is Movement.Move.Open -> Movement(current = Movement.Direction.Opening)
+            is Movement.Move.Stop -> Movement(current = Movement.Direction.Idle)
             is OnOff.Toggle.On -> OnOff(current = true)
             is OnOff.Toggle.Off -> OnOff(current = false)
             is ScheduledMode.Toggle.On -> ScheduledMode(current = true)
@@ -229,7 +232,7 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Blind.State.Known(
             control = Cover.Control.WithPosition(
                 position = required(Position(current = 0.percent)),
-                movement = optional(Movement(current = Movement.Direction.Idle)),
+                movement = optional(Movement(current = Movement.Direction.Opening)),
             ),
         ),
     ),

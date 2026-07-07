@@ -26,11 +26,15 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
+import network.marsys.smarthome.shared.domain.entity.capability.Movement
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
+import network.marsys.smarthome.shared.domain.entity.capability.Opened
+import network.marsys.smarthome.shared.domain.entity.capability.Position
 import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
 import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
+import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
@@ -62,6 +66,7 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
+import network.marsys.smarthome.shared.modal.entity.section.CoverControlSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureControlSection
 import network.marsys.smarthome.shared.modal.entity.section.ThermostatControlSection
@@ -231,6 +236,19 @@ private fun EntityDetailLoadedModalContent(
             )
         },
     )
+
+    if (entity is Cover<*>) {
+        entity.ifPresent<Opened, Position, Movement> { opened, position, movement ->
+            CoverControlSection(
+                entity = entity.identifier,
+                orientation = entity.orientation,
+                opened = opened ?: return,
+                position = position,
+                movement = movement,
+                onAction = onAction,
+            )
+        }
+    }
 }
 
 @Composable
