@@ -5,6 +5,13 @@
     <string name="entity_capability_brightness">Brightness</string>
     <string name="entity_capability_on_off">Power</string>
 
+    <string name="entity_capability_position">Opened</string>
+    <string name="entity_capability_position_stop">Stop</string>
+    <string name="entity_capability_position_open">Open</string>
+    <string name="entity_capability_position_close">Close</string>
+
+    <string name="entity_capability_opened_current_state">Current state</string>
+
     <string name="entity_capability_temperature_current">Current</string>
     <string name="entity_capability_temperature_target">Target</string>
     <string name="entity_capability_temperature_status">Status</string>
