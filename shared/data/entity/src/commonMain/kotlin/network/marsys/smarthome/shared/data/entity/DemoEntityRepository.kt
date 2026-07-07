@@ -68,18 +68,12 @@ class DemoEntityRepository(
 
         val capability: WritableCapability<*> = when (action) {
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
-            is ChildLock.Toggle.On -> ChildLock(current = true)
-            is ChildLock.Toggle.Off -> ChildLock(current = false)
-            is Movement.Move.Close -> Movement(current = Movement.Direction.Closing)
-            is Movement.Move.Open -> Movement(current = Movement.Direction.Opening)
-            is Movement.Move.Stop -> Movement(current = Movement.Direction.Idle)
-            is OnOff.Toggle.On -> OnOff(current = true)
-            is OnOff.Toggle.Off -> OnOff(current = false)
-            is ScheduledMode.Toggle.On -> ScheduledMode(current = true)
-            is ScheduledMode.Toggle.Off -> ScheduledMode(current = false)
+            is ChildLock.Toggle -> executeChildLockCapabilityAction(action)
+            is Movement.Move -> executeMovementCapabilityAction(action)
+            is OnOff.Toggle -> executeOnOffCapabilityAction(action)
+            is ScheduledMode.Toggle -> executeScheduledModeCapabilityAction(action)
             is TargetTemperature.SetTargetTemperature -> TargetTemperature(current = action.targetTemperature)
-            is WindowDetection.Toggle.On -> WindowDetection(current = true)
-            is WindowDetection.Toggle.Off -> WindowDetection(current = false)
+            is WindowDetection.Toggle -> executeWindowDetectionCapabilityAction(action)
             else -> return
         }
 
@@ -87,6 +81,32 @@ class DemoEntityRepository(
         state.update {
             it + (action.identifier to updated)
         }
+    }
+
+    private fun executeChildLockCapabilityAction(action: ChildLock.Toggle) = when (action) {
+        is ChildLock.Toggle.On -> ChildLock(current = true)
+        is ChildLock.Toggle.Off -> ChildLock(current = false)
+    }
+
+    private fun executeMovementCapabilityAction(action: Movement.Move) = when (action) {
+        is Movement.Move.Close -> Movement(current = Movement.Direction.Closing)
+        is Movement.Move.Open -> Movement(current = Movement.Direction.Opening)
+        is Movement.Move.Stop -> Movement(current = Movement.Direction.Idle)
+    }
+
+    private fun executeOnOffCapabilityAction(action: OnOff.Toggle) = when (action) {
+        is OnOff.Toggle.On -> OnOff(current = true)
+        is OnOff.Toggle.Off -> OnOff(current = false)
+    }
+
+    private fun executeScheduledModeCapabilityAction(action: ScheduledMode.Toggle) = when (action) {
+        is ScheduledMode.Toggle.On -> ScheduledMode(current = true)
+        is ScheduledMode.Toggle.Off -> ScheduledMode(current = false)
+    }
+
+    private fun executeWindowDetectionCapabilityAction(action: WindowDetection.Toggle) = when (action) {
+        is WindowDetection.Toggle.On -> WindowDetection(current = true)
+        is WindowDetection.Toggle.Off -> WindowDetection(current = false)
     }
 
     /*
