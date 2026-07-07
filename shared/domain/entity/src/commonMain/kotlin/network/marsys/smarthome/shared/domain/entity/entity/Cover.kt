@@ -31,7 +31,7 @@ abstract class Cover<S : Entity.State> : AbstractEntity<S>() {
 
         val descriptor: Entity.State.Descriptor
 
-        val movement: Capability.Constraint<Movement>
+        val movement: Capability.Optional<Movement>
 
         val opened: Capability.Present<Opened>
 

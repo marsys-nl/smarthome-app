@@ -15,6 +15,7 @@ import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
+import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
@@ -44,10 +45,12 @@ import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("TooManyFunctions")
 class DemoEntityRepository(
     seed: List<Entity<*>> = DemoEntities,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityRepository {
+    private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
 
     override val entities: Flow<Collection<Entity<*>>> =
@@ -92,6 +95,8 @@ class DemoEntityRepository(
         is Movement.Move.Close -> Movement(current = Movement.Direction.Closing)
         is Movement.Move.Open -> Movement(current = Movement.Direction.Opening)
         is Movement.Move.Stop -> Movement(current = Movement.Direction.Idle)
+    }.also {
+        setupCoverSimulation(action)
     }
 
     private fun executeOnOffCapabilityAction(action: OnOff.Toggle) = when (action) {
@@ -109,12 +114,20 @@ class DemoEntityRepository(
         is WindowDetection.Toggle.Off -> WindowDetection(current = false)
     }
 
+    private fun setupCoverSimulation(action: Movement.Move) {
+        when (action) {
+            is Movement.Move.Stop -> simulations.remove(action.identifier)
+            else -> simulations[action.identifier] = action
+        }
+    }
+
     /*
      * Simulations
      */
 
     private fun initializeObservingSimulations() {
         applyThermostatSimulations()
+        applyRecurringSimulations()
     }
 
     private fun applyThermostatSimulations() {
@@ -132,7 +145,7 @@ class DemoEntityRepository(
                         val mode = thermostatState.mode.value
 
                         if (onOff.current && measured.current != target.current) {
-                            val step = randomizer.nextDouble(0.05, 0.15).celsius
+                            val step = randomizer.nextDouble(0.03, 0.08).celsius
 
                             val adjusted = when {
                                 measured.current < target.current && mode.supports(ThermostatMode.Mode.Heat) ->
@@ -161,8 +174,105 @@ class DemoEntityRepository(
         }
     }
 
+    private fun applyRecurringSimulations() {
+        scope.launch {
+            while (true) {
+                delay(SIMULATION_TICK)
+
+                simulations.forEach { (_, action) ->
+                    val entity = state.value[action.identifier] ?: return@forEach
+
+                    when (entity) {
+                        is Cover<*> if action is Movement.Move -> applyCoverSimulation(entity, action)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun applyCoverSimulation(entity: Cover<*>, action: Movement.Move) {
+        val coverState = entity.state as? Cover.State ?: return run {
+            simulations.remove(entity.identifier)
+        }
+
+        val movement = coverState.control.movement as? Capability.Available<Movement> ?: return run {
+            simulations.remove(entity.identifier)
+        }
+
+        val capabilities: List<Capability<*>> = when (val control = coverState.control) {
+            is Cover.Control.WithPosition -> determineUpdatedCapabilitiesWithPosition(
+                movement = movement.value,
+                position = control.position.value,
+                action = action,
+            )
+
+            is Cover.Control.WithoutPosition -> determineUpdatedCapabilitiesWithoutPosition(
+                movement = movement.value,
+                opened = control.opened.value,
+                action = action,
+            )
+        }
+
+        val updated = entity.update { state ->
+            capabilities.fold(state) { accumulator, capability ->
+                accumulator.with(capability = capability)
+            }
+        }
+
+        state.update {
+            it + (entity.identifier to updated)
+        }
+    }
+
+    private fun determineUpdatedCapabilitiesWithPosition(
+        movement: Movement,
+        position: Position,
+        action: Movement.Move,
+    ): List<Capability<*>> {
+        val updatedPosition = when (action) {
+            is Movement.Move.Open -> position.copy(
+                current = (position.current + 1.percent)
+                    .coerceAtMost(100.percent),
+            )
+
+            is Movement.Move.Close -> position.copy(
+                current = (position.current - 1.percent)
+                    .coerceAtLeast(0.percent),
+            )
+
+            is Movement.Move.Stop -> position
+        }
+
+        val updatedMovement = when {
+            updatedPosition.current == 0.percent || updatedPosition.current == 100.percent ->
+                Movement(current = Movement.Direction.Idle)
+
+            else -> movement
+        }
+
+        return listOf(updatedPosition, updatedMovement)
+    }
+
+    @Suppress("FunctionNameMaxLength")
+    private fun determineUpdatedCapabilitiesWithoutPosition(
+        movement: Movement,
+        opened: Opened,
+        action: Movement.Move,
+    ): List<Capability<*>> = listOf(
+        movement.copy(
+            current = Movement.Direction.Idle,
+        ),
+        opened.copy(
+            current = when (action) {
+                is Movement.Move.Open -> true
+                is Movement.Move.Close -> false
+                is Movement.Move.Stop -> opened.current
+            },
+        ),
+    )
+
     companion object {
-        private val SIMULATION_TICK = 2.seconds
+        private val SIMULATION_TICK = 0.25.seconds
 
         private val randomizer = Random(seed = Clock.System.now().epochSeconds)
     }
@@ -252,7 +362,7 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Blind.State.Known(
             control = Cover.Control.WithPosition(
                 position = required(Position(current = 0.percent)),
-                movement = optional(Movement(current = Movement.Direction.Opening)),
+                movement = optional(Movement(current = Movement.Direction.Idle)),
             ),
         ),
     ),
