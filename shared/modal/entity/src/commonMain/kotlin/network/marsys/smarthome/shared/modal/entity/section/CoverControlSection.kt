@@ -81,6 +81,7 @@ internal fun CoverControlSection(
                 entity = entity,
                 orientation = orientation,
                 movement = movement,
+                opened = opened,
                 onAction = onAction,
             )
         }
@@ -155,6 +156,7 @@ private fun CoverMovementControlSection(
     entity: EntityIdentifier,
     orientation: Cover.Orientation,
     movement: Movement,
+    opened: Opened,
     onAction: (EntityDetailModalAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -171,26 +173,32 @@ private fun CoverMovementControlSection(
             },
             text = Res.string.entity_capability_position_open,
             onClick = {
-                onAction.invoke(
-                    EntityDetailModalAction.MoveCover.Open(
-                        entity = entity,
-                    ),
-                )
+                if (movement.current != Movement.Direction.Opening) {
+                    onAction.invoke(
+                        EntityDetailModalAction.MoveCover.Open(
+                            entity = entity,
+                        ),
+                    )
+                }
             },
             active = movement.current == Movement.Direction.Opening,
+            disabled = opened.current && movement.current == Movement.Direction.Idle,
         )
 
         CoverMovementButton(
             icon = Icons.Square,
             text = Res.string.entity_capability_position_stop,
             onClick = {
-                onAction.invoke(
-                    EntityDetailModalAction.MoveCover.Stop(
-                        entity = entity,
-                    ),
-                )
+                if (movement.current != Movement.Direction.Idle) {
+                    onAction.invoke(
+                        EntityDetailModalAction.MoveCover.Stop(
+                            entity = entity,
+                        ),
+                    )
+                }
             },
             active = false,
+            disabled = movement.current == Movement.Direction.Idle,
         )
 
         CoverMovementButton(
@@ -200,13 +208,16 @@ private fun CoverMovementControlSection(
             },
             text = Res.string.entity_capability_position_close,
             onClick = {
-                onAction.invoke(
-                    EntityDetailModalAction.MoveCover.Close(
-                        entity = entity,
-                    ),
-                )
+                if (movement.current != Movement.Direction.Closing) {
+                    onAction.invoke(
+                        EntityDetailModalAction.MoveCover.Close(
+                            entity = entity,
+                        ),
+                    )
+                }
             },
             active = movement.current == Movement.Direction.Closing,
+            disabled = !opened.current && movement.current == Movement.Direction.Idle,
         )
     }
 }
@@ -217,6 +228,7 @@ private fun CoverMovementButton(
     text: StringResource,
     onClick: () -> Unit,
     active: Boolean,
+    disabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     val activeButtonColors = ButtonDefaults.colors(
@@ -225,21 +237,22 @@ private fun CoverMovementButton(
     )
 
     val inactiveButtonColors = ButtonDefaults.colors(
-        backgroundColor = SolidColor(Color.Transparent),
+        backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
         contentColor = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-        borderColor = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
     )
 
     Button(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth(),
+        enabled = !disabled,
         colors = when (active) {
             true -> activeButtonColors
             false -> inactiveButtonColors
         },
         contentPadding = PaddingValues(
-            vertical = 16.dp,
+            vertical = 20.dp,
             horizontal = 16.dp,
         ),
     ) {
