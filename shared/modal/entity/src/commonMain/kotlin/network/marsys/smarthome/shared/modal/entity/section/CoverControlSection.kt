@@ -80,6 +80,7 @@ internal fun CoverControlSection(
             CoverMovementControlSection(
                 entity = entity,
                 orientation = orientation,
+                position = position,
                 movement = movement,
                 opened = opened,
                 onAction = onAction,
@@ -155,6 +156,7 @@ private fun CoverPositionSection(
 private fun CoverMovementControlSection(
     entity: EntityIdentifier,
     orientation: Cover.Orientation,
+    position: Position?,
     movement: Movement,
     opened: Opened,
     onAction: (EntityDetailModalAction) -> Unit,
@@ -174,15 +176,12 @@ private fun CoverMovementControlSection(
             text = Res.string.entity_capability_position_open,
             onClick = {
                 if (movement.current != Movement.Direction.Opening) {
-                    onAction.invoke(
-                        EntityDetailModalAction.MoveCover.Open(
-                            entity = entity,
-                        ),
-                    )
+                    onAction.invoke(EntityDetailModalAction.MoveCover.Open(entity = entity))
                 }
             },
             active = movement.current == Movement.Direction.Opening,
-            disabled = opened.current && movement.current == Movement.Direction.Idle,
+            disabled = position?.current?.equals(100.percent) ?: opened.current &&
+                movement.current == Movement.Direction.Idle,
         )
 
         CoverMovementButton(
@@ -190,11 +189,7 @@ private fun CoverMovementControlSection(
             text = Res.string.entity_capability_position_stop,
             onClick = {
                 if (movement.current != Movement.Direction.Idle) {
-                    onAction.invoke(
-                        EntityDetailModalAction.MoveCover.Stop(
-                            entity = entity,
-                        ),
-                    )
+                    onAction.invoke(EntityDetailModalAction.MoveCover.Stop(entity = entity))
                 }
             },
             active = false,
@@ -209,15 +204,12 @@ private fun CoverMovementControlSection(
             text = Res.string.entity_capability_position_close,
             onClick = {
                 if (movement.current != Movement.Direction.Closing) {
-                    onAction.invoke(
-                        EntityDetailModalAction.MoveCover.Close(
-                            entity = entity,
-                        ),
-                    )
+                    onAction.invoke(EntityDetailModalAction.MoveCover.Close(entity = entity))
                 }
             },
             active = movement.current == Movement.Direction.Closing,
-            disabled = !opened.current && movement.current == Movement.Direction.Idle,
+            disabled = position?.current?.equals(0.percent) ?: !opened.current &&
+                movement.current == Movement.Direction.Idle,
         )
     }
 }
