@@ -145,7 +145,7 @@ class DemoEntityRepository(
                         val mode = thermostatState.mode.value
 
                         if (onOff.current && measured.current != target.current) {
-                            val step = randomizer.nextDouble(0.03, 0.08).celsius
+                            val step = randomizer.nextDouble(0.005, 0.02).celsius
 
                             val adjusted = when {
                                 measured.current < target.current && mode.supports(ThermostatMode.Mode.Heat) ->
@@ -190,7 +190,7 @@ class DemoEntityRepository(
         }
     }
 
-    private fun applyCoverSimulation(entity: Cover<*>, action: Movement.Move) {
+    private suspend fun applyCoverSimulation(entity: Cover<*>, action: Movement.Move) {
         val coverState = entity.state as? Cover.State ?: return run {
             simulations.remove(entity.identifier)
         }
@@ -222,6 +222,12 @@ class DemoEntityRepository(
         state.update {
             it + (entity.identifier to updated)
         }
+
+        capabilities.filterIsInstance<Movement>()
+            .firstOrNull { it.current == Movement.Direction.Idle }
+            ?.let {
+                simulations.remove(entity.identifier)
+            }
     }
 
     private fun determineUpdatedCapabilitiesWithPosition(
@@ -254,7 +260,7 @@ class DemoEntityRepository(
     }
 
     @Suppress("FunctionNameMaxLength")
-    private fun determineUpdatedCapabilitiesWithoutPosition(
+    private suspend fun determineUpdatedCapabilitiesWithoutPosition(
         movement: Movement,
         opened: Opened,
         action: Movement.Move,
@@ -269,10 +275,12 @@ class DemoEntityRepository(
                 is Movement.Move.Stop -> opened.current
             },
         ),
-    )
+    ).also {
+        delay(1.seconds)
+    }
 
     companion object {
-        private val SIMULATION_TICK = 0.25.seconds
+        private val SIMULATION_TICK = 0.1.seconds
 
         private val randomizer = Random(seed = Clock.System.now().epochSeconds)
     }
