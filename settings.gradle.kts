@@ -48,6 +48,7 @@ include(
     ":shared:domain:entity",
     ":shared:feature:dashboard",
     ":shared:feature:onboarding",
+    ":shared:feature:profile",
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",
