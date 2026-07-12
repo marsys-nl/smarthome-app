@@ -1,5 +1,6 @@
 package network.smarthome.shared.library.main
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,8 @@ import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
+import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
@@ -75,84 +78,99 @@ internal fun MainScreenNavigation(
         elements = arrayOf(SmartHomeScreen.Dashboard),
     )
 
-    NavDisplay(
+    Column(
         modifier = modifier
             .fillMaxSize(),
-        backStack = backStack,
-        onBack = { backStack.removeLastOrNull() },
-        sceneStrategies = listOf(modalStrategy),
-        entryProvider = entryProvider {
-            entry<SmartHomeScreen.Dashboard> {
-                MainScreenNavigationItemWrapper(
-                    backStack = backStack,
-                ) {
-                    MainScreenDashboardScreenView(
-                        onNavigate = { target ->
-                            backStack += when (target) {
-                                is NavigationDestination.ChangeAppAppearanceModal ->
-                                    SmartHomeScreen.AppAppearance
+    ) {
 
-                                is NavigationDestination.EntityDetailModal ->
-                                    SmartHomeScreen.EntityDetails(target.entity)
+        NavDisplay(
+            modifier = modifier
+                .weight(1f),
+            backStack = backStack,
+            onBack = { backStack.removeLastOrNull() },
+            sceneStrategies = listOf(modalStrategy),
+            entryProvider = entryProvider {
+                entry<SmartHomeScreen.Dashboard> {
+                    MainScreenNavigationItemWrapper(
+                        backStack = backStack,
+                    ) {
+                        MainScreenDashboardScreenView(
+                            onNavigate = { target ->
+                                backStack += when (target) {
+                                    is NavigationDestination.ChangeAppAppearanceModal ->
+                                        SmartHomeScreen.AppAppearance
+
+                                    is NavigationDestination.EntityDetailModal ->
+                                        SmartHomeScreen.EntityDetails(target.entity)
+                                }
+                            },
+                        )
+                    }
+                }
+
+                entry<SmartHomeScreen.Rooms> {
+                    MainScreenNavigationItemWrapper(
+                        backStack = backStack,
+                    ) {
+                        MainScreenPlaceholderScreenView(
+                            screen = SmartHomeScreen.Rooms,
+                        )
+                    }
+                }
+
+                entry<SmartHomeScreen.Scenes> {
+                    MainScreenNavigationItemWrapper(
+                        backStack = backStack,
+                    ) {
+                        MainScreenPlaceholderScreenView(
+                            screen = SmartHomeScreen.Scenes,
+                        )
+                    }
+                }
+
+                entry<SmartHomeScreen.Profile> {
+                    MainScreenNavigationItemWrapper(
+                        backStack = backStack,
+                    ) {
+                        ProfileScreenView()
+                    }
+                }
+
+                entry<SmartHomeScreen.AppAppearance>(
+                    metadata = ModalSceneStrategy.modal(),
+                ) {
+                    val coroutineScope = rememberCoroutineScope()
+
+                    AppAppearanceModalContent(
+                        onDismissRequest = { backStack.removeLastOrNull() },
+                        onSelectTheme = {
+                            coroutineScope.launch {
+                                appearancePreferencesRepository.setTheme(it)
                             }
                         },
                     )
                 }
-            }
 
-            entry<SmartHomeScreen.Rooms> {
-                MainScreenNavigationItemWrapper(
-                    backStack = backStack,
+                entry<SmartHomeScreen.EntityDetails>(
+                    metadata = ModalSceneStrategy.modal(),
                 ) {
-                    MainScreenPlaceholderScreenView(
-                        screen = SmartHomeScreen.Rooms,
+                    EntityDetailModal(
+                        entity = it.entity,
+                        onDismissRequest = { backStack.removeLastOrNull() },
                     )
                 }
-            }
+            },
+        )
 
-            entry<SmartHomeScreen.Scenes> {
-                MainScreenNavigationItemWrapper(
-                    backStack = backStack,
-                ) {
-                    MainScreenPlaceholderScreenView(
-                        screen = SmartHomeScreen.Scenes,
-                    )
-                }
-            }
-
-            entry<SmartHomeScreen.Profile> {
-                MainScreenNavigationItemWrapper(
-                    backStack = backStack,
-                ) {
-                    ProfileScreenView()
-                }
-            }
-
-            entry<SmartHomeScreen.AppAppearance>(
-                metadata = ModalSceneStrategy.modal(),
-            ) {
-                val coroutineScope = rememberCoroutineScope()
-
-                AppAppearanceModalContent(
-                    onDismissRequest = { backStack.removeLastOrNull() },
-                    onSelectTheme = {
-                        coroutineScope.launch {
-                            appearancePreferencesRepository.setTheme(it)
-                        }
-                    },
-                )
-            }
-
-            entry<SmartHomeScreen.EntityDetails>(
-                metadata = ModalSceneStrategy.modal(),
-            ) {
-                EntityDetailModal(
-                    entity = it.entity,
-                    onDismissRequest = { backStack.removeLastOrNull() },
-                )
-            }
-        },
-    )
+        BottomNavigation(
+            selectedNavigationItem = backStack.firstOrNull(),
+            onNavigationItemSelect = { screen ->
+                backStack.clear()
+                backStack += screen
+            },
+            navigationItemProvider = bottomNavigationItems(),
+        )
+    }
 }
 
 @Composable
@@ -168,26 +186,12 @@ private fun MainScreenNavigationItemWrapper(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .then(blurModifier),
+            .background(LocalColorScheme.current[ColorKeyToken.BackgroundPrimary])
+            .then(blurModifier)
+            .verticalScroll(rememberScrollState())
+            .safeContentPadding(),
     ) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-                .safeContentPadding()
-                .weight(1f),
-        ) {
-            content.invoke()
-        }
-
-        BottomNavigation(
-            selectedNavigationItem = backStack.firstOrNull(),
-            onNavigationItemSelect = { screen ->
-                backStack.clear()
-                backStack += screen
-            },
-            navigationItemProvider = bottomNavigationItems(),
-        )
+        content.invoke()
     }
 }
 

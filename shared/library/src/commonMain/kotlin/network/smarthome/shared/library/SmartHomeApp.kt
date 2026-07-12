@@ -8,6 +8,7 @@ import network.marsys.smarthome.shared.data.connection.connectionDataModule
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
+import network.marsys.smarthome.shared.feature.profile.ProfileViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -40,6 +41,13 @@ private val viewModelModule = module {
             applicationConfigurationRepository = get(),
             onboardingRepository = get(),
             validateBackendUriUseCase = get(),
+        )
+    }
+
+    viewModel {
+        ProfileViewModel(
+            applicationConfigurationRepository = get(),
+            coroutineScope = viewModelCoroutineScope(),
         )
     }
 
