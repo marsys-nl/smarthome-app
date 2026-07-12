@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -30,6 +33,7 @@ import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.Shield
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -48,6 +52,7 @@ fun ProfileScreenView(
     ProfileScreenViewContent(
         name = state.user,
         email = state.email,
+        connectedBackend = state.connectedBackend,
         modifier = modifier,
     )
 }
@@ -56,6 +61,7 @@ fun ProfileScreenView(
 private fun ProfileScreenViewContent(
     name: String,
     email: String,
+    connectedBackend: String?,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -76,6 +82,11 @@ private fun ProfileScreenViewContent(
                 name = name,
                 email = email,
             )
+            connectedBackend?.let {
+                ProfileConnectedBackend(
+                    connectedBackend = it,
+                )
+            }
         }
     }
 }
@@ -146,6 +157,67 @@ private fun ProfileUserInfo(
     }
 }
 
+@Composable
+private fun ProfileConnectedBackend(
+    connectedBackend: String,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessPrimary]),
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderSuccessPrimary],
+        ),
+        borderWidth = 1.dp,
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement
+                .spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Card(
+                modifier = Modifier
+                    .width(32.dp)
+                    .aspectRatio(1f),
+                colors = CardDefaults.colors(
+                    backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessSecondary]),
+                ),
+                shape = RoundedCornerShape(8.dp),
+                contentPadding = PaddingValues(8.dp),
+            ) {
+                Icon(
+                    icon = Icons.Shield,
+                    size = 16.dp,
+                    tint = SmartHomeTheme.colors[ColorKeyToken.ForegroundSuccessPrimary],
+                )
+            }
+
+            Column(
+                modifier = Modifier,
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp),
+            ) {
+                Text(
+                    text = "Connected backend",
+                    lineHeight = 16.sp,
+                    fontSize = 12.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessPrimary],
+                )
+
+                Text(
+                    text = connectedBackend,
+                    lineHeight = 16.sp,
+                    fontSize = 12.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessSecondary],
+                    fontFamily = FontFamily.Monospace,
+                )
+            }
+        }
+    }
+}
+
 @PreviewLocales
 @PreviewFontScales
 @PreviewScreenSizes
@@ -159,6 +231,7 @@ private fun ProfileScreenDemoUserPreview(
         ProfileScreenViewContent(
             name = "Demo User",
             email = "demo.user@example.com",
+            connectedBackend = null,
         )
     }
 }
@@ -176,6 +249,7 @@ private fun ProfileScreenRealUserPreview(
         ProfileScreenViewContent(
             name = "Niels Marsman",
             email = "niels.marsman@example.com",
+            connectedBackend = "https://example.com",
         )
     }
 }

@@ -30,6 +30,11 @@ class ProfileViewModel(
                 applicationConfigurationRepository = applicationConfigurationRepository,
             )
 
+            launchConnectedBackendMutations(
+                state = state,
+                applicationConfigurationRepository = applicationConfigurationRepository,
+            )
+
             actions.handle(
                 scope = this,
                 keySelector = ProfileScreenAction::key,
@@ -50,6 +55,18 @@ class ProfileViewModel(
             }
         },
     )
+
+context(scope: CoroutineScope)
+private fun launchConnectedBackendMutations(
+    state: MutableProfileScreenState,
+    applicationConfigurationRepository: ApplicationConfigurationRepository,
+) {
+    scope.launch {
+        applicationConfigurationRepository.backendUri.collect {
+            state.connectedBackend = it
+        }
+    }
+}
 
 context(scope: CoroutineScope)
 private fun launchUserMutations(
@@ -74,4 +91,5 @@ private fun launchUserMutations(
 private class MutableProfileScreenState : ProfileScreenState {
     override var user: String by mutableStateOf("")
     override var email: String by mutableStateOf("")
+    override var connectedBackend: String? by mutableStateOf(null)
 }

@@ -7,6 +7,7 @@ import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 interface ProfileScreenState {
     val user: String
     val email: String
+    val connectedBackend: String?
 }
 
 sealed class ProfileScreenAction(val key: String) {
