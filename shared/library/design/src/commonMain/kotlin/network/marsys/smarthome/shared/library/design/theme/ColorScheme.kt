@@ -19,15 +19,19 @@ data class ColorScheme internal constructor(
     private val backgroundTertiaryDisabled: Color,
     private val backgroundBrandPrimary: Color,
     private val backgroundBrandSecondary: Color,
+    private val backgroundSuccessPrimary: Color,
+    private val backgroundSuccessSecondary: Color,
     private val backgroundModal: Color,
     private val backgroundDimmed: Color,
     private val backgroundDisabled: Color,
     private val borderPrimary: Color,
     private val borderBrandPrimary: Color,
     private val borderBrandPrimaryDimmed: Color,
+    private val borderSuccessPrimary: Color,
     private val foregroundPrimary: Color,
     private val foregroundPrimaryAlternative: Color,
     private val foregroundBrandPrimary: Color,
+    private val foregroundSuccessPrimary: Color,
     private val foregroundDisabled: Color,
     private val gradientBrandPrimaryToSecondary: Brush,
     private val gradientDimmedPrimaryToSecondary: Brush,
@@ -35,6 +39,8 @@ data class ColorScheme internal constructor(
     private val textSecondary: Color,
     private val textSecondaryAlternative: Color,
     private val textBrandOnBrand: Color,
+    private val textSuccessPrimary: Color,
+    private val textSuccessSecondary: Color,
     private val textDisabled: Color,
 ) {
     @Suppress("CyclomaticComplexMethod")
@@ -46,20 +52,26 @@ data class ColorScheme internal constructor(
         ColorKeyToken.BackgroundTertiaryDisabled -> backgroundTertiaryDisabled
         ColorKeyToken.BackgroundBrandPrimary -> backgroundBrandPrimary
         ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
+        ColorKeyToken.BackgroundSuccessPrimary -> backgroundSuccessPrimary
+        ColorKeyToken.BackgroundSuccessSecondary -> backgroundSuccessSecondary
         ColorKeyToken.BackgroundModal -> backgroundModal
         ColorKeyToken.BackgroundDimmed -> backgroundDimmed
         ColorKeyToken.BackgroundDisabled -> backgroundDisabled
         ColorKeyToken.BorderPrimary -> borderPrimary
         ColorKeyToken.BorderBrandPrimary -> borderBrandPrimary
         ColorKeyToken.BorderBrandPrimaryDimmed -> borderBrandPrimaryDimmed
+        ColorKeyToken.BorderSuccessPrimary -> borderSuccessPrimary
         ColorKeyToken.ForegroundPrimary -> foregroundPrimary
         ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
         ColorKeyToken.ForegroundBrandPrimary -> foregroundBrandPrimary
+        ColorKeyToken.ForegroundSuccessPrimary -> foregroundSuccessPrimary
         ColorKeyToken.ForegroundDisabled -> foregroundDisabled
         ColorKeyToken.TextPrimary -> textPrimary
         ColorKeyToken.TextSecondary -> textSecondary
         ColorKeyToken.TextSecondaryAlternative -> textSecondaryAlternative
         ColorKeyToken.TextBrandOnBrand -> textBrandOnBrand
+        ColorKeyToken.TextSuccessPrimary -> textSuccessPrimary
+        ColorKeyToken.TextSuccessSecondary -> textSuccessSecondary
         ColorKeyToken.TextDisabled -> textDisabled
     }
 
@@ -90,15 +102,19 @@ internal fun darkColorScheme(
     backgroundTertiaryDisabled: Color = DarkColorSchemeTokens.BackgroundTertiaryDisabled,
     backgroundBrandPrimary: Color = DarkColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
+    backgroundSuccessPrimary: Color = DarkColorSchemeTokens.BackgroundSuccessPrimary,
+    backgroundSuccessSecondary: Color = DarkColorSchemeTokens.BackgroundSuccessSecondary,
     backgroundModal: Color = DarkColorSchemeTokens.BackgroundModal,
     backgroundDimmed: Color = DarkColorSchemeTokens.BackgroundDimmed,
     backgroundDisabled: Color = DarkColorSchemeTokens.BackgroundDisabled,
     borderPrimary: Color = DarkColorSchemeTokens.BorderPrimary,
     borderBrandPrimary: Color = DarkColorSchemeTokens.BorderBrandPrimary,
     borderBrandPrimaryDimmed: Color = DarkColorSchemeTokens.BorderBrandPrimaryDimmed,
+    borderSuccessPrimary: Color = DarkColorSchemeTokens.BorderSuccessPrimary,
     foregroundPrimary: Color = DarkColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundBrandPrimary: Color = DarkColorSchemeTokens.ForegroundBrandPrimary,
+    foregroundSuccessPrimary: Color = DarkColorSchemeTokens.ForegroundSuccessPrimary,
     foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
     gradientBrandPrimaryToSecondary: Brush = DarkColorSchemeTokens.GradientBrandPrimaryToSecondary,
     gradientDimmedPrimaryToSecondary: Brush = DarkColorSchemeTokens.GradientDimmedPrimaryToSecondary,
@@ -106,6 +122,8 @@ internal fun darkColorScheme(
     textSecondary: Color = DarkColorSchemeTokens.TextSecondary,
     textSecondaryAlternative: Color = DarkColorSchemeTokens.TextSecondaryAlternative,
     textBrandOnBrand: Color = DarkColorSchemeTokens.TextBrandOnBrand,
+    textSuccessPrimary: Color = DarkColorSchemeTokens.TextSuccessPrimary,
+    textSuccessSecondary: Color = DarkColorSchemeTokens.TextSuccessSecondary,
     textDisabled: Color = DarkColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -115,15 +133,19 @@ internal fun darkColorScheme(
     backgroundTertiaryDisabled = backgroundTertiaryDisabled,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
+    backgroundSuccessPrimary = backgroundSuccessPrimary,
+    backgroundSuccessSecondary = backgroundSuccessSecondary,
     backgroundModal = backgroundModal,
     backgroundDimmed = backgroundDimmed,
     backgroundDisabled = backgroundDisabled,
     borderPrimary = borderPrimary,
     borderBrandPrimary = borderBrandPrimary,
     borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
+    borderSuccessPrimary = borderSuccessPrimary,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundBrandPrimary = foregroundBrandPrimary,
+    foregroundSuccessPrimary = foregroundSuccessPrimary,
     foregroundDisabled = foregroundDisabled,
     gradientBrandPrimaryToSecondary = gradientBrandPrimaryToSecondary,
     gradientDimmedPrimaryToSecondary = gradientDimmedPrimaryToSecondary,
@@ -131,6 +153,8 @@ internal fun darkColorScheme(
     textSecondary = textSecondary,
     textSecondaryAlternative = textSecondaryAlternative,
     textBrandOnBrand = textBrandOnBrand,
+    textSuccessPrimary = textSuccessPrimary,
+    textSuccessSecondary = textSuccessSecondary,
     textDisabled = textDisabled,
 )
 
@@ -142,15 +166,19 @@ internal fun lightColorScheme(
     backgroundTertiaryDisabled: Color = LightColorSchemeTokens.BackgroundTertiaryDisabled,
     backgroundBrandPrimary: Color = LightColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
+    backgroundSuccessPrimary: Color = LightColorSchemeTokens.BackgroundSuccessPrimary,
+    backgroundSuccessSecondary: Color = LightColorSchemeTokens.BackgroundSuccessSecondary,
     backgroundModal: Color = LightColorSchemeTokens.BackgroundModal,
     backgroundDimmed: Color = LightColorSchemeTokens.BackgroundDimmed,
     backgroundDisabled: Color = LightColorSchemeTokens.BackgroundDisabled,
     borderPrimary: Color = LightColorSchemeTokens.BorderPrimary,
     borderBrandPrimary: Color = LightColorSchemeTokens.BorderBrandPrimary,
     borderBrandPrimaryDimmed: Color = LightColorSchemeTokens.BorderBrandPrimaryDimmed,
+    borderSuccessPrimary: Color = LightColorSchemeTokens.BorderSuccessPrimary,
     foregroundPrimary: Color = LightColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
     foregroundBrandPrimary: Color = LightColorSchemeTokens.ForegroundBrandPrimary,
+    foregroundSuccessPrimary: Color = LightColorSchemeTokens.ForegroundSuccessPrimary,
     foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
     gradientBrandPrimaryToSecondary: Brush = LightColorSchemeTokens.GradientBrandPrimaryToSecondary,
     gradientDimmedPrimaryToSecondary: Brush = LightColorSchemeTokens.GradientDimmedPrimaryToSecondary,
@@ -158,6 +186,8 @@ internal fun lightColorScheme(
     textSecondary: Color = LightColorSchemeTokens.TextSecondary,
     textSecondaryAlternative: Color = LightColorSchemeTokens.TextSecondaryAlternative,
     textBrandOnBrand: Color = LightColorSchemeTokens.TextBrandOnBrand,
+    textSuccessPrimary: Color = LightColorSchemeTokens.TextSuccessPrimary,
+    textSuccessSecondary: Color = LightColorSchemeTokens.TextSuccessSecondary,
     textDisabled: Color = LightColorSchemeTokens.TextDisabled,
 ) = ColorScheme(
     backgroundPrimary = backgroundPrimary,
@@ -167,15 +197,19 @@ internal fun lightColorScheme(
     backgroundTertiaryDisabled = backgroundTertiaryDisabled,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
+    backgroundSuccessPrimary = backgroundSuccessPrimary,
+    backgroundSuccessSecondary = backgroundSuccessSecondary,
     backgroundModal = backgroundModal,
     backgroundDimmed = backgroundDimmed,
     backgroundDisabled = backgroundDisabled,
     borderPrimary = borderPrimary,
     borderBrandPrimary = borderBrandPrimary,
     borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
+    borderSuccessPrimary = borderSuccessPrimary,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
     foregroundBrandPrimary = foregroundBrandPrimary,
+    foregroundSuccessPrimary = foregroundSuccessPrimary,
     foregroundDisabled = foregroundDisabled,
     gradientBrandPrimaryToSecondary = gradientBrandPrimaryToSecondary,
     gradientDimmedPrimaryToSecondary = gradientDimmedPrimaryToSecondary,
@@ -183,5 +217,7 @@ internal fun lightColorScheme(
     textSecondary = textSecondary,
     textSecondaryAlternative = textSecondaryAlternative,
     textBrandOnBrand = textBrandOnBrand,
+    textSuccessPrimary = textSuccessPrimary,
+    textSuccessSecondary = textSuccessSecondary,
     textDisabled = textDisabled,
 )

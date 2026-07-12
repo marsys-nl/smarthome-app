@@ -12,6 +12,8 @@ enum class ColorKeyToken {
     BackgroundTertiaryDisabled,
     BackgroundBrandPrimary,
     BackgroundBrandSecondary,
+    BackgroundSuccessPrimary,
+    BackgroundSuccessSecondary,
     BackgroundModal,
     BackgroundDimmed,
     BackgroundDisabled,
@@ -19,16 +21,20 @@ enum class ColorKeyToken {
     BorderPrimary,
     BorderBrandPrimary,
     BorderBrandPrimaryDimmed,
+    BorderSuccessPrimary,
 
     ForegroundPrimary,
     ForegroundPrimaryAlternative,
     ForegroundBrandPrimary,
+    ForegroundSuccessPrimary,
     ForegroundDisabled,
 
     TextPrimary,
     TextSecondary,
     TextSecondaryAlternative,
     TextBrandOnBrand,
+    TextSuccessPrimary,
+    TextSuccessSecondary,
     TextDisabled,
 }
 
