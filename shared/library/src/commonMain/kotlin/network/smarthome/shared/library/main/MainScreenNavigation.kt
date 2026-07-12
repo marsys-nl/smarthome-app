@@ -83,7 +83,7 @@ internal fun MainScreenNavigation(
             .fillMaxSize(),
     ) {
         NavDisplay(
-            modifier = modifier
+            modifier = Modifier
                 .weight(1f),
             backStack = backStack,
             onBack = { backStack.removeLastOrNull() },
