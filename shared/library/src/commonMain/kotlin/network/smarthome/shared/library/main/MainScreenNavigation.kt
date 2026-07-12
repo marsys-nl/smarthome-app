@@ -82,7 +82,6 @@ internal fun MainScreenNavigation(
         modifier = modifier
             .fillMaxSize(),
     ) {
-
         NavDisplay(
             modifier = modifier
                 .weight(1f),
