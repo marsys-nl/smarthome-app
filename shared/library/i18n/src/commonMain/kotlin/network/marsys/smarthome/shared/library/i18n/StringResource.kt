@@ -11,7 +11,7 @@ import org.jetbrains.compose.resources.pluralStringResource as composePluralStri
 import org.jetbrains.compose.resources.stringResource as composeStringResource
 
 private val STRING_FORMAT_REGEX = Regex("""%(\d+)\$[ds]""")
-private fun String.replaceWithArgs(args: List<String>) = STRING_FORMAT_REGEX.replace(this) { matchResult ->
+internal fun String.replaceWithArgs(args: List<String>) = STRING_FORMAT_REGEX.replace(this) { matchResult ->
     args[matchResult.groupValues[1].toInt() - 1]
 }
 
