@@ -23,7 +23,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.composeunstyled.LocalContentColor as UnstyledLocalContentColor
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
@@ -32,6 +31,7 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.CardTokens
+import com.composeunstyled.LocalContentColor as UnstyledLocalContentColor
 
 @Composable
 fun Card(

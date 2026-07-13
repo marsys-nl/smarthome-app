@@ -201,7 +201,7 @@ private fun ProfileConnectedBackend(
                 colors = CardDefaults.colors(
                     backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessSecondary]),
                     contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundSuccessPrimary],
-                )
+                ),
             )
 
             Column(
@@ -344,15 +344,19 @@ private fun IconCard(
             .width(size)
             .aspectRatio(1f),
         colors = colors,
-        shape = RoundedCornerShape(size / 4),
-        contentPadding = PaddingValues(size / 4),
+        shape = RoundedCornerShape(size / ICON_CARD_CORNER_DIVISOR),
+        contentPadding = PaddingValues(size / ICON_CARD_PADDING_DIVISOR),
     ) {
         Icon(
             icon = icon,
-            size = size / 2,
+            size = size / ICON_CARD_ICON_SIZE_DIVISOR,
         )
     }
 }
+
+private const val ICON_CARD_CORNER_DIVISOR = 4
+private const val ICON_CARD_PADDING_DIVISOR = 4
+private const val ICON_CARD_ICON_SIZE_DIVISOR = 2
 
 @PreviewLocales
 @PreviewFontScales
