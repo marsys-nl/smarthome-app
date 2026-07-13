@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_header">Profile</string>
+
+    <string name="connected_backend">Connected with</string>
+
+    <string name="menu_item_appearance_title">Appearance</string>
+    <string name="menu_item_appearance_description">Dark mode &amp; colors</string>
 </resources>

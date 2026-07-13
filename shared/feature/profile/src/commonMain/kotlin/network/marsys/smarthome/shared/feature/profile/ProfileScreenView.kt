@@ -20,11 +20,15 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.Res
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.connected_backend
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_title
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.profile_header
 import network.marsys.smarthome.shared.library.core.SmartHomeConfig
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
@@ -210,7 +214,7 @@ private fun ProfileConnectedBackend(
                     .spacedBy(4.dp),
             ) {
                 Text(
-                    text = "Connected backend",
+                    text = stringResource(Res.string.connected_backend),
                     lineHeight = 16.sp,
                     fontSize = 12.sp,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessPrimary],
@@ -222,6 +226,8 @@ private fun ProfileConnectedBackend(
                     fontSize = 12.sp,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessSecondary],
                     fontFamily = FontFamily.Monospace,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
@@ -258,8 +264,8 @@ private fun ProfileMenuItems(
             .spacedBy(16.dp),
     ) {
         ProfileMenuItem(
-            title = "Appearance",
-            description = "Dark mode & colors",
+            title = stringResource(Res.string.menu_item_appearance_title),
+            description = stringResource(Res.string.menu_item_appearance_description),
             icon = Icons.SunMoon,
             onClick = {
                 onAction.invoke(ProfileScreenAction.ChangeAppAppearance)
@@ -321,6 +327,8 @@ private fun ProfileMenuItem(
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
 
