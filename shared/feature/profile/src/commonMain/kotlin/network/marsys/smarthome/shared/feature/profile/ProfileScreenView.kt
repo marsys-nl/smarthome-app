@@ -14,8 +14,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
@@ -29,6 +34,8 @@ import network.marsys.smarthome.shared.feature.profile.profile.generated.resourc
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.connected_backend
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_description
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_title
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_notifications_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_notifications_title
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.profile_header
 import network.marsys.smarthome.shared.library.core.SmartHomeConfig
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
@@ -44,6 +51,7 @@ import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.icons.Bell
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Shield
@@ -264,6 +272,16 @@ private fun ProfileMenuItems(
             .spacedBy(16.dp),
     ) {
         ProfileMenuItem(
+            title = stringResource(Res.string.menu_item_notifications_title),
+            description = stringResource(Res.string.menu_item_notifications_description),
+            icon = Icons.Bell,
+            enabled = false,
+            onClick = {
+                // No-op
+            },
+        )
+
+        ProfileMenuItem(
             title = stringResource(Res.string.menu_item_appearance_title),
             description = stringResource(Res.string.menu_item_appearance_description),
             icon = Icons.SunMoon,
@@ -281,6 +299,8 @@ private fun ProfileMenuItem(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    colors: ProfileMenuItemColors = ProfileMenuItemDefaults.colors(),
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     right: @Composable (() -> Unit)? = {
         Icon(
@@ -290,14 +310,29 @@ private fun ProfileMenuItem(
         )
     },
 ) {
+    val cardColors = CardDefaults.colors(
+        backgroundColor = colors.backgroundColor(enabled).value,
+    )
+
+    val iconColors = CardDefaults.colors(
+        backgroundColor = colors.iconBackgroundColor(enabled).value,
+        contentColor = colors.iconContentColor(enabled).value,
+    )
+
+    val titleColor = colors.titleColor(enabled).value
+    val descriptionColor = colors.descriptionColor(enabled).value
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = interactionSource,
                 indication = null,
+                enabled = enabled,
                 onClick = onClick,
             ),
+        colors = cardColors,
+        borderWidth = 1.dp,
     ) {
         Row(
             modifier = Modifier,
@@ -307,6 +342,7 @@ private fun ProfileMenuItem(
         ) {
             IconCard(
                 icon = icon,
+                colors = iconColors,
             )
 
             Column(
@@ -320,13 +356,14 @@ private fun ProfileMenuItem(
                     lineHeight = 24.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W600,
+                    color = titleColor,
                 )
 
                 Text(
                     text = description,
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
-                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                    color = descriptionColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -337,15 +374,84 @@ private fun ProfileMenuItem(
     }
 }
 
+@Immutable
+data class ProfileMenuItemColors(
+    private val backgroundColor: Brush,
+    private val titleColor: Color,
+    private val descriptionColor: Color,
+    private val iconBackgroundColor: Brush,
+    private val iconContentColor: Color,
+    private val disabledBackgroundColor: Brush,
+    private val disabledTitleColor: Color,
+    private val disabledDescriptionColor: Color,
+    private val disabledIconBackgroundColor: Brush,
+    private val disabledIconContentColor: Color,
+) {
+    @Composable
+    internal fun backgroundColor(enabled: Boolean): State<Brush> =
+        rememberUpdatedState(
+            if (enabled) backgroundColor else disabledBackgroundColor,
+        )
+
+    @Composable
+    internal fun titleColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(
+            if (enabled) titleColor else disabledTitleColor,
+        )
+
+    @Composable
+    internal fun descriptionColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(
+            if (enabled) descriptionColor else disabledDescriptionColor,
+        )
+
+    @Composable
+    internal fun iconBackgroundColor(enabled: Boolean): State<Brush> =
+        rememberUpdatedState(
+            if (enabled) iconBackgroundColor else disabledIconBackgroundColor,
+        )
+
+    @Composable
+    internal fun iconContentColor(enabled: Boolean): State<Color> =
+        rememberUpdatedState(
+            if (enabled) iconContentColor else disabledIconContentColor,
+        )
+}
+
+object ProfileMenuItemDefaults {
+    @Composable
+    fun colors(
+        backgroundColor: Brush = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
+        titleColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        descriptionColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        iconBackgroundColor: Brush = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryDisabled]),
+        iconContentColor: Color = SmartHomeTheme.colors[ColorKeyToken.ForegroundSecondary],
+        disabledBackgroundColor: Brush = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundDisabledAlternative]),
+        disabledTitleColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextDisabled],
+        disabledDescriptionColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextDisabled],
+        disabledIconBackgroundColor: Brush =
+            SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryAlternative]),
+        disabledIconContentColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextDisabled],
+    ): ProfileMenuItemColors = ProfileMenuItemColors(
+        backgroundColor = backgroundColor,
+        titleColor = titleColor,
+        descriptionColor = descriptionColor,
+        iconBackgroundColor = iconBackgroundColor,
+        iconContentColor = iconContentColor,
+        disabledBackgroundColor = disabledBackgroundColor,
+        disabledTitleColor = disabledTitleColor,
+        disabledDescriptionColor = disabledDescriptionColor,
+        disabledIconBackgroundColor = disabledIconBackgroundColor,
+        disabledIconContentColor = disabledIconContentColor,
+    )
+}
+
 @Composable
 private fun IconCard(
     icon: ImageVector,
+    colors: CardColors,
     modifier: Modifier = Modifier,
     size: Dp = 44.dp,
-    colors: CardColors = CardDefaults.colors(
-        backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
-        contentColor = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
-    ),
 ) {
     Card(
         modifier = modifier

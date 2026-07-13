@@ -6,4 +6,6 @@
 
     <string name="menu_item_appearance_title">Appearance</string>
     <string name="menu_item_appearance_description">Dark mode &amp; colors</string>
+    <string name="menu_item_notifications_title">Notifications</string>
+    <string name="menu_item_notifications_description">Manage alerts and sounds</string>
 </resources>
