@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -21,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.Res
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.profile_header
+import network.marsys.smarthome.shared.library.core.SmartHomeConfig
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -88,6 +90,8 @@ private fun ProfileScreenViewContent(
                 )
             }
         }
+
+        DebugInfo()
     }
 }
 
@@ -215,6 +219,25 @@ private fun ProfileConnectedBackend(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun DebugInfo(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = "SmartHome ${SmartHomeConfig.VERSION_NAME}",
+            lineHeight = 16.sp,
+            fontSize = 12.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        )
     }
 }
 

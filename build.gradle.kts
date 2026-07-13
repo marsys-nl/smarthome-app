@@ -5,6 +5,7 @@ import kotlinx.kover.gradle.plugin.dsl.GroupingEntityType
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.multiplatform.library) apply false
+    alias(libs.plugins.build.konfig) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.compose.multiplatform) apply false
     alias(libs.plugins.detekt) apply false
