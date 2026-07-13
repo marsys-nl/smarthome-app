@@ -1,5 +1,7 @@
 package network.marsys.smarthome.shared.feature.profile
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -7,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,13 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.Res
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.connected_backend
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_title
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.profile_header
+import network.marsys.smarthome.shared.library.core.SmartHomeConfig
+import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -29,30 +40,41 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Shield
+import network.marsys.smarthome.shared.library.design.icons.SunMoon
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
+import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ProfileScreenView(
+    onNavigate: (NavigationDestination) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
 ) {
     val state = viewModel.produceStateWithLifecycle()
+    viewModel.collectEffectsWithLifecycle { effect ->
+        when (effect) {
+            is ProfileScreenEffect.Navigate -> onNavigate(effect.target)
+        }
+    }
 
     ProfileScreenViewContent(
         name = state.user,
         email = state.email,
         connectedBackend = state.connectedBackend,
+        onAction = viewModel.accept,
         modifier = modifier,
     )
 }
@@ -62,6 +84,7 @@ private fun ProfileScreenViewContent(
     name: String,
     email: String,
     connectedBackend: String?,
+    onAction: (ProfileScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -87,7 +110,12 @@ private fun ProfileScreenViewContent(
                     connectedBackend = it,
                 )
             }
+            ProfileMenuItems(
+                onAction = onAction,
+            )
         }
+
+        DebugInfo()
     }
 }
 
@@ -121,20 +149,14 @@ private fun ProfileUserInfo(
                 .spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Card(
-                modifier = Modifier
-                    .width(64.dp)
-                    .aspectRatio(1f),
+            IconCard(
+                icon = Icons.User,
+                size = 64.dp,
                 colors = CardDefaults.colors(
                     backgroundColor = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
+                    contentColor = PaletteTokens.Base.White,
                 ),
-            ) {
-                Icon(
-                    icon = Icons.User,
-                    size = 32.dp,
-                    tint = PaletteTokens.Base.White,
-                )
-            }
+            )
 
             Column(
                 modifier = Modifier,
@@ -177,22 +199,14 @@ private fun ProfileConnectedBackend(
                 .spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Card(
-                modifier = Modifier
-                    .width(32.dp)
-                    .aspectRatio(1f),
+            IconCard(
+                icon = Icons.Shield,
+                size = 32.dp,
                 colors = CardDefaults.colors(
                     backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessSecondary]),
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundSuccessPrimary],
                 ),
-                shape = RoundedCornerShape(8.dp),
-                contentPadding = PaddingValues(8.dp),
-            ) {
-                Icon(
-                    icon = Icons.Shield,
-                    size = 16.dp,
-                    tint = SmartHomeTheme.colors[ColorKeyToken.ForegroundSuccessPrimary],
-                )
-            }
+            )
 
             Column(
                 modifier = Modifier,
@@ -200,7 +214,7 @@ private fun ProfileConnectedBackend(
                     .spacedBy(4.dp),
             ) {
                 Text(
-                    text = "Connected backend",
+                    text = stringResource(Res.string.connected_backend),
                     lineHeight = 16.sp,
                     fontSize = 12.sp,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessPrimary],
@@ -212,11 +226,145 @@ private fun ProfileConnectedBackend(
                     fontSize = 12.sp,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextSuccessSecondary],
                     fontFamily = FontFamily.Monospace,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
         }
     }
 }
+
+@Composable
+private fun DebugInfo(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = "SmartHome ${SmartHomeConfig.VERSION_NAME}",
+            lineHeight = 16.sp,
+            fontSize = 12.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        )
+    }
+}
+
+@Composable
+private fun ProfileMenuItems(
+    onAction: (ProfileScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
+    ) {
+        ProfileMenuItem(
+            title = stringResource(Res.string.menu_item_appearance_title),
+            description = stringResource(Res.string.menu_item_appearance_description),
+            icon = Icons.SunMoon,
+            onClick = {
+                onAction.invoke(ProfileScreenAction.ChangeAppAppearance)
+            },
+        )
+    }
+}
+
+@Composable
+private fun ProfileMenuItem(
+    title: String,
+    description: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    right: @Composable (() -> Unit)? = {
+        Icon(
+            icon = Icons.ChevronRight,
+            size = 20.dp,
+            tint = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        )
+    },
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick,
+            ),
+    ) {
+        Row(
+            modifier = Modifier,
+            horizontalArrangement = Arrangement
+                .spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            IconCard(
+                icon = icon,
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp),
+            ) {
+                Text(
+                    text = title,
+                    lineHeight = 24.sp,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W600,
+                )
+
+                Text(
+                    text = description,
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            right?.invoke()
+        }
+    }
+}
+
+@Composable
+private fun IconCard(
+    icon: ImageVector,
+    modifier: Modifier = Modifier,
+    size: Dp = 44.dp,
+    colors: CardColors = CardDefaults.colors(
+        backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
+        contentColor = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+    ),
+) {
+    Card(
+        modifier = modifier
+            .width(size)
+            .aspectRatio(1f),
+        colors = colors,
+        shape = RoundedCornerShape(size / ICON_CARD_CORNER_DIVISOR),
+        contentPadding = PaddingValues(size / ICON_CARD_PADDING_DIVISOR),
+    ) {
+        Icon(
+            icon = icon,
+            size = size / ICON_CARD_ICON_SIZE_DIVISOR,
+        )
+    }
+}
+
+private const val ICON_CARD_CORNER_DIVISOR = 4
+private const val ICON_CARD_PADDING_DIVISOR = 4
+private const val ICON_CARD_ICON_SIZE_DIVISOR = 2
 
 @PreviewLocales
 @PreviewFontScales
@@ -232,6 +380,7 @@ private fun ProfileScreenDemoUserPreview(
             name = "Demo User",
             email = "demo.user@example.com",
             connectedBackend = null,
+            onAction = {},
         )
     }
 }
@@ -250,6 +399,7 @@ private fun ProfileScreenRealUserPreview(
             name = "Niels Marsman",
             email = "niels.marsman@example.com",
             connectedBackend = "https://example.com",
+            onAction = {},
         )
     }
 }

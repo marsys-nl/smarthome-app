@@ -23,14 +23,15 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.composeunstyled.LocalContentColor
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
+import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.CardTokens
+import com.composeunstyled.LocalContentColor as UnstyledLocalContentColor
 
 @Composable
 fun Card(
@@ -74,11 +75,11 @@ fun Card(
         contentAlignment = contentAlignment,
     ) {
         CompositionLocalProvider(
-            value = LocalContentColor provides colors.contentColor,
-            content = {
-                content.invoke(this)
-            },
-        )
+            LocalContentColor provides colors.contentColor,
+            UnstyledLocalContentColor provides colors.contentColor,
+        ) {
+            content.invoke(this)
+        }
     }
 }
 

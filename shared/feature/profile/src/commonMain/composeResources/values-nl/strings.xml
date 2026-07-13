@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_header">Profiel</string>
+
+    <string name="connected_backend">Verbonden met</string>
+
+    <string name="menu_item_appearance_title">Uiterlijk</string>
+    <string name="menu_item_appearance_description">Donkere modus &amp; kleuren</string>
 </resources>
