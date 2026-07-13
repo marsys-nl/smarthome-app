@@ -95,12 +95,8 @@ internal fun MainScreenNavigation(
                     ) {
                         MainScreenDashboardScreenView(
                             onNavigate = { target ->
-                                backStack += when (target) {
-                                    is NavigationDestination.ChangeAppAppearanceModal ->
-                                        SmartHomeScreen.AppAppearance
-
-                                    is NavigationDestination.EntityDetailModal ->
-                                        SmartHomeScreen.EntityDetails(target.entity)
+                                with(backStack) {
+                                    handleNavigationDestination(target)
                                 }
                             },
                         )
@@ -131,7 +127,13 @@ internal fun MainScreenNavigation(
                     MainScreenNavigationItemWrapper(
                         backStack = backStack,
                     ) {
-                        ProfileScreenView()
+                        ProfileScreenView(
+                            onNavigate = { target ->
+                                with(backStack) {
+                                    handleNavigationDestination(target)
+                                }
+                            },
+                        )
                     }
                 }
 
@@ -191,6 +193,17 @@ private fun MainScreenNavigationItemWrapper(
             .safeContentPadding(),
     ) {
         content.invoke()
+    }
+}
+
+context(backStack: NavBackStack<SmartHomeScreen>)
+private fun handleNavigationDestination(target: NavigationDestination) {
+    backStack += when (target) {
+        is NavigationDestination.ChangeAppAppearanceModal ->
+            SmartHomeScreen.AppAppearance
+
+        is NavigationDestination.EntityDetailModal ->
+            SmartHomeScreen.EntityDetails(target.entity)
     }
 }
 
