@@ -6,4 +6,6 @@
 
     <string name="menu_item_appearance_title">Uiterlijk</string>
     <string name="menu_item_appearance_description">Donkere modus &amp; kleuren</string>
+    <string name="menu_item_notifications_title">Meldingen</string>
+    <string name="menu_item_notifications_description">Beheer meldingen en geluiden</string>
 </resources>

@@ -9,6 +9,7 @@ internal interface ColorSchemeTokens {
     val BackgroundSecondary: Color
     val BackgroundSecondarySelected: Color
     val BackgroundTertiary: Color
+    val BackgroundTertiaryAlternative: Color
     val BackgroundTertiaryDisabled: Color
     val BackgroundBrandPrimary: Color
     val BackgroundBrandSecondary: Color
@@ -18,12 +19,14 @@ internal interface ColorSchemeTokens {
     val BackgroundDimmed: Color get() =
         PaletteTokens.Base.White.copy(alpha = .2f)
     val BackgroundDisabled: Color
+    val BackgroundDisabledAlternative: Color
     val BorderPrimary: Color
     val BorderBrandPrimary: Color
     val BorderBrandPrimaryDimmed: Color
     val BorderSuccessPrimary: Color
     val ForegroundPrimary: Color
     val ForegroundPrimaryAlternative: Color
+    val ForegroundSecondary: Color
     val ForegroundBrandPrimary: Color
     val ForegroundSuccessPrimary: Color
     val ForegroundDisabled: Color

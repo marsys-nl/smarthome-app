@@ -16,6 +16,7 @@ data class ColorScheme internal constructor(
     private val backgroundSecondary: Color,
     private val backgroundSecondarySelected: Color,
     private val backgroundTertiary: Color,
+    private val backgroundTertiaryAlternative: Color,
     private val backgroundTertiaryDisabled: Color,
     private val backgroundBrandPrimary: Color,
     private val backgroundBrandSecondary: Color,
@@ -24,12 +25,14 @@ data class ColorScheme internal constructor(
     private val backgroundModal: Color,
     private val backgroundDimmed: Color,
     private val backgroundDisabled: Color,
+    private val backgroundDisabledAlternative: Color,
     private val borderPrimary: Color,
     private val borderBrandPrimary: Color,
     private val borderBrandPrimaryDimmed: Color,
     private val borderSuccessPrimary: Color,
     private val foregroundPrimary: Color,
     private val foregroundPrimaryAlternative: Color,
+    private val foregroundSecondary: Color,
     private val foregroundBrandPrimary: Color,
     private val foregroundSuccessPrimary: Color,
     private val foregroundDisabled: Color,
@@ -49,6 +52,7 @@ data class ColorScheme internal constructor(
         ColorKeyToken.BackgroundSecondary -> backgroundSecondary
         ColorKeyToken.BackgroundSecondarySelected -> backgroundSecondarySelected
         ColorKeyToken.BackgroundTertiary -> backgroundTertiary
+        ColorKeyToken.BackgroundTertiaryAlternative -> backgroundTertiaryAlternative
         ColorKeyToken.BackgroundTertiaryDisabled -> backgroundTertiaryDisabled
         ColorKeyToken.BackgroundBrandPrimary -> backgroundBrandPrimary
         ColorKeyToken.BackgroundBrandSecondary -> backgroundBrandSecondary
@@ -57,12 +61,14 @@ data class ColorScheme internal constructor(
         ColorKeyToken.BackgroundModal -> backgroundModal
         ColorKeyToken.BackgroundDimmed -> backgroundDimmed
         ColorKeyToken.BackgroundDisabled -> backgroundDisabled
+        ColorKeyToken.BackgroundDisabledAlternative -> backgroundDisabledAlternative
         ColorKeyToken.BorderPrimary -> borderPrimary
         ColorKeyToken.BorderBrandPrimary -> borderBrandPrimary
         ColorKeyToken.BorderBrandPrimaryDimmed -> borderBrandPrimaryDimmed
         ColorKeyToken.BorderSuccessPrimary -> borderSuccessPrimary
         ColorKeyToken.ForegroundPrimary -> foregroundPrimary
         ColorKeyToken.ForegroundPrimaryAlternative -> foregroundPrimaryAlternative
+        ColorKeyToken.ForegroundSecondary -> foregroundSecondary
         ColorKeyToken.ForegroundBrandPrimary -> foregroundBrandPrimary
         ColorKeyToken.ForegroundSuccessPrimary -> foregroundSuccessPrimary
         ColorKeyToken.ForegroundDisabled -> foregroundDisabled
@@ -99,6 +105,7 @@ internal fun darkColorScheme(
     backgroundSecondary: Color = DarkColorSchemeTokens.BackgroundSecondary,
     backgroundSecondarySelected: Color = DarkColorSchemeTokens.BackgroundSecondarySelected,
     backgroundTertiary: Color = DarkColorSchemeTokens.BackgroundTertiary,
+    backgroundTertiaryAlternative: Color = DarkColorSchemeTokens.BackgroundTertiaryAlternative,
     backgroundTertiaryDisabled: Color = DarkColorSchemeTokens.BackgroundTertiaryDisabled,
     backgroundBrandPrimary: Color = DarkColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = DarkColorSchemeTokens.BackgroundBrandSecondary,
@@ -107,12 +114,14 @@ internal fun darkColorScheme(
     backgroundModal: Color = DarkColorSchemeTokens.BackgroundModal,
     backgroundDimmed: Color = DarkColorSchemeTokens.BackgroundDimmed,
     backgroundDisabled: Color = DarkColorSchemeTokens.BackgroundDisabled,
+    backgroundDisabledAlternative: Color = DarkColorSchemeTokens.BackgroundDisabledAlternative,
     borderPrimary: Color = DarkColorSchemeTokens.BorderPrimary,
     borderBrandPrimary: Color = DarkColorSchemeTokens.BorderBrandPrimary,
     borderBrandPrimaryDimmed: Color = DarkColorSchemeTokens.BorderBrandPrimaryDimmed,
     borderSuccessPrimary: Color = DarkColorSchemeTokens.BorderSuccessPrimary,
     foregroundPrimary: Color = DarkColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = DarkColorSchemeTokens.ForegroundPrimaryAlternative,
+    foregroundSecondary: Color = DarkColorSchemeTokens.ForegroundSecondary,
     foregroundBrandPrimary: Color = DarkColorSchemeTokens.ForegroundBrandPrimary,
     foregroundSuccessPrimary: Color = DarkColorSchemeTokens.ForegroundSuccessPrimary,
     foregroundDisabled: Color = DarkColorSchemeTokens.ForegroundDisabled,
@@ -130,6 +139,7 @@ internal fun darkColorScheme(
     backgroundSecondary = backgroundSecondary,
     backgroundSecondarySelected = backgroundSecondarySelected,
     backgroundTertiary = backgroundTertiary,
+    backgroundTertiaryAlternative = backgroundTertiaryAlternative,
     backgroundTertiaryDisabled = backgroundTertiaryDisabled,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
@@ -138,12 +148,14 @@ internal fun darkColorScheme(
     backgroundModal = backgroundModal,
     backgroundDimmed = backgroundDimmed,
     backgroundDisabled = backgroundDisabled,
+    backgroundDisabledAlternative = backgroundDisabledAlternative,
     borderPrimary = borderPrimary,
     borderBrandPrimary = borderBrandPrimary,
     borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
     borderSuccessPrimary = borderSuccessPrimary,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
+    foregroundSecondary = foregroundSecondary,
     foregroundBrandPrimary = foregroundBrandPrimary,
     foregroundSuccessPrimary = foregroundSuccessPrimary,
     foregroundDisabled = foregroundDisabled,
@@ -163,6 +175,7 @@ internal fun lightColorScheme(
     backgroundSecondary: Color = LightColorSchemeTokens.BackgroundSecondary,
     backgroundSecondarySelected: Color = LightColorSchemeTokens.BackgroundSecondarySelected,
     backgroundTertiary: Color = LightColorSchemeTokens.BackgroundTertiary,
+    backgroundTertiaryAlternative: Color = LightColorSchemeTokens.BackgroundTertiaryAlternative,
     backgroundTertiaryDisabled: Color = LightColorSchemeTokens.BackgroundTertiaryDisabled,
     backgroundBrandPrimary: Color = LightColorSchemeTokens.BackgroundBrandPrimary,
     backgroundBrandSecondary: Color = LightColorSchemeTokens.BackgroundBrandSecondary,
@@ -171,12 +184,14 @@ internal fun lightColorScheme(
     backgroundModal: Color = LightColorSchemeTokens.BackgroundModal,
     backgroundDimmed: Color = LightColorSchemeTokens.BackgroundDimmed,
     backgroundDisabled: Color = LightColorSchemeTokens.BackgroundDisabled,
+    backgroundDisabledAlternative: Color = LightColorSchemeTokens.BackgroundDisabledAlternative,
     borderPrimary: Color = LightColorSchemeTokens.BorderPrimary,
     borderBrandPrimary: Color = LightColorSchemeTokens.BorderBrandPrimary,
     borderBrandPrimaryDimmed: Color = LightColorSchemeTokens.BorderBrandPrimaryDimmed,
     borderSuccessPrimary: Color = LightColorSchemeTokens.BorderSuccessPrimary,
     foregroundPrimary: Color = LightColorSchemeTokens.ForegroundPrimary,
     foregroundPrimaryAlternative: Color = LightColorSchemeTokens.ForegroundPrimaryAlternative,
+    foregroundSecondary: Color = LightColorSchemeTokens.ForegroundSecondary,
     foregroundBrandPrimary: Color = LightColorSchemeTokens.ForegroundBrandPrimary,
     foregroundSuccessPrimary: Color = LightColorSchemeTokens.ForegroundSuccessPrimary,
     foregroundDisabled: Color = LightColorSchemeTokens.ForegroundDisabled,
@@ -194,6 +209,7 @@ internal fun lightColorScheme(
     backgroundSecondary = backgroundSecondary,
     backgroundSecondarySelected = backgroundSecondarySelected,
     backgroundTertiary = backgroundTertiary,
+    backgroundTertiaryAlternative = backgroundTertiaryAlternative,
     backgroundTertiaryDisabled = backgroundTertiaryDisabled,
     backgroundBrandPrimary = backgroundBrandPrimary,
     backgroundBrandSecondary = backgroundBrandSecondary,
@@ -202,12 +218,14 @@ internal fun lightColorScheme(
     backgroundModal = backgroundModal,
     backgroundDimmed = backgroundDimmed,
     backgroundDisabled = backgroundDisabled,
+    backgroundDisabledAlternative = backgroundDisabledAlternative,
     borderPrimary = borderPrimary,
     borderBrandPrimary = borderBrandPrimary,
     borderBrandPrimaryDimmed = borderBrandPrimaryDimmed,
     borderSuccessPrimary = borderSuccessPrimary,
     foregroundPrimary = foregroundPrimary,
     foregroundPrimaryAlternative = foregroundPrimaryAlternative,
+    foregroundSecondary = foregroundSecondary,
     foregroundBrandPrimary = foregroundBrandPrimary,
     foregroundSuccessPrimary = foregroundSuccessPrimary,
     foregroundDisabled = foregroundDisabled,
