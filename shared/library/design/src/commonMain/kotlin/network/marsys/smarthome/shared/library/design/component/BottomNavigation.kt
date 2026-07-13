@@ -29,6 +29,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -101,7 +102,13 @@ fun <T : Any> BottomNavigation(
                         modifier = Modifier
                             .width(BottomNavigationDefaults.itemWidth())
                             .onGloballyPositioned { coordinates ->
-                                positions[navigationItem.key] = coordinates.boundsInParent().left.toInt()
+                                val bounds = coordinates.boundsInParent()
+
+                                if (bounds.topLeft == Offset.Zero && positions.containsKey(navigationItem.key)) {
+                                    return@onGloballyPositioned
+                                }
+
+                                positions[navigationItem.key] = bounds.left.toInt()
                             }
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
