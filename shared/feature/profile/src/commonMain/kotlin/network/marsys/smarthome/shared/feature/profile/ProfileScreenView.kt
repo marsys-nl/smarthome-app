@@ -197,7 +197,7 @@ private fun ProfileConnectedBackend(
             .fillMaxWidth(),
         colors = CardDefaults.colors(
             backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessPrimary]),
-            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderSuccessPrimary],
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderSuccessSubtle],
         ),
         borderWidth = 1.dp,
     ) {
