@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -29,7 +27,6 @@ import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNav
 import network.marsys.smarthome.shared.feature.profile.ProfileScreenView
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
-import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Grid3x3
 import network.marsys.smarthome.shared.library.design.icons.House
@@ -46,7 +43,6 @@ import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
-import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModal
 import network.smarthome.shared.library.screens.SmartHomeScreen
@@ -245,30 +241,11 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
 private fun MainScreenDashboardScreenView(
     onNavigate: (NavigationDestination) -> Unit,
     modifier: Modifier = Modifier,
-    onboardingRepository: OnboardingRepository = koinInject(),
 ) {
     DashboardScreenView(
         onNavigate = onNavigate,
         modifier = modifier,
-    ) {
-        val coroutineScope = rememberCoroutineScope()
-
-        Button(
-            modifier = Modifier
-                .padding(top = 32.dp),
-            contentPadding = PaddingValues(
-                horizontal = 16.dp,
-                vertical = 8.dp,
-            ),
-            onClick = {
-                coroutineScope.launch {
-                    onboardingRepository.resetOnboarding()
-                }
-            },
-        ) {
-            Text(text = "Reset onboarding")
-        }
-    }
+    )
 }
 
 @Composable

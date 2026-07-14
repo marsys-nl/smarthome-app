@@ -54,6 +54,8 @@ import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Bell
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.LogOut
+import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.Shield
 import network.marsys.smarthome.shared.library.design.icons.SunMoon
 import network.marsys.smarthome.shared.library.design.icons.User
@@ -105,19 +107,20 @@ private fun ProfileScreenViewContent(
                 .widthIn(max = Breakpoints.MEDIUM.dp)
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement
-                .spacedBy(32.dp),
         ) {
             ProfileScreenHeader()
+
             ProfileUserInfo(
                 name = name,
                 email = email,
             )
+
             connectedBackend?.let {
                 ProfileConnectedBackend(
                     connectedBackend = it,
                 )
             }
+
             ProfileMenuItems(
                 onAction = onAction,
             )
@@ -148,7 +151,8 @@ private fun ProfileUserInfo(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(top = 32.dp),
         contentPadding = PaddingValues(24.dp),
     ) {
         Row(
@@ -194,7 +198,8 @@ private fun ProfileConnectedBackend(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(top = 32.dp),
         colors = CardDefaults.colors(
             backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessPrimary]),
             borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderSuccessSubtle],
@@ -267,9 +272,10 @@ private fun ProfileMenuItems(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .padding(top = 24.dp),
         verticalArrangement = Arrangement
-            .spacedBy(16.dp),
+            .spacedBy(12.dp),
     ) {
         ProfileMenuItem(
             title = stringResource(Res.string.menu_item_notifications_title),
@@ -289,6 +295,41 @@ private fun ProfileMenuItems(
                 onAction.invoke(ProfileScreenAction.ChangeAppAppearance)
             },
         )
+
+        ProfileMenuItem(
+            title = "Reset onboarding",
+            description = "Run the setup wizard again",
+            icon = Icons.Reset,
+            onClick = {
+                onAction.invoke(ProfileScreenAction.ResetOnboarding)
+            },
+            modifier = Modifier
+                .padding(top = 32.dp),
+            colors = ProfileMenuItemDefaults.actionColors(
+                backgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundInfoPrimary],
+                titleColor = SmartHomeTheme.colors[ColorKeyToken.TextInfoPrimary],
+                descriptionColor = SmartHomeTheme.colors[ColorKeyToken.TextInfoSecondary],
+                iconBackgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundInfoSecondary],
+                iconContentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundInfoPrimary],
+            ),
+        )
+
+        ProfileMenuItem(
+            title = "Logout",
+            description = "Sign out of your account",
+            icon = Icons.LogOut,
+            onClick = {
+                onAction.invoke(ProfileScreenAction.Logout)
+            },
+            enabled = false,
+            colors = ProfileMenuItemDefaults.actionColors(
+                backgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorPrimary],
+                titleColor = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary],
+                descriptionColor = SmartHomeTheme.colors[ColorKeyToken.TextErrorSecondary],
+                iconBackgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorSecondary],
+                iconContentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundErrorPrimary],
+            ),
+        )
     }
 }
 
@@ -302,11 +343,11 @@ private fun ProfileMenuItem(
     enabled: Boolean = true,
     colors: ProfileMenuItemColors = ProfileMenuItemDefaults.colors(),
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
-    right: @Composable (() -> Unit)? = {
+    right: @Composable ((Color) -> Unit)? = {
         Icon(
             icon = Icons.ChevronRight,
             size = 20.dp,
-            tint = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+            tint = it,
         )
     },
 ) {
@@ -369,7 +410,7 @@ private fun ProfileMenuItem(
                 )
             }
 
-            right?.invoke()
+            right?.invoke(colors.iconContentColor(enabled).value)
         }
     }
 }
@@ -443,6 +484,26 @@ object ProfileMenuItemDefaults {
         disabledDescriptionColor = disabledDescriptionColor,
         disabledIconBackgroundColor = disabledIconBackgroundColor,
         disabledIconContentColor = disabledIconContentColor,
+    )
+
+    @Composable
+    fun actionColors(
+        backgroundColor: Color,
+        titleColor: Color,
+        descriptionColor: Color,
+        iconBackgroundColor: Color,
+        iconContentColor: Color,
+    ): ProfileMenuItemColors = ProfileMenuItemColors(
+        backgroundColor = SolidColor(backgroundColor),
+        titleColor = titleColor,
+        descriptionColor = descriptionColor,
+        iconBackgroundColor = SolidColor(iconBackgroundColor),
+        iconContentColor = iconContentColor,
+        disabledBackgroundColor = SolidColor(backgroundColor.copy(alpha = .3f)),
+        disabledTitleColor = titleColor.copy(alpha = .3f),
+        disabledDescriptionColor = descriptionColor.copy(alpha = .3f),
+        disabledIconBackgroundColor = SolidColor(iconBackgroundColor.copy(alpha = .3f)),
+        disabledIconContentColor = iconContentColor.copy(alpha = .3f),
     )
 }
 

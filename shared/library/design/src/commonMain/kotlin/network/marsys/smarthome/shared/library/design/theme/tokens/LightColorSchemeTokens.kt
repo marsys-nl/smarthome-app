@@ -19,26 +19,26 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500
 
     // Error
-    override val BackgroundErrorPrimary: Color = PaletteTokens.Red.Red50
-    override val BackgroundErrorSecondary: Color = PaletteTokens.Red.Red100
+    override val BackgroundErrorPrimary: Color = PaletteTokens.Red.Red100
+    override val BackgroundErrorSecondary: Color = PaletteTokens.Red.Red200
     override val BackgroundErrorSolid: Color = PaletteTokens.Red.Red600
     override val BackgroundErrorSolidPressed: Color = PaletteTokens.Red.Red700
 
     // Warning
-    override val BackgroundWarningPrimary: Color = PaletteTokens.Yellow.Yellow50
-    override val BackgroundWarningSecondary: Color = PaletteTokens.Yellow.Yellow100
+    override val BackgroundWarningPrimary: Color = PaletteTokens.Yellow.Yellow100
+    override val BackgroundWarningSecondary: Color = PaletteTokens.Yellow.Yellow200
     override val BackgroundWarningSolid: Color = PaletteTokens.Yellow.Yellow600
     override val BackgroundWarningSolidPressed: Color = PaletteTokens.Yellow.Yellow700
 
     // Info
-    override val BackgroundInfoPrimary: Color = PaletteTokens.Blue.Blue50
-    override val BackgroundInfoSecondary: Color = PaletteTokens.Blue.Blue100
+    override val BackgroundInfoPrimary: Color = PaletteTokens.Blue.Blue100
+    override val BackgroundInfoSecondary: Color = PaletteTokens.Blue.Blue200
     override val BackgroundInfoSolid: Color = PaletteTokens.Blue.Blue600
     override val BackgroundInfoSolidPressed: Color = PaletteTokens.Blue.Blue700
 
     // Success
-    override val BackgroundSuccessPrimary: Color = PaletteTokens.Emerald.Emerald50
-    override val BackgroundSuccessSecondary: Color = PaletteTokens.Emerald.Emerald100
+    override val BackgroundSuccessPrimary: Color = PaletteTokens.Emerald.Emerald100
+    override val BackgroundSuccessSecondary: Color = PaletteTokens.Emerald.Emerald200
     override val BackgroundSuccessSolid: Color = PaletteTokens.Emerald.Emerald600
     override val BackgroundSuccessSolidPressed: Color = PaletteTokens.Emerald.Emerald700
 

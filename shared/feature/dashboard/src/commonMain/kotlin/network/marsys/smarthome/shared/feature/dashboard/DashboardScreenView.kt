@@ -34,7 +34,6 @@ fun DashboardScreenView(
     modifier: Modifier = Modifier,
     viewModel: DashboardViewModel = koinViewModel(),
     instant: Instant = Clock.System.now(),
-    content: @Composable () -> Unit,
 ) {
     val state = viewModel.produceStateWithLifecycle()
     viewModel.collectEffectsWithLifecycle { effect ->
@@ -50,7 +49,6 @@ fun DashboardScreenView(
         onAction = viewModel.accept,
         modifier = modifier,
         instant = instant,
-        content = content,
     )
 }
 
@@ -63,7 +61,6 @@ private fun DashboardScreenViewContent(
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     instant: Instant = Clock.System.now(),
-    content: @Composable () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -86,7 +83,6 @@ private fun DashboardScreenViewContent(
                     entities = entities,
                     groupEntitiesByType = groupEntitiesByType,
                     onAction = onAction,
-                    content = content,
                 )
             },
             splitPane = {
@@ -94,7 +90,6 @@ private fun DashboardScreenViewContent(
                     entities = entities,
                     groupEntitiesByType = groupEntitiesByType,
                     onAction = onAction,
-                    content = content,
                 )
             },
         )
@@ -108,7 +103,6 @@ private fun SinglePaneDashboard(
     groupEntitiesByType: Boolean,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -119,8 +113,6 @@ private fun SinglePaneDashboard(
             groupEntitiesByType = groupEntitiesByType,
             onAction = onAction,
         )
-
-        content.invoke()
     }
 }
 
@@ -131,12 +123,13 @@ private fun SplitPaneDashboard(
     groupEntitiesByType: Boolean,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
 ) {
     SplitPane(
         modifier = modifier
             .fillMaxWidth(),
-        left = content,
+        left = {
+            // No-op for now
+        },
         right = {
             Column(
                 modifier = Modifier
@@ -168,8 +161,6 @@ private fun DashboardScreenViewPreview(
                 .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
-        ) {
-            // No-op for now
-        }
+        )
     }
 }

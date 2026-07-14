@@ -35,6 +35,7 @@ class SmartHomeStoreRepository(
     override val backendUri: Flow<String?> =
         dataStore.data.map { preferences ->
             preferences[Keys.backendUri]
+                .takeIf { preferences[Keys.isDemoMode] == false }
         }
 
     override val isDemoMode: Flow<Boolean> =
