@@ -24,10 +24,17 @@ object PaletteTokens {
     }
 
     object Blue {
+        val Blue50 = Color(0xFFEFF6FF)
+        val Blue100 = Color(0xFFDBEAFE)
+        val Blue200 = Color(0xFFBFDBFE)
         val Blue300 = Color(0xFF93C5FD)
         val Blue400 = Color(0xFF60A5FA)
         val Blue500 = Color(0xFF3B82F6)
         val Blue600 = Color(0xFF2563EB)
+        val Blue700 = Color(0xFF1D4ED8)
+        val Blue800 = Color(0xFF1E40AF)
+        val Blue900 = Color(0xFF1E3A8A)
+        val Blue950 = Color(0xFF172554)
     }
 
     object Emerald {
@@ -79,9 +86,17 @@ object PaletteTokens {
     }
 
     object Red {
+        val Red50 = Color(0xFFFEF2F2)
+        val Red100 = Color(0xFFFEE2E2)
+        val Red200 = Color(0xFFFECACA)
+        val Red300 = Color(0xFFFCA5A5)
         val Red400 = Color(0xFFF87171)
         val Red500 = Color(0xFFF84444)
         val Red600 = Color(0xFFF82626)
+        val Red700 = Color(0xFFB91C1C)
+        val Red800 = Color(0xFF991B1B)
+        val Red900 = Color(0xFF7F1D1D)
+        val Red950 = Color(0xFF450A0A)
     }
 
     object Rose {
@@ -106,5 +121,19 @@ object PaletteTokens {
 
     object Teal {
         val Teal600 = Color(0xFF0D9488)
+    }
+
+    object Yellow {
+        val Yellow50 = Color(0xFFFEFCE8)
+        val Yellow100 = Color(0xFFFEF9C3)
+        val Yellow200 = Color(0xFFFEF08A)
+        val Yellow300 = Color(0xFFFDE047)
+        val Yellow400 = Color(0xFFFBBF24)
+        val Yellow500 = Color(0xFFEAB308)
+        val Yellow600 = Color(0xFFCA8A04)
+        val Yellow700 = Color(0xFFA16207)
+        val Yellow800 = Color(0xFF854D0E)
+        val Yellow900 = Color(0xFF713F12)
+        val Yellow950 = Color(0xFF422006)
     }
 }

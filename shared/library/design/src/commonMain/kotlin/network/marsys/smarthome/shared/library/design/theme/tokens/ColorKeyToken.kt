@@ -5,6 +5,11 @@ import androidx.compose.ui.graphics.Color
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 
 enum class ColorKeyToken {
+
+    /**
+     * Backgrounds.
+     */
+
     BackgroundPrimary,
     BackgroundSecondary,
     BackgroundSecondarySelected,
@@ -13,30 +18,93 @@ enum class ColorKeyToken {
     BackgroundTertiaryDisabled,
     BackgroundBrandPrimary,
     BackgroundBrandSecondary,
+
+    // Error
+    BackgroundErrorPrimary,
+    BackgroundErrorSecondary,
+    BackgroundErrorSolid,
+    BackgroundErrorSolidPressed,
+
+    // Warning
+    BackgroundWarningPrimary,
+    BackgroundWarningSecondary,
+    BackgroundWarningSolid,
+    BackgroundWarningSolidPressed,
+
+    // Info
+    BackgroundInfoPrimary,
+    BackgroundInfoSecondary,
+    BackgroundInfoSolid,
+    BackgroundInfoSolidPressed,
+
+    // Success
     BackgroundSuccessPrimary,
     BackgroundSuccessSecondary,
+    BackgroundSuccessSolid,
+    BackgroundSuccessSolidPressed,
+
     BackgroundModal,
     BackgroundDimmed,
     BackgroundDisabled,
     BackgroundDisabledAlternative,
+
+    /**
+     * Borders.
+     */
+
     BorderPrimary,
+
+    // Brand
     BorderBrandPrimary,
     BorderBrandPrimaryDimmed,
-    BorderSuccessPrimary,
+
+    // Semantics
+    BorderErrorPrimary,
+    BorderErrorSubtle,
+    BorderWarningSubtle,
+    BorderInfoSubtle,
+    BorderSuccessSubtle,
+
+    /**
+     * Foregrounds.
+     */
 
     ForegroundPrimary,
     ForegroundPrimaryAlternative,
     ForegroundSecondary,
+
+    // Brand
     ForegroundBrandPrimary,
+
+    // Semantics
+    ForegroundErrorPrimary,
+    ForegroundWarningPrimary,
+    ForegroundInfoPrimary,
     ForegroundSuccessPrimary,
+
     ForegroundDisabled,
+
+    /**
+     * Texts.
+     */
 
     TextPrimary,
     TextSecondary,
     TextSecondaryAlternative,
+
+    // Brand
     TextBrandOnBrand,
+
+    // Semantics
+    TextErrorPrimary,
+    TextErrorSecondary,
+    TextWarningPrimary,
+    TextWarningSecondary,
+    TextInfoPrimary,
+    TextInfoSecondary,
     TextSuccessPrimary,
     TextSuccessSecondary,
+
     TextDisabled,
 }
 
