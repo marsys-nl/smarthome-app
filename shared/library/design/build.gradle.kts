@@ -31,6 +31,8 @@ kotlin {
         }
 
         commonMain.dependencies {
+            implementation(projects.shared.library.i18n)
+
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.compose.unstyled.button)

@@ -21,12 +21,16 @@ import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.LocalDescriptorStrings
+import network.marsys.smarthome.shared.library.i18n.rememberDescriptorStrings
 
 @Composable
 fun SmartHomeTheme(
     theme: ThemeSelection,
     content: @Composable () -> Unit,
 ) {
+    val descriptorStrings = rememberDescriptorStrings()
+
     val darkMode = when (theme) {
         ThemeSelection.LightMode -> false
         ThemeSelection.DarkMode -> true
@@ -41,6 +45,7 @@ fun SmartHomeTheme(
     CompositionLocalProvider(
         values = arrayOf(
             LocalDarkMode provides darkMode,
+            LocalDescriptorStrings provides descriptorStrings,
             LocalThemeSelection provides theme,
         ),
     ) {
