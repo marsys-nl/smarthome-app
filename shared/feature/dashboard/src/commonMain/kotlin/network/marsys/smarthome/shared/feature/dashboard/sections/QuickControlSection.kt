@@ -3,10 +3,8 @@ package network.marsys.smarthome.shared.feature.dashboard.sections
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.FlowRowScope
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -162,13 +160,19 @@ private fun QuickControlSectionEntities(
     identifiers: ImmutableList<EntityIdentifier>,
     onAction: (DashboardScreenAction) -> Unit,
 ) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement
-            .spacedBy(16.dp),
-        verticalArrangement = Arrangement
-            .spacedBy(16.dp),
+    @OptIn(ExperimentalGridApi::class)
+    Grid(
+        config = {
+            val maxWidthDp = constraints.maxWidth.toDp()
+            val columnsCount = (maxWidthDp / 150.dp).toInt()
+                .coerceIn(1..4)
+
+            repeat(columnsCount) {
+                column(minmax(150.dp, 1.fr))
+            }
+
+            gap(16.dp)
+        },
     ) {
         identifiers.forEach { identifier ->
             key(identifier) {
@@ -183,10 +187,12 @@ private fun QuickControlSectionEntities(
     }
 }
 
+@OptIn(ExperimentalGridApi::class)
 @Composable
-private fun FlowRowScope.QuickControlSectionEntityCard(
+private fun QuickControlSectionEntityCard(
     entity: Entity<*>,
     onAction: (DashboardScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val type = entity::class
     val icon = remember(type) { type.icon() }
@@ -213,9 +219,7 @@ private fun FlowRowScope.QuickControlSectionEntityCard(
             .localized(),
         icon = icon,
         active = active,
-        modifier = Modifier
-            .widthIn(min = 150.dp)
-            .weight(1f)
+        modifier = modifier
             .then(clickModifier),
         activeColors = colors,
     ) {
@@ -383,7 +387,8 @@ private fun GroupedQuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
-            entities = emptyMap(),
+            entities = DashboardScreenPreviewData.entities
+                .associateBy { it.identifier },
             groupEntitiesByType = true,
             onAction = {},
         )

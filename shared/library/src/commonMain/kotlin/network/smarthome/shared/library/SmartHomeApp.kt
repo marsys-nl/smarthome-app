@@ -12,10 +12,8 @@ import network.marsys.smarthome.shared.feature.profile.ProfileViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.i18n.LocalDescriptorStrings
 import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
 import network.marsys.smarthome.shared.library.i18n.TranslationCache
-import network.marsys.smarthome.shared.library.i18n.rememberDescriptorStrings
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
@@ -81,14 +79,12 @@ fun SmartHomeApp(
         },
     ) {
         val translationCache = koinInject<TranslationCache>()
-        val descriptorStrings = rememberDescriptorStrings()
 
         val appearancePreferencesRepository = koinInject<AppearancePreferencesRepository>()
         val theme by appearancePreferencesRepository.theme
             .collectAsStateWithLifecycle(ThemeSelection.SystemDefault)
 
         CompositionLocalProvider(
-            LocalDescriptorStrings provides descriptorStrings,
             LocalTranslationCache provides translationCache,
         ) {
             SmartHomeTheme(
