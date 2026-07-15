@@ -12,12 +12,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
@@ -39,20 +44,15 @@ fun Card(
     colors: CardColors = CardDefaults.colors(),
     shape: Shape = CardDefaults.shape(),
     contentPadding: PaddingValues = CardDefaults.contentPadding(),
-    borderWidth: Dp = 0.dp,
+    border: Border = Border.None,
     contentAlignment: Alignment = Alignment.TopStart,
     content: @Composable BoxScope.() -> Unit,
 ) {
-    val borderModifier =
-        if (borderWidth > 0.dp && colors.borderColor.isSpecified) {
-            Modifier.border(
-                width = borderWidth,
-                color = colors.borderColor,
-                shape = shape,
-            )
-        } else {
-            Modifier
-        }
+    val borderModifier = determineBorderModifier(
+        border = border,
+        shape = shape,
+        color = colors.borderColor,
+    )
 
     Box(
         modifier = modifier
@@ -80,6 +80,49 @@ fun Card(
         ) {
             content.invoke(this)
         }
+    }
+}
+
+@Composable
+private fun determineBorderModifier(
+    border: Border,
+    shape: Shape,
+    color: Color,
+): Modifier {
+    val density = LocalDensity.current
+
+    return when (border) {
+        is Border.Solid if color.isSpecified && border.width > 0.dp ->
+            Modifier.border(
+                width = border.width,
+                color = color,
+                shape = shape,
+            )
+
+        is Border.Dashed if color.isSpecified && border.width > 0.dp ->
+            Modifier.drawBehind {
+                val stroke = Stroke(
+                    width = border.width.toPx(),
+                    pathEffect = PathEffect.dashPathEffect(
+                        floatArrayOf(10f, 10f),
+                        0f,
+                    ),
+                )
+
+                val outline = shape.createOutline(
+                    size = size,
+                    layoutDirection = layoutDirection,
+                    density = density,
+                )
+
+                drawOutline(
+                    outline = outline,
+                    color = color,
+                    style = stroke,
+                )
+            }
+
+        else -> Modifier
     }
 }
 
@@ -116,6 +159,13 @@ object CardDefaults {
     )
 }
 
+sealed interface Border {
+    data object None : Border
+
+    data class Solid(val width: Dp) : Border
+    data class Dashed(val width: Dp) : Border
+}
+
 @Preview
 @Composable
 private fun CardPreview(
@@ -145,7 +195,29 @@ private fun BorderedCardPreview(
             colors = CardDefaults.colors(
                 borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
             ),
-            borderWidth = 1.dp,
+            border = Border.Solid(1.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(size = 100.dp),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun DashedBorderedCardPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        Card(
+            colors = CardDefaults.colors(
+                borderColor = LocalColorScheme.current[ColorKeyToken.ForegroundBrandPrimary],
+            ),
+            border = Border.Dashed(1.dp),
         ) {
             Box(
                 modifier = Modifier

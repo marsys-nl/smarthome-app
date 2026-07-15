@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -67,7 +68,7 @@ fun EntityCard(
         modifier = modifier,
         colors = cardColors,
         contentPadding = EntityCardDefaults.contentPadding(),
-        borderWidth = 1.dp,
+        border = Border.Solid(1.dp),
     ) {
         Column(
             modifier = Modifier

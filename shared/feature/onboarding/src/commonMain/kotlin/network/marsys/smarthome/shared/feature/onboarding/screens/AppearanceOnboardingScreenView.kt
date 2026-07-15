@@ -42,6 +42,7 @@ import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
@@ -211,7 +212,7 @@ private fun SelectableThemeOption(
                 onClick = onSelectTheme,
             ),
         colors = cardColors,
-        borderWidth = borderWidth,
+        border = Border.Solid(borderWidth),
     ) {
         Row(
             horizontalArrangement = Arrangement

@@ -28,6 +28,7 @@ import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -175,7 +176,7 @@ private fun SelectableThemeOption(
                 onClick = onSelectTheme,
             ),
         colors = cardColors,
-        borderWidth = borderWidth,
+        border = Border.Solid(borderWidth),
     ) {
         Row(
             horizontalArrangement = Arrangement

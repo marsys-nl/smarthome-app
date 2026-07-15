@@ -16,6 +16,7 @@ import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_group_button_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_ungroup_button_title
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -46,7 +47,7 @@ fun GroupEntitiesButton(
             borderColor = GroupEntitiesButtonDefaults.borderColor(groupByType),
         ),
         contentPadding = contentPadding,
-        borderWidth = 1.dp,
+        border = Border.Solid(1.dp),
     ) {
         Row(
             modifier = Modifier,

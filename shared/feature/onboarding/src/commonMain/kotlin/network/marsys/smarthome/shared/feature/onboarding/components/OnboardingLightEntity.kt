@@ -26,6 +26,7 @@ import network.marsys.smarthome.shared.feature.onboarding.onboarding.generated.r
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -69,7 +70,7 @@ fun OnboardingLightEntity(
             ),
         colors = cardColors,
         contentPadding = PaddingValues(all = 20.dp),
-        borderWidth = borderWidth,
+        border = Border.Solid(borderWidth),
     ) {
         Row(
             horizontalArrangement = Arrangement

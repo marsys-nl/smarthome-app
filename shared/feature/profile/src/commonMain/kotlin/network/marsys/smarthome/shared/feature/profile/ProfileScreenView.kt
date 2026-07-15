@@ -46,6 +46,7 @@ import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
@@ -204,7 +205,7 @@ private fun ProfileConnectedBackend(
             backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSuccessPrimary]),
             borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderSuccessSubtle],
         ),
-        borderWidth = 1.dp,
+        border = Border.Solid(1.dp),
     ) {
         Row(
             modifier = Modifier,
@@ -300,6 +301,7 @@ private fun ProfileMenuItems(
             title = "Reset onboarding",
             description = "Run the setup wizard again",
             icon = Icons.Reset,
+            border = false,
             onClick = {
                 onAction.invoke(ProfileScreenAction.ResetOnboarding)
             },
@@ -318,6 +320,7 @@ private fun ProfileMenuItems(
             title = "Logout",
             description = "Sign out of your account",
             icon = Icons.LogOut,
+            border = false,
             onClick = {
                 onAction.invoke(ProfileScreenAction.Logout)
             },
@@ -341,6 +344,7 @@ private fun ProfileMenuItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    border: Boolean = true,
     colors: ProfileMenuItemColors = ProfileMenuItemDefaults.colors(),
     interactionSource: MutableInteractionSource = MutableInteractionSource(),
     right: @Composable ((Color) -> Unit)? = {
@@ -351,18 +355,6 @@ private fun ProfileMenuItem(
         )
     },
 ) {
-    val cardColors = CardDefaults.colors(
-        backgroundColor = colors.backgroundColor(enabled).value,
-    )
-
-    val iconColors = CardDefaults.colors(
-        backgroundColor = colors.iconBackgroundColor(enabled).value,
-        contentColor = colors.iconContentColor(enabled).value,
-    )
-
-    val titleColor = colors.titleColor(enabled).value
-    val descriptionColor = colors.descriptionColor(enabled).value
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -372,8 +364,15 @@ private fun ProfileMenuItem(
                 enabled = enabled,
                 onClick = onClick,
             ),
-        colors = cardColors,
-        borderWidth = 1.dp,
+        colors = CardDefaults.colors(
+            backgroundColor = colors.backgroundColor(enabled).value,
+            borderColor = colors.titleColor(enabled).value
+                .copy(alpha = .7f),
+        ),
+        border = when (enabled) {
+            false if border -> Border.Dashed(1.dp)
+            else -> Border.None
+        },
     ) {
         Row(
             modifier = Modifier,
@@ -383,7 +382,10 @@ private fun ProfileMenuItem(
         ) {
             IconCard(
                 icon = icon,
-                colors = iconColors,
+                colors = CardDefaults.colors(
+                    backgroundColor = colors.iconBackgroundColor(enabled).value,
+                    contentColor = colors.iconContentColor(enabled).value,
+                ),
             )
 
             Column(
@@ -397,14 +399,14 @@ private fun ProfileMenuItem(
                     lineHeight = 24.sp,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.W600,
-                    color = titleColor,
+                    color = colors.titleColor(enabled).value,
                 )
 
                 Text(
                     text = description,
                     lineHeight = 20.sp,
                     fontSize = 14.sp,
-                    color = descriptionColor,
+                    color = colors.descriptionColor(enabled).value,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -499,11 +501,11 @@ object ProfileMenuItemDefaults {
         descriptionColor = descriptionColor,
         iconBackgroundColor = SolidColor(iconBackgroundColor),
         iconContentColor = iconContentColor,
-        disabledBackgroundColor = SolidColor(backgroundColor.copy(alpha = .3f)),
-        disabledTitleColor = titleColor.copy(alpha = .3f),
-        disabledDescriptionColor = descriptionColor.copy(alpha = .3f),
-        disabledIconBackgroundColor = SolidColor(iconBackgroundColor.copy(alpha = .3f)),
-        disabledIconContentColor = iconContentColor.copy(alpha = .3f),
+        disabledBackgroundColor = SolidColor(backgroundColor.copy(alpha = .5f)),
+        disabledTitleColor = titleColor.copy(alpha = .5f),
+        disabledDescriptionColor = descriptionColor.copy(alpha = .5f),
+        disabledIconBackgroundColor = SolidColor(iconBackgroundColor.copy(alpha = .5f)),
+        disabledIconContentColor = iconContentColor.copy(alpha = .5f),
     )
 }
 
