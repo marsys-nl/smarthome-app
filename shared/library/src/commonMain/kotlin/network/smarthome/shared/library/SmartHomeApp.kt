@@ -49,6 +49,7 @@ private val viewModelModule = module {
     viewModel {
         ProfileViewModel(
             applicationConfigurationRepository = get(),
+            onboardingRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
