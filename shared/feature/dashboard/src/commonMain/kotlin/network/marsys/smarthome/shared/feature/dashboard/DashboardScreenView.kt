@@ -12,6 +12,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
+import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSectionPreviewData
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -43,9 +44,7 @@ fun DashboardScreenView(
     }
 
     DashboardScreenViewContent(
-        name = state.user,
-        entities = state.quickControlState.entities,
-        groupEntitiesByType = state.quickControlState.groupedEntitiesByType,
+        state = state,
         onAction = viewModel.accept,
         modifier = modifier,
         instant = instant,
@@ -54,10 +53,7 @@ fun DashboardScreenView(
 
 @Composable
 private fun DashboardScreenViewContent(
-    name: String,
-    @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
-    groupEntitiesByType: Boolean,
+    state: DashboardScreenState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     instant: Instant = Clock.System.now(),
@@ -68,7 +64,7 @@ private fun DashboardScreenViewContent(
     ) {
         DashboardHeader(
             instant = instant,
-            name = name,
+            name = state.user,
             onAction = onAction,
         )
 
@@ -80,15 +76,13 @@ private fun DashboardScreenViewContent(
             ),
             singlePane = {
                 SinglePaneDashboard(
-                    entities = entities,
-                    groupEntitiesByType = groupEntitiesByType,
+                    state = state,
                     onAction = onAction,
                 )
             },
             splitPane = {
                 SplitPaneDashboard(
-                    entities = entities,
-                    groupEntitiesByType = groupEntitiesByType,
+                    state = state,
                     onAction = onAction,
                 )
             },
@@ -98,9 +92,7 @@ private fun DashboardScreenViewContent(
 
 @Composable
 private fun SinglePaneDashboard(
-    @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
-    groupEntitiesByType: Boolean,
+    state: DashboardScreenState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -109,8 +101,7 @@ private fun SinglePaneDashboard(
             .fillMaxWidth(),
     ) {
         QuickControlSection(
-            entities = entities,
-            groupEntitiesByType = groupEntitiesByType,
+            state = state.quickControlState,
             onAction = onAction,
         )
     }
@@ -118,9 +109,7 @@ private fun SinglePaneDashboard(
 
 @Composable
 private fun SplitPaneDashboard(
-    @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
-    groupEntitiesByType: Boolean,
+    state: DashboardScreenState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -136,8 +125,7 @@ private fun SplitPaneDashboard(
                     .fillMaxWidth(),
             ) {
                 QuickControlSection(
-                    entities = entities,
-                    groupEntitiesByType = groupEntitiesByType,
+                    state = state.quickControlState,
                     onAction = onAction,
                 )
             }
@@ -156,11 +144,18 @@ private fun DashboardScreenViewPreview(
         theme = theme,
     ) {
         DashboardScreenViewContent(
-            name = "John",
-            entities = DashboardScreenEntityData.entities
-                .associateBy { it.identifier },
-            groupEntitiesByType = false,
+            state = DashboardScreenPreviewData.loaded(),
             onAction = {},
         )
+    }
+}
+
+internal object DashboardScreenPreviewData {
+    fun loaded(
+        quickControlState: DashboardScreenState.QuickControlState =
+            QuickControlSectionPreviewData.loaded(),
+    ): DashboardScreenState = object : DashboardScreenState {
+        override val user: String = "John"
+        override val quickControlState: DashboardScreenState.QuickControlState = quickControlState
     }
 }

@@ -32,7 +32,8 @@ import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
-import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenPreviewData
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityData
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
@@ -74,9 +75,7 @@ import kotlin.reflect.KClass
 
 @Composable
 fun QuickControlSection(
-    @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
-    groupEntitiesByType: Boolean,
+    state: DashboardScreenState.QuickControlState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -89,7 +88,7 @@ fun QuickControlSection(
             title = stringResource(Res.string.quick_control_section_title),
             right = {
                 GroupEntitiesButton(
-                    groupByType = groupEntitiesByType,
+                    groupByType = state.groupedEntitiesByType,
                     onClick = {
                         onAction.invoke(DashboardScreenAction.ToggleGroupEntitiesByType)
                     },
@@ -97,18 +96,18 @@ fun QuickControlSection(
             },
         )
 
-        if (groupEntitiesByType) {
+        if (state.groupedEntitiesByType) {
             QuickControlSectionGroupedEntities(
-                entities = entities,
+                entities = state.entities,
                 onAction = onAction,
             )
         } else {
-            val identifiers by remember(entities) {
-                derivedStateOf { entities.keys.toImmutableList() }
+            val identifiers by remember(state.entities) {
+                derivedStateOf { state.entities.keys.toImmutableList() }
             }
 
             QuickControlSectionEntities(
-                entities = entities,
+                entities = state.entities,
                 identifiers = identifiers,
                 onAction = onAction,
             )
@@ -370,9 +369,7 @@ private fun QuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
-            entities = DashboardScreenPreviewData.entities
-                .associateBy { it.identifier },
-            groupEntitiesByType = false,
+            state = QuickControlSectionPreviewData.loaded(),
             onAction = {},
         )
     }
@@ -387,10 +384,21 @@ private fun GroupedQuickControlSectionPreview(
         theme = theme,
     ) {
         QuickControlSection(
-            entities = DashboardScreenPreviewData.entities
-                .associateBy { it.identifier },
-            groupEntitiesByType = true,
+            state = QuickControlSectionPreviewData.loaded(
+                groupedEntitiesByType = true,
+            ),
             onAction = {},
         )
+    }
+}
+
+internal object QuickControlSectionPreviewData {
+    fun loaded(
+        entities: Map<EntityIdentifier, Entity<*>> = DashboardScreenEntityData.entities
+            .associateBy { it.identifier },
+        groupedEntitiesByType: Boolean = false,
+    ): DashboardScreenState.QuickControlState = object : DashboardScreenState.QuickControlState {
+        override val entities: Map<EntityIdentifier, Entity<*>> = entities
+        override val groupedEntitiesByType: Boolean = groupedEntitiesByType
     }
 }
