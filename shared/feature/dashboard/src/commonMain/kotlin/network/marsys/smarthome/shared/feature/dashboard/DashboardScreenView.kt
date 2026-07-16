@@ -157,7 +157,7 @@ private fun DashboardScreenViewPreview(
     ) {
         DashboardScreenViewContent(
             name = "John",
-            entities = DashboardScreenPreviewData.entities
+            entities = DashboardScreenEntityData.entities
                 .associateBy { it.identifier },
             groupEntitiesByType = false,
             onAction = {},
