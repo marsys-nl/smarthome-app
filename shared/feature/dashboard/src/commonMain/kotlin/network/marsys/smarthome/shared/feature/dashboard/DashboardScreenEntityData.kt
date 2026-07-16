@@ -15,7 +15,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 
-object DashboardScreenPreviewData {
+object DashboardScreenEntityData {
     val entities: List<Entity<*>> = listOf(
         // Lights
         Light(
