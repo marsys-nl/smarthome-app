@@ -24,7 +24,7 @@ build-konfig = "0.22.0"
 compose-unstyled = "2.8.2"
 
 detekt = "2.0.0-alpha.3"
-detekt-compose-rules = "0.6.2"
+detekt-compose-rules = "0.6.3"
 
 jetbrains-compose = "1.11.1"
 
