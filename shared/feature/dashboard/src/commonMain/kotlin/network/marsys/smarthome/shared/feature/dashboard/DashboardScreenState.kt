@@ -12,8 +12,16 @@ interface DashboardScreenState {
 
     @Stable
     interface QuickControlState {
+        val condition: Condition
         val entities: Map<EntityIdentifier, Entity<*>>
         val groupedEntitiesByType: Boolean
+    }
+
+    sealed interface Condition {
+        data object Error : Condition
+        data object Empty : Condition
+        data object Loading : Condition
+        data object Success : Condition
     }
 }
 

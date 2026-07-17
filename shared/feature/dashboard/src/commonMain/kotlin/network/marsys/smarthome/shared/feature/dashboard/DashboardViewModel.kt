@@ -95,8 +95,15 @@ private fun launchEntityMutations(
                 }
             }
 
-            val removed = current.keys - entities.map { it.identifier }
+            val removed = current.keys - entities.map { it.identifier }.toSet()
             removed.forEach(current::remove)
+
+            when (state.quickControlState.condition) {
+                !is DashboardScreenState.Condition.Success ->
+                    state.quickControlState.condition = DashboardScreenState.Condition.Success
+
+                else -> Unit
+            }
         }
     }
 }
@@ -124,6 +131,7 @@ private class MutableDashboardScreenState(
 }
 
 private class MutableQuickControlState : DashboardScreenState.QuickControlState {
+    override var condition: DashboardScreenState.Condition by mutableStateOf(DashboardScreenState.Condition.Loading)
     override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
     override var groupedEntitiesByType: Boolean by mutableStateOf(false)
 }

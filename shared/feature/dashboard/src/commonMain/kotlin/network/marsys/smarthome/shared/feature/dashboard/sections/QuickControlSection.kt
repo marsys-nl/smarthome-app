@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -34,6 +37,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityData
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
+import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
@@ -87,31 +91,80 @@ fun QuickControlSection(
         SectionHeader(
             title = stringResource(Res.string.quick_control_section_title),
             right = {
-                GroupEntitiesButton(
-                    groupByType = state.groupedEntitiesByType,
-                    onClick = {
-                        onAction.invoke(DashboardScreenAction.ToggleGroupEntitiesByType)
-                    },
-                )
+                if (state.condition == DashboardScreenState.Condition.Success) {
+                    GroupEntitiesButton(
+                        groupByType = state.groupedEntitiesByType,
+                        onClick = {
+                            onAction.invoke(DashboardScreenAction.ToggleGroupEntitiesByType)
+                        },
+                    )
+                }
             },
         )
 
-        if (state.groupedEntitiesByType) {
-            QuickControlSectionGroupedEntities(
-                entities = state.entities,
-                onAction = onAction,
-            )
-        } else {
-            val identifiers by remember(state.entities) {
-                derivedStateOf { state.entities.keys.toImmutableList() }
-            }
+        when (state.condition) {
+            DashboardScreenState.Condition.Loading ->
+                QuickControlSectionLoadingContent()
 
-            QuickControlSectionEntities(
-                entities = state.entities,
-                identifiers = identifiers,
-                onAction = onAction,
-            )
+            DashboardScreenState.Condition.Success ->
+                QuickControlSectionLoadedContent(
+                    state = state,
+                    onAction = onAction,
+                )
+
+            else -> Unit
         }
+    }
+}
+
+@Composable
+private fun QuickControlSectionLoadingContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        SectionLoadingIndicator(
+            message = "Loading your entities and devices...",
+        )
+
+        @OptIn(ExperimentalGridApi::class)
+        Grid(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
+            config = dashboardSectionGridConfig,
+        ) {
+            repeat(LOADING_CARD_COUNT) {
+                ShimmerCard()
+            }
+        }
+    }
+}
+
+private const val LOADING_CARD_COUNT = 4
+
+@Composable
+private fun QuickControlSectionLoadedContent(
+    state: DashboardScreenState.QuickControlState,
+    onAction: (DashboardScreenAction) -> Unit,
+) {
+    if (state.groupedEntitiesByType) {
+        QuickControlSectionGroupedEntities(
+            entities = state.entities,
+            onAction = onAction,
+        )
+    } else {
+        val identifiers by remember(state.entities) {
+            derivedStateOf { state.entities.keys.toImmutableList() }
+        }
+
+        QuickControlSectionEntities(
+            entities = state.entities,
+            identifiers = identifiers,
+            onAction = onAction,
+        )
     }
 }
 
@@ -161,17 +214,7 @@ private fun QuickControlSectionEntities(
 ) {
     @OptIn(ExperimentalGridApi::class)
     Grid(
-        config = {
-            val maxWidthDp = constraints.maxWidth.toDp()
-            val columnsCount = (maxWidthDp / 150.dp).toInt()
-                .coerceIn(1..4)
-
-            repeat(columnsCount) {
-                column(minmax(150.dp, 1.fr))
-            }
-
-            gap(16.dp)
-        },
+        config = dashboardSectionGridConfig,
     ) {
         identifiers.forEach { identifier ->
             key(identifier) {
@@ -362,6 +405,21 @@ private fun KClass<out Entity<*>>.cardColors(): ActiveEntityCardColors = when (t
 
 @Preview
 @Composable
+private fun LoadingQuickControlSectionPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        QuickControlSection(
+            state = QuickControlSectionPreviewData.loading(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun QuickControlSectionPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
@@ -393,11 +451,18 @@ private fun GroupedQuickControlSectionPreview(
 }
 
 internal object QuickControlSectionPreviewData {
+    fun loading() = object : DashboardScreenState.QuickControlState {
+        override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val groupedEntitiesByType: Boolean = false
+    }
+
     fun loaded(
         entities: Map<EntityIdentifier, Entity<*>> = DashboardScreenEntityData.entities
             .associateBy { it.identifier },
         groupedEntitiesByType: Boolean = false,
-    ): DashboardScreenState.QuickControlState = object : DashboardScreenState.QuickControlState {
+    ) = object : DashboardScreenState.QuickControlState {
+        override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Success
         override val entities: Map<EntityIdentifier, Entity<*>> = entities
         override val groupedEntitiesByType: Boolean = groupedEntitiesByType
     }
