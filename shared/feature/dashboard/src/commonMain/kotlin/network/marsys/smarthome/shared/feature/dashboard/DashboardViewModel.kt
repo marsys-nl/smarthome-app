@@ -7,6 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
@@ -20,6 +23,7 @@ import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.seconds
 
 internal typealias DashboardStateHolder =
     SuspendingActionStateEffectMutator<DashboardScreenAction, DashboardScreenState, DashboardScreenEffect>
@@ -80,31 +84,32 @@ class DashboardViewModel(
         },
     )
 
+@OptIn(FlowPreview::class)
 context(scope: CoroutineScope)
 private fun launchEntityMutations(
     state: MutableDashboardScreenState,
     entityRepository: EntityRepository,
 ) {
     scope.launch {
-        entityRepository.entities.collect { entities ->
-            val current = state.quickControlState.entities
+        entityRepository.entities
+            .catch { state.quickControlState.condition = DashboardScreenState.Condition.Error }
+            .collect { entities ->
+                val current = state.quickControlState.entities
 
-            entities.forEach {
-                if (current[it.identifier] != it) {
-                    current[it.identifier] = it
+                entities.forEach {
+                    if (current[it.identifier] != it) {
+                        current[it.identifier] = it
+                    }
+                }
+
+                val removed = current.keys - entities.map { it.identifier }.toSet()
+                removed.forEach(current::remove)
+
+                state.quickControlState.condition = when {
+                    entities.isEmpty() -> DashboardScreenState.Condition.Empty
+                    else -> DashboardScreenState.Condition.Success
                 }
             }
-
-            val removed = current.keys - entities.map { it.identifier }.toSet()
-            removed.forEach(current::remove)
-
-            when (state.quickControlState.condition) {
-                !is DashboardScreenState.Condition.Success ->
-                    state.quickControlState.condition = DashboardScreenState.Condition.Success
-
-                else -> Unit
-            }
-        }
     }
 }
 
