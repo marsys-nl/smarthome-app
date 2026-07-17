@@ -5,14 +5,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,7 +53,15 @@ import network.marsys.smarthome.shared.library.design.EntityCard
 import network.marsys.smarthome.shared.library.design.EntityCardDefaults
 import network.marsys.smarthome.shared.library.design.LocalDarkMode
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.component.Border
+import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.IconCard
+import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.component.TextDefaults
+import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.Blinds
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -59,6 +70,7 @@ import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Plug
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
+import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.localized
@@ -106,6 +118,9 @@ fun QuickControlSection(
             DashboardScreenState.Condition.Loading ->
                 QuickControlSectionLoadingContent()
 
+            DashboardScreenState.Condition.Empty ->
+                QuickControlSectionEmptyContent()
+
             DashboardScreenState.Condition.Success ->
                 QuickControlSectionLoadedContent(
                     state = state,
@@ -144,6 +159,50 @@ private fun QuickControlSectionLoadingContent(
 }
 
 private const val LOADING_CARD_COUNT = 4
+
+@Composable
+private fun QuickControlSectionEmptyContent(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.colors(
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Dashed(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.Component,
+                colors = CardDefaults.colors(
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = "No devices yet",
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = "Add your first smart device to start controlling it from this dashboard.",
+                style = TextDefaults.description then TextStyles.centered,
+                minLines = 2,
+            )
+        }
+    }
+}
 
 @Composable
 private fun QuickControlSectionLoadedContent(
@@ -420,6 +479,21 @@ private fun LoadingQuickControlSectionPreview(
 
 @Preview
 @Composable
+private fun EmptyQuickControlSectionPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        QuickControlSection(
+            state = QuickControlSectionPreviewData.empty(),
+            onAction = {},
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun QuickControlSectionPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
@@ -451,6 +525,12 @@ private fun GroupedQuickControlSectionPreview(
 }
 
 internal object QuickControlSectionPreviewData {
+    fun empty() = object : DashboardScreenState.QuickControlState {
+        override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Empty
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val groupedEntitiesByType: Boolean = false
+    }
+
     fun loading() = object : DashboardScreenState.QuickControlState {
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
         override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()

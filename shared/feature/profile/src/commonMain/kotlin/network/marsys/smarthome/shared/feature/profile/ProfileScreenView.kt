@@ -51,6 +51,7 @@ import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
+import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.Bell
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
@@ -508,32 +509,6 @@ object ProfileMenuItemDefaults {
         disabledIconContentColor = iconContentColor.copy(alpha = .5f),
     )
 }
-
-@Composable
-private fun IconCard(
-    icon: ImageVector,
-    colors: CardColors,
-    modifier: Modifier = Modifier,
-    size: Dp = 44.dp,
-) {
-    Card(
-        modifier = modifier
-            .width(size)
-            .aspectRatio(1f),
-        colors = colors,
-        shape = RoundedCornerShape(size / ICON_CARD_CORNER_DIVISOR),
-        contentPadding = PaddingValues(size / ICON_CARD_PADDING_DIVISOR),
-    ) {
-        Icon(
-            icon = icon,
-            size = size / ICON_CARD_ICON_SIZE_DIVISOR,
-        )
-    }
-}
-
-private const val ICON_CARD_CORNER_DIVISOR = 4
-private const val ICON_CARD_PADDING_DIVISOR = 4
-private const val ICON_CARD_ICON_SIZE_DIVISOR = 2
 
 @PreviewLocales
 @PreviewFontScales
