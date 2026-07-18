@@ -9,15 +9,18 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.color
+import network.marsys.smarthome.shared.library.design.theme.tokens.gradient
 
 object ButtonTokens {
     val BackgroundColor: Brush
         @Composable
-        get() = SolidColor(color(ColorKeyToken.BackgroundBrandPrimary))
+        get() = gradient(GradientKeyToken.BrandPrimaryToSecondary)
     val ContentColor: Color
         @Composable
-        get() = color(ColorKeyToken.TextPrimary)
+        get() = PaletteTokens.Base.White
     val BorderColor: Color
         @Composable
         get() = Color.Unspecified

@@ -1,9 +1,12 @@
+@file:OptIn(ExperimentalFoundationStyleApi::class)
+
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +34,7 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
+import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
@@ -42,8 +46,6 @@ import org.jetbrains.compose.resources.painterResource
 private val OnboardingBackgroundColor = Color(color = 0xFFF1BF42)
 private val OnboardingContentColor = PaletteTokens.Slate.Slate800
 
-private val OnboardingButtonBackgroundColor = PaletteTokens.Slate.Slate800
-private val OnboardingButtonTextColor = PaletteTokens.Base.White
 private val OnboardingProgressIndicatorBackgroundColor = PaletteTokens.Amber.Amber600
     .copy(alpha = .3f)
 private val OnboardingProgressIndicatorForegroundColor = PaletteTokens.Slate.Slate800
@@ -108,12 +110,7 @@ fun InitialOnboardingScreenView(
         footer = {
             OnboardingNextButton(
                 onClick = navigateToEntities,
-                colors = ButtonDefaults.colors(
-                    backgroundColor = SolidColor(
-                        value = OnboardingButtonBackgroundColor,
-                    ),
-                    contentColor = OnboardingButtonTextColor,
-                ),
+                style = ButtonStyle.onBrand(),
             )
 
             OnboardingScreenIndicator(

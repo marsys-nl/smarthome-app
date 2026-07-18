@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -80,6 +81,7 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
+import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
@@ -97,6 +99,7 @@ import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 
 private val BrandPrimaryToSecondaryGradient
@@ -475,19 +478,20 @@ private fun FinishOnboardingButton(
     state: ConfigurationOnboardingState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    foregroundColor: Color = ButtonTokens.ContentColor,
 ) {
+    @OptIn(ExperimentalFoundationStyleApi::class)
     Button(
         onClick = {
             if (state !is ConfigurationOnboardingState.Processing) {
                 onClick.invoke()
             }
         },
+        style = ButtonStyle.primary(
+            content = foregroundColor,
+        ),
         modifier = modifier
             .fillMaxWidth(),
-        colors = ButtonDefaults.colors(
-            backgroundColor = BrandPrimaryToSecondaryGradient,
-            contentColor = PaletteTokens.Base.White,
-        ),
     ) {
         Row(
             modifier = Modifier
@@ -519,7 +523,7 @@ private fun FinishOnboardingButton(
                     modifier = Modifier
                         .height(textHeight),
                     colorFilter = ColorFilter.tint(
-                        color = LocalContentColor.current,
+                        color = foregroundColor,
                     ),
                 )
             }
@@ -569,13 +573,12 @@ private fun OnboardingSkipConfigurationButton(
         LocalTextStyle.current
     }
 
+    @OptIn(ExperimentalFoundationStyleApi::class)
     Button(
         onClick = onClick,
+        style = ButtonStyle.text(),
         modifier = modifier
             .padding(top = 24.dp),
-        colors = ButtonDefaults.colors(
-            backgroundColor = SolidColor(Color.Transparent),
-        ),
         indication = null,
         interactionSource = interactionSource,
     ) {

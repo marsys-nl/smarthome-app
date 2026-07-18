@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -127,12 +128,9 @@ fun AppearanceOnboardingScreenView(
                     onClick = navigateBack,
                 )
 
+                @OptIn(ExperimentalFoundationStyleApi::class)
                 OnboardingNextButton(
                     onClick = navigateToConfiguration,
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = BrandPrimaryToSecondaryGradient,
-                        contentColor = PaletteTokens.Base.White,
-                    ),
                 )
             }
 

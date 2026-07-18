@@ -1,162 +1,229 @@
+@file:OptIn(ExperimentalFoundationStyleApi::class)
+
 package network.marsys.smarthome.shared.library.design.component
 
-import androidx.compose.animation.core.FiniteAnimationSpec
-import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Indication
 import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.disabled
+import androidx.compose.foundation.style.hovered
+import androidx.compose.foundation.style.pressed
+import androidx.compose.foundation.style.rememberUpdatedStyleState
+import androidx.compose.foundation.style.styleable
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.composeunstyled.UnstyledButton
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
+import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 
 @Composable
 fun Button(
     onClick: () -> Unit,
+    style: Style,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    shape: Shape = ButtonDefaults.buttonShape(),
-    colors: ButtonColors = ButtonDefaults.colors(),
-    contentPadding: PaddingValues = ButtonDefaults.contentPadding(),
-    borderWidth: Dp = 0.dp,
+    role: Role = Role.Button,
+    interactionSource: MutableInteractionSource? = remember { MutableInteractionSource() },
     indication: Indication? = LocalIndication.current,
-    interactionSource: MutableInteractionSource? = null,
     content: @Composable () -> Unit,
 ) {
-    val background = colors.backgroundColor(enabled).value
-
-    val backgroundColor = when (background) {
-        is SolidColor -> background.value
-        else -> Color.Unspecified
+    val styleState = rememberUpdatedStyleState(interactionSource) {
+        it.isEnabled = enabled
     }
 
-    val contentColor = colors.contentColor(enabled).value
-    val borderColor = colors.borderColor(enabled).value
+    val mergedStyle = ButtonDefaults.base then style
 
-    val gradientModifier = when (background) {
-        is ShaderBrush -> Modifier.background(
-            brush = background,
-            shape = shape,
-        )
-
-        else -> Modifier
+    val pointerModifier = if (enabled) {
+        Modifier.pointerHoverIcon(PointerIcon.Default)
+    } else {
+        Modifier
     }
 
-    UnstyledButton(
-        onClick = onClick,
-        enabled = enabled,
-        contentPadding = contentPadding,
-        indication = indication,
-        interactionSource = interactionSource,
+    Box(
         modifier = modifier
-            .clip(shape)
-            .background(backgroundColor)
-            .border(
-                width = borderWidth,
-                color = borderColor,
-                shape = shape,
+            .semantics(
+                properties = {
+                    this.role = role
+                },
             )
-            .then(gradientModifier),
-    ) {
-        CompositionLocalProvider(
-            LocalContentColor provides contentColor,
-        ) {
+            .clickable(
+                enabled = enabled,
+                interactionSource = interactionSource,
+                indication = indication,
+                onClick = onClick,
+            )
+            .styleable(styleState, mergedStyle)
+            .then(pointerModifier),
+        contentAlignment = Alignment.Center,
+        content = {
             content.invoke()
-        }
-    }
-}
-
-@Immutable
-@ConsistentCopyVisibility
-data class ButtonColors internal constructor(
-    private val backgroundColor: Brush,
-    private val contentColor: Color,
-    private val borderColor: Color,
-    private val disabledBackgroundColor: Brush,
-    private val disabledContentColor: Color,
-    private val disabledBorderColor: Color,
-) {
-    @Composable
-    internal fun backgroundColor(enabled: Boolean): State<Brush> =
-        rememberUpdatedState(
-            if (enabled) backgroundColor else disabledBackgroundColor,
-        )
-
-    @Composable
-    internal fun contentColor(enabled: Boolean): State<Color> =
-        rememberUpdatedState(
-            if (enabled) contentColor else disabledContentColor,
-        )
-
-    @Composable
-    internal fun borderColor(enabled: Boolean): State<Color> =
-        rememberUpdatedState(
-            if (enabled) borderColor else disabledBorderColor,
-        )
+        },
+    )
 }
 
 object ButtonDefaults {
-    private const val ANIMATION_DURATION_MILLIS = 300
+    internal val base = Style {
+        contentPadding(
+            horizontal = ButtonTokens.ButtonHorizontalPadding,
+            vertical = ButtonTokens.ButtonVerticalPadding,
+        )
 
-    @Composable
-    fun buttonShape(): Shape = ButtonTokens.ButtonShape
+        textAlign(value = TextAlign.Center)
 
+        shape(value = ButtonTokens.ButtonShape)
+        clip(value = true)
+    }
+}
+
+object ButtonStyle {
     @Composable
-    fun colors(
-        backgroundColor: Brush = ButtonTokens.BackgroundColor,
-        contentColor: Color = ButtonTokens.ContentColor,
-        borderColor: Color = ButtonTokens.BorderColor,
-        disabledBackgroundColor: Brush = ButtonTokens.DisabledBackgroundColor,
-        disabledContentColor: Color = ButtonTokens.DisabledContentColor,
-        disabledBorderColor: Color = borderColor,
-    ): ButtonColors = ButtonColors(
-        backgroundColor = backgroundColor,
-        contentColor = contentColor,
-        borderColor = borderColor,
-        disabledBackgroundColor = disabledBackgroundColor,
-        disabledContentColor = disabledContentColor,
-        disabledBorderColor = disabledBorderColor,
+    fun brand() = base(
+        background = ButtonTokens.BackgroundColor,
+        content = ButtonTokens.ContentColor,
+        border = ButtonTokens.BorderColor,
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = ButtonTokens.BorderColor,
+        pressedBackground = ButtonTokens.BackgroundColor,
+        pressedContent = ButtonTokens.ContentColor,
+        pressedBorder = ButtonTokens.BorderColor,
     )
 
     @Composable
-    fun contentPadding(
-        horizontal: Dp = ButtonTokens.ButtonHorizontalPadding,
-        vertical: Dp = ButtonTokens.ButtonVerticalPadding,
-    ): PaddingValues = PaddingValues(
-        horizontal = horizontal,
-        vertical = vertical,
+    fun outlined() = base(
+        background = SolidColor(Color.Unspecified),
+        content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        border = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        pressedBackground = ButtonTokens.BackgroundColor,
+        pressedContent = ButtonTokens.ContentColor,
+        pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+    ) then {
+        borderWidth(1.dp)
+    }
+
+    @Composable
+    fun onBrand() = base(
+        background = SolidColor(value = PaletteTokens.Slate.Slate800),
+        content = PaletteTokens.Base.White,
+        border = ButtonTokens.BorderColor,
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = ButtonTokens.BorderColor,
+        pressedBackground = SolidColor(value = PaletteTokens.Slate.Slate800),
+        pressedContent = PaletteTokens.Base.White,
+        pressedBorder = ButtonTokens.BorderColor,
     )
 
     @Composable
-    @Suppress("unused")
-    internal fun <T> transition(
-        duration: Int = ANIMATION_DURATION_MILLIS,
-    ): @Composable Transition.Segment<Boolean>.() -> FiniteAnimationSpec<T> = {
-        tween(duration)
+    fun text() = base(
+        background = SolidColor(Color.Unspecified),
+        content = LocalContentColor.current,
+        border = ButtonTokens.BorderColor,
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = ButtonTokens.BorderColor,
+        pressedBackground = ButtonTokens.BackgroundColor,
+        pressedContent = LocalContentColor.current,
+        pressedBorder = ButtonTokens.BorderColor,
+    )
+
+    @Composable
+    fun primary(
+        content: Color = ButtonTokens.ContentColor,
+    ) = base(
+        background = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
+        content = content,
+        border = ButtonTokens.BorderColor,
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = ButtonTokens.BorderColor,
+        pressedBackground = ButtonTokens.BackgroundColor,
+        pressedContent = content,
+        pressedBorder = ButtonTokens.BorderColor,
+    )
+
+    @Composable
+    fun secondary() = base(
+        background = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
+        content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        border = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        disabledBackground = ButtonTokens.DisabledBackgroundColor,
+        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBorder = ButtonTokens.BorderColor,
+        pressedBackground = ButtonTokens.BackgroundColor,
+        pressedContent = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+    )
+
+    internal fun base(
+        background: Brush,
+        content: Color,
+        border: Color,
+        disabledBackground: Brush,
+        disabledContent: Color,
+        disabledBorder: Color,
+        pressedBackground: Brush,
+        pressedContent: Color,
+        pressedBorder: Color,
+        hoveredBackground: Brush = pressedBackground,
+        hoveredContent: Color = pressedContent,
+        hoveredBorder: Color = pressedBorder,
+    ) = Style {
+        background(value = background)
+        contentColor(value = content)
+        borderColor(value = border)
+
+        disabled {
+            animate {
+                background(value = disabledBackground)
+                contentColor(value = disabledContent)
+                borderColor(value = disabledBorder)
+            }
+        }
+
+        hovered {
+            animate {
+                background(value = hoveredBackground)
+                contentColor(value = hoveredContent)
+                borderColor(value = hoveredBorder)
+            }
+        }
+
+        pressed {
+            animate {
+                background(value = pressedBackground)
+                contentColor(value = pressedContent)
+                borderColor(value = pressedBorder)
+            }
+        }
     }
 }
 
@@ -170,6 +237,25 @@ private fun ButtonPreview(
     ) {
         Button(
             onClick = {},
+            style = ButtonStyle.primary(),
+            enabled = true,
+        ) {
+            Text("Button")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SecondaryButtonPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        Button(
+            onClick = {},
+            style = ButtonStyle.secondary(),
             enabled = true,
         ) {
             Text("Button")
@@ -187,6 +273,7 @@ private fun DisabledButtonPreview(
     ) {
         Button(
             onClick = {},
+            style = ButtonStyle.primary(),
             enabled = false,
         ) {
             Text("Disabled button")
@@ -204,11 +291,7 @@ private fun BorderedButtonPreview(
     ) {
         Button(
             onClick = {},
-            colors = ButtonDefaults.colors(
-                backgroundColor = SolidColor(Color.Unspecified),
-                borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
-            ),
-            borderWidth = 1.dp,
+            style = ButtonStyle.outlined(),
         ) {
             Text("Bordered button")
         }
@@ -226,11 +309,7 @@ private fun BorderedDisabledButtonPreview(
         Button(
             onClick = {},
             enabled = false,
-            colors = ButtonDefaults.colors(
-                backgroundColor = SolidColor(Color.Unspecified),
-                borderColor = LocalColorScheme.current[ColorKeyToken.BorderPrimary],
-            ),
-            borderWidth = 1.dp,
+            style = ButtonStyle.outlined(),
         ) {
             Text("Bordered disabled button")
         }
