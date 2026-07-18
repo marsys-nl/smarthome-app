@@ -1,5 +1,7 @@
 package network.marsys.smarthome.shared.library.design
 
+import androidx.compose.foundation.Indication
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -46,6 +48,7 @@ fun SmartHomeTheme(
         values = arrayOf(
             LocalDarkMode provides darkMode,
             LocalDescriptorStrings provides descriptorStrings,
+            LocalIndication provides object : Indication {},
             LocalThemeSelection provides theme,
         ),
     ) {

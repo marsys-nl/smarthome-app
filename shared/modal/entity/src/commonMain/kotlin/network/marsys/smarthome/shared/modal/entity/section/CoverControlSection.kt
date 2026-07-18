@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +30,7 @@ import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
+import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.ChevronDown
@@ -38,6 +42,8 @@ import network.marsys.smarthome.shared.library.design.icons.Square
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
+import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 import network.marsys.smarthome.shared.library.i18n.localized
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalAction
@@ -215,6 +221,7 @@ private fun CoverMovementControlSection(
 }
 
 @Composable
+@OptIn(ExperimentalFoundationStyleApi::class)
 private fun CoverMovementButton(
     icon: ImageVector,
     text: StringResource,
@@ -223,30 +230,32 @@ private fun CoverMovementButton(
     disabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val activeButtonColors = ButtonDefaults.colors(
-        backgroundColor = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
-        contentColor = Color.White,
-    )
+    val style = if (active) {
+        ButtonStyle.primary()
+    } else {
+        ButtonStyle.secondary()
+    }
 
-    val inactiveButtonColors = ButtonDefaults.colors(
-        backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
-        contentColor = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-        borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
-    )
+    val foreground = if (active) {
+        PaletteTokens.Base.White
+    } else if (disabled) {
+        ButtonTokens.DisabledContentColor
+    } else {
+        SmartHomeTheme.colors[ColorKeyToken.TextPrimary]
+    }
 
     Button(
         onClick = onClick,
+        style = style then Style {
+            borderWidth(1.dp)
+            contentPadding(
+                horizontal = 16.dp,
+                vertical = 20.dp,
+            )
+        },
         modifier = modifier
             .fillMaxWidth(),
         enabled = !disabled,
-        colors = when (active) {
-            true -> activeButtonColors
-            false -> inactiveButtonColors
-        },
-        contentPadding = PaddingValues(
-            vertical = 20.dp,
-            horizontal = 16.dp,
-        ),
     ) {
         Row(
             horizontalArrangement = Arrangement
@@ -255,6 +264,7 @@ private fun CoverMovementButton(
             Icon(
                 icon = icon,
                 size = 16.dp,
+                tint = foreground,
             )
 
             Text(

@@ -3,6 +3,7 @@ package network.marsys.smarthome.shared.feature.onboarding.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -110,12 +111,9 @@ internal fun EntitiesOnboardingScreenView(
                     onClick = navigateBack,
                 )
 
+                @OptIn(ExperimentalFoundationStyleApi::class)
                 OnboardingNextButton(
                     onClick = navigateToScenes,
-                    colors = ButtonDefaults.colors(
-                        backgroundColor = BrandPrimaryToSecondaryGradient,
-                        contentColor = PaletteTokens.Base.White,
-                    ),
                 )
             }
 
