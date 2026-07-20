@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.isSpecified
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
@@ -71,27 +72,55 @@ fun Text(
     text: String,
     style: Style,
     modifier: Modifier = Modifier,
+    textStyle: TextStyle = LocalTextStyle.current,
+    textAlign: TextAlign = TextAlign.Unspecified,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    fontSize: TextUnit = textStyle.fontSize,
+    letterSpacing: TextUnit = textStyle.letterSpacing,
+    fontWeight: FontWeight? = textStyle.fontWeight,
+    color: Color = Color.Unspecified,
+    fontFamily: FontFamily? = textStyle.fontFamily,
     singleLine: Boolean = false,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    onTextLayout: ((TextLayoutResult) -> Unit)? = null,
+    overflow: TextOverflow = TextOverflow.Clip,
+    autoSize: TextAutoSize? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val styleState = rememberUpdatedStyleState(interactionSource)
-    val mergedStyle = TextDefaults.base then style
+    val mergedStyle = TextDefaults.base then style then Style {
+        if (color.isSpecified) {
+            contentColor(color)
+        }
+    }
+
+    val mergedTextStyle = textStyle.merge(
+        color = Color.Unspecified,
+        textAlign = textAlign,
+        lineHeight = lineHeight,
+        fontSize = fontSize,
+        letterSpacing = letterSpacing,
+        fontWeight = fontWeight,
+        fontFamily = fontFamily,
+    )
 
     BasicText(
         text = text,
         modifier = modifier
             .styleable(styleState, mergedStyle),
+        style = mergedTextStyle,
+        onTextLayout = onTextLayout,
+        overflow = overflow,
         minLines = minLines,
         maxLines = maxLines,
+        autoSize = autoSize,
     )
 }
 
 @OptIn(ExperimentalFoundationStyleApi::class)
 object TextDefaults {
     internal val base = Style {
-        contentColor(LocalContentColor.currentValue)
         fontSize(14.sp)
         fontWeight(FontWeight.Normal)
     }
@@ -119,6 +148,11 @@ object TextDefaults {
 
     val description = Style {
         contentColor(LocalColorScheme.currentValue[ColorKeyToken.TextSecondary])
+        lineHeight(20.sp)
+        fontSize(14.sp)
+    }
+
+    val normal = Style {
         lineHeight(20.sp)
         fontSize(14.sp)
     }

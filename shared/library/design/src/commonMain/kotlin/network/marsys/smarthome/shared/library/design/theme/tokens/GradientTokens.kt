@@ -78,7 +78,7 @@ object GradientTokens {
         }
     }
 
-    private fun linearGradient(
+    internal fun linearGradient(
         from: Color,
         to: Color,
         alpha: Float = 1f,

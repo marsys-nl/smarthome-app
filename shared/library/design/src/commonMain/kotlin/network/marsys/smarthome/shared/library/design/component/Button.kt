@@ -35,6 +35,7 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonColorTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ErrorButtonTokens
 
@@ -94,15 +95,15 @@ object ButtonDefaults {
 object ButtonStyle {
     @Composable
     fun brand() = base(
-        background = ButtonTokens.BackgroundColor,
-        content = ButtonTokens.ContentColor,
-        border = ButtonTokens.BorderColor,
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
-        disabledBorder = ButtonTokens.BorderColor,
-        pressedBackground = ButtonTokens.BackgroundColor,
-        pressedContent = ButtonTokens.ContentColor,
-        pressedBorder = ButtonTokens.BorderColor,
+        background = ButtonColorTokens.BackgroundColor,
+        content = ButtonColorTokens.ContentColor,
+        border = ButtonColorTokens.BorderColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
+        disabledBorder = ButtonColorTokens.BorderColor,
+        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
+        pressedContent = ButtonColorTokens.PressedContentColor,
+        pressedBorder = ButtonColorTokens.BorderColor,
     )
 
     @Composable
@@ -123,11 +124,11 @@ object ButtonStyle {
         background = SolidColor(Color.Unspecified),
         content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         border = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
         disabledBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
-        pressedBackground = ButtonTokens.BackgroundColor,
-        pressedContent = ButtonTokens.ContentColor,
+        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
+        pressedContent = ButtonColorTokens.PressedContentColor,
         pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
     ) then {
         borderWidth(1.dp)
@@ -137,41 +138,39 @@ object ButtonStyle {
     fun onBrand() = base(
         background = SolidColor(value = PaletteTokens.Slate.Slate800),
         content = PaletteTokens.Base.White,
-        border = ButtonTokens.BorderColor,
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
-        disabledBorder = ButtonTokens.BorderColor,
+        border = ButtonColorTokens.BorderColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
+        disabledBorder = ButtonColorTokens.BorderColor,
         pressedBackground = SolidColor(value = PaletteTokens.Slate.Slate800),
         pressedContent = PaletteTokens.Base.White,
-        pressedBorder = ButtonTokens.BorderColor,
+        pressedBorder = ButtonColorTokens.BorderColor,
     )
 
     @Composable
     fun text() = base(
         background = SolidColor(Color.Unspecified),
         content = LocalContentColor.current,
-        border = ButtonTokens.BorderColor,
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
-        disabledBorder = ButtonTokens.BorderColor,
-        pressedBackground = ButtonTokens.BackgroundColor,
+        border = ButtonColorTokens.BorderColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
+        disabledBorder = ButtonColorTokens.BorderColor,
+        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
         pressedContent = LocalContentColor.current,
-        pressedBorder = ButtonTokens.BorderColor,
+        pressedBorder = ButtonColorTokens.BorderColor,
     )
 
     @Composable
-    fun primary(
-        content: Color = ButtonTokens.ContentColor,
-    ) = base(
+    fun primary() = base(
         background = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
-        content = content,
-        border = ButtonTokens.BorderColor,
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
-        disabledBorder = ButtonTokens.BorderColor,
-        pressedBackground = ButtonTokens.BackgroundColor,
-        pressedContent = content,
-        pressedBorder = ButtonTokens.BorderColor,
+        content = ButtonColorTokens.ContentColor,
+        border = ButtonColorTokens.BorderColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
+        disabledBorder = ButtonColorTokens.BorderColor,
+        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
+        pressedContent = ButtonColorTokens.ContentColor,
+        pressedBorder = ButtonColorTokens.BorderColor,
     )
 
     @Composable
@@ -179,10 +178,10 @@ object ButtonStyle {
         background = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundSecondary]),
         content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         border = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
-        disabledBackground = ButtonTokens.DisabledBackgroundColor,
-        disabledContent = ButtonTokens.DisabledContentColor,
-        disabledBorder = ButtonTokens.BorderColor,
-        pressedBackground = ButtonTokens.BackgroundColor,
+        disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
+        disabledContent = ButtonColorTokens.DisabledContentColor,
+        disabledBorder = ButtonColorTokens.BorderColor,
+        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
         pressedContent = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
     )

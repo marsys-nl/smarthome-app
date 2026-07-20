@@ -7,6 +7,12 @@
     <string name="dashboard_greeting_night">Good night</string>
 
     <string name="quick_control_section_title">Quick controls</string>
+    <string name="quick_control_loading_description">Loading your entities and devices...</string>
+    <string name="quick_control_empty_title">No entities or devices yet</string>
+    <string name="quick_control_empty_description">Add your first smart device to start controlling it from this dashboard.</string>
+    <string name="quick_control_error_title">Couldn't load entities or devices</string>
+    <string name="quick_control_error_description">Something went wrong while fetching your entities and devices. Please try again.</string>
+    <string name="quick_control_error_retry">Retry</string>
     <string name="quick_control_group_button_title">Group by type</string>
     <string name="quick_control_ungroup_button_title">Ungroup</string>
 </resources>

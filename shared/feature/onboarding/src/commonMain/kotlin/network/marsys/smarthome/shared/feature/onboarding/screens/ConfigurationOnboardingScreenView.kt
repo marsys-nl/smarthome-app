@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package network.marsys.smarthome.shared.feature.onboarding.screens
 
 import androidx.compose.animation.core.LinearEasing
@@ -80,7 +78,6 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.Icon
@@ -99,6 +96,7 @@ import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonColorTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 
@@ -478,7 +476,6 @@ private fun FinishOnboardingButton(
     state: ConfigurationOnboardingState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    foregroundColor: Color = ButtonTokens.ContentColor,
 ) {
     @OptIn(ExperimentalFoundationStyleApi::class)
     Button(
@@ -487,9 +484,7 @@ private fun FinishOnboardingButton(
                 onClick.invoke()
             }
         },
-        style = ButtonStyle.primary(
-            content = foregroundColor,
-        ),
+        style = ButtonStyle.primary(),
         modifier = modifier
             .fillMaxWidth(),
     ) {
@@ -523,7 +518,7 @@ private fun FinishOnboardingButton(
                     modifier = Modifier
                         .height(textHeight),
                     colorFilter = ColorFilter.tint(
-                        color = foregroundColor,
+                        color = ButtonColorTokens.ContentColor,
                     ),
                 )
             }

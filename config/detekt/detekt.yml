@@ -31,7 +31,7 @@ complexity:
     StringLiteralDuplication:
         allowedDuplications: 3
     TooManyFunctions:
-        ignoreAnnotatedFunctions: ['Preview']
+        ignoreAnnotatedFunctions: ['Composable', 'Preview']
 
 Compose:
     CompositionLocalAllowlist:
