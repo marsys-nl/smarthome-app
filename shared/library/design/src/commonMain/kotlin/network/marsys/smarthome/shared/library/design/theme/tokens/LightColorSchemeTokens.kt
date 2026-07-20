@@ -19,8 +19,9 @@ internal object LightColorSchemeTokens : ColorSchemeTokens {
     override val BackgroundBrandSecondary: Color = PaletteTokens.Emerald.Emerald500
 
     // Error
-    override val BackgroundErrorPrimary: Color = PaletteTokens.Red.Red100
-    override val BackgroundErrorSecondary: Color = PaletteTokens.Red.Red200
+    override val BackgroundErrorPrimary: Color = PaletteTokens.Red.Red50
+    override val BackgroundErrorSecondary: Color = PaletteTokens.Red.Red100
+    override val BackgroundErrorSecondaryPressed: Color = PaletteTokens.Red.Red200
     override val BackgroundErrorSolid: Color = PaletteTokens.Red.Red600
     override val BackgroundErrorSolidPressed: Color = PaletteTokens.Red.Red700
 

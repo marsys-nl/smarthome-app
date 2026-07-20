@@ -22,6 +22,7 @@ enum class ColorKeyToken {
     // Error
     BackgroundErrorPrimary,
     BackgroundErrorSecondary,
+    BackgroundErrorSecondaryPressed,
     BackgroundErrorSolid,
     BackgroundErrorSolidPressed,
 

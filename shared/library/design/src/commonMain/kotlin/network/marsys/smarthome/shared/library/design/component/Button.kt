@@ -36,6 +36,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ErrorButtonTokens
 
 @Composable
 fun Button(
@@ -102,6 +103,19 @@ object ButtonStyle {
         pressedBackground = ButtonTokens.BackgroundColor,
         pressedContent = ButtonTokens.ContentColor,
         pressedBorder = ButtonTokens.BorderColor,
+    )
+
+    @Composable
+    fun error() = base(
+        background = ErrorButtonTokens.BackgroundColor,
+        content = ErrorButtonTokens.ContentColor,
+        border = ErrorButtonTokens.BorderColor,
+        disabledBackground = ErrorButtonTokens.DisabledBackgroundColor,
+        disabledContent = ErrorButtonTokens.DisabledContentColor,
+        disabledBorder = ErrorButtonTokens.BorderColor,
+        pressedBackground = ErrorButtonTokens.PressedBackgroundColor,
+        pressedContent = ErrorButtonTokens.PressedContentColor,
+        pressedBorder = ErrorButtonTokens.BorderColor,
     )
 
     @Composable
@@ -302,6 +316,23 @@ private fun BorderedDisabledButtonPreview(
             style = ButtonStyle.outlined(),
         ) {
             Text("Bordered disabled button")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorButtonPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        Button(
+            onClick = {},
+            style = ButtonStyle.error(),
+        ) {
+            Text("Error button")
         }
     }
 }

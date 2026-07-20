@@ -36,3 +36,33 @@ object ButtonTokens {
     val ButtonHorizontalPadding: Dp = 16.dp
     val ButtonVerticalPadding: Dp = 16.dp
 }
+
+object ErrorButtonTokens {
+    val BackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundErrorSecondary))
+
+    val ContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundErrorPrimary)
+
+    val BorderColor: Color
+        @Composable
+        get() = Color.Unspecified
+
+    val DisabledBackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundDisabled))
+
+    val DisabledContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.TextDisabled)
+
+    val PressedBackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundErrorSecondaryPressed))
+
+    val PressedContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundErrorPrimary)
+}
