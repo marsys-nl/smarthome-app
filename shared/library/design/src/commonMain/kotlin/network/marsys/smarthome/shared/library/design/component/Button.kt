@@ -2,9 +2,6 @@
 
 package network.marsys.smarthome.shared.library.design.component
 
-import androidx.compose.foundation.Indication
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
@@ -25,8 +22,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.PointerIcon
 import androidx.compose.ui.input.pointer.pointerHoverIcon
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -34,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.modifier.instantPressClickable
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -48,8 +44,7 @@ fun Button(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     role: Role = Role.Button,
-    interactionSource: MutableInteractionSource? = remember { MutableInteractionSource() },
-    indication: Indication? = LocalIndication.current,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     content: @Composable () -> Unit,
 ) {
     val styleState = rememberUpdatedStyleState(interactionSource) {
@@ -66,15 +61,10 @@ fun Button(
 
     Box(
         modifier = modifier
-            .semantics(
-                properties = {
-                    this.role = role
-                },
-            )
-            .clickable(
+            .instantPressClickable(
                 enabled = enabled,
                 interactionSource = interactionSource,
-                indication = indication,
+                role = role,
                 onClick = onClick,
             )
             .styleable(styleState, mergedStyle)
@@ -258,7 +248,7 @@ private fun SecondaryButtonPreview(
             style = ButtonStyle.secondary(),
             enabled = true,
         ) {
-            Text("Button")
+            Text("Secondary button")
         }
     }
 }

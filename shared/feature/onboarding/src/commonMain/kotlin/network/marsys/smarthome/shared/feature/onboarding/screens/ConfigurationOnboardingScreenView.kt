@@ -579,7 +579,6 @@ private fun OnboardingSkipConfigurationButton(
         style = ButtonStyle.text(),
         modifier = modifier
             .padding(top = 24.dp),
-        indication = null,
         interactionSource = interactionSource,
     ) {
         Text(
