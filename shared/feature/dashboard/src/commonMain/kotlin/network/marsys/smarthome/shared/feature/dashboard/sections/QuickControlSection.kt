@@ -45,6 +45,12 @@ import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityDa
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_empty_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_empty_title
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_retry
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_title
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_loading_description
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_section_title
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupEntitiesButton
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
@@ -76,6 +82,7 @@ import network.marsys.smarthome.shared.library.design.icons.Monitor
 import network.marsys.smarthome.shared.library.design.icons.Plug
 import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.Thermostat
+import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.GradientTokens
@@ -149,7 +156,7 @@ private fun QuickControlSectionLoadingContent(
     ) {
         @OptIn(ExperimentalFoundationStyleApi::class)
         SectionLoadingIndicator(
-            message = "Loading your entities and devices...",
+            message = stringResource(Res.string.quick_control_loading_description),
         )
 
         @OptIn(ExperimentalGridApi::class)
@@ -197,14 +204,14 @@ private fun QuickControlSectionEmptyContent(
             )
 
             Text(
-                text = "No devices yet",
+                text = stringResource(Res.string.quick_control_empty_title),
                 style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
             )
 
             Text(
-                text = "Add your first smart device to start controlling it from this dashboard.",
+                text = stringResource(Res.string.quick_control_empty_description),
                 style = TextDefaults.description then TextStyles.centered,
                 minLines = 2,
             )
@@ -233,7 +240,7 @@ private fun QuickControlSectionErrorContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             IconCard(
-                icon = Icons.Component,
+                icon = Icons.TriangleAlert,
                 colors = CardDefaults.colors(
                     backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorSecondary]),
                     contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundErrorPrimary],
@@ -244,7 +251,7 @@ private fun QuickControlSectionErrorContent(
             )
 
             Text(
-                text = "Couldn't load devices",
+                text = stringResource(Res.string.quick_control_error_title),
                 style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 6.dp),
@@ -252,7 +259,7 @@ private fun QuickControlSectionErrorContent(
             )
 
             Text(
-                text = "Something went wrong while fetching your devices. Please try again.",
+                text = stringResource(Res.string.quick_control_error_description),
                 style = TextDefaults.description then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 20.dp),
@@ -261,7 +268,7 @@ private fun QuickControlSectionErrorContent(
             )
 
             ErrorIconButton(
-                text = "Retry",
+                text = stringResource(Res.string.quick_control_error_retry),
                 icon = Icons.Reset,
                 onClick = {},
             )
@@ -294,7 +301,7 @@ fun ErrorIconButton(
         Text(
             text = text,
             style = TextDefaults.normal then TextStyles.semiBold,
-            color = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary]
+            color = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary],
         )
     }
 }

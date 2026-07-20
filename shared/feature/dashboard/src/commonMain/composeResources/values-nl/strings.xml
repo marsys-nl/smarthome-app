@@ -6,6 +6,12 @@
     <string name="dashboard_greeting_night">Goedenacht</string>
 
     <string name="quick_control_section_title">Quick controls</string>
+    <string name="quick_control_loading_description">Bezig met laden van uw entiteiten en apparaten...</string>
+    <string name="quick_control_empty_title">Nog geen entiteiten of apparaten</string>
+    <string name="quick_control_empty_description">Voeg uw eerste apparaat toe om het vanaf dit dashboard te kunnen bedienen.</string>
+    <string name="quick_control_error_title">Kon entiteiten of apparaten niet laden</string>
+    <string name="quick_control_error_description">Er is iets misgegaan bij het ophalen van uw entiteiten en apparaten. Probeer het opnieuw.</string>
+    <string name="quick_control_error_retry">Probeer opnieuw</string>
     <string name="quick_control_group_button_title">Groeperen op type</string>
     <string name="quick_control_ungroup_button_title">Degroeperen</string>
 </resources>
