@@ -23,6 +23,7 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     // Error
     override val BackgroundErrorPrimary: Color = PaletteTokens.Red.Red950
     override val BackgroundErrorSecondary: Color = PaletteTokens.Red.Red900
+    override val BackgroundErrorSecondaryPressed: Color = PaletteTokens.Red.Red800
     override val BackgroundErrorSolid: Color = PaletteTokens.Red.Red600
     override val BackgroundErrorSolidPressed: Color = PaletteTokens.Red.Red500
 
@@ -98,8 +99,8 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     override val TextBrandOnBrand: Color = PaletteTokens.Amber.Amber300
 
     // Semantics
-    override val TextErrorPrimary: Color = PaletteTokens.Red.Red500
-    override val TextErrorSecondary: Color = PaletteTokens.Red.Red600
+    override val TextErrorPrimary: Color = PaletteTokens.Red.Red400
+    override val TextErrorSecondary: Color = PaletteTokens.Red.Red500
     override val TextWarningPrimary: Color = PaletteTokens.Yellow.Yellow500
     override val TextWarningSecondary: Color = PaletteTokens.Yellow.Yellow600
     override val TextInfoPrimary: Color = PaletteTokens.Blue.Blue500

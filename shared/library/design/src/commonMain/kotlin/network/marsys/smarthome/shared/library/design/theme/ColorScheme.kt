@@ -20,6 +20,7 @@ data class ColorScheme internal constructor(
     private val backgroundBrandSecondary: Color,
     private val backgroundErrorPrimary: Color,
     private val backgroundErrorSecondary: Color,
+    private val backgroundErrorSecondaryPressed: Color,
     private val backgroundErrorSolid: Color,
     private val backgroundErrorSolidPressed: Color,
     private val backgroundWarningPrimary: Color,
@@ -75,7 +76,11 @@ data class ColorScheme internal constructor(
     private val textSuccessSecondary: Color,
     private val textDisabled: Color,
 ) {
-    @Suppress("CyclomaticComplexMethod", "ktlint:standard:blank-line-between-when-conditions")
+    @Suppress(
+        "CyclomaticComplexMethod",
+        "ktlint:standard:blank-line-between-when-conditions",
+        "LongMethod",
+    )
     operator fun get(token: ColorKeyToken): Color = when (token) {
         ColorKeyToken.BackgroundPrimary -> backgroundPrimary
         ColorKeyToken.BackgroundSecondary -> backgroundSecondary
@@ -89,6 +94,7 @@ data class ColorScheme internal constructor(
 
         ColorKeyToken.BackgroundErrorPrimary -> backgroundErrorPrimary
         ColorKeyToken.BackgroundErrorSecondary -> backgroundErrorSecondary
+        ColorKeyToken.BackgroundErrorSecondaryPressed -> backgroundErrorSecondaryPressed
         ColorKeyToken.BackgroundErrorSolid -> backgroundErrorSolid
         ColorKeyToken.BackgroundErrorSolidPressed -> backgroundErrorSolidPressed
 

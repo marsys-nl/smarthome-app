@@ -70,6 +70,11 @@ internal interface ErrorColorSchemeTokens {
     val BackgroundErrorSecondary: Color
 
     /**
+     * Secondary error state background color for components such (featured) icons when hovered or pressed.
+     */
+    val BackgroundErrorSecondaryPressed: Color
+
+    /**
      * Default solid error state background color for components such as buttons, cards and featured icons.
      */
     val BackgroundErrorSolid: Color
