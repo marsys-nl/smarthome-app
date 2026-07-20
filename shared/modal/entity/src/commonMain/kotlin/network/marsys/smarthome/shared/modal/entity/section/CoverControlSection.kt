@@ -2,7 +2,6 @@ package network.marsys.smarthome.shared.modal.entity.section
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
@@ -11,8 +10,6 @@ import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,7 +26,6 @@ import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.ButtonDefaults
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
@@ -41,9 +37,8 @@ import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Square
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
-import network.marsys.smarthome.shared.library.design.theme.tokens.GradientKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
-import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonColorTokens
 import network.marsys.smarthome.shared.library.i18n.localized
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalAction
@@ -239,7 +234,7 @@ private fun CoverMovementButton(
     val foreground = if (active) {
         PaletteTokens.Base.White
     } else if (disabled) {
-        ButtonTokens.DisabledContentColor
+        ButtonColorTokens.DisabledContentColor
     } else {
         SmartHomeTheme.colors[ColorKeyToken.TextPrimary]
     }

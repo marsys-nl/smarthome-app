@@ -5,8 +5,9 @@ import androidx.compose.ui.graphics.Brush
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 
 enum class GradientKeyToken {
-    DimmedPrimaryToSecondary,
     BrandPrimaryToSecondary,
+    BrandPrimaryToSecondaryPressed,
+    DimmedPrimaryToSecondary,
 }
 
 @Composable

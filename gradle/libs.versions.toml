@@ -60,7 +60,6 @@ compose-resources = { group = "org.jetbrains.compose.components", name = "compon
 compose-runtime = { group = "org.jetbrains.compose.runtime", name = "runtime", version.ref = "jetbrains-compose" }
 compose-ui-tooling = { group = "org.jetbrains.compose.ui", name = "ui-tooling", version.ref = "jetbrains-compose" }
 compose-ui-tooling-preview = { group = "org.jetbrains.compose.ui", name = "ui-tooling-preview", version.ref = "jetbrains-compose" }
-compose-unstyled-button = { group = "com.composables", name = "composeunstyled-button", version.ref = "compose-unstyled" }
 compose-unstyled-outline = { group = "com.composables", name = "composeunstyled-outline", version.ref = "compose-unstyled" }
 compose-unstyled-theming = { group = "com.composables", name = "composeunstyled-theming", version.ref = "compose-unstyled" }
 compose-unstyled-toggle-switch = { group = "com.composables", name = "composeunstyled-toggle-switch", version.ref = "compose-unstyled" }

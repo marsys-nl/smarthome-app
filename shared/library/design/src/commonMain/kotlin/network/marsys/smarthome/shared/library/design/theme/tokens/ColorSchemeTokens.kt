@@ -49,6 +49,11 @@ internal interface ColorSchemeTokens :
     val ForegroundDisabled: Color
     val GradientBrandPrimaryToSecondary: Brush get() =
         GradientTokens.Amber.Amber400.ToEmerald400
+    val GradientBrandPrimaryToSecondaryPressed: Brush get() =
+        GradientTokens.linearGradient(
+            from = PaletteTokens.Amber.Amber500,
+            to = PaletteTokens.Emerald.Emerald500,
+        )
     val GradientDimmedPrimaryToSecondary: Brush get() =
         GradientTokens.Amber.Amber400.ToEmerald400(alpha = .2f)
     val TextPrimary: Color

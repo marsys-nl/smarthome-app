@@ -60,6 +60,7 @@ data class ColorScheme internal constructor(
     private val foregroundDisabled: Color,
 
     private val gradientBrandPrimaryToSecondary: Brush,
+    private val gradientBrandPrimaryToSecondaryPressed: Brush,
     private val gradientDimmedPrimaryToSecondary: Brush,
 
     private val textPrimary: Color,
@@ -155,6 +156,7 @@ data class ColorScheme internal constructor(
 
     operator fun get(token: GradientKeyToken): Brush = when (token) {
         GradientKeyToken.BrandPrimaryToSecondary -> gradientBrandPrimaryToSecondary
+        GradientKeyToken.BrandPrimaryToSecondaryPressed -> gradientBrandPrimaryToSecondaryPressed
         GradientKeyToken.DimmedPrimaryToSecondary -> gradientDimmedPrimaryToSecondary
     }
 

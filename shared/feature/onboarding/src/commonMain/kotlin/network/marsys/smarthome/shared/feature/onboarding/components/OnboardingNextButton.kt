@@ -17,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -35,17 +34,14 @@ import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.icons.ArrowRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
-import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonColorTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
 fun OnboardingNextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    contentColor: Color = ButtonTokens.ContentColor,
-    style: Style = ButtonStyle.primary(
-        content = contentColor,
-    ),
+    style: Style = ButtonStyle.primary(),
 ) {
     Button(
         onClick = onClick,
@@ -80,7 +76,7 @@ fun OnboardingNextButton(
                 modifier = Modifier
                     .height(textHeight),
                 colorFilter = ColorFilter.tint(
-                    color = contentColor,
+                    color = ButtonColorTokens.ContentColor,
                 ),
             )
         }
