@@ -120,6 +120,19 @@ object ButtonStyle {
     )
 
     @Composable
+    fun modalClose() = base(
+        background = SolidColor(Color.Transparent),
+        content = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        border = Color.Unspecified,
+        disabledBackground = SolidColor(Color.Unspecified),
+        disabledContent = Color.Unspecified,
+        disabledBorder = Color.Unspecified,
+        pressedBackground = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
+        pressedContent = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        pressedBorder = Color.Unspecified,
+    )
+
+    @Composable
     fun outlined() = base(
         background = SolidColor(Color.Unspecified),
         content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
@@ -181,7 +194,7 @@ object ButtonStyle {
         disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
         disabledContent = ButtonColorTokens.DisabledContentColor,
         disabledBorder = ButtonColorTokens.BorderColor,
-        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
+        pressedBackground = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
         pressedContent = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
     )
