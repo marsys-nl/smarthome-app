@@ -38,6 +38,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonColorTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ButtonTokens
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.ErrorButtonTokens
+import network.marsys.smarthome.shared.library.design.theme.tokens.components.InfoButtonTokens
 
 @Composable
 fun Button(
@@ -117,6 +118,19 @@ object ButtonStyle {
         pressedBackground = ErrorButtonTokens.PressedBackgroundColor,
         pressedContent = ErrorButtonTokens.PressedContentColor,
         pressedBorder = ErrorButtonTokens.BorderColor,
+    )
+
+    @Composable
+    fun info() = base(
+        background = InfoButtonTokens.BackgroundColor,
+        content = InfoButtonTokens.ContentColor,
+        border = InfoButtonTokens.BorderColor,
+        disabledBackground = InfoButtonTokens.DisabledBackgroundColor,
+        disabledContent = InfoButtonTokens.DisabledContentColor,
+        disabledBorder = InfoButtonTokens.BorderColor,
+        pressedBackground = InfoButtonTokens.PressedBackgroundColor,
+        pressedContent = InfoButtonTokens.PressedContentColor,
+        pressedBorder = InfoButtonTokens.BorderColor,
     )
 
     @Composable

@@ -170,6 +170,11 @@ internal interface InfoColorSchemeTokens {
     val BackgroundInfoSecondary: Color
 
     /**
+     * Secondary info state background color for components such (featured) icons when hovered or pressed.
+     */
+    val BackgroundInfoSecondaryPressed: Color
+
+    /**
      * Default solid info state background color for components such as buttons, cards and featured icons.
      */
     val BackgroundInfoSolid: Color

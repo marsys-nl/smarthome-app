@@ -80,3 +80,33 @@ object ErrorButtonTokens {
         @Composable
         get() = color(ColorKeyToken.ForegroundErrorPrimary)
 }
+
+object InfoButtonTokens {
+    val BackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundInfoSecondary))
+
+    val ContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundInfoPrimary)
+
+    val BorderColor: Color
+        @Composable
+        get() = Color.Unspecified
+
+    val DisabledBackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundDisabled))
+
+    val DisabledContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.TextDisabled)
+
+    val PressedBackgroundColor: Brush
+        @Composable
+        get() = SolidColor(color(ColorKeyToken.BackgroundInfoSecondaryPressed))
+
+    val PressedContentColor: Color
+        @Composable
+        get() = color(ColorKeyToken.ForegroundInfoPrimary)
+}

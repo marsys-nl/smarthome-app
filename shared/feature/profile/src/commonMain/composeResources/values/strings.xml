@@ -8,4 +8,20 @@
     <string name="menu_item_appearance_description">Dark mode &amp; colors</string>
     <string name="menu_item_notifications_title">Notifications</string>
     <string name="menu_item_notifications_description">Manage alerts and sounds</string>
+
+    <string name="menu_item_reset_onboarding_title">Reset onboarding</string>
+    <string name="menu_item_reset_onboarding_description">Run the setup wizard again</string>
+
+    <string name="menu_item_logout_title">Logout</string>
+    <string name="menu_item_logout_description">Sign out of your account</string>
+
+    <string name="reset_onboarding_modal_title">Reset onboarding?</string>
+    <string name="reset_onboarding_modal_description">You'll go through the setup wizard again from the beginning. Your connected devices and rooms won't be affected, but the connection to the backend will be lost and you'll need to establish that again.</string>
+    <string name="reset_onboarding_modal_accept">Reset</string>
+
+    <string name="logout_modal_title">Log out?</string>
+    <string name="logout_modal_description">You'll need to sign in again to access the dashboard and connected devices.</string>
+    <string name="logout_modal_accept">Log out</string>
+
+    <string name="modal_cancel">Cancel</string>
 </resources>

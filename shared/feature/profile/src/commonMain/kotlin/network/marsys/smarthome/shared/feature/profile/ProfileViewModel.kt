@@ -50,10 +50,22 @@ class ProfileViewModel(
                         )
                     }
 
-                    ProfileScreenAction.Logout -> Unit
+                    ProfileScreenAction.ConfirmLogout ->
+                        Unit // Do nothing yet, needs to be implemented in the future
+
+                    ProfileScreenAction.ConfirmResetOnboarding ->
+                        onboardingRepository.resetOnboarding()
+
+                    ProfileScreenAction.Logout -> action.flow.collect {
+                        emitter.emit(
+                            effect = ProfileScreenEffect.DisplayConfirmLogoutDialog,
+                        )
+                    }
 
                     ProfileScreenAction.ResetOnboarding -> action.flow.collect {
-                        onboardingRepository.resetOnboarding()
+                        emitter.emit(
+                            effect = ProfileScreenEffect.DisplayConfirmResetOnboardingDialog,
+                        )
                     }
                 }
             }

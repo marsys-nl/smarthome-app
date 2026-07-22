@@ -8,4 +8,20 @@
     <string name="menu_item_appearance_description">Donkere modus &amp; kleuren</string>
     <string name="menu_item_notifications_title">Meldingen</string>
     <string name="menu_item_notifications_description">Beheer meldingen en geluiden</string>
+
+    <string name="menu_item_reset_onboarding_title">Reset onboarding</string>
+    <string name="menu_item_reset_onboarding_description">De setup wizard opnieuw starten</string>
+
+    <string name="menu_item_logout_title">Uitloggen</string>
+    <string name="menu_item_logout_description">Uit je account uitloggen</string>
+
+    <string name="reset_onboarding_modal_title">Reset onboarding?</string>
+    <string name="reset_onboarding_modal_description">Je gaat opnieuw door de setup wizard vanaf het begin. Je verbonden apparaten en kamers worden niet beïnvloed, maar de verbinding met de backend gaat verloren en je zult die opnieuw tot stand dienen te brengen.</string>
+    <string name="reset_onboarding_modal_accept">Reset</string>
+
+    <string name="logout_modal_title">Uitloggen?</string>
+    <string name="logout_modal_description">Je moet opnieuw inloggen om toegang te krijgen tot het dashboard en de verbonden apparaten.</string>
+    <string name="logout_modal_accept">Uitloggen</string>
+
+    <string name="modal_cancel">Annuleren</string>
 </resources>
