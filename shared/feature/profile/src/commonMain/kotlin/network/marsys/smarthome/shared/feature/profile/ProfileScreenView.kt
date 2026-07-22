@@ -789,7 +789,7 @@ private fun ProfileScreenConfirmLogoutModalPreview(
             modalBottomSheetState = rememberModalBottomSheetState(
                 initialDetent = ConfirmLogoutDetent,
                 detents = listOf(ConfirmLogoutDetent),
-            )
+            ),
         )
     }
 }
@@ -812,7 +812,7 @@ private fun ProfileScreenResetOnboardingModalPreview(
             modalBottomSheetState = rememberModalBottomSheetState(
                 initialDetent = ResetOnboardingDetent,
                 detents = listOf(ResetOnboardingDetent),
-            )
+            ),
         )
     }
 }

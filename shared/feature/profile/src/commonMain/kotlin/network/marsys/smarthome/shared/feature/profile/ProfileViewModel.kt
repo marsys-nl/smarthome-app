@@ -42,16 +42,17 @@ class ProfileViewModel(
                 keySelector = ProfileScreenAction::key,
             ) {
                 when (val action = type()) {
-                    ProfileScreenAction.ChangeAppAppearance -> action.flow.collect {
-                        emitter.emit(
-                            effect = ProfileScreenEffect.Navigate(
-                                target = NavigationDestination.ChangeAppAppearanceModal,
-                            ),
-                        )
-                    }
+                    ProfileScreenAction.ChangeAppAppearance ->
+                        action.flow.collect {
+                            emitter.emit(
+                                effect = ProfileScreenEffect.Navigate(
+                                    target = NavigationDestination.ChangeAppAppearanceModal,
+                                ),
+                            )
+                        }
 
                     ProfileScreenAction.ConfirmLogout ->
-                        Unit // Do nothing yet, needs to be implemented in the future
+                        Unit
 
                     ProfileScreenAction.ConfirmResetOnboarding ->
                         onboardingRepository.resetOnboarding()
@@ -62,11 +63,12 @@ class ProfileViewModel(
                         )
                     }
 
-                    ProfileScreenAction.ResetOnboarding -> action.flow.collect {
-                        emitter.emit(
-                            effect = ProfileScreenEffect.DisplayConfirmResetOnboardingDialog,
-                        )
-                    }
+                    ProfileScreenAction.ResetOnboarding ->
+                        action.flow.collect {
+                            emitter.emit(
+                                effect = ProfileScreenEffect.DisplayConfirmResetOnboardingDialog,
+                            )
+                        }
                 }
             }
         },
