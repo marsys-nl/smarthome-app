@@ -29,6 +29,7 @@ data class ColorScheme internal constructor(
     private val backgroundWarningSolidPressed: Color,
     private val backgroundInfoPrimary: Color,
     private val backgroundInfoSecondary: Color,
+    private val backgroundInfoSecondaryPressed: Color,
     private val backgroundInfoSolid: Color,
     private val backgroundInfoSolidPressed: Color,
     private val backgroundSuccessPrimary: Color,
@@ -106,6 +107,7 @@ data class ColorScheme internal constructor(
 
         ColorKeyToken.BackgroundInfoPrimary -> backgroundInfoPrimary
         ColorKeyToken.BackgroundInfoSecondary -> backgroundInfoSecondary
+        ColorKeyToken.BackgroundInfoSecondaryPressed -> backgroundInfoSecondaryPressed
         ColorKeyToken.BackgroundInfoSolid -> backgroundInfoSolid
         ColorKeyToken.BackgroundInfoSolidPressed -> backgroundInfoSolidPressed
 

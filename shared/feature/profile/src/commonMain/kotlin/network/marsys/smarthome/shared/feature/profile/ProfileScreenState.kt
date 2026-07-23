@@ -12,10 +12,14 @@ interface ProfileScreenState {
 
 sealed class ProfileScreenAction(val key: String) {
     data object ChangeAppAppearance : ProfileScreenAction("ChangeAppAppearance")
+    data object ConfirmLogout : ProfileScreenAction("ConfirmLogout")
+    data object ConfirmResetOnboarding : ProfileScreenAction("ConfirmResetOnboarding")
     data object Logout : ProfileScreenAction("Logout")
     data object ResetOnboarding : ProfileScreenAction("ResetOnboarding")
 }
 
 sealed interface ProfileScreenEffect {
     data class Navigate(val target: NavigationDestination) : ProfileScreenEffect
+    data object DisplayConfirmLogoutDialog : ProfileScreenEffect
+    data object DisplayConfirmResetOnboardingDialog : ProfileScreenEffect
 }

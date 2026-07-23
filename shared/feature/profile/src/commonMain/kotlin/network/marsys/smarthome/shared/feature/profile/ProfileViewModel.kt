@@ -42,19 +42,33 @@ class ProfileViewModel(
                 keySelector = ProfileScreenAction::key,
             ) {
                 when (val action = type()) {
-                    ProfileScreenAction.ChangeAppAppearance -> action.flow.collect {
+                    ProfileScreenAction.ChangeAppAppearance ->
+                        action.flow.collect {
+                            emitter.emit(
+                                effect = ProfileScreenEffect.Navigate(
+                                    target = NavigationDestination.ChangeAppAppearanceModal,
+                                ),
+                            )
+                        }
+
+                    ProfileScreenAction.ConfirmLogout ->
+                        Unit
+
+                    ProfileScreenAction.ConfirmResetOnboarding ->
+                        onboardingRepository.resetOnboarding()
+
+                    ProfileScreenAction.Logout -> action.flow.collect {
                         emitter.emit(
-                            effect = ProfileScreenEffect.Navigate(
-                                target = NavigationDestination.ChangeAppAppearanceModal,
-                            ),
+                            effect = ProfileScreenEffect.DisplayConfirmLogoutDialog,
                         )
                     }
 
-                    ProfileScreenAction.Logout -> Unit
-
-                    ProfileScreenAction.ResetOnboarding -> action.flow.collect {
-                        onboardingRepository.resetOnboarding()
-                    }
+                    ProfileScreenAction.ResetOnboarding ->
+                        action.flow.collect {
+                            emitter.emit(
+                                effect = ProfileScreenEffect.DisplayConfirmResetOnboardingDialog,
+                            )
+                        }
                 }
             }
         },

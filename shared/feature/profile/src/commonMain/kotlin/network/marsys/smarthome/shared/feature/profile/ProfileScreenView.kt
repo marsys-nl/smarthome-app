@@ -6,19 +6,19 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -27,16 +27,31 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composeunstyled.ModalBottomSheetState
+import com.composeunstyled.SheetDetent
+import com.composeunstyled.rememberModalBottomSheetState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.Res
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.connected_backend
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.logout_modal_accept
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.logout_modal_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.logout_modal_title
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_description
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_appearance_title
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_logout_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_logout_title
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_notifications_description
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_notifications_title
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_reset_onboarding_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.menu_item_reset_onboarding_title
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.modal_cancel
 import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.profile_header
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.reset_onboarding_modal_accept
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.reset_onboarding_modal_description
+import network.marsys.smarthome.shared.feature.profile.profile.generated.resources.reset_onboarding_modal_title
 import network.marsys.smarthome.shared.library.core.SmartHomeConfig
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
@@ -47,12 +62,15 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Border
+import network.marsys.smarthome.shared.library.design.component.Button
+import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
-import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
+import network.marsys.smarthome.shared.library.design.component.ModalBottomSheet
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.icons.Bell
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -60,6 +78,7 @@ import network.marsys.smarthome.shared.library.design.icons.LogOut
 import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.Shield
 import network.marsys.smarthome.shared.library.design.icons.SunMoon
+import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -75,10 +94,26 @@ fun ProfileScreenView(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
 ) {
+    val modalBottomSheetState = rememberModalBottomSheetState(
+        initialDetent = SheetDetent.Hidden,
+        detents = listOf(
+            SheetDetent.Hidden,
+            ConfirmLogoutDetent,
+            ResetOnboardingDetent,
+        ),
+    )
+
     val state = viewModel.produceStateWithLifecycle()
     viewModel.collectEffectsWithLifecycle { effect ->
         when (effect) {
-            is ProfileScreenEffect.Navigate -> onNavigate(effect.target)
+            is ProfileScreenEffect.DisplayConfirmLogoutDialog ->
+                modalBottomSheetState.animateTo(ConfirmLogoutDetent)
+
+            is ProfileScreenEffect.DisplayConfirmResetOnboardingDialog ->
+                modalBottomSheetState.animateTo(ResetOnboardingDetent)
+
+            is ProfileScreenEffect.Navigate ->
+                onNavigate(effect.target)
         }
     }
 
@@ -88,8 +123,12 @@ fun ProfileScreenView(
         connectedBackend = state.connectedBackend,
         onAction = viewModel.accept,
         modifier = modifier,
+        modalBottomSheetState = modalBottomSheetState,
     )
 }
+
+private val ConfirmLogoutDetent = SheetDetent("ConfirmLogout") { _, height -> height }
+private val ResetOnboardingDetent = SheetDetent("ResetOnboarding") { _, height -> height }
 
 @Composable
 private fun ProfileScreenViewContent(
@@ -98,10 +137,25 @@ private fun ProfileScreenViewContent(
     connectedBackend: String?,
     onAction: (ProfileScreenAction) -> Unit,
     modifier: Modifier = Modifier,
+    modalBottomSheetState: ModalBottomSheetState = rememberModalBottomSheetState(
+        initialDetent = SheetDetent.Hidden,
+        detents = listOf(
+            SheetDetent.Hidden,
+            ConfirmLogoutDetent,
+            ResetOnboardingDetent,
+        ),
+    ),
 ) {
+    val blurModifier = if (modalBottomSheetState.currentDetent != SheetDetent.Hidden) {
+        Modifier.blur(4.dp)
+    } else {
+        Modifier
+    }
+
     Column(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .then(blurModifier),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
@@ -129,6 +183,24 @@ private fun ProfileScreenViewContent(
         }
 
         DebugInfo()
+    }
+
+    ModalBottomSheet(
+        state = modalBottomSheetState,
+    ) {
+        when (modalBottomSheetState.currentDetent) {
+            ConfirmLogoutDetent -> ConfirmLogoutModalBottomSheetContent(
+                modalBottomSheetState = modalBottomSheetState,
+                onAction = onAction,
+            )
+
+            ResetOnboardingDetent -> ResetOnboardingModalBottomSheetContent(
+                modalBottomSheetState = modalBottomSheetState,
+                onAction = onAction,
+            )
+
+            else -> Unit
+        }
     }
 }
 
@@ -299,8 +371,8 @@ private fun ProfileMenuItems(
         )
 
         ProfileMenuItem(
-            title = "Reset onboarding",
-            description = "Run the setup wizard again",
+            title = stringResource(Res.string.menu_item_reset_onboarding_title),
+            description = stringResource(Res.string.menu_item_reset_onboarding_description),
             icon = Icons.Reset,
             border = false,
             onClick = {
@@ -318,8 +390,8 @@ private fun ProfileMenuItems(
         )
 
         ProfileMenuItem(
-            title = "Logout",
-            description = "Sign out of your account",
+            title = stringResource(Res.string.menu_item_logout_title),
+            description = stringResource(Res.string.menu_item_logout_description),
             icon = Icons.LogOut,
             border = false,
             onClick = {
@@ -415,6 +487,157 @@ private fun ProfileMenuItem(
 
             right?.invoke(colors.iconContentColor(enabled).value)
         }
+    }
+}
+
+@Composable
+private fun ResetOnboardingModalBottomSheetContent(
+    modalBottomSheetState: ModalBottomSheetState,
+    onAction: (ProfileScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    @OptIn(ExperimentalFoundationStyleApi::class)
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+    ) {
+        IconCard(
+            icon = Icons.TriangleAlert,
+            size = 56.dp,
+            modifier = Modifier
+                .padding(bottom = 16.dp),
+            colors = CardDefaults.colors(
+                backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundInfoPrimary]),
+                contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundInfoPrimary],
+            ),
+        )
+
+        Text(
+            text = stringResource(Res.string.reset_onboarding_modal_title),
+            style = TextDefaults.sectionHeader,
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        )
+
+        Text(
+            text = stringResource(Res.string.reset_onboarding_modal_description),
+            style = TextDefaults.description,
+            modifier = Modifier
+                .padding(bottom = 24.dp),
+        )
+
+        ConfirmModalBottomSheetButtons(
+            modalBottomSheetState = modalBottomSheetState,
+        ) {
+            Button(
+                onClick = {
+                    it.launch {
+                        onAction.invoke(ProfileScreenAction.ConfirmResetOnboarding)
+                        modalBottomSheetState.animateTo(SheetDetent.Hidden)
+                    }
+                },
+                style = ButtonStyle.info(),
+                modifier = Modifier
+                    .weight(1f),
+            ) {
+                Text(
+                    text = stringResource(Res.string.reset_onboarding_modal_accept),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfirmLogoutModalBottomSheetContent(
+    modalBottomSheetState: ModalBottomSheetState,
+    onAction: (ProfileScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    @OptIn(ExperimentalFoundationStyleApi::class)
+    Column(
+        modifier = modifier
+            .fillMaxWidth(),
+    ) {
+        IconCard(
+            icon = Icons.LogOut,
+            size = 56.dp,
+            modifier = Modifier
+                .padding(bottom = 16.dp),
+            colors = CardDefaults.colors(
+                backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorPrimary]),
+                contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundErrorPrimary],
+            ),
+        )
+
+        Text(
+            text = stringResource(Res.string.logout_modal_title),
+            style = TextDefaults.sectionHeader,
+            modifier = Modifier
+                .padding(bottom = 8.dp),
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        )
+
+        Text(
+            text = stringResource(Res.string.logout_modal_description),
+            style = TextDefaults.description,
+            modifier = Modifier
+                .padding(bottom = 24.dp),
+        )
+
+        ConfirmModalBottomSheetButtons(
+            modalBottomSheetState = modalBottomSheetState,
+        ) {
+            Button(
+                onClick = {
+                    it.launch {
+                        onAction.invoke(ProfileScreenAction.ConfirmLogout)
+                        modalBottomSheetState.animateTo(SheetDetent.Hidden)
+                    }
+                },
+                style = ButtonStyle.error(),
+                modifier = Modifier
+                    .weight(1f),
+            ) {
+                Text(
+                    text = stringResource(Res.string.logout_modal_accept),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConfirmModalBottomSheetButtons(
+    modalBottomSheetState: ModalBottomSheetState,
+    modifier: Modifier = Modifier,
+    acceptButtonContent: @Composable (CoroutineScope) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+
+    @OptIn(ExperimentalFoundationStyleApi::class)
+    Row(
+        modifier = modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        Button(
+            onClick = {
+                coroutineScope.launch {
+                    modalBottomSheetState.animateTo(SheetDetent.Hidden)
+                }
+            },
+            style = ButtonStyle.secondary(),
+            modifier = Modifier
+                .weight(1f),
+        ) {
+            Text(
+                text = stringResource(Res.string.modal_cancel),
+            )
+        }
+
+        acceptButtonContent.invoke(coroutineScope)
     }
 }
 
@@ -544,6 +767,52 @@ private fun ProfileScreenRealUserPreview(
             email = "niels.marsman@example.com",
             connectedBackend = "https://example.com",
             onAction = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ProfileScreenConfirmLogoutModalPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ProfileScreenViewContent(
+            name = "Niels Marsman",
+            email = "niels.marsman@example.com",
+            connectedBackend = "https://example.com",
+            onAction = {},
+            modalBottomSheetState = rememberModalBottomSheetState(
+                initialDetent = ConfirmLogoutDetent,
+                detents = listOf(ConfirmLogoutDetent),
+            ),
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ProfileScreenResetOnboardingModalPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ProfileScreenViewContent(
+            name = "Niels Marsman",
+            email = "niels.marsman@example.com",
+            connectedBackend = "https://example.com",
+            onAction = {},
+            modalBottomSheetState = rememberModalBottomSheetState(
+                initialDetent = ResetOnboardingDetent,
+                detents = listOf(ResetOnboardingDetent),
+            ),
         )
     }
 }

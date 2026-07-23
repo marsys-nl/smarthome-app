@@ -36,6 +36,7 @@ internal object DarkColorSchemeTokens : ColorSchemeTokens {
     // Info
     override val BackgroundInfoPrimary: Color = PaletteTokens.Blue.Blue950
     override val BackgroundInfoSecondary: Color = PaletteTokens.Blue.Blue900
+    override val BackgroundInfoSecondaryPressed: Color = PaletteTokens.Blue.Blue800
     override val BackgroundInfoSolid: Color = PaletteTokens.Blue.Blue600
     override val BackgroundInfoSolidPressed: Color = PaletteTokens.Blue.Blue500
 

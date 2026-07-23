@@ -35,6 +35,7 @@ enum class ColorKeyToken {
     // Info
     BackgroundInfoPrimary,
     BackgroundInfoSecondary,
+    BackgroundInfoSecondaryPressed,
     BackgroundInfoSolid,
     BackgroundInfoSolidPressed,
 
