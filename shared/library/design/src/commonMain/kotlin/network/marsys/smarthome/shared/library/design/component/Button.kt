@@ -175,15 +175,18 @@ object ButtonStyle {
     )
 
     @Composable
-    fun text() = base(
+    fun text(
+        content: Color = LocalContentColor.current,
+        pressedContent: Color = LocalContentColor.current,
+    ) = base(
         background = SolidColor(Color.Unspecified),
-        content = LocalContentColor.current,
+        content = content,
         border = ButtonColorTokens.BorderColor,
         disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
         disabledContent = ButtonColorTokens.DisabledContentColor,
         disabledBorder = ButtonColorTokens.BorderColor,
-        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
-        pressedContent = LocalContentColor.current,
+        pressedBackground = SolidColor(Color.Unspecified),
+        pressedContent = pressedContent,
         pressedBorder = ButtonColorTokens.BorderColor,
     )
 

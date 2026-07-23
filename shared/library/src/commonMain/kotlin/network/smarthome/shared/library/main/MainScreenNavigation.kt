@@ -194,7 +194,14 @@ private fun MainScreenNavigationItemWrapper(
 
 context(backStack: NavBackStack<SmartHomeScreen>)
 private fun handleNavigationDestination(target: NavigationDestination) {
+    if (target is NavigationDestination.MainNavigationDestination) {
+        backStack.clear()
+    }
+
     backStack += when (target) {
+        is NavigationDestination.Areas ->
+            SmartHomeScreen.Rooms
+
         is NavigationDestination.ChangeAppAppearanceModal ->
             SmartHomeScreen.AppAppearance
 
