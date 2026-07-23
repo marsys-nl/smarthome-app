@@ -7,6 +7,7 @@ import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 @Stable
 interface DashboardScreenState {
+    val areas: AreasState
     val quickControlState: QuickControlState
     val user: String
 
@@ -15,6 +16,11 @@ interface DashboardScreenState {
         val condition: Condition
         val entities: Map<EntityIdentifier, Entity<*>>
         val groupedEntitiesByType: Boolean
+    }
+
+    @Stable
+    interface AreasState {
+        val condition: Condition
     }
 
     sealed interface Condition {
@@ -28,14 +34,16 @@ interface DashboardScreenState {
 sealed class DashboardScreenAction(val key: String) {
     data object ChangeAppAppearance : DashboardScreenAction("ChangeAppAppearance")
 
-    data class ToggleEntityState(
-        val entity: EntityIdentifier,
-        val state: Boolean,
-    ) : DashboardScreenAction("ToggleEntityState[$entity]")
+    data object NavigateToAreas : DashboardScreenAction("NavigateToAreas")
 
     data class OpenEntityDetailModal(
         val entity: EntityIdentifier,
     ) : DashboardScreenAction("EditEntity[$entity]")
+
+    data class ToggleEntityState(
+        val entity: EntityIdentifier,
+        val state: Boolean,
+    ) : DashboardScreenAction("ToggleEntityState[$entity]")
 
     data object ToggleGroupEntitiesByType : DashboardScreenAction("ToggleGroupEntitiesByType")
 }

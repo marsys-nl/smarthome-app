@@ -8,6 +8,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
@@ -22,6 +23,7 @@ import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import org.jetbrains.compose.resources.getString
+import kotlin.time.Duration.Companion.seconds
 
 internal typealias DashboardStateHolder =
     SuspendingActionStateEffectMutator<DashboardScreenAction, DashboardScreenState, DashboardScreenEffect>
@@ -34,6 +36,10 @@ class DashboardViewModel(
     DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableDashboardScreenState(),
         producer = { state, actions, emitter ->
+            launchAreaMutations(
+                state = state,
+            )
+
             launchEntityMutations(
                 state = state,
                 entityRepository = entityRepository,
@@ -57,12 +63,11 @@ class DashboardViewModel(
                         )
                     }
 
-                    is DashboardScreenAction.ToggleEntityState -> action.flow.collect {
-                        entityRepository.execute(
-                            action = when (it.state) {
-                                true -> OnOff.Toggle.On(identifier = action.entity)
-                                false -> OnOff.Toggle.Off(identifier = action.entity)
-                            },
+                    DashboardScreenAction.NavigateToAreas -> action.flow.collect {
+                        emitter.emit(
+                            effect = DashboardScreenEffect.Navigate(
+                                target = NavigationDestination.Areas,
+                            ),
                         )
                     }
 
@@ -74,6 +79,15 @@ class DashboardViewModel(
                         )
                     }
 
+                    is DashboardScreenAction.ToggleEntityState -> action.flow.collect {
+                        entityRepository.execute(
+                            action = when (it.state) {
+                                true -> OnOff.Toggle.On(identifier = action.entity)
+                                false -> OnOff.Toggle.Off(identifier = action.entity)
+                            },
+                        )
+                    }
+
                     DashboardScreenAction.ToggleGroupEntitiesByType -> action.flow.collect {
                         state.quickControlState.groupedEntitiesByType = !state.quickControlState.groupedEntitiesByType
                     }
@@ -81,6 +95,16 @@ class DashboardViewModel(
             }
         },
     )
+
+context(scope: CoroutineScope)
+private fun launchAreaMutations(
+    state: MutableDashboardScreenState,
+) {
+    scope.launch {
+        delay(3.seconds)
+        state.areas.condition = DashboardScreenState.Condition.Success
+    }
+}
 
 @OptIn(FlowPreview::class)
 context(scope: CoroutineScope)
@@ -127,10 +151,16 @@ private fun launchUserNameMutations(
 }
 
 private class MutableDashboardScreenState(
+    areasState: MutableAreasState = MutableAreasState(),
     quickControlState: MutableQuickControlState = MutableQuickControlState(),
 ) : DashboardScreenState {
+    override val areas: MutableAreasState by mutableStateOf(areasState)
     override val quickControlState: MutableQuickControlState by mutableStateOf(quickControlState)
     override var user: String by mutableStateOf("")
+}
+
+private class MutableAreasState : DashboardScreenState.AreasState {
+    override var condition: DashboardScreenState.Condition by mutableStateOf(DashboardScreenState.Condition.Loading)
 }
 
 private class MutableQuickControlState : DashboardScreenState.QuickControlState {
