@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="areas_loading_description">Bezig met laden van uw ruimtes...</string>
+
     <string name="dashboard_greeting_afternoon">Goedemiddag</string>
     <string name="dashboard_greeting_evening">Goedenavond</string>
     <string name="dashboard_greeting_morning">Goedemorgen</string>
