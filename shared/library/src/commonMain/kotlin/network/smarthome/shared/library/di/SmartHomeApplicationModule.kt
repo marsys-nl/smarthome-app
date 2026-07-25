@@ -1,3 +1,5 @@
+@file:Suppress("StringLiteralDuplication")
+
 package network.smarthome.shared.library.di
 
 import network.marsys.smarthome.shared.library.i18n.TranslationCache
@@ -22,10 +24,45 @@ internal val smartHomeApplicationModule = module {
 
     single<TranslationCache> {
         InMemoryTranslationCache(
-            translations = DemoEntityTranslations,
+            translations = DemoEntityTranslations + AreaTranslations,
         )
     }
 }
+
+private val AreaTranslations = mapOf(
+    "area.bathroom" to mapOf(
+        "en" to "Bathroom",
+        "nl" to "Badkamer",
+    ),
+    "area.bedroom" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "area.garage" to mapOf(
+        "en" to "Garage",
+        "nl" to "Garage",
+    ),
+    "area.hallway" to mapOf(
+        "en" to "Hallway",
+        "nl" to "Hal",
+    ),
+    "area.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "area.living-room" to mapOf(
+        "en" to "Living room",
+        "nl" to "Woonkamer",
+    ),
+    "area.nursery" to mapOf(
+        "en" to "Nursery",
+        "nl" to "Babykamer",
+    ),
+    "area.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+)
 
 private val DemoEntityTranslations = mapOf(
     "light.bedroom-lamp" to mapOf(

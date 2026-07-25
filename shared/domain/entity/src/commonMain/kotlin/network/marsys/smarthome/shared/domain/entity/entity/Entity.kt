@@ -3,11 +3,13 @@ package network.marsys.smarthome.shared.domain.entity.entity
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
     val state: S
+    val area: Area?
 
     val descriptor: State.Descriptor
         get() = state.descriptor

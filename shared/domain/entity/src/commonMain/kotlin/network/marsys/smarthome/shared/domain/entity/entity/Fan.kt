@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.capability.updateWith
@@ -8,6 +9,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 data class Fan(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
+    override val area: Area? = null,
 ) : AbstractEntity<Fan.State>(), Entity.Activatable {
     override val active: Boolean
         get() = state is State.Known && state.onOff.value.current
