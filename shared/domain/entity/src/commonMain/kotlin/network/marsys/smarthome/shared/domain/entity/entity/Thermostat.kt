@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
@@ -15,6 +16,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.updateWith
 data class Thermostat(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
+    override val area: Area? = null,
 ) : AbstractEntity<Thermostat.State>(), Entity.Activatable {
     override val active: Boolean
         get() = state is State.Known && state.onOff.value.current

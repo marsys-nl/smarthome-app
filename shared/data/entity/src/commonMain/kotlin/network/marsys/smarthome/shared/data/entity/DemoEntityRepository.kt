@@ -14,6 +14,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
@@ -52,6 +53,13 @@ class DemoEntityRepository(
 ) : EntityRepository {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
+
+    override val areas: Flow<Map<Area, Collection<Entity<*>>>> =
+        state.map { entityMap ->
+            entityMap.values
+                .filter { it.area != null }
+                .groupBy { it.area as Area }
+        }
 
     override val entities: Flow<Collection<Entity<*>>> =
         state
