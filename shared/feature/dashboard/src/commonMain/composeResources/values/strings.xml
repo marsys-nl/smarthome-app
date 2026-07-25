@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="areas_loading_description">Loading your areas...</string>
+
     <string name="dashboard_greeting_appendix" translatable="false">%1$s,</string>
     <string name="dashboard_greeting_afternoon">Good afternoon</string>
     <string name="dashboard_greeting_evening">Good evening</string>

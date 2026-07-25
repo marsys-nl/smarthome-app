@@ -5,7 +5,11 @@ import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalGridApi
+import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.Style
 import androidx.compose.foundation.style.then
@@ -20,6 +24,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
+import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_loading_description
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -33,6 +40,7 @@ import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
 fun AreasSection(
@@ -49,8 +57,43 @@ fun AreasSection(
             condition = state.condition,
             onAction = onAction,
         )
+
+        when (state.condition) {
+            DashboardScreenState.Condition.Loading ->
+                AreasSectionLoadingContent()
+
+            else -> Unit
+        }
     }
 }
+
+@Composable
+private fun AreasSectionLoadingContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        SectionLoadingIndicator(
+            message = stringResource(Res.string.areas_loading_description),
+        )
+
+        @OptIn(ExperimentalGridApi::class)
+        Grid(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .fillMaxWidth(),
+            config = dashboardSectionGridConfig,
+        ) {
+            repeat(LOADING_CARD_COUNT) {
+                ShimmerCard()
+            }
+        }
+    }
+}
+
+private const val LOADING_CARD_COUNT = 4
 
 @Composable
 private fun AreasSectionHeader(
