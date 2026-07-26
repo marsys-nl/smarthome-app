@@ -2,12 +2,13 @@ package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.runtime.Stable
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 @Stable
 interface DashboardScreenState {
-    val areas: AreasState
+    val areasState: AreasState
     val quickControlState: QuickControlState
     val user: String
 
@@ -21,6 +22,13 @@ interface DashboardScreenState {
     @Stable
     interface AreasState {
         val condition: Condition
+        val areas: Map<EntityIdentifier, AreaState>
+    }
+
+    @Stable
+    interface AreaState {
+        val area: Area
+        val entities: Map<EntityIdentifier, Entity<*>>
     }
 
     sealed interface Condition {

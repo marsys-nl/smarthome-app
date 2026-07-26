@@ -54,12 +54,14 @@ class DemoEntityRepository(
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
 
-    override val areas: Flow<Map<Area, Collection<Entity<*>>>> =
-        state.map { entityMap ->
-            entityMap.values
-                .filter { it.area != null }
-                .groupBy { it.area as Area }
-        }
+    override val areas: Flow<Collection<Area>> =
+        state
+            .map { entityMap ->
+                entityMap.values
+                    .mapNotNull { it.area }
+                    .distinct()
+            }
+            .distinctUntilChanged()
 
     override val entities: Flow<Collection<Entity<*>>> =
         state

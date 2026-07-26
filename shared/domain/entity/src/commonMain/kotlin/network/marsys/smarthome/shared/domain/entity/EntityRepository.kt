@@ -6,7 +6,7 @@ import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 
 interface EntityRepository {
-    val areas: Flow<Map<Area, Collection<Entity<*>>>>
+    val areas: Flow<Collection<Area>>
 
     val entities: Flow<Collection<Entity<*>>>
 

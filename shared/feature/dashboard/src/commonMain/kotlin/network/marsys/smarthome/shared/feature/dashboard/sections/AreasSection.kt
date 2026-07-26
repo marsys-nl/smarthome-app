@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
@@ -213,18 +214,22 @@ private fun AreasSectionLoadingPreview(
 
 internal object AreasSectionPreviewData {
     fun empty() = object : DashboardScreenState.AreasState {
+        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Empty
     }
 
     fun error() = object : DashboardScreenState.AreasState {
+        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Error
     }
 
     fun loaded() = object : DashboardScreenState.AreasState {
+        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Success
     }
 
     fun loading() = object : DashboardScreenState.AreasState {
+        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
     }
 }
