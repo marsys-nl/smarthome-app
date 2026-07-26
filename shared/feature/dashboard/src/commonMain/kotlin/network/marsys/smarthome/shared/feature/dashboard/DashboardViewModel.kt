@@ -8,11 +8,13 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
@@ -23,7 +25,6 @@ import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import org.jetbrains.compose.resources.getString
-import kotlin.time.Duration.Companion.seconds
 
 internal typealias DashboardStateHolder =
     SuspendingActionStateEffectMutator<DashboardScreenAction, DashboardScreenState, DashboardScreenEffect>
@@ -38,6 +39,7 @@ class DashboardViewModel(
         producer = { state, actions, emitter ->
             launchAreaMutations(
                 state = state,
+                entityRepository = entityRepository,
             )
 
             launchEntityMutations(
@@ -99,10 +101,40 @@ class DashboardViewModel(
 context(scope: CoroutineScope)
 private fun launchAreaMutations(
     state: MutableDashboardScreenState,
+    entityRepository: EntityRepository,
 ) {
     scope.launch {
-        delay(3.seconds)
-        state.areas.condition = DashboardScreenState.Condition.Success
+        val flow = combine(
+            entityRepository.areas,
+            entityRepository.entities,
+        ) { areas, entities ->
+            val current = state.areasState.areas
+
+            areas.forEach { area ->
+                val state = MutableAreaState(
+                    area = area,
+                    entities = entities
+                        .filter { entity -> entity.area?.identifier == area.identifier }
+                        .associateBy { entity -> entity.identifier },
+                )
+
+                if (current[area.identifier] != state) {
+                    current[area.identifier] = state
+                }
+            }
+
+            val removed = current.keys - areas.map { it.identifier }.toSet()
+            removed.forEach(current::remove)
+
+            state.areasState.condition = when {
+                areas.isEmpty() -> DashboardScreenState.Condition.Empty
+                else -> DashboardScreenState.Condition.Success
+            }
+        }
+
+        flow
+            .catch { state.areasState.condition = DashboardScreenState.Condition.Error }
+            .collect()
     }
 }
 
@@ -154,13 +186,22 @@ private class MutableDashboardScreenState(
     areasState: MutableAreasState = MutableAreasState(),
     quickControlState: MutableQuickControlState = MutableQuickControlState(),
 ) : DashboardScreenState {
-    override val areas: MutableAreasState by mutableStateOf(areasState)
+    override val areasState: MutableAreasState by mutableStateOf(areasState)
     override val quickControlState: MutableQuickControlState by mutableStateOf(quickControlState)
     override var user: String by mutableStateOf("")
 }
 
 private class MutableAreasState : DashboardScreenState.AreasState {
     override var condition: DashboardScreenState.Condition by mutableStateOf(DashboardScreenState.Condition.Loading)
+    override var areas: SnapshotStateMap<EntityIdentifier, DashboardScreenState.AreaState> = mutableStateMapOf()
+}
+
+private class MutableAreaState(
+    area: Area,
+    entities: Map<EntityIdentifier, Entity<*>>,
+) : DashboardScreenState.AreaState {
+    override var area: Area by mutableStateOf(area)
+    override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
 }
 
 private class MutableQuickControlState : DashboardScreenState.QuickControlState {

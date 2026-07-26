@@ -104,7 +104,7 @@ private fun SinglePaneDashboard(
             .spacedBy(32.dp),
     ) {
         AreasSection(
-            state = state.areas,
+            state = state.areasState,
             onAction = onAction,
         )
 
@@ -126,7 +126,7 @@ private fun SplitPaneDashboard(
             .fillMaxWidth(),
         left = {
             AreasSection(
-                state = state.areas,
+                state = state.areasState,
                 onAction = onAction,
             )
         },
@@ -168,7 +168,7 @@ internal object DashboardScreenPreviewData {
         quickControlState: DashboardScreenState.QuickControlState =
             QuickControlSectionPreviewData.loaded(),
     ): DashboardScreenState = object : DashboardScreenState {
-        override val areas: DashboardScreenState.AreasState = areasState
+        override val areasState: DashboardScreenState.AreasState = areasState
         override val quickControlState: DashboardScreenState.QuickControlState = quickControlState
         override val user: String = "John"
     }
