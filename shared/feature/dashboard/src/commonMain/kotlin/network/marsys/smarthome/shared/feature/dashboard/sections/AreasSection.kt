@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -27,16 +28,24 @@ import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_empty_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_empty_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_loading_description
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
+import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
+import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
+import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
+import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
@@ -62,6 +71,9 @@ fun AreasSection(
         when (state.condition) {
             DashboardScreenState.Condition.Loading ->
                 AreasSectionLoadingContent()
+
+            DashboardScreenState.Condition.Empty ->
+                AreasSectionEmptyContent()
 
             else -> Unit
         }
@@ -95,6 +107,50 @@ private fun AreasSectionLoadingContent(
 }
 
 private const val LOADING_CARD_COUNT = 4
+
+@Composable
+private fun AreasSectionEmptyContent(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.colors(
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Dashed(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.Component,
+                colors = CardDefaults.colors(
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.areas_empty_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = stringResource(Res.string.areas_empty_description),
+                style = TextDefaults.description then TextStyles.centered,
+                minLines = 2,
+            )
+        }
+    }
+}
 
 @Composable
 private fun AreasSectionHeader(

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="areas_loading_description">Bezig met laden van uw ruimtes...</string>
+    <string name="areas_empty_title">Geen ruimtes beschikbaar</string>
+    <string name="areas_empty_description">Voeg uw eerste ruimte toe om deze vanaf dit dashboard te kunnen beheren.</string>
 
     <string name="dashboard_greeting_afternoon">Goedemiddag</string>
     <string name="dashboard_greeting_evening">Goedenavond</string>
