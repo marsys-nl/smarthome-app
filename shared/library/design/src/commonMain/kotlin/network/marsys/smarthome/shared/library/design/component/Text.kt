@@ -140,6 +140,7 @@ object TextDefaults {
     }
 
     val header = Style {
+        contentColor(LocalColorScheme.currentValue[ColorKeyToken.TextPrimary])
         lineHeight(24.sp)
         fontSize(16.sp)
 

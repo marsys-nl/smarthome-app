@@ -81,6 +81,15 @@ class DashboardViewModel(
                         )
                     }
 
+                    is DashboardScreenAction.OpenAreaScreen -> action.flow.collect {
+                        emitter.emit(
+                            effect = DashboardScreenEffect.Navigate(
+//                                target = NavigationDestination.AreaScreen(area = action.area),
+                                target = NavigationDestination.Areas,
+                            ),
+                        )
+                    }
+
                     is DashboardScreenAction.ToggleEntityState -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
@@ -111,16 +120,19 @@ private fun launchAreaMutations(
             val current = state.areasState.areas
 
             areas.forEach { area ->
-                val state = MutableAreaState(
-                    area = area,
-                    entities = entities
+                if (!current.containsKey(area.identifier)) {
+                    current[area.identifier] = MutableAreaState(area = area)
+                }
+
+                val stateEntities = current[area.identifier]?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
+                    ?: return@forEach
+
+                stateEntities.clear()
+                stateEntities.putAll(
+                    from = entities
                         .filter { entity -> entity.area?.identifier == area.identifier }
                         .associateBy { entity -> entity.identifier },
                 )
-
-                if (current[area.identifier] != state) {
-                    current[area.identifier] = state
-                }
             }
 
             val removed = current.keys - areas.map { it.identifier }.toSet()
@@ -198,7 +210,6 @@ private class MutableAreasState : DashboardScreenState.AreasState {
 
 private class MutableAreaState(
     area: Area,
-    entities: Map<EntityIdentifier, Entity<*>>,
 ) : DashboardScreenState.AreaState {
     override var area: Area by mutableStateOf(area)
     override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
