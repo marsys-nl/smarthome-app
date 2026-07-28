@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="areas_loading_description">Bezig met laden van uw ruimtes...</string>
-    <string name="areas_empty_title">Geen ruimtes beschikbaar</string>
-    <string name="areas_empty_description">Voeg uw eerste ruimte toe om deze vanaf dit dashboard te kunnen beheren.</string>
-
     <string name="dashboard_greeting_afternoon">Goedemiddag</string>
     <string name="dashboard_greeting_evening">Goedenavond</string>
     <string name="dashboard_greeting_morning">Goedemorgen</string>
@@ -18,4 +14,11 @@
     <string name="quick_control_error_retry">Probeer opnieuw</string>
     <string name="quick_control_group_button_title">Groeperen op type</string>
     <string name="quick_control_ungroup_button_title">Degroeperen</string>
+
+    <string name="zones_section_title">Zones</string>
+    <string name="zones_see_all">Bekijk alle</string>
+    <string name="zones_loading_description">Bezig met laden van uw zones...</string>
+    <string name="zones_empty_title">Geen zones beschikbaar</string>
+    <string name="zones_empty_description">Voeg uw eerste zone toe om deze vanaf dit dashboard te kunnen beheren.</string>
+    <string name="zones_active_devices">%1$s van %2$s entiteiten</string>
 </resources>

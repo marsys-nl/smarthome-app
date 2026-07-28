@@ -5,7 +5,7 @@ import network.marsys.smarthome.domain.EntityIdentifier
 sealed interface NavigationDestination {
     sealed interface MainNavigationDestination : NavigationDestination
 
-    data object Areas : MainNavigationDestination
+    data object Zones : MainNavigationDestination
 
     data object ChangeAppAppearanceModal : NavigationDestination
 

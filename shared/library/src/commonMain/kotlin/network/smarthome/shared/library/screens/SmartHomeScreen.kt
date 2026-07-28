@@ -11,7 +11,7 @@ internal sealed interface SmartHomeScreen : NavKey {
     data object Dashboard : SmartHomeScreen
 
     @Serializable
-    data object Rooms : SmartHomeScreen
+    data object Zones : SmartHomeScreen
 
     @Serializable
     data object Scenes : SmartHomeScreen

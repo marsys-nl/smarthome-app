@@ -310,8 +310,8 @@ private fun BottomNavigationPreview(
                 )
 
                 item(
-                    screen = "rooms",
-                    text = "Rooms",
+                    screen = "zones",
+                    text = "Zones",
                     icon = Icons.Grid3x3,
                 )
 

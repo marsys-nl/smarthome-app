@@ -14,9 +14,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
@@ -37,7 +37,7 @@ class DashboardViewModel(
     DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableDashboardScreenState(),
         producer = { state, actions, emitter ->
-            launchAreaMutations(
+            launchZoneMutations(
                 state = state,
                 entityRepository = entityRepository,
             )
@@ -65,10 +65,10 @@ class DashboardViewModel(
                         )
                     }
 
-                    DashboardScreenAction.NavigateToAreas -> action.flow.collect {
+                    DashboardScreenAction.NavigateToZones -> action.flow.collect {
                         emitter.emit(
                             effect = DashboardScreenEffect.Navigate(
-                                target = NavigationDestination.Areas,
+                                target = NavigationDestination.Zones,
                             ),
                         )
                     }
@@ -81,11 +81,11 @@ class DashboardViewModel(
                         )
                     }
 
-                    is DashboardScreenAction.OpenAreaScreen -> action.flow.collect {
+                    is DashboardScreenAction.OpenZoneScreen -> action.flow.collect {
                         emitter.emit(
                             effect = DashboardScreenEffect.Navigate(
-//                                target = NavigationDestination.AreaScreen(area = action.area),
-                                target = NavigationDestination.Areas,
+//                                target = NavigationDestination.ZoneScreen(zone = action.zone),
+                                target = NavigationDestination.Zones,
                             ),
                         )
                     }
@@ -108,44 +108,44 @@ class DashboardViewModel(
     )
 
 context(scope: CoroutineScope)
-private fun launchAreaMutations(
+private fun launchZoneMutations(
     state: MutableDashboardScreenState,
     entityRepository: EntityRepository,
 ) {
     scope.launch {
         val flow = combine(
-            entityRepository.areas,
+            entityRepository.zones,
             entityRepository.entities,
-        ) { areas, entities ->
-            val current = state.areasState.areas
+        ) { zones, entities ->
+            val current = state.zonesState.zones
 
-            areas.forEach { area ->
-                if (!current.containsKey(area.identifier)) {
-                    current[area.identifier] = MutableAreaState(area = area)
+            zones.forEach { zone ->
+                if (!current.containsKey(zone.identifier)) {
+                    current[zone.identifier] = MutableZoneState(zone = zone)
                 }
 
-                val stateEntities = current[area.identifier]?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
+                val stateEntities = current[zone.identifier]?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
                     ?: return@forEach
 
                 stateEntities.clear()
                 stateEntities.putAll(
                     from = entities
-                        .filter { entity -> entity.area?.identifier == area.identifier }
+                        .filter { entity -> entity.zone?.identifier == zone.identifier }
                         .associateBy { entity -> entity.identifier },
                 )
             }
 
-            val removed = current.keys - areas.map { it.identifier }.toSet()
+            val removed = current.keys - zones.map { it.identifier }.toSet()
             removed.forEach(current::remove)
 
-            state.areasState.condition = when {
-                areas.isEmpty() -> DashboardScreenState.Condition.Empty
+            state.zonesState.condition = when {
+                zones.isEmpty() -> DashboardScreenState.Condition.Empty
                 else -> DashboardScreenState.Condition.Success
             }
         }
 
         flow
-            .catch { state.areasState.condition = DashboardScreenState.Condition.Error }
+            .catch { state.zonesState.condition = DashboardScreenState.Condition.Error }
             .collect()
     }
 }
@@ -195,23 +195,23 @@ private fun launchUserNameMutations(
 }
 
 private class MutableDashboardScreenState(
-    areasState: MutableAreasState = MutableAreasState(),
+    zonesState: MutableZonesState = MutableZonesState(),
     quickControlState: MutableQuickControlState = MutableQuickControlState(),
 ) : DashboardScreenState {
-    override val areasState: MutableAreasState by mutableStateOf(areasState)
+    override val zonesState: MutableZonesState by mutableStateOf(zonesState)
     override val quickControlState: MutableQuickControlState by mutableStateOf(quickControlState)
     override var user: String by mutableStateOf("")
 }
 
-private class MutableAreasState : DashboardScreenState.AreasState {
+private class MutableZonesState : DashboardScreenState.ZonesState {
     override var condition: DashboardScreenState.Condition by mutableStateOf(DashboardScreenState.Condition.Loading)
-    override var areas: SnapshotStateMap<EntityIdentifier, DashboardScreenState.AreaState> = mutableStateMapOf()
+    override var zones: SnapshotStateMap<EntityIdentifier, DashboardScreenState.ZoneState> = mutableStateMapOf()
 }
 
-private class MutableAreaState(
-    area: Area,
-) : DashboardScreenState.AreaState {
-    override var area: Area by mutableStateOf(area)
+private class MutableZoneState(
+    zone: Zone,
+) : DashboardScreenState.ZoneState {
+    override var zone: Zone by mutableStateOf(zone)
     override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
 }
 

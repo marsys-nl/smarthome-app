@@ -2,13 +2,13 @@ package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.runtime.Stable
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 @Stable
 interface DashboardScreenState {
-    val areasState: AreasState
+    val zonesState: ZonesState
     val quickControlState: QuickControlState
     val user: String
 
@@ -20,14 +20,14 @@ interface DashboardScreenState {
     }
 
     @Stable
-    interface AreasState {
+    interface ZonesState {
         val condition: Condition
-        val areas: Map<EntityIdentifier, AreaState>
+        val zones: Map<EntityIdentifier, ZoneState>
     }
 
     @Stable
-    interface AreaState {
-        val area: Area
+    interface ZoneState {
+        val zone: Zone
         val entities: Map<EntityIdentifier, Entity<*>>
     }
 
@@ -42,15 +42,15 @@ interface DashboardScreenState {
 sealed class DashboardScreenAction(val key: String) {
     data object ChangeAppAppearance : DashboardScreenAction("ChangeAppAppearance")
 
-    data object NavigateToAreas : DashboardScreenAction("NavigateToAreas")
+    data object NavigateToZones : DashboardScreenAction("NavigateToZones")
 
     data class OpenEntityDetailModal(
         val entity: EntityIdentifier,
     ) : DashboardScreenAction("EditEntity[$entity]")
 
-    data class OpenAreaScreen(
-        val area: EntityIdentifier,
-    ) : DashboardScreenAction("OpenAreaScreen[$area]")
+    data class OpenZoneScreen(
+        val zone: EntityIdentifier,
+    ) : DashboardScreenAction("OpenZoneScreen[$zone]")
 
     data class ToggleEntityState(
         val entity: EntityIdentifier,

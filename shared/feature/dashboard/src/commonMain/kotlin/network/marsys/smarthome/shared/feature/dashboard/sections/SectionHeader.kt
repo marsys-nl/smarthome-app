@@ -64,14 +64,14 @@ private fun ScenesSectionHeaderPreview(
 
 @Preview
 @Composable
-private fun RoomsSectionHeaderPreview(
+private fun ZonesSectionHeaderPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
         SectionHeader(
-            title = "Rooms",
+            title = "Zones",
         ) {
             Row(
                 horizontalArrangement = Arrangement

@@ -7,7 +7,7 @@
     <string name="app_appearance_mode_dark_title">Donkere modus</string>
     <string name="app_appearance_mode_dark_description">Altijd de donkere modus gebruiken</string>
 
-    <string name="bottom_navigation_item_rooms">Kamers</string>
+    <string name="bottom_navigation_item_zones">Zones</string>
     <string name="bottom_navigation_item_scenes">Scènes</string>
     <string name="bottom_navigation_item_profile">Profiel</string>
 
