@@ -48,6 +48,10 @@ sealed class DashboardScreenAction(val key: String) {
         val entity: EntityIdentifier,
     ) : DashboardScreenAction("EditEntity[$entity]")
 
+    data class OpenAreaScreen(
+        val area: EntityIdentifier,
+    ) : DashboardScreenAction("OpenAreaScreen[$area]")
+
     data class ToggleEntityState(
         val entity: EntityIdentifier,
         val state: Boolean,

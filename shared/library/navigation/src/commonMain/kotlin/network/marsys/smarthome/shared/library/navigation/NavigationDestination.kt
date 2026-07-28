@@ -6,6 +6,7 @@ sealed interface NavigationDestination {
     sealed interface MainNavigationDestination : NavigationDestination
 
     data object Areas : MainNavigationDestination
+
     data object ChangeAppAppearanceModal : NavigationDestination
 
     data class EntityDetailModal(
