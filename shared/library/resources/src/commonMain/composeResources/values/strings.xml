@@ -8,7 +8,7 @@
     <string name="app_appearance_mode_dark_description">Always use dark mode</string>
 
     <string name="bottom_navigation_item_home" translatable="false">Home</string>
-    <string name="bottom_navigation_item_rooms">Rooms</string>
+    <string name="bottom_navigation_item_zones">Zones</string>
     <string name="bottom_navigation_item_scenes">Scenes</string>
     <string name="bottom_navigation_item_profile">Profile</string>
 

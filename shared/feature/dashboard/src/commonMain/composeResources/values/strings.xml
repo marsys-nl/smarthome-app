@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="areas_loading_description">Loading your areas...</string>
-    <string name="areas_empty_title">No areas available</string>
-    <string name="areas_empty_description">Add your first area to start managing it from this dashboard.</string>
-
     <string name="dashboard_greeting_appendix" translatable="false">%1$s,</string>
     <string name="dashboard_greeting_afternoon">Good afternoon</string>
     <string name="dashboard_greeting_evening">Good evening</string>
@@ -19,4 +15,11 @@
     <string name="quick_control_error_retry">Retry</string>
     <string name="quick_control_group_button_title">Group by type</string>
     <string name="quick_control_ungroup_button_title">Ungroup</string>
+
+    <string name="zones_section_title">Zones</string>
+    <string name="zones_see_all">See all</string>
+    <string name="zones_loading_description">Loading your zones...</string>
+    <string name="zones_empty_title">No zones available</string>
+    <string name="zones_empty_description">Add your first zone to start managing it from this dashboard.</string>
+    <string name="zones_active_devices">%1$s of %2$s entities</string>
 </resources>

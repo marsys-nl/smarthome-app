@@ -24,41 +24,41 @@ internal val smartHomeApplicationModule = module {
 
     single<TranslationCache> {
         InMemoryTranslationCache(
-            translations = DemoEntityTranslations + AreaTranslations,
+            translations = DemoEntityTranslations + ZoneTranslations,
         )
     }
 }
 
-private val AreaTranslations = mapOf(
-    "area.bathroom" to mapOf(
+private val ZoneTranslations = mapOf(
+    "zone.bathroom" to mapOf(
         "en" to "Bathroom",
         "nl" to "Badkamer",
     ),
-    "area.bedroom" to mapOf(
+    "zone.bedroom" to mapOf(
         "en" to "Bedroom",
         "nl" to "Slaapkamer",
     ),
-    "area.garage" to mapOf(
+    "zone.garage" to mapOf(
         "en" to "Garage",
         "nl" to "Garage",
     ),
-    "area.hallway" to mapOf(
+    "zone.hallway" to mapOf(
         "en" to "Hallway",
         "nl" to "Hal",
     ),
-    "area.kitchen" to mapOf(
+    "zone.kitchen" to mapOf(
         "en" to "Kitchen",
         "nl" to "Keuken",
     ),
-    "area.living-room" to mapOf(
+    "zone.living-room" to mapOf(
         "en" to "Living room",
         "nl" to "Woonkamer",
     ),
-    "area.nursery" to mapOf(
+    "zone.nursery" to mapOf(
         "en" to "Nursery",
         "nl" to "Babykamer",
     ),
-    "area.office" to mapOf(
+    "zone.office" to mapOf(
         "en" to "Office",
         "nl" to "Kantoor",
     ),

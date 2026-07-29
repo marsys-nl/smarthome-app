@@ -28,9 +28,9 @@ import network.marsys.smarthome.shared.feature.profile.ProfileScreenView
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.icons.Grid3x3
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.SquareDashed
 import network.marsys.smarthome.shared.library.design.icons.User
 import network.marsys.smarthome.shared.library.design.icons.Zap
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
@@ -40,8 +40,8 @@ import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_home
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_profile
-import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_rooms
 import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_scenes
+import network.marsys.smarthome.shared.library.resources.bottom_navigation_item_zones
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.modal.appearance.AppAppearanceModalContent
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModal
@@ -52,7 +52,7 @@ private val config = SavedStateConfiguration {
     serializersModule = SerializersModule {
         polymorphic(SmartHomeScreen::class) {
             subclass(SmartHomeScreen.Dashboard::class, SmartHomeScreen.Dashboard.serializer())
-            subclass(SmartHomeScreen.Rooms::class, SmartHomeScreen.Rooms.serializer())
+            subclass(SmartHomeScreen.Zones::class, SmartHomeScreen.Zones.serializer())
             subclass(SmartHomeScreen.Scenes::class, SmartHomeScreen.Scenes.serializer())
             subclass(SmartHomeScreen.Profile::class, SmartHomeScreen.Profile.serializer())
 
@@ -94,12 +94,12 @@ internal fun MainScreenNavigation(
                 }
             }
 
-            entry<SmartHomeScreen.Rooms> {
+            entry<SmartHomeScreen.Zones> {
                 MainScreenNavigationItemWrapper(
                     backStack = backStack,
                 ) {
                     MainScreenPlaceholderScreenView(
-                        screen = SmartHomeScreen.Rooms,
+                        screen = SmartHomeScreen.Zones,
                     )
                 }
             }
@@ -199,8 +199,8 @@ private fun handleNavigationDestination(target: NavigationDestination) {
     }
 
     backStack += when (target) {
-        is NavigationDestination.Areas ->
-            SmartHomeScreen.Rooms
+        is NavigationDestination.Zones ->
+            SmartHomeScreen.Zones
 
         is NavigationDestination.ChangeAppAppearanceModal ->
             SmartHomeScreen.AppAppearance
@@ -213,7 +213,7 @@ private fun handleNavigationDestination(target: NavigationDestination) {
 @Composable
 private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHomeScreen>.() -> Unit {
     val homeNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_home)
-    val roomsNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_rooms)
+    val zonesNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_zones)
     val scenesNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_scenes)
     val profileNavigationItemTextResource = stringResource(SmartHomeRes.string.bottom_navigation_item_profile)
 
@@ -225,9 +225,9 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
         )
 
         item(
-            screen = SmartHomeScreen.Rooms,
-            text = roomsNavigationItemTextResource,
-            icon = Icons.Grid3x3,
+            screen = SmartHomeScreen.Zones,
+            text = zonesNavigationItemTextResource,
+            icon = Icons.SquareDashed,
         )
 
         item(

@@ -118,7 +118,7 @@ private fun SectionLoadingIndicatorPreview(
         theme = theme,
     ) {
         SectionLoadingIndicator(
-            message = "Loading your areas...",
+            message = "Loading your zones...",
         )
     }
 }

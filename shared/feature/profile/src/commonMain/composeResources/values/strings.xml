@@ -16,7 +16,7 @@
     <string name="menu_item_logout_description">Sign out of your account</string>
 
     <string name="reset_onboarding_modal_title">Reset onboarding?</string>
-    <string name="reset_onboarding_modal_description">You'll go through the setup wizard again from the beginning. Your connected devices and rooms won't be affected, but the connection to the backend will be lost and you'll need to establish that again.</string>
+    <string name="reset_onboarding_modal_description">You'll go through the setup wizard again from the beginning. Your connected devices and zones won't be affected, but the connection to the backend will be lost and you'll need to establish that again.</string>
     <string name="reset_onboarding_modal_accept">Reset</string>
 
     <string name="logout_modal_title">Log out?</string>

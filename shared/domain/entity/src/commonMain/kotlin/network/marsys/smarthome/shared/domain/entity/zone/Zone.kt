@@ -1,8 +1,8 @@
-package network.marsys.smarthome.shared.domain.entity.area
+package network.marsys.smarthome.shared.domain.entity.zone
 
 import network.marsys.smarthome.domain.EntityIdentifier
 
-data class Area(
+data class Zone(
     val identifier: EntityIdentifier,
     val icon: Icon,
 ) {

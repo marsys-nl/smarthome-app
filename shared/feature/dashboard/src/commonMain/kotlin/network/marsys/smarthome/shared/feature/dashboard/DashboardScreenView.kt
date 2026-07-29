@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.shared.feature.dashboard.components.DashboardHeader
-import network.marsys.smarthome.shared.feature.dashboard.sections.AreasSection
-import network.marsys.smarthome.shared.feature.dashboard.sections.AreasSectionPreviewData
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSection
 import network.marsys.smarthome.shared.feature.dashboard.sections.QuickControlSectionPreviewData
+import network.marsys.smarthome.shared.feature.dashboard.sections.ZonesSection
+import network.marsys.smarthome.shared.feature.dashboard.sections.ZonesSectionPreviewData
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -103,8 +103,8 @@ private fun SinglePaneDashboard(
         verticalArrangement = Arrangement
             .spacedBy(32.dp),
     ) {
-        AreasSection(
-            state = state.areasState,
+        ZonesSection(
+            state = state.zonesState,
             onAction = onAction,
         )
 
@@ -125,8 +125,8 @@ private fun SplitPaneDashboard(
         modifier = modifier
             .fillMaxWidth(),
         left = {
-            AreasSection(
-                state = state.areasState,
+            ZonesSection(
+                state = state.zonesState,
                 onAction = onAction,
             )
         },
@@ -163,12 +163,12 @@ private fun DashboardScreenViewPreview(
 
 internal object DashboardScreenPreviewData {
     fun loaded(
-        areasState: DashboardScreenState.AreasState =
-            AreasSectionPreviewData.loaded(),
+        zonesState: DashboardScreenState.ZonesState =
+            ZonesSectionPreviewData.loaded(),
         quickControlState: DashboardScreenState.QuickControlState =
             QuickControlSectionPreviewData.loaded(),
     ): DashboardScreenState = object : DashboardScreenState {
-        override val areasState: DashboardScreenState.AreasState = areasState
+        override val zonesState: DashboardScreenState.ZonesState = zonesState
         override val quickControlState: DashboardScreenState.QuickControlState = quickControlState
         override val user: String = "John"
     }

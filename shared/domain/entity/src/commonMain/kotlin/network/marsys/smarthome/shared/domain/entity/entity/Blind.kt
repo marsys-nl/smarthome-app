@@ -1,16 +1,16 @@
 package network.marsys.smarthome.shared.domain.entity.entity
 
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Movement
 import network.marsys.smarthome.shared.domain.entity.capability.Opened
 import network.marsys.smarthome.shared.domain.entity.capability.Position
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 
 data class Blind(
     override val identifier: EntityIdentifier,
     override val state: State = State.Unknown,
-    override val area: Area? = null,
+    override val zone: Zone? = null,
 ) : Cover<Blind.State>() {
     override val orientation: Orientation
         get() = Orientation.Vertical

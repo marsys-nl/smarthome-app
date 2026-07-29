@@ -16,7 +16,6 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
@@ -44,6 +43,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Shutter
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
@@ -56,11 +56,11 @@ class DemoEntityRepository(
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
 
-    override val areas: Flow<Collection<Area>> =
+    override val zones: Flow<Collection<Zone>> =
         state
             .map { entityMap ->
                 entityMap.values
-                    .mapNotNull { it.area }
+                    .mapNotNull { it.zone }
                     .distinct()
             }
             .distinctUntilChanged()
@@ -298,38 +298,38 @@ class DemoEntityRepository(
     }
 }
 
-val DemoAreas = listOf(
-    Area(
-        identifier = EntityIdentifier("area.bathroom"),
-        icon = Area.Icon.Bathroom,
+val DemoZones = listOf(
+    Zone(
+        identifier = EntityIdentifier("zone.bathroom"),
+        icon = Zone.Icon.Bathroom,
     ),
-    Area(
-        identifier = EntityIdentifier("area.bedroom"),
-        icon = Area.Icon.Bedroom,
+    Zone(
+        identifier = EntityIdentifier("zone.bedroom"),
+        icon = Zone.Icon.Bedroom,
     ),
-    Area(
-        identifier = EntityIdentifier("area.garage"),
-        icon = Area.Icon.Garage,
+    Zone(
+        identifier = EntityIdentifier("zone.garage"),
+        icon = Zone.Icon.Garage,
     ),
-    Area(
-        identifier = EntityIdentifier("area.hallway"),
-        icon = Area.Icon.Other,
+    Zone(
+        identifier = EntityIdentifier("zone.hallway"),
+        icon = Zone.Icon.Other,
     ),
-    Area(
-        identifier = EntityIdentifier("area.kitchen"),
-        icon = Area.Icon.Kitchen,
+    Zone(
+        identifier = EntityIdentifier("zone.kitchen"),
+        icon = Zone.Icon.Kitchen,
     ),
-    Area(
-        identifier = EntityIdentifier("area.living-room"),
-        icon = Area.Icon.LivingRoom,
+    Zone(
+        identifier = EntityIdentifier("zone.living-room"),
+        icon = Zone.Icon.LivingRoom,
     ),
-    Area(
-        identifier = EntityIdentifier("area.office"),
-        icon = Area.Icon.Office,
+    Zone(
+        identifier = EntityIdentifier("zone.office"),
+        icon = Zone.Icon.Office,
     ),
-    Area(
-        identifier = EntityIdentifier("area.nursery"),
-        icon = Area.Icon.Bedroom,
+    Zone(
+        identifier = EntityIdentifier("zone.nursery"),
+        icon = Zone.Icon.Bedroom,
     ),
 )
 
@@ -341,21 +341,21 @@ val DemoEntities: List<Entity<*>> = listOf(
             onOff = required(OnOff(current = true)),
             brightness = optional(Brightness(80.percent)),
         ),
-        area = area("area.bedroom"),
+        zone = zone("zone.bedroom"),
     ),
     Light(
         identifier = EntityIdentifier("light.kitchen-light"),
         state = Light.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.kitchen"),
+        zone = zone("zone.kitchen"),
     ),
     Light(
         identifier = EntityIdentifier("light.ceiling-light"),
         state = Light.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.hallway"),
+        zone = zone("zone.hallway"),
     ),
     // Thermostats
     Thermostat(
@@ -368,7 +368,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 target = required(TargetTemperature(current = 22.celsius)),
             ),
         ),
-        area = area("area.office"),
+        zone = zone("zone.office"),
     ),
     Thermostat(
         identifier = EntityIdentifier("thermostat.main-bedroom"),
@@ -380,7 +380,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 target = required(TargetTemperature(current = 22.celsius)),
             ),
         ),
-        area = area("area.bedroom"),
+        zone = zone("zone.bedroom"),
     ),
     Thermostat(
         identifier = EntityIdentifier("thermostat.nursery"),
@@ -402,7 +402,7 @@ val DemoEntities: List<Entity<*>> = listOf(
             windowDetection = optional(WindowDetection(current = true)),
             scheduledMode = optional(ScheduledMode(current = false)),
         ),
-        area = area("area.nursery"),
+        zone = zone("zone.nursery"),
     ),
     // Plugs
     SmartPlug(
@@ -410,14 +410,14 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = SmartPlug.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.office"),
+        zone = zone("zone.office"),
     ),
     SmartPlug(
         identifier = EntityIdentifier("plug.smart-tv"),
         state = SmartPlug.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.living-room"),
+        zone = zone("zone.living-room"),
     ),
     // Covers
     Blind(
@@ -428,7 +428,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 movement = optional(Movement(current = Movement.Direction.Idle)),
             ),
         ),
-        area = area("area.living-room"),
+        zone = zone("zone.living-room"),
     ),
     Blind(
         identifier = EntityIdentifier("blind.office"),
@@ -437,7 +437,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 opened = required(Opened(current = false)),
             ),
         ),
-        area = area("area.office"),
+        zone = zone("zone.office"),
     ),
     Shutter(
         identifier = EntityIdentifier("shutter.main-bedroom"),
@@ -446,7 +446,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 position = required(Position(current = 50.percent)),
             ),
         ),
-        area = area("area.bedroom"),
+        zone = zone("zone.bedroom"),
     ),
     Curtain(
         identifier = EntityIdentifier("curtain.kitchen"),
@@ -456,7 +456,7 @@ val DemoEntities: List<Entity<*>> = listOf(
                 movement = optional(Movement(current = Movement.Direction.Idle)),
             ),
         ),
-        area = area("area.kitchen"),
+        zone = zone("zone.kitchen"),
     ),
     // Fans
     Fan(
@@ -464,13 +464,13 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Fan.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.bedroom"),
+        zone = zone("zone.bedroom"),
     ),
     // Speakers
     Speaker(
         identifier = EntityIdentifier("speaker.kitchen"),
         state = Speaker.State.Unknown,
-        area = area("area.kitchen"),
+        zone = zone("zone.kitchen"),
     ),
     // Cameras
     Camera(
@@ -478,7 +478,7 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Camera.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.hallway"),
+        zone = zone("zone.hallway"),
     ),
     // Locks
     Lock(
@@ -486,9 +486,9 @@ val DemoEntities: List<Entity<*>> = listOf(
         state = Lock.State.Known(
             onOff = required(OnOff(current = true)),
         ),
-        area = area("area.hallway"),
+        zone = zone("zone.hallway"),
     ),
 )
 
-private fun area(identifier: String): Area? =
-    DemoAreas.firstOrNull { it.identifier.value == identifier }
+private fun zone(identifier: String): Zone? =
+    DemoZones.firstOrNull { it.identifier.value == identifier }

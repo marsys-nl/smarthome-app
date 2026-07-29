@@ -40,15 +40,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.area.Area
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_empty_description
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_empty_title
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.areas_loading_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_active_devices
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_title
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_loading_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_section_title
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_see_all
 import network.marsys.smarthome.shared.library.design.EntityCardDefaults
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -79,8 +82,8 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 import network.marsys.smarthome.shared.library.i18n.stringResource
 
 @Composable
-fun AreasSection(
-    state: DashboardScreenState.AreasState,
+fun ZonesSection(
+    state: DashboardScreenState.ZonesState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -89,21 +92,21 @@ fun AreasSection(
         verticalArrangement = Arrangement
             .spacedBy(16.dp),
     ) {
-        AreasSectionHeader(
+        ZonesSectionHeader(
             condition = state.condition,
             onAction = onAction,
         )
 
         when (state.condition) {
             DashboardScreenState.Condition.Loading ->
-                AreasSectionLoadingContent()
+                ZonesSectionLoadingContent()
 
             DashboardScreenState.Condition.Empty ->
-                AreasSectionEmptyContent()
+                ZonesSectionEmptyContent()
 
             DashboardScreenState.Condition.Success ->
-                AreasSectionLoadedContent(
-                    areas = state.areas,
+                ZonesSectionLoadedContent(
+                    zones = state.zones,
                     onAction = onAction,
                 )
 
@@ -113,7 +116,7 @@ fun AreasSection(
 }
 
 @Composable
-private fun AreasSectionLoadingContent(
+private fun ZonesSectionLoadingContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -121,7 +124,7 @@ private fun AreasSectionLoadingContent(
     ) {
         @OptIn(ExperimentalFoundationStyleApi::class)
         SectionLoadingIndicator(
-            message = stringResource(Res.string.areas_loading_description),
+            message = stringResource(Res.string.zones_loading_description),
         )
 
         @OptIn(ExperimentalGridApi::class)
@@ -141,7 +144,7 @@ private fun AreasSectionLoadingContent(
 private const val LOADING_CARD_COUNT = 4
 
 @Composable
-private fun AreasSectionEmptyContent(
+private fun ZonesSectionEmptyContent(
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -169,14 +172,14 @@ private fun AreasSectionEmptyContent(
             )
 
             Text(
-                text = stringResource(Res.string.areas_empty_title),
+                text = stringResource(Res.string.zones_empty_title),
                 style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
             )
 
             Text(
-                text = stringResource(Res.string.areas_empty_description),
+                text = stringResource(Res.string.zones_empty_description),
                 style = TextDefaults.description then TextStyles.centered,
                 minLines = 2,
             )
@@ -185,9 +188,9 @@ private fun AreasSectionEmptyContent(
 }
 
 @Composable
-private fun AreasSectionLoadedContent(
+private fun ZonesSectionLoadedContent(
     @Suppress("UnstableCollections")
-    areas: Map<EntityIdentifier, DashboardScreenState.AreaState>,
+    zones: Map<EntityIdentifier, DashboardScreenState.ZoneState>,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -196,9 +199,9 @@ private fun AreasSectionLoadedContent(
         modifier = modifier,
         config = dashboardSectionGridConfig,
     ) {
-        areas.forEach { (identifier, item) ->
+        zones.forEach { (identifier, item) ->
             key(identifier) {
-                AreasSectionAreaCard(
+                ZonesSectionZoneCard(
                     state = item,
                     onAction = onAction,
                 )
@@ -209,19 +212,19 @@ private fun AreasSectionLoadedContent(
 
 @OptIn(ExperimentalGridApi::class, ExperimentalFoundationStyleApi::class)
 @Composable
-private fun AreasSectionAreaCard(
-    state: DashboardScreenState.AreaState,
+private fun ZonesSectionZoneCard(
+    state: DashboardScreenState.ZoneState,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val clickModifier = remember(state.area.identifier) {
+    val clickModifier = remember(state.zone.identifier) {
         Modifier.clickable(
             interactionSource = null,
             indication = null,
         ) {
             onAction.invoke(
-                DashboardScreenAction.OpenAreaScreen(
-                    area = state.area.identifier,
+                DashboardScreenAction.OpenZoneScreen(
+                    zone = state.zone.identifier,
                 ),
             )
         }
@@ -242,13 +245,13 @@ private fun AreasSectionAreaCard(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            AreaIcon(
-                area = state.area,
+            ZoneIcon(
+                zone = state.zone,
                 active = active,
             )
 
             Text(
-                text = stringResource(state.area.identifier),
+                text = stringResource(state.zone.identifier),
                 style = TextDefaults.header,
                 modifier = Modifier
                     .padding(top = 8.dp),
@@ -256,7 +259,11 @@ private fun AreasSectionAreaCard(
             )
 
             Text(
-                text = "${active} of ${total} devices",
+                text = stringResource(
+                    Res.string.zones_active_devices,
+                    active,
+                    total,
+                ),
                 style = TextDefaults.description,
                 modifier = Modifier
                     .padding(top = 4.dp),
@@ -264,7 +271,7 @@ private fun AreasSectionAreaCard(
         }
 
         if (active > 0) {
-            ActiveAreaIndicator(
+            ActiveZoneIndicator(
                 modifier = Modifier
                     .align(Alignment.BottomEnd),
             )
@@ -273,8 +280,8 @@ private fun AreasSectionAreaCard(
 }
 
 @Composable
-private fun AreaIcon(
-    area: Area,
+private fun ZoneIcon(
+    zone: Zone,
     active: Int,
     modifier: Modifier = Modifier,
 ) {
@@ -291,7 +298,7 @@ private fun AreaIcon(
     }
 
     Icon(
-        icon = areaIcon(area.icon),
+        icon = determineZoneIcon(zone.icon),
         modifier = modifier
             .padding(bottom = 16.dp)
             .clip(RoundedCornerShape(16.dp))
@@ -302,18 +309,18 @@ private fun AreaIcon(
     )
 }
 
-private fun areaIcon(icon: Area.Icon) = when (icon) {
-    Area.Icon.Bathroom -> Icons.Bath
-    Area.Icon.Bedroom -> Icons.Bed
-    Area.Icon.Garage -> Icons.Car
-    Area.Icon.Kitchen -> Icons.ChefHat
-    Area.Icon.LivingRoom -> Icons.Sofa
-    Area.Icon.Office -> Icons.Briefcase
-    Area.Icon.Other -> Icons.Component
+private fun determineZoneIcon(icon: Zone.Icon) = when (icon) {
+    Zone.Icon.Bathroom -> Icons.Bath
+    Zone.Icon.Bedroom -> Icons.Bed
+    Zone.Icon.Garage -> Icons.Car
+    Zone.Icon.Kitchen -> Icons.ChefHat
+    Zone.Icon.LivingRoom -> Icons.Sofa
+    Zone.Icon.Office -> Icons.Briefcase
+    Zone.Icon.Other -> Icons.Component
 }
 
 @Composable
-private fun ActiveAreaIndicator(
+private fun ActiveZoneIndicator(
     modifier: Modifier = Modifier,
 ) {
     val transition = rememberInfiniteTransition("blinking-indicator")
@@ -341,13 +348,13 @@ private fun ActiveAreaIndicator(
 }
 
 @Composable
-private fun AreasSectionHeader(
+private fun ZonesSectionHeader(
     condition: DashboardScreenState.Condition,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     SectionHeader(
-        title = "Areas",
+        title = stringResource(Res.string.zones_section_title),
         modifier = modifier,
     ) {
         val interactionSource = remember { MutableInteractionSource() }
@@ -361,7 +368,7 @@ private fun AreasSectionHeader(
                 @OptIn(ExperimentalFoundationStyleApi::class)
                 Button(
                     onClick = {
-                        onAction.invoke(DashboardScreenAction.NavigateToAreas)
+                        onAction.invoke(DashboardScreenAction.NavigateToZones)
                     },
                     style = ButtonStyle.text(
                         pressedContent = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
@@ -375,7 +382,7 @@ private fun AreasSectionHeader(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "See all",
+                            text = stringResource(Res.string.zones_see_all),
                             style = TextDefaults.normal then Style {
                                 fontWeight(FontWeight.W500)
                             },
@@ -398,14 +405,14 @@ private fun AreasSectionHeader(
 
 @Preview
 @Composable
-private fun AreasSectionEmptyPreview(
+private fun ZonesSectionEmptyPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        AreasSection(
-            state = AreasSectionPreviewData.empty(),
+        ZonesSection(
+            state = ZonesSectionPreviewData.empty(),
             onAction = {},
         )
     }
@@ -413,14 +420,14 @@ private fun AreasSectionEmptyPreview(
 
 @Preview
 @Composable
-private fun AreasSectionErrorPreview(
+private fun ZonesSectionErrorPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        AreasSection(
-            state = AreasSectionPreviewData.error(),
+        ZonesSection(
+            state = ZonesSectionPreviewData.error(),
             onAction = {},
         )
     }
@@ -428,14 +435,14 @@ private fun AreasSectionErrorPreview(
 
 @Preview
 @Composable
-private fun AreasSectionLoadedPreview(
+private fun ZonesSectionLoadedPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        AreasSection(
-            state = AreasSectionPreviewData.loaded(),
+        ZonesSection(
+            state = ZonesSectionPreviewData.loaded(),
             onAction = {},
         )
     }
@@ -443,37 +450,37 @@ private fun AreasSectionLoadedPreview(
 
 @Preview
 @Composable
-private fun AreasSectionLoadingPreview(
+private fun ZonesSectionLoadingPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        AreasSection(
-            state = AreasSectionPreviewData.loading(),
+        ZonesSection(
+            state = ZonesSectionPreviewData.loading(),
             onAction = {},
         )
     }
 }
 
-internal object AreasSectionPreviewData {
-    fun empty() = object : DashboardScreenState.AreasState {
-        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
+internal object ZonesSectionPreviewData {
+    fun empty() = object : DashboardScreenState.ZonesState {
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Empty
     }
 
-    fun error() = object : DashboardScreenState.AreasState {
-        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
+    fun error() = object : DashboardScreenState.ZonesState {
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Error
     }
 
-    fun loaded() = object : DashboardScreenState.AreasState {
-        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
+    fun loaded() = object : DashboardScreenState.ZonesState {
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Success
     }
 
-    fun loading() = object : DashboardScreenState.AreasState {
-        override val areas: Map<EntityIdentifier, DashboardScreenState.AreaState> = emptyMap()
+    fun loading() = object : DashboardScreenState.ZonesState {
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
     }
 }
