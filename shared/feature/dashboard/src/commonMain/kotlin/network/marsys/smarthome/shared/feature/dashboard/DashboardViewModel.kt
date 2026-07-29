@@ -119,21 +119,24 @@ private fun launchZoneMutations(
         ) { zones, entities ->
             val current = state.zonesState.zones
 
-            zones.forEach { zone ->
-                if (!current.containsKey(zone.identifier)) {
-                    current[zone.identifier] = MutableZoneState(zone = zone)
+            zones
+                .take(MAX_ZONES)
+                .forEach { zone ->
+                    if (!current.containsKey(zone.identifier)) {
+                        current[zone.identifier] = MutableZoneState(zone = zone)
+                    }
+
+                    val stateEntities = current[zone.identifier]
+                        ?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
+                        ?: return@forEach
+
+                    stateEntities.clear()
+                    stateEntities.putAll(
+                        from = entities
+                            .filter { entity -> entity.zone?.identifier == zone.identifier }
+                            .associateBy { entity -> entity.identifier },
+                    )
                 }
-
-                val stateEntities = current[zone.identifier]?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
-                    ?: return@forEach
-
-                stateEntities.clear()
-                stateEntities.putAll(
-                    from = entities
-                        .filter { entity -> entity.zone?.identifier == zone.identifier }
-                        .associateBy { entity -> entity.identifier },
-                )
-            }
 
             val removed = current.keys - zones.map { it.identifier }.toSet()
             removed.forEach(current::remove)
@@ -220,3 +223,5 @@ private class MutableQuickControlState : DashboardScreenState.QuickControlState 
     override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
     override var groupedEntitiesByType: Boolean by mutableStateOf(false)
 }
+
+const val MAX_ZONES = 6
