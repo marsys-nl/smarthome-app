@@ -200,13 +200,16 @@ private fun handleNavigationDestination(target: NavigationDestination) {
 
     backStack += when (target) {
         is NavigationDestination.Zones ->
-            SmartHomeScreen.Zones
+            listOf(SmartHomeScreen.Zones)
+
+        is NavigationDestination.Zone ->
+            listOf(SmartHomeScreen.Zones)
 
         is NavigationDestination.ChangeAppAppearanceModal ->
-            SmartHomeScreen.AppAppearance
+            listOf(SmartHomeScreen.AppAppearance)
 
         is NavigationDestination.EntityDetailModal ->
-            SmartHomeScreen.EntityDetails(target.entity)
+            listOf(SmartHomeScreen.EntityDetails(target.entity))
     }
 }
 

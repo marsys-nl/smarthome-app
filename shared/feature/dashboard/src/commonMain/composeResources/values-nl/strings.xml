@@ -20,5 +20,8 @@
     <string name="zones_loading_description">Bezig met laden van uw zones...</string>
     <string name="zones_empty_title">Geen zones beschikbaar</string>
     <string name="zones_empty_description">Voeg uw eerste zone toe om deze vanaf dit dashboard te kunnen beheren.</string>
+    <string name="zones_error_title">Kon zones niet laden</string>
+    <string name="zones_error_description">Er is iets misgegaan bij het ophalen van uw zones. Probeer het opnieuw.</string>
+    <string name="zones_error_retry">Probeer opnieuw</string>
     <string name="zones_active_devices">%1$s van %2$s entiteiten</string>
 </resources>

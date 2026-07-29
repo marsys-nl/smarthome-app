@@ -7,6 +7,8 @@ sealed interface NavigationDestination {
 
     data object Zones : MainNavigationDestination
 
+    data class Zone(val zone: EntityIdentifier) : MainNavigationDestination
+
     data object ChangeAppAppearanceModal : NavigationDestination
 
     data class EntityDetailModal(

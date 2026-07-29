@@ -21,5 +21,8 @@
     <string name="zones_loading_description">Loading your zones...</string>
     <string name="zones_empty_title">No zones available</string>
     <string name="zones_empty_description">Add your first zone to start managing it from this dashboard.</string>
+    <string name="zones_error_title">Couldn't load zones</string>
+    <string name="zones_error_description">Something went wrong while fetching your zones. Please try again.</string>
+    <string name="zones_error_retry">Retry</string>
     <string name="zones_active_devices">%1$s of %2$s entities</string>
 </resources>
