@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -43,7 +44,9 @@ import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
+import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityData
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
+import network.marsys.smarthome.shared.feature.dashboard.MAX_ZONES
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_active_devices
@@ -201,9 +204,22 @@ private fun ZonesSectionLoadedContent(
     ) {
         zones.forEach { (identifier, item) ->
             key(identifier) {
+                val clickModifier = remember(item.zone.identifier) {
+                    Modifier.clickable(
+                        interactionSource = null,
+                        indication = null,
+                    ) {
+                        onAction.invoke(
+                            DashboardScreenAction.OpenZoneScreen(
+                                zone = item.zone.identifier,
+                            ),
+                        )
+                    }
+                }
+
                 ZonesSectionZoneCard(
                     state = item,
-                    onAction = onAction,
+                    modifier = clickModifier,
                 )
             }
         }
@@ -214,67 +230,57 @@ private fun ZonesSectionLoadedContent(
 @Composable
 private fun ZonesSectionZoneCard(
     state: DashboardScreenState.ZoneState,
-    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val clickModifier = remember(state.zone.identifier) {
-        Modifier.clickable(
-            interactionSource = null,
-            indication = null,
-        ) {
-            onAction.invoke(
-                DashboardScreenAction.OpenZoneScreen(
-                    zone = state.zone.identifier,
-                ),
-            )
-        }
-    }
-
     val total = state.entities.size
     val active = state.entities.values.count {
         it is Entity.Activatable && it.active
     }
 
     Card(
-        modifier = modifier
-            .then(clickModifier),
+        modifier = modifier,
         contentPadding = EntityCardDefaults.contentPadding(),
         border = Border.Solid(1.dp),
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxSize(),
         ) {
-            ZoneIcon(
-                zone = state.zone,
-                active = active,
-            )
-
-            Text(
-                text = stringResource(state.zone.identifier),
-                style = TextDefaults.header,
+            Column(
                 modifier = Modifier
-                    .padding(top = 8.dp),
-                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-            )
+                    .fillMaxWidth(),
+            ) {
+                ZoneIcon(
+                    zone = state.zone,
+                    active = active,
+                )
 
-            Text(
-                text = stringResource(
-                    Res.string.zones_active_devices,
-                    active,
-                    total,
-                ),
-                style = TextDefaults.description,
-                modifier = Modifier
-                    .padding(top = 4.dp),
-            )
-        }
+                Text(
+                    text = stringResource(state.zone.identifier),
+                    style = TextDefaults.header,
+                    modifier = Modifier
+                        .padding(top = 8.dp),
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+                )
 
-        if (active > 0) {
-            ActiveZoneIndicator(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd),
-            )
+                Text(
+                    text = stringResource(
+                        Res.string.zones_active_devices,
+                        active,
+                        total,
+                    ),
+                    style = TextDefaults.description,
+                    modifier = Modifier
+                        .padding(top = 4.dp),
+                )
+            }
+
+            if (active > 0) {
+                ActiveZoneIndicator(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd),
+                )
+            }
         }
     }
 }
@@ -475,7 +481,18 @@ internal object ZonesSectionPreviewData {
     }
 
     fun loaded() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DashboardScreenEntityData.zones
+            .take(MAX_ZONES)
+            .associateBy { it.identifier }
+            .mapValues { (_, zone) ->
+                object : DashboardScreenState.ZoneState {
+                    override val zone: Zone = zone
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DashboardScreenEntityData.entities
+                        .filter { it.zone?.identifier == zone.identifier }
+                        .associateBy { it.identifier }
+                }
+            }
+
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Success
     }
 
