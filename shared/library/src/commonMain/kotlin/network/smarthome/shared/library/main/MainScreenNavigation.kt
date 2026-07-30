@@ -25,6 +25,7 @@ import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
 import network.marsys.smarthome.shared.feature.profile.ProfileScreenView
+import network.marsys.smarthome.shared.feature.zones.ZonesScreenView
 import network.marsys.smarthome.shared.library.design.component.BottomNavigation
 import network.marsys.smarthome.shared.library.design.component.BottomNavigationItemProviderScope
 import network.marsys.smarthome.shared.library.design.component.Text
@@ -98,9 +99,7 @@ internal fun MainScreenNavigation(
                 MainScreenNavigationItemWrapper(
                     backStack = backStack,
                 ) {
-                    MainScreenPlaceholderScreenView(
-                        screen = SmartHomeScreen.Zones,
-                    )
+                    ZonesScreenView()
                 }
             }
 
