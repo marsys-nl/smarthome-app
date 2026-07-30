@@ -136,7 +136,7 @@ fun QuickControlSection(
                 QuickControlSectionEmptyContent()
 
             DashboardScreenState.Condition.Error ->
-                QuickControlSectionErrorContent()
+                QuickControlSectionErrorContent(onAction = onAction)
 
             DashboardScreenState.Condition.Success ->
                 QuickControlSectionLoadedContent(
@@ -221,6 +221,7 @@ private fun QuickControlSectionEmptyContent(
 
 @Composable
 private fun QuickControlSectionErrorContent(
+    onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -270,7 +271,9 @@ private fun QuickControlSectionErrorContent(
             ErrorIconButton(
                 text = stringResource(Res.string.quick_control_error_retry),
                 icon = Icons.Reset,
-                onClick = {},
+                onClick = {
+                    onAction.invoke(DashboardScreenAction.RetryQuickControl)
+                },
             )
         }
     }

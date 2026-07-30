@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -49,9 +50,15 @@ import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.MAX_ZONES
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_retry
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_active_devices
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_description
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_title
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_error_description
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_error_retry
+import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_error_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_loading_description
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_section_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_see_all
@@ -77,7 +84,9 @@ import network.marsys.smarthome.shared.library.design.icons.ChefHat
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.Sofa
+import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -107,13 +116,14 @@ fun ZonesSection(
             DashboardScreenState.Condition.Empty ->
                 ZonesSectionEmptyContent()
 
+            DashboardScreenState.Condition.Error ->
+                ZonesSectionErrorContent(onAction = onAction)
+
             DashboardScreenState.Condition.Success ->
                 ZonesSectionLoadedContent(
                     zones = state.zones,
                     onAction = onAction,
                 )
-
-            else -> Unit
         }
     }
 }
@@ -185,6 +195,66 @@ private fun ZonesSectionEmptyContent(
                 text = stringResource(Res.string.zones_empty_description),
                 style = TextDefaults.description then TextStyles.centered,
                 minLines = 2,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ZonesSectionErrorContent(
+    onAction: (DashboardScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorPrimary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary],
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderErrorSubtle],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Solid(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.TriangleAlert,
+                colors = CardDefaults.colors(
+                    backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorSecondary]),
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundErrorPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.zones_error_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 6.dp),
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+            )
+
+            Text(
+                text = stringResource(Res.string.zones_error_description),
+                style = TextDefaults.description then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 20.dp),
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                minLines = 2,
+            )
+
+            ErrorIconButton(
+                text = stringResource(Res.string.zones_error_retry),
+                icon = Icons.Reset,
+                onClick = {
+                    onAction.invoke(DashboardScreenAction.RetryZones)
+                },
             )
         }
     }

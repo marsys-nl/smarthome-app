@@ -8,6 +8,7 @@ import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -37,12 +38,15 @@ class DashboardViewModel(
     DashboardStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableDashboardScreenState(),
         producer = { state, actions, emitter ->
-            launchZoneMutations(
+            var zoneMutationJob: Job?
+            var entityMutationJob: Job?
+
+            zoneMutationJob = launchZoneMutations(
                 state = state,
                 entityRepository = entityRepository,
             )
 
-            launchEntityMutations(
+            entityMutationJob = launchEntityMutations(
                 state = state,
                 entityRepository = entityRepository,
             )
@@ -84,9 +88,24 @@ class DashboardViewModel(
                     is DashboardScreenAction.OpenZoneScreen -> action.flow.collect {
                         emitter.emit(
                             effect = DashboardScreenEffect.Navigate(
-//                                target = NavigationDestination.ZoneScreen(zone = action.zone),
-                                target = NavigationDestination.Zones,
+                                target = NavigationDestination.Zone(zone = action.zone),
                             ),
+                        )
+                    }
+
+                    is DashboardScreenAction.RetryZones -> action.flow.collect {
+                        zoneMutationJob?.cancel()
+                        zoneMutationJob = launchZoneMutations(
+                            state = state,
+                            entityRepository = entityRepository,
+                        )
+                    }
+
+                    is DashboardScreenAction.RetryQuickControl -> action.flow.collect {
+                        entityMutationJob?.cancel()
+                        entityMutationJob = launchEntityMutations(
+                            state = state,
+                            entityRepository = entityRepository,
                         )
                     }
 
@@ -111,46 +130,46 @@ context(scope: CoroutineScope)
 private fun launchZoneMutations(
     state: MutableDashboardScreenState,
     entityRepository: EntityRepository,
-) {
-    scope.launch {
-        val flow = combine(
-            entityRepository.zones,
-            entityRepository.entities,
-        ) { zones, entities ->
-            val current = state.zonesState.zones
+) = scope.launch {
+    state.zonesState.condition = DashboardScreenState.Condition.Loading
 
-            zones
-                .take(MAX_ZONES)
-                .forEach { zone ->
-                    if (!current.containsKey(zone.identifier)) {
-                        current[zone.identifier] = MutableZoneState(zone = zone)
-                    }
+    val flow = combine(
+        entityRepository.zones,
+        entityRepository.entities,
+    ) { zones, entities ->
+        val current = state.zonesState.zones
 
-                    val stateEntities = current[zone.identifier]
-                        ?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
-                        ?: return@forEach
-
-                    stateEntities.clear()
-                    stateEntities.putAll(
-                        from = entities
-                            .filter { entity -> entity.zone?.identifier == zone.identifier }
-                            .associateBy { entity -> entity.identifier },
-                    )
+        zones
+            .take(MAX_ZONES)
+            .forEach { zone ->
+                if (!current.containsKey(zone.identifier)) {
+                    current[zone.identifier] = MutableZoneState(zone = zone)
                 }
 
-            val removed = current.keys - zones.map { it.identifier }.toSet()
-            removed.forEach(current::remove)
+                val stateEntities = current[zone.identifier]
+                    ?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
+                    ?: return@forEach
 
-            state.zonesState.condition = when {
-                zones.isEmpty() -> DashboardScreenState.Condition.Empty
-                else -> DashboardScreenState.Condition.Success
+                stateEntities.clear()
+                stateEntities.putAll(
+                    from = entities
+                        .filter { entity -> entity.zone?.identifier == zone.identifier }
+                        .associateBy { entity -> entity.identifier },
+                )
             }
-        }
 
-        flow
-            .catch { state.zonesState.condition = DashboardScreenState.Condition.Error }
-            .collect()
+        val removed = current.keys - zones.map { it.identifier }.toSet()
+        removed.forEach(current::remove)
+
+        state.zonesState.condition = when {
+            zones.isEmpty() -> DashboardScreenState.Condition.Empty
+            else -> DashboardScreenState.Condition.Success
+        }
     }
+
+    flow
+        .catch { state.zonesState.condition = DashboardScreenState.Condition.Error }
+        .collect()
 }
 
 @OptIn(FlowPreview::class)
@@ -158,28 +177,28 @@ context(scope: CoroutineScope)
 private fun launchEntityMutations(
     state: MutableDashboardScreenState,
     entityRepository: EntityRepository,
-) {
-    scope.launch {
-        entityRepository.entities
-            .catch { state.quickControlState.condition = DashboardScreenState.Condition.Error }
-            .collect { entities ->
-                val current = state.quickControlState.entities
+) = scope.launch {
+    state.quickControlState.condition = DashboardScreenState.Condition.Loading
 
-                entities.forEach {
-                    if (current[it.identifier] != it) {
-                        current[it.identifier] = it
-                    }
-                }
+    entityRepository.entities
+        .catch { state.quickControlState.condition = DashboardScreenState.Condition.Error }
+        .collect { entities ->
+            val current = state.quickControlState.entities
 
-                val removed = current.keys - entities.map { it.identifier }.toSet()
-                removed.forEach(current::remove)
-
-                state.quickControlState.condition = when {
-                    entities.isEmpty() -> DashboardScreenState.Condition.Empty
-                    else -> DashboardScreenState.Condition.Success
+            entities.forEach {
+                if (current[it.identifier] != it) {
+                    current[it.identifier] = it
                 }
             }
-    }
+
+            val removed = current.keys - entities.map { it.identifier }.toSet()
+            removed.forEach(current::remove)
+
+            state.quickControlState.condition = when {
+                entities.isEmpty() -> DashboardScreenState.Condition.Empty
+                else -> DashboardScreenState.Condition.Success
+            }
+        }
 }
 
 context(scope: CoroutineScope)

@@ -52,6 +52,10 @@ sealed class DashboardScreenAction(val key: String) {
         val zone: EntityIdentifier,
     ) : DashboardScreenAction("OpenZoneScreen[$zone]")
 
+    data object RetryQuickControl : DashboardScreenAction("RetryQuickControl")
+
+    data object RetryZones : DashboardScreenAction("RetryZones")
+
     data class ToggleEntityState(
         val entity: EntityIdentifier,
         val state: Boolean,
