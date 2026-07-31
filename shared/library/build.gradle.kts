@@ -42,6 +42,7 @@ kotlin {
             implementation(projects.shared.feature.dashboard)
             implementation(projects.shared.feature.onboarding)
             implementation(projects.shared.feature.profile)
+            implementation(projects.shared.feature.zones)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.i18n)
