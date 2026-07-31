@@ -99,7 +99,13 @@ internal fun MainScreenNavigation(
                 MainScreenNavigationItemWrapper(
                     backStack = backStack,
                 ) {
-                    ZonesScreenView()
+                    ZonesScreenView(
+                        onNavigate = { target ->
+                            with(backStack) {
+                                handleNavigationDestination(target)
+                            }
+                        },
+                    )
                 }
             }
 
