@@ -2,4 +2,5 @@
 <resources>
     <string name="zones_header">Zones</string>
     <string name="zones_description">%1$d zones in your home</string>
+    <string name="zones_loading_description">Loading your zones...</string>
 </resources>

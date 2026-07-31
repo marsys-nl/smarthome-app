@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationStyleApi::class)
 
-package network.marsys.smarthome.shared.feature.dashboard.components
+package network.marsys.smarthome.shared.library.design.component
 
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.RepeatMode
