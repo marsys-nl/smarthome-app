@@ -4,18 +4,28 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
+import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_header
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
+import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.component.TextDefaults
+import network.marsys.smarthome.shared.library.design.component.TextStyles
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.stringResource
 
@@ -53,12 +63,12 @@ fun ZonesScreenViewContent(
 private fun ZonesScreenHeader(
     modifier: Modifier = Modifier,
 ) {
+    @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = stringResource(Res.string.zones_header),
+        style = TextDefaults.title then TextStyles.bold,
         modifier = modifier,
-        lineHeight = 32.sp,
-        fontSize = 24.sp,
-        fontWeight = FontWeight.W700,
+        color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
     )
 }
 
@@ -67,11 +77,24 @@ private fun ZonesScreenDescription(
     modifier: Modifier = Modifier,
     zones: Int = 6,
 ) {
+    @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = stringResource(Res.string.zones_description, zones),
+        style = TextDefaults.description,
         modifier = modifier,
-        lineHeight = 20.sp,
-        fontSize = 14.sp,
-        color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
     )
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ZonesScreenModalPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZonesScreenViewContent()
+    }
 }
