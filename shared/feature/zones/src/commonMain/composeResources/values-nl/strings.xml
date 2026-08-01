@@ -5,4 +5,7 @@
     <string name="zones_loading_description">Uw zones aan het laden...</string>
     <string name="zones_empty_title">Nog geen zones</string>
     <string name="zones_empty_description">Maak uw eerste zone om te beginnen met het partitioneren van kamers, apparaten en automatiseringen — binnen of buiten.</string>
+    <string name="zones_error_title">Kon zones niet laden</string>
+    <string name="zones_error_description">Er is iets misgegaan bij het ophalen van uw zones. Probeer het opnieuw.</string>
+    <string name="zones_error_retry">Opnieuw proberen</string>
 </resources>

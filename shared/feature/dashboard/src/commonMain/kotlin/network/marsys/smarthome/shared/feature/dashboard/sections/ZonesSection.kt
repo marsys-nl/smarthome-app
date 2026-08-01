@@ -50,9 +50,6 @@ import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.MAX_ZONES
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_description
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_retry
-import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.quick_control_error_title
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_active_devices
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_description
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.zones_empty_title
@@ -71,6 +68,7 @@ import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.ErrorIconButton
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator

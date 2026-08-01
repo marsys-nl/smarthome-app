@@ -5,4 +5,7 @@
     <string name="zones_loading_description">Loading your zones...</string>
     <string name="zones_empty_title">No zones yet</string>
     <string name="zones_empty_description">Create your first zone to start partitioning rooms, devices and automations — indoors or out.</string>
+    <string name="zones_error_title">Couldn't load zones</string>
+    <string name="zones_error_description">Something went wrong while fetching your zones. Please try again.</string>
+    <string name="zones_error_retry">Retry</string>
 </resources>

@@ -69,6 +69,7 @@ import network.marsys.smarthome.shared.library.design.component.Button
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.ErrorIconButton
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
@@ -277,36 +278,6 @@ private fun QuickControlSectionErrorContent(
                 },
             )
         }
-    }
-}
-
-@Composable
-@OptIn(ExperimentalFoundationStyleApi::class)
-fun ErrorIconButton(
-    text: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) = Button(
-    onClick = onClick,
-    style = ButtonStyle.error(),
-    modifier = modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement
-            .spacedBy(8.dp),
-    ) {
-        Icon(
-            icon = icon,
-            size = 16.dp,
-        )
-
-        Text(
-            text = text,
-            style = TextDefaults.normal then TextStyles.semiBold,
-            color = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary],
-        )
     }
 }
 
