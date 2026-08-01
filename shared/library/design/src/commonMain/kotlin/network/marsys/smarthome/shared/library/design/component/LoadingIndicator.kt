@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationStyleApi::class)
 
-package network.marsys.smarthome.shared.feature.dashboard.sections
+package network.marsys.smarthome.shared.library.design.component
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -39,7 +39,7 @@ import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPrevie
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 
 @Composable
-fun SectionLoadingIndicator(
+fun LoadingIndicator(
     message: String,
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -47,12 +47,12 @@ fun SectionLoadingIndicator(
     foregroundColor: Color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
     fontSize: TextUnit = 14.sp,
     // End of temporary style parameters.
-    style: Style = SectionLoadingIndicatorDefaults.style(
+    style: Style = LoadingIndicatorDefaults.style(
         fontSize = fontSize,
         foregroundColor = foregroundColor,
     ),
 ) {
-    val mergedStyle = SectionLoadingIndicatorDefaults.base then style
+    val mergedStyle = LoadingIndicatorDefaults.base then style
 
     val styleState = remember { MutableStyleState(interactionSource) }
     val transition = rememberInfiniteTransition("loading-indicator")
@@ -93,7 +93,7 @@ fun SectionLoadingIndicator(
     }
 }
 
-object SectionLoadingIndicatorDefaults {
+object LoadingIndicatorDefaults {
     internal val base = Style {
         lineHeight(value = 20.sp)
         fontSize(value = 14.sp)
@@ -111,13 +111,13 @@ object SectionLoadingIndicatorDefaults {
 
 @Composable
 @Preview
-private fun SectionLoadingIndicatorPreview(
+private fun LoadingIndicatorPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeComponentPreview(
         theme = theme,
     ) {
-        SectionLoadingIndicator(
+        LoadingIndicator(
             message = "Loading your zones...",
         )
     }

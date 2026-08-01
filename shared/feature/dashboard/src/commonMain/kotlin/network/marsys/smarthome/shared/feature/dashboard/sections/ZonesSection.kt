@@ -73,6 +73,7 @@ import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
+import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
@@ -136,7 +137,7 @@ private fun ZonesSectionLoadingContent(
         modifier = modifier,
     ) {
         @OptIn(ExperimentalFoundationStyleApi::class)
-        SectionLoadingIndicator(
+        LoadingIndicator(
             message = stringResource(Res.string.zones_loading_description),
         )
 

@@ -106,10 +106,7 @@ private fun launchZoneMutations(
     }
 
     flow
-        .catch {
-            println(it)
-            state.condition = ZonesScreenState.Condition.Error
-        }
+        .catch { state.condition = ZonesScreenState.Condition.Error }
         .collect()
 }
 
