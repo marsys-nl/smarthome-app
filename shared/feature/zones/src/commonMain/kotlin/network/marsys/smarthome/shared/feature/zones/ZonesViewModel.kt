@@ -100,7 +100,7 @@ private fun launchZoneMutations(
         removed.forEach(current::remove)
 
         state.condition = when {
-            true -> ZonesScreenState.Condition.Empty
+            zones.isEmpty() -> ZonesScreenState.Condition.Empty
             else -> ZonesScreenState.Condition.Success
         }
     }
