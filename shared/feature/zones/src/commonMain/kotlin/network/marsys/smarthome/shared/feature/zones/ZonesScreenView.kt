@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.EntityIdentifier
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
+import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_empty_description
+import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_empty_title
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_header
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_loading_description
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
@@ -34,13 +36,18 @@ import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
+import network.marsys.smarthome.shared.library.design.icons.Component
+import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.stringResource
@@ -184,10 +191,44 @@ private fun ZonesScreenShimmerRow(
 private fun ZonesScreenEmptyViewContent(
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier,
+    Card(
+        modifier = modifier
+            .padding(top = 52.dp),
+        colors = CardDefaults.colors(
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Dashed(1.dp),
     ) {
-        // No-op for now
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.Component,
+                colors = CardDefaults.colors(
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.zones_empty_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = stringResource(Res.string.zones_empty_description),
+                style = TextDefaults.description then TextStyles.centered,
+                minLines = 2,
+            )
+        }
     }
 }
 
