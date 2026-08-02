@@ -8,4 +8,5 @@
     <string name="zones_error_title">Couldn't load zones</string>
     <string name="zones_error_description">Something went wrong while fetching your zones. Please try again.</string>
     <string name="zones_error_retry">Retry</string>
+    <string name="zones_active_entities">%1$d of %2$d entities active</string>
 </resources>

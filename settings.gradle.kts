@@ -53,6 +53,7 @@ include(
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",
+    ":shared:library:design:domain",
     ":shared:library:i18n",
     ":shared:library:i18n:memory",
     ":shared:library:navigation",

@@ -1,12 +1,10 @@
 package network.marsys.smarthome.shared.feature.zones
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalGridApi
-import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,15 +13,17 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
+import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_active_entities
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_empty_description
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_empty_title
@@ -51,10 +51,12 @@ import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaul
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
+import network.marsys.smarthome.shared.library.design.domain.icon
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
+import network.marsys.smarthome.shared.library.design.modifier.instantPressClickable
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.stringResource
@@ -241,7 +243,6 @@ private fun ZonesScreenEmptyViewContent(
 
 @Composable
 private fun ZonesScreenErrorViewContent(
-    @Suppress("UnusedParameter", "UNUSED_PARAMETER")
     onAction: (ZonesScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -304,17 +305,125 @@ private fun ZonesScreenErrorViewContent(
 @Composable
 private fun ZonesScreenLoadedViewContent(
     state: ZonesScreenState,
-    @Suppress("UnusedParameter", "UNUSED_PARAMETER")
     onAction: (ZonesScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
     ) {
         ZonesScreenDescription(
             zones = state.zones.size,
+            modifier = Modifier
+                .padding(bottom = 16.dp),
+        )
+
+        state.zones.values.forEach { zoneState ->
+            ZonesScreenZoneRow(
+                state = zoneState,
+                onAction = onAction,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ZonesScreenZoneRow(
+    state: ZonesScreenState.ZoneState,
+    onAction: (ZonesScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val total = state.entities.size
+    val active = state.entities.values.count {
+        it is Entity.Activatable && it.active
+    }
+
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .instantPressClickable(
+                interactionSource = interactionSource,
+                onClick = {
+                    onAction.invoke(ZonesScreenAction.OpenZoneScreen(state.zone.identifier))
+                },
+            ),
+        colors = CardDefaults.colors(
+            pressedBackgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundDisabledAlternative]),
+        ),
+        contentPadding = PaddingValues(24.dp),
+        interactionSource = interactionSource,
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp),
+            ) {
+                Text(
+                    text = stringResource(state.zone.identifier),
+                    style = TextDefaults.title then TextStyles.bold,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+                )
+
+                Text(
+                    text = stringResource(Res.string.zones_active_entities, active, total),
+                    style = TextDefaults.description,
+                )
+            }
+
+            Row(
+                modifier = Modifier,
+                horizontalArrangement = Arrangement
+                    .spacedBy(0.dp - 8.dp),
+            ) {
+                state.entities.values
+                    .take(ZONE_ENTITY_COUNT)
+                    .forEachIndexed { index, entity ->
+                        ZonesScreenEntityIcon(
+                            index = index,
+                            entity = entity,
+                        )
+                    }
+            }
+        }
+    }
+}
+
+private const val ZONE_ENTITY_COUNT = 3
+
+@Composable
+private fun ZonesScreenEntityIcon(
+    index: Int,
+    entity: Entity<*>,
+    modifier: Modifier = Modifier,
+) {
+    val colors = when (entity) {
+        is Entity.Activatable if entity.active -> CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundBrandPrimary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimaryAlternative],
+        )
+
+        else -> CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
         )
     }
+
+    IconCard(
+        icon = entity::class.icon(),
+        colors = colors,
+        modifier = modifier
+            .size(width = 40.dp, height = 40.dp)
+            .zIndex(index.toFloat()),
+    )
 }
 
 @Composable
