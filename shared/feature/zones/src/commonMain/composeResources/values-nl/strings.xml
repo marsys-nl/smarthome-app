@@ -8,4 +8,5 @@
     <string name="zones_error_title">Kon zones niet laden</string>
     <string name="zones_error_description">Er is iets misgegaan bij het ophalen van uw zones. Probeer het opnieuw.</string>
     <string name="zones_error_retry">Opnieuw proberen</string>
+    <string name="zones_active_entities">%1$d van %2$d entiteiten actief</string>
 </resources>

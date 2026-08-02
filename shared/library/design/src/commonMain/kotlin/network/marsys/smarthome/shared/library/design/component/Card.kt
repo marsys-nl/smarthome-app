@@ -2,6 +2,10 @@ package network.marsys.smarthome.shared.library.design.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.InteractionSource
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,6 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -46,12 +54,20 @@ fun Card(
     contentPadding: PaddingValues = CardDefaults.contentPadding(),
     border: Border = Border.None,
     contentAlignment: Alignment = Alignment.TopStart,
+    interactionSource: InteractionSource = remember { MutableInteractionSource() },
     content: @Composable BoxScope.() -> Unit,
 ) {
+    val pressed by interactionSource.collectIsPressedAsState()
+    val hovered by interactionSource.collectIsHoveredAsState()
+
+    val backgroundColor = colors.backgroundColor(pressed = pressed, hovered = hovered).value
+    val contentColor = colors.contentColor(pressed = pressed, hovered = hovered).value
+    val borderColor = colors.borderColor(pressed = pressed, hovered = hovered).value
+
     val borderModifier = determineBorderModifier(
         border = border,
         shape = shape,
-        color = colors.borderColor,
+        color = borderColor,
     )
 
     Box(
@@ -67,7 +83,7 @@ fun Card(
                 ),
             )
             .background(
-                brush = colors.backgroundColor,
+                brush = backgroundColor,
                 shape = shape,
             )
             .then(borderModifier)
@@ -75,8 +91,8 @@ fun Card(
         contentAlignment = contentAlignment,
     ) {
         CompositionLocalProvider(
-            LocalContentColor provides colors.contentColor,
-            UnstyledLocalContentColor provides colors.contentColor,
+            LocalContentColor provides contentColor,
+            UnstyledLocalContentColor provides contentColor,
         ) {
             content.invoke(this)
         }
@@ -129,10 +145,46 @@ private fun determineBorderModifier(
 @Immutable
 @ConsistentCopyVisibility
 data class CardColors internal constructor(
-    internal val backgroundColor: Brush,
-    internal val contentColor: Color,
-    internal val borderColor: Color,
-)
+    private val backgroundColor: Brush,
+    private val contentColor: Color,
+    private val borderColor: Color,
+    private val pressedBackgroundColor: Brush,
+    private val pressedContentColor: Color,
+    private val pressedBorderColor: Color,
+    private val hoveredBackgroundColor: Brush,
+    private val hoveredContentColor: Color,
+    private val hoveredBorderColor: Color,
+) {
+    @Composable
+    internal fun backgroundColor(pressed: Boolean, hovered: Boolean): State<Brush> =
+        rememberUpdatedState(
+            when {
+                pressed -> pressedBackgroundColor
+                hovered -> hoveredBackgroundColor
+                else -> backgroundColor
+            },
+        )
+
+    @Composable
+    internal fun contentColor(pressed: Boolean, hovered: Boolean): State<Color> =
+        rememberUpdatedState(
+            when {
+                pressed -> pressedContentColor
+                hovered -> hoveredContentColor
+                else -> contentColor
+            },
+        )
+
+    @Composable
+    internal fun borderColor(pressed: Boolean, hovered: Boolean): State<Color> =
+        rememberUpdatedState(
+            when {
+                pressed -> pressedBorderColor
+                hovered -> hoveredBorderColor
+                else -> borderColor
+            },
+        )
+}
 
 object CardDefaults {
     @Composable
@@ -143,10 +195,22 @@ object CardDefaults {
         backgroundColor: Brush = CardTokens.BackgroundColor,
         contentColor: Color = CardTokens.ContentColor,
         borderColor: Color = CardTokens.BorderColor,
+        pressedBackgroundColor: Brush = backgroundColor,
+        pressedContentColor: Color = contentColor,
+        pressedBorderColor: Color = borderColor,
+        hoveredBackgroundColor: Brush = backgroundColor,
+        hoveredContentColor: Color = contentColor,
+        hoveredBorderColor: Color = borderColor,
     ): CardColors = CardColors(
         backgroundColor = backgroundColor,
         contentColor = contentColor,
         borderColor = borderColor,
+        pressedBackgroundColor = pressedBackgroundColor,
+        pressedContentColor = pressedContentColor,
+        pressedBorderColor = pressedBorderColor,
+        hoveredBackgroundColor = hoveredBackgroundColor,
+        hoveredContentColor = hoveredContentColor,
+        hoveredBorderColor = hoveredBorderColor,
     )
 
     @Composable

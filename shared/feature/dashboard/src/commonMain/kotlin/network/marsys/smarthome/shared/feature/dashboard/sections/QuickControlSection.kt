@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalGridApi
 import androidx.compose.foundation.layout.Grid
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.Style
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -20,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -65,25 +62,18 @@ import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.component.Border
-import network.marsys.smarthome.shared.library.design.component.Button
-import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.ErrorIconButton
-import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
-import network.marsys.smarthome.shared.library.design.icons.Blinds
+import network.marsys.smarthome.shared.library.design.domain.icon
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
-import network.marsys.smarthome.shared.library.design.icons.Lightbulb
-import network.marsys.smarthome.shared.library.design.icons.Monitor
-import network.marsys.smarthome.shared.library.design.icons.Plug
 import network.marsys.smarthome.shared.library.design.icons.Reset
-import network.marsys.smarthome.shared.library.design.icons.Thermostat
 import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -434,15 +424,6 @@ private fun KClass<out Entity<*>>.groupTitle(): String =
             else -> SmartHomeRes.string.entity_category_other
         },
     )
-
-private fun KClass<out Entity<*>>.icon(): ImageVector = when (this) {
-    Light::class -> Icons.Lightbulb
-    Thermostat::class -> Icons.Thermostat
-    SmartPlug::class -> Icons.Plug
-    Blind::class, Curtain::class, Shutter::class -> Icons.Blinds
-    Camera::class -> Icons.Monitor
-    else -> Icons.Component
-}
 
 @Composable
 @Suppress("CyclomaticComplexMethod")
