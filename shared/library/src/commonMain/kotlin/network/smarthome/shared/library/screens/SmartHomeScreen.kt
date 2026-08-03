@@ -14,6 +14,11 @@ internal sealed interface SmartHomeScreen : NavKey {
     data object Zones : SmartHomeScreen
 
     @Serializable
+    data class Zone(
+        val zone: @Contextual EntityIdentifier,
+    ) : SmartHomeScreen
+
+    @Serializable
     data object Scenes : SmartHomeScreen
 
     @Serializable

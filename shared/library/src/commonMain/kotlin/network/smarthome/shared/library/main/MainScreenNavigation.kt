@@ -54,6 +54,7 @@ private val config = SavedStateConfiguration {
         polymorphic(SmartHomeScreen::class) {
             subclass(SmartHomeScreen.Dashboard::class, SmartHomeScreen.Dashboard.serializer())
             subclass(SmartHomeScreen.Zones::class, SmartHomeScreen.Zones.serializer())
+            subclass(SmartHomeScreen.Zone::class, SmartHomeScreen.Zone.serializer())
             subclass(SmartHomeScreen.Scenes::class, SmartHomeScreen.Scenes.serializer())
             subclass(SmartHomeScreen.Profile::class, SmartHomeScreen.Profile.serializer())
 
@@ -105,6 +106,16 @@ internal fun MainScreenNavigation(
                                 handleNavigationDestination(target)
                             }
                         },
+                    )
+                }
+            }
+
+            entry<SmartHomeScreen.Zone> {
+                MainScreenNavigationItemWrapper(
+                    backStack = backStack,
+                ) {
+                    MainScreenPlaceholderScreenView(
+                        screen = it,
                     )
                 }
             }
@@ -208,7 +219,7 @@ private fun handleNavigationDestination(target: NavigationDestination) {
             listOf(SmartHomeScreen.Zones)
 
         is NavigationDestination.Zone ->
-            listOf(SmartHomeScreen.Zones)
+            listOf(SmartHomeScreen.Zones, SmartHomeScreen.Zone(target.zone))
 
         is NavigationDestination.ChangeAppAppearanceModal ->
             listOf(SmartHomeScreen.AppAppearance)
