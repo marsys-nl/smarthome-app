@@ -49,6 +49,7 @@ include(
     ":shared:feature:dashboard",
     ":shared:feature:onboarding",
     ":shared:feature:profile",
+    ":shared:feature:zone",
     ":shared:feature:zones",
     ":shared:library",
     ":shared:library:core",
