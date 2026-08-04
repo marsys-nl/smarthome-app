@@ -9,6 +9,7 @@ import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.feature.profile.ProfileViewModel
+import network.marsys.smarthome.shared.feature.zone.ZoneViewModel
 import network.marsys.smarthome.shared.feature.zones.ZonesViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -63,6 +64,14 @@ private val viewModelModule = module {
 
     viewModel {
         ZonesViewModel(
+            entityRepository = get(),
+            coroutineScope = viewModelCoroutineScope(),
+        )
+    }
+
+    viewModel {
+        ZoneViewModel(
+            identifier = it.get(),
             entityRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
