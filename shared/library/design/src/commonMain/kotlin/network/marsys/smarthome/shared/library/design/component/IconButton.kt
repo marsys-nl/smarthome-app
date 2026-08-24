@@ -72,6 +72,26 @@ fun ErrorIconButton(
     modifier = modifier,
 )
 
+@Composable
+fun IconOnlyButton(
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    /* Temporary solution until there is support for subcomponent styling */
+    foregroundColor: Color = PaletteTokens.Base.White,
+    style: Style = ButtonStyle.brand(),
+) = Button(
+    onClick = onClick,
+    modifier = modifier,
+    style = style,
+) {
+    Icon(
+        icon = icon,
+        size = 16.dp,
+        tint = foregroundColor,
+    )
+}
+
 @Preview
 @Composable
 private fun IconButtonPreview(
