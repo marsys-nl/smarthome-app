@@ -54,8 +54,6 @@ fun Button(
         it.isEnabled = enabled
     }
 
-    val mergedStyle = ButtonDefaults.base then style
-
     val pointerModifier = if (enabled) {
         Modifier.pointerHoverIcon(PointerIcon.Default)
     } else {
@@ -70,7 +68,7 @@ fun Button(
                 role = role,
                 onClick = onClick,
             )
-            .styleable(styleState, mergedStyle)
+            .styleable(styleState, ButtonDefaults.base, style)
             .then(pointerModifier),
         contentAlignment = Alignment.Center,
         content = {
