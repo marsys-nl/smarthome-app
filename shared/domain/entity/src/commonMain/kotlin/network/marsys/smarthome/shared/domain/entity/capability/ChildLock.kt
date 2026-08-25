@@ -1,6 +1,6 @@
 package network.marsys.smarthome.shared.domain.entity.capability
 
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import kotlin.time.Clock
 import kotlin.time.Instant

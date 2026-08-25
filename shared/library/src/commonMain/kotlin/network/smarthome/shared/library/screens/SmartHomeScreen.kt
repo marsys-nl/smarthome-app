@@ -3,7 +3,7 @@ package network.smarthome.shared.library.screens
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 
 @Serializable
 internal sealed interface SmartHomeScreen : NavKey {

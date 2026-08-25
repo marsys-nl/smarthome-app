@@ -1,7 +1,7 @@
 package network.marsys.smarthome.shared.domain.entity
 
 import kotlinx.coroutines.flow.Flow
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 

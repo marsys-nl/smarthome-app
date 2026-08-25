@@ -2,7 +2,7 @@ package network.marsys.smarthome.shared.library.i18n
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalLocale
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.unknown_entity
 import org.jetbrains.compose.resources.PluralStringResource
