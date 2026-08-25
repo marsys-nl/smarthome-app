@@ -11,18 +11,15 @@ import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_title_nr_entities
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
-import network.marsys.smarthome.shared.library.design.component.CardDefaults
-import network.marsys.smarthome.shared.library.design.component.Icon
-import network.marsys.smarthome.shared.library.design.component.IconButton
-import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
@@ -117,8 +114,17 @@ private fun ZoneScreenHeader(
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
+            val entities = when (state.condition) {
+                is ZoneScreenState.Condition.Success -> stringResource(
+                    resource = Res.string.zone_title_nr_entities,
+                    formatArgs = arrayOf(state.entities.size),
+                )
+
+                else -> "…"
+            }
+
             Text(
-                text = "5 entities",
+                text = entities,
                 style = TextDefaults.description,
             )
         }
