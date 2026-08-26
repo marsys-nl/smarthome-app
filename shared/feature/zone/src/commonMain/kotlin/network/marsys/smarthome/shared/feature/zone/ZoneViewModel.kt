@@ -7,11 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
+import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
+import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 internal typealias ZoneStateHolder =
     SuspendingActionStateEffectMutator<ZoneScreenAction, ZoneScreenState, ZoneScreenEffect>
@@ -25,6 +27,29 @@ class ZoneViewModel(
         state = MutableZoneScreenState(identifier),
         producer = { state, actions, emitter ->
             // Implement the logic to handle actions and update the state here
+
+            actions.handle(
+                scope = this,
+                keySelector = ZoneScreenAction::key,
+            ) {
+                when (val action = type()) {
+                    is ZoneScreenAction.NavigateToZones -> action.flow.collect {
+                        emitter.emit(
+                            effect = ZoneScreenEffect.Navigate(
+                                target = NavigationDestination.Zones,
+                            ),
+                        )
+                    }
+
+                    is ZoneScreenAction.OpenEntityDetailModal -> action.flow.collect {
+                        // Handle opening entity detail modal
+                    }
+
+                    is ZoneScreenAction.RetryLoadingEntities -> action.flow.collect {
+                        // Handle retrying loading entities
+                    }
+                }
+            }
         },
     )
 

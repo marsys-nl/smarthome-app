@@ -1,7 +1,7 @@
 package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.runtime.Stable
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination

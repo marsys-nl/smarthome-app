@@ -1,6 +1,6 @@
 package network.marsys.smarthome.shared.domain.entity.zone
 
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 
 data class Zone(
     val identifier: EntityIdentifier,

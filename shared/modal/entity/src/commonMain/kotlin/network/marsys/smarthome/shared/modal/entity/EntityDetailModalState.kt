@@ -1,7 +1,7 @@
 package network.marsys.smarthome.shared.modal.entity
 
 import androidx.compose.runtime.Stable
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
 import network.marsys.smarthome.shared.domain.entity.entity.Entity

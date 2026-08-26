@@ -1,6 +1,6 @@
 package network.marsys.smarthome.shared.library.navigation
 
-import network.marsys.smarthome.domain.EntityIdentifier
+import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 
 sealed interface NavigationDestination {
     sealed interface MainNavigationDestination : NavigationDestination
