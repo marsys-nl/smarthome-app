@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="zone_title_nr_entities">%1$s entiteiten</string>
+    <plurals name="zone_description_nr_entities">
+        <item quantity="one">%1$d entiteit</item>
+        <item quantity="other">%1$d entiteiten</item>
+    </plurals>
 </resources>
