@@ -20,6 +20,10 @@ fun pluralStringResource(resource: PluralStringResource, quantity: Int): String 
     composePluralStringResource(resource, quantity, quantity)
 
 @Composable
+fun pluralStringResource(resource: PluralStringResource, quantity: Int, vararg formatArgs: Any): String =
+    composePluralStringResource(resource, quantity, *formatArgs)
+
+@Composable
 fun stringResource(identifier: EntityIdentifier): String {
     val language = LocalLocale.current.language
     return LocalTranslationCache.current[identifier.value, language]

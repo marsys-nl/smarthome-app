@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="zones_header">Zones</string>
-    <string name="zones_description">%1$d zones in uw huis</string>
+    <plurals name="zones_description">
+        <item quantity="one">%1$d zone in uw huis</item>
+        <item quantity="other">%1$d zones in uw huis</item>
+    </plurals>
     <string name="zones_loading_description">Uw zones aan het laden...</string>
     <string name="zones_empty_title">Nog geen zones</string>
     <string name="zones_empty_description">Maak uw eerste zone om te beginnen met het partitioneren van kamers, apparaten en automatiseringen — binnen of buiten.</string>
     <string name="zones_error_title">Kon zones niet laden</string>
     <string name="zones_error_description">Er is iets misgegaan bij het ophalen van uw zones. Probeer het opnieuw.</string>
     <string name="zones_error_retry">Opnieuw proberen</string>
-    <string name="zones_active_entities">%1$d van %2$d entiteiten actief</string>
+    <plurals name="zones_active_entities">
+        <item quantity="one">%1$d van %2$d entiteit actief</item>
+        <item quantity="other">%1$d van %2$d entiteiten actief</item>
+    </plurals>
 </resources>
