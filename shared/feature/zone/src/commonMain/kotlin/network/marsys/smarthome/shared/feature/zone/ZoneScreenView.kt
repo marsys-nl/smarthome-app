@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
-import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_title_nr_entities
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -27,6 +27,7 @@ import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import org.koin.compose.viewmodel.koinViewModel
@@ -115,9 +116,9 @@ private fun ZoneScreenHeader(
             )
 
             val entities = when (state.condition) {
-                is ZoneScreenState.Condition.Success -> stringResource(
-                    resource = Res.string.zone_title_nr_entities,
-                    formatArgs = arrayOf(state.entities.size),
+                is ZoneScreenState.Condition.Success -> pluralStringResource(
+                    resource = Res.plurals.zone_description_nr_entities,
+                    quantity = state.entities.size,
                 )
 
                 else -> "…"
