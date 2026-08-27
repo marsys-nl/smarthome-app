@@ -4,4 +4,9 @@
         <item quantity="one">%1$d entity</item>
         <item quantity="other">%1$d entities</item>
     </plurals>
+    <string name="zone_entities_empty_title">No entities in this zone</string>
+    <string name="zone_entities_empty_description">Add an entity to this zone to start controlling it from here.</string>
+    <string name="zone_entities_error_title">Couldn't load entities</string>
+    <string name="zone_entities_error_description">Something went wrong while fetching your entities. Please try again.</string>
+    <string name="zone_entities_error_retry">Retry</string>
 </resources>

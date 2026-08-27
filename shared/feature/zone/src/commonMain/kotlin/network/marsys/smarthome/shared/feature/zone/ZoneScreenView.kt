@@ -1,22 +1,31 @@
 package network.marsys.smarthome.shared.feature.zone
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_description
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_title
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_error_description
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_error_retry
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_error_title
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -25,13 +34,24 @@ import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
+import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.ErrorIconButton
+import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
+import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
+import network.marsys.smarthome.shared.library.design.component.ShimmerBox
+import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
+import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.icons.Reset
+import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.pluralStringResource
@@ -87,6 +107,198 @@ private fun ZoneScreenViewContent(
                 state = state,
                 onAction = onAction,
             )
+
+            when (state.condition) {
+                is ZoneScreenState.Condition.Loading ->
+                    ZoneScreenLoadingViewContent()
+
+                is ZoneScreenState.Condition.Empty ->
+                    ZoneScreenEmptyViewContent()
+
+                is ZoneScreenState.Condition.Error ->
+                    ZoneScreenErrorViewContent(
+                        onAction = onAction,
+                    )
+
+                else -> Unit
+            }
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenLoadingViewContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        LoadingIndicator(
+            message = "Loading entities…",
+        )
+
+        repeat(LOADING_ENTITY_SHIMMER_COUNT) {
+            ZoneScreenShimmerRow()
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenShimmerRow(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(24.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement
+                .spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ShimmerBox(
+                modifier = Modifier
+                    .size(width = 48.dp, height = 48.dp),
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp),
+            ) {
+                ShimmerBox(
+                    modifier = Modifier
+                        .size(width = 112.dp, height = 16.dp),
+                )
+
+                ShimmerBox(
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .size(width = 64.dp, height = 10.dp),
+                    style = ShimmerBoxDefaults.defaultStyle(
+                        backgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryAlternative],
+                    ),
+                )
+            }
+
+            ShimmerBox(
+                modifier = Modifier
+                    .size(width = 36.dp, height = 20.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenEmptyViewContent(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.colors(
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Dashed(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.Component,
+                colors = CardDefaults.colors(
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_empty_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_empty_description),
+                style = TextDefaults.description then TextStyles.centered,
+                minLines = 2,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenErrorViewContent(
+    onAction: (ZoneScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .padding(top = 52.dp),
+        colors = CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorPrimary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.TextErrorPrimary],
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderErrorSubtle],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Solid(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.TriangleAlert,
+                colors = CardDefaults.colors(
+                    backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundErrorSecondary]),
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundErrorPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_error_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 6.dp),
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_error_description),
+                style = TextDefaults.description then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 20.dp),
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                minLines = 2,
+            )
+
+            ErrorIconButton(
+                text = stringResource(Res.string.zone_entities_error_retry),
+                icon = Icons.Reset,
+                onClick = {
+                    onAction.invoke(ZoneScreenAction.RetryLoadingEntities)
+                },
+            )
         }
     }
 }
@@ -99,7 +311,8 @@ private fun ZoneScreenHeader(
 ) {
     @OptIn(ExperimentalFoundationStyleApi::class)
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(bottom = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconOnlyButton(
@@ -122,22 +335,25 @@ private fun ZoneScreenHeader(
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
-            val entities = when (state.condition) {
-                is ZoneScreenState.Condition.Success -> pluralStringResource(
-                    resource = Res.plurals.zone_description_nr_entities,
-                    quantity = state.entities.size,
-                )
-
-                else -> "…"
-            }
-
             Text(
-                text = entities,
+                text = determineHeaderDescriptionText(state = state),
                 style = TextDefaults.description,
             )
         }
     }
 }
+
+@Composable
+private fun determineHeaderDescriptionText(state: ZoneScreenState): String = when (state.condition) {
+    is ZoneScreenState.Condition.Loading -> "…"
+
+    else -> pluralStringResource(
+        resource = Res.plurals.zone_description_nr_entities,
+        quantity = state.entities.size,
+    )
+}
+
+private const val LOADING_ENTITY_SHIMMER_COUNT = 3
 
 @PreviewLocales
 @PreviewFontScales
