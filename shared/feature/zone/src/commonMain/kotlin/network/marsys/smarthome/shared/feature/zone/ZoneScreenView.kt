@@ -20,6 +20,8 @@ import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_description
+import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_title
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -28,8 +30,11 @@ import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.Border
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
+import network.marsys.smarthome.shared.library.design.component.CardDefaults
+import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.ShimmerBox
@@ -38,6 +43,7 @@ import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
+import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -98,6 +104,9 @@ private fun ZoneScreenViewContent(
             when (state.condition) {
                 is ZoneScreenState.Condition.Loading ->
                     ZoneScreenLoadingViewContent()
+
+                is ZoneScreenState.Condition.Empty ->
+                    ZoneScreenEmptyViewContent()
 
                 else -> Unit
             }
@@ -177,6 +186,51 @@ private fun ZoneScreenShimmerRow(
 }
 
 @Composable
+private fun ZoneScreenEmptyViewContent(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.colors(
+            borderColor = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
+        ),
+        contentPadding = PaddingValues(32.dp),
+        border = Border.Dashed(1.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            IconCard(
+                icon = Icons.Component,
+                colors = CardDefaults.colors(
+                    contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+                ),
+                modifier = Modifier
+                    .padding(bottom = 16.dp),
+                size = 64.dp,
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_empty_title),
+                style = TextDefaults.header then TextStyles.centered,
+                modifier = Modifier
+                    .padding(bottom = 4.dp),
+            )
+
+            Text(
+                text = stringResource(Res.string.zone_entities_empty_description),
+                style = TextDefaults.description then TextStyles.centered,
+                minLines = 2,
+            )
+        }
+    }
+}
+
+@Composable
 private fun ZoneScreenHeader(
     state: ZoneScreenState,
     onAction: (ZoneScreenAction) -> Unit,
@@ -208,21 +262,22 @@ private fun ZoneScreenHeader(
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
-            val entities = when (state.condition) {
-                is ZoneScreenState.Condition.Success -> pluralStringResource(
-                    resource = Res.plurals.zone_description_nr_entities,
-                    quantity = state.entities.size,
-                )
-
-                else -> "…"
-            }
-
             Text(
-                text = entities,
+                text = determineHeaderDescriptionText(state = state),
                 style = TextDefaults.description,
             )
         }
     }
+}
+
+@Composable
+private fun determineHeaderDescriptionText(state: ZoneScreenState): String = when (state.condition) {
+    is ZoneScreenState.Condition.Loading -> "…"
+
+    else -> pluralStringResource(
+        resource = Res.plurals.zone_description_nr_entities,
+        quantity = state.entities.size,
+    )
 }
 
 private const val LOADING_ENTITY_SHIMMER_COUNT = 3

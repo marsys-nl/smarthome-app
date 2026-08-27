@@ -4,4 +4,6 @@
         <item quantity="one">%1$d entiteit</item>
         <item quantity="other">%1$d entiteiten</item>
     </plurals>
+    <string name="zone_entities_empty_title">Geen entiteiten in deze zone</string>
+    <string name="zone_entities_empty_description">Voeg een entiteit toe aan deze zone, om te besturen vanaf hier.</string>
 </resources>
