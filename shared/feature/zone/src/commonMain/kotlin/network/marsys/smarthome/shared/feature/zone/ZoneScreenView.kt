@@ -11,14 +11,20 @@ import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
+import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
+import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
+import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
 import network.marsys.smarthome.shared.library.design.component.Text
@@ -26,6 +32,7 @@ import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
 import network.marsys.smarthome.shared.library.design.icons.Icons
+import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
@@ -129,5 +136,101 @@ private fun ZoneScreenHeader(
                 style = TextDefaults.description,
             )
         }
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun LoadingZoneScreenPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZoneScreenViewContent(
+            state = ZoneScreenPreviewData.loading(),
+            onAction = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun EmptyZoneScreenPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZoneScreenViewContent(
+            state = ZoneScreenPreviewData.empty(),
+            onAction = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ErrorZoneScreenPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZoneScreenViewContent(
+            state = ZoneScreenPreviewData.error(),
+            onAction = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun LoadedZoneScreenPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZoneScreenViewContent(
+            state = ZoneScreenPreviewData.loaded(),
+            onAction = {},
+        )
+    }
+}
+
+internal object ZoneScreenPreviewData {
+    private val zone: EntityIdentifier = EntityIdentifier("zone.living-room")
+
+    fun loading() = object : ZoneScreenState {
+        override val condition = ZoneScreenState.Condition.Loading
+        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+    }
+
+    fun empty() = object : ZoneScreenState {
+        override val condition = ZoneScreenState.Condition.Empty
+        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+    }
+
+    fun error() = object : ZoneScreenState {
+        override val condition = ZoneScreenState.Condition.Error
+        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+    }
+
+    fun loaded() = object : ZoneScreenState {
+        override val condition = ZoneScreenState.Condition.Success
+        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
     }
 }
