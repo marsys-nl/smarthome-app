@@ -18,7 +18,6 @@ import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionS
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
-import kotlin.collections.set
 
 internal typealias ZoneStateHolder =
     SuspendingActionStateEffectMutator<ZoneScreenAction, ZoneScreenState, ZoneScreenEffect>

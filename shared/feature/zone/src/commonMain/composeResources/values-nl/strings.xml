@@ -6,4 +6,7 @@
     </plurals>
     <string name="zone_entities_empty_title">Geen entiteiten in deze zone</string>
     <string name="zone_entities_empty_description">Voeg een entiteit toe aan deze zone, om te besturen vanaf hier.</string>
+    <string name="zone_entities_error_title">Kon entiteiten niet laden</string>
+    <string name="zone_entities_error_description">Er is iets misgegaan bij het ophalen van uw entiteiten. Probeer het opnieuw.</string>
+    <string name="zone_entities_error_retry">Opnieuw proberen</string>
 </resources>
