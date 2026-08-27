@@ -1,10 +1,13 @@
 package network.marsys.smarthome.shared.feature.zone
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.then
@@ -26,7 +29,11 @@ import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScal
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
 import network.marsys.smarthome.shared.library.design.component.ButtonStyle
+import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
+import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
+import network.marsys.smarthome.shared.library.design.component.ShimmerBox
+import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
@@ -87,6 +94,84 @@ private fun ZoneScreenViewContent(
                 state = state,
                 onAction = onAction,
             )
+
+            when (state.condition) {
+                is ZoneScreenState.Condition.Loading ->
+                    ZoneScreenLoadingViewContent()
+
+                else -> Unit
+            }
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenLoadingViewContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        LoadingIndicator(
+            message = "Loading entities…",
+        )
+
+        repeat(LOADING_ENTITY_SHIMMER_COUNT) {
+            ZoneScreenShimmerRow()
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenShimmerRow(
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        contentPadding = PaddingValues(24.dp),
+    ) {
+        @OptIn(ExperimentalFoundationStyleApi::class)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement
+                .spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ShimmerBox(
+                modifier = Modifier
+                    .size(width = 48.dp, height = 48.dp),
+            )
+
+            Column(
+                modifier = Modifier
+                    .weight(1f),
+                verticalArrangement = Arrangement
+                    .spacedBy(4.dp),
+            ) {
+                ShimmerBox(
+                    modifier = Modifier
+                        .size(width = 112.dp, height = 16.dp),
+                )
+
+                ShimmerBox(
+                    modifier = Modifier
+                        .padding(top = 4.dp)
+                        .size(width = 64.dp, height = 10.dp),
+                    style = ShimmerBoxDefaults.defaultStyle(
+                        backgroundColor = SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiaryAlternative],
+                    ),
+                )
+            }
+
+            ShimmerBox(
+                modifier = Modifier
+                    .size(width = 36.dp, height = 20.dp),
+            )
         }
     }
 }
@@ -99,7 +184,8 @@ private fun ZoneScreenHeader(
 ) {
     @OptIn(ExperimentalFoundationStyleApi::class)
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .padding(bottom = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         IconOnlyButton(
@@ -138,6 +224,8 @@ private fun ZoneScreenHeader(
         }
     }
 }
+
+private const val LOADING_ENTITY_SHIMMER_COUNT = 3
 
 @PreviewLocales
 @PreviewFontScales
