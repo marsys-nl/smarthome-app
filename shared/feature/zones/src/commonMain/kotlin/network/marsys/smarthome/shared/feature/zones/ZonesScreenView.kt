@@ -1,5 +1,6 @@
 package network.marsys.smarthome.shared.feature.zones
 
+import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -59,6 +60,7 @@ import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
 import network.marsys.smarthome.shared.library.design.modifier.instantPressClickable
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import org.koin.compose.viewmodel.koinViewModel
@@ -329,16 +331,14 @@ private fun ZonesScreenLoadedViewContent(
 }
 
 @Composable
+@OptIn(ExperimentalFoundationStyleApi::class)
 private fun ZonesScreenZoneRow(
     state: ZonesScreenState.ZoneState,
     onAction: (ZonesScreenAction) -> Unit,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
-    val total = state.entities.size
-    val active = state.entities.values.count {
-        it is Entity.Activatable && it.active
-    }
+    val active = state.entities.values.count { it is Entity.Activatable && it.active }
 
     Card(
         modifier = modifier
@@ -355,7 +355,6 @@ private fun ZonesScreenZoneRow(
         contentPadding = PaddingValues(24.dp),
         interactionSource = interactionSource,
     ) {
-        @OptIn(ExperimentalFoundationStyleApi::class)
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -374,7 +373,11 @@ private fun ZonesScreenZoneRow(
                 )
 
                 Text(
-                    text = stringResource(Res.string.zones_active_entities, active, total),
+                    text = pluralStringResource(
+                        resource = Res.plurals.zones_active_entities,
+                        quantity = state.entities.size,
+                        formatArgs = arrayOf(active, state.entities.size),
+                    ),
                     style = TextDefaults.description,
                 )
             }
@@ -446,7 +449,10 @@ private fun ZonesScreenDescription(
 ) {
     @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
-        text = stringResource(Res.string.zones_description, zones),
+        text = pluralStringResource(
+            resource = Res.plurals.zones_description,
+            quantity = zones,
+        ),
         style = TextDefaults.description,
         modifier = modifier,
     )

@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="zones_header">Zones</string>
-    <string name="zones_description">%1$d zones in your home</string>
+    <plurals name="zones_description">
+        <item quantity="one">%1$d zone in your home</item>
+        <item quantity="other">%1$d zones in your home</item>
+    </plurals>
     <string name="zones_loading_description">Loading your zones...</string>
     <string name="zones_empty_title">No zones yet</string>
     <string name="zones_empty_description">Create your first zone to start partitioning rooms, devices and automations — indoors or out.</string>
     <string name="zones_error_title">Couldn't load zones</string>
     <string name="zones_error_description">Something went wrong while fetching your zones. Please try again.</string>
     <string name="zones_error_retry">Retry</string>
-    <string name="zones_active_entities">%1$d of %2$d entities active</string>
+    <plurals name="zones_active_entities">
+        <item quantity="one">%1$d of %2$d entity active</item>
+        <item quantity="other">%1$d of %2$d entities active</item>
+    </plurals>
 </resources>
