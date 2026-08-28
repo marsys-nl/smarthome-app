@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -339,7 +340,6 @@ private fun ZoneScreenLoadedViewContent(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationStyleApi::class)
 private fun ZoneScreenEntityRow(
     entity: Entity<*>,
     onAction: (ZoneScreenAction) -> Unit,
@@ -367,38 +367,16 @@ private fun ZoneScreenEntityRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             EntityIcon(entity = entity)
-
-            Column(
-                modifier = Modifier
-                    .weight(1f),
-                verticalArrangement = Arrangement
-                    .spacedBy(4.dp),
-            ) {
-                Text(
-                    text = stringResource(entity.identifier),
-                    style = TextDefaults.header then TextStyles.bold,
-                    color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-
-                Text(
-                    text = entity.descriptor
-                        .localized(),
-                    style = TextDefaults.description,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+            EntityDetails(entity = entity)
 
             entity.ifPresent<OnOff> {
                 Switch(
                     checked = it.current,
-                    onCheckedChange = {
+                    onCheckedChange = { value ->
                         onAction.invoke(
                             ZoneScreenAction.ToggleEntityState(
                                 entity = entity.identifier,
-                                state = it,
+                                state = value,
                             ),
                         )
                     },
@@ -435,6 +413,36 @@ private fun EntityIcon(
             .padding(end = 16.dp),
         size = 48.dp,
     )
+}
+
+@Composable
+@OptIn(ExperimentalFoundationStyleApi::class)
+private fun RowScope.EntityDetails(
+    entity: Entity<*>,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .weight(1f),
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = stringResource(entity.identifier),
+            style = TextDefaults.header then TextStyles.bold,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Text(
+            text = entity.descriptor
+                .localized(),
+            style = TextDefaults.description,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
 }
 
 @Composable
