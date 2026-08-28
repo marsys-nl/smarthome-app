@@ -1,9 +1,11 @@
 package network.marsys.smarthome.shared.feature.zone
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,12 +14,15 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
@@ -28,6 +33,7 @@ import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zon
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_error_title
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
+import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
@@ -44,16 +50,22 @@ import network.marsys.smarthome.shared.library.design.component.IconOnlyButton
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
+import network.marsys.smarthome.shared.library.design.component.Switch
+import network.marsys.smarthome.shared.library.design.component.SwitchSize
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.component.TextStyles
+import network.marsys.smarthome.shared.library.design.domain.icon
+import network.marsys.smarthome.shared.library.design.icons.Blinds
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.TriangleAlert
+import network.marsys.smarthome.shared.library.design.modifier.instantPressClickable
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.localized
 import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
@@ -120,7 +132,11 @@ private fun ZoneScreenViewContent(
                         onAction = onAction,
                     )
 
-                else -> Unit
+                is ZoneScreenState.Condition.Success ->
+                    ZoneScreenLoadedViewContent(
+                        state = state,
+                        onAction = onAction,
+                    )
             }
         }
     }
@@ -300,6 +316,132 @@ private fun ZoneScreenErrorViewContent(
                 },
             )
         }
+    }
+}
+
+@Composable
+private fun ZoneScreenLoadedViewContent(
+    state: ZoneScreenState,
+    onAction: (ZoneScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(12.dp),
+    ) {
+        state.entities.forEach { entity ->
+            ZoneScreenEntityRow(
+                entity = entity.value,
+                onAction = onAction,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ZoneScreenEntityRow(
+    entity: Entity<*>,
+    onAction: (ZoneScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .instantPressClickable(
+                interactionSource = interactionSource,
+                onClick = {
+                    onAction.invoke(ZoneScreenAction.OpenEntityDetailModal(entity.identifier))
+                },
+            ),
+        colors = CardDefaults.colors(
+            pressedBackgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundDisabledAlternative]),
+        ),
+        contentPadding = PaddingValues(24.dp),
+        interactionSource = interactionSource,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            EntityIcon(entity = entity)
+            EntityDetails(entity = entity)
+
+            entity.ifPresent<OnOff> {
+                Switch(
+                    checked = it.current,
+                    onCheckedChange = { value ->
+                        onAction.invoke(
+                            ZoneScreenAction.ToggleEntityState(
+                                entity = entity.identifier,
+                                state = value,
+                            ),
+                        )
+                    },
+                    modifier = Modifier
+                        .padding(start = 16.dp),
+                    size = SwitchSize.Small,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun EntityIcon(
+    entity: Entity<*>,
+    modifier: Modifier = Modifier,
+) {
+    val colors = when (entity) {
+        is Entity.Activatable if entity.active -> CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundBrandPrimary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimaryAlternative],
+        )
+
+        else -> CardDefaults.colors(
+            backgroundColor = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
+            contentColor = SmartHomeTheme.colors[ColorKeyToken.ForegroundPrimary],
+        )
+    }
+
+    IconCard(
+        icon = entity::class.icon(),
+        colors = colors,
+        modifier = modifier
+            .padding(end = 16.dp),
+        size = 48.dp,
+    )
+}
+
+@Composable
+@OptIn(ExperimentalFoundationStyleApi::class)
+private fun RowScope.EntityDetails(
+    entity: Entity<*>,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .weight(1f),
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = stringResource(entity.identifier),
+            style = TextDefaults.header then TextStyles.bold,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Text(
+            text = entity.descriptor
+                .localized(),
+            style = TextDefaults.description,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

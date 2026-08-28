@@ -27,6 +27,11 @@ internal sealed class ZoneScreenAction(val key: String) {
     ) : ZoneScreenAction("EditEntity[$entity]")
 
     data object RetryLoadingEntities : ZoneScreenAction("RetryLoadingEntities")
+
+    data class ToggleEntityState(
+        val entity: EntityIdentifier,
+        val state: Boolean,
+    ) : ZoneScreenAction("ToggleEntityState[$entity]")
 }
 
 internal sealed interface ZoneScreenEffect {

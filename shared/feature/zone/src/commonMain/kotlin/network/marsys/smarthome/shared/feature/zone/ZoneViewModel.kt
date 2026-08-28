@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
@@ -52,7 +53,11 @@ class ZoneViewModel(
                     }
 
                     is ZoneScreenAction.OpenEntityDetailModal -> action.flow.collect {
-                        // Handle opening entity detail modal
+                        emitter.emit(
+                            effect = ZoneScreenEffect.Navigate(
+                                target = NavigationDestination.EntityDetailModal(entity = action.entity),
+                            ),
+                        )
                     }
 
                     is ZoneScreenAction.RetryLoadingEntities -> action.flow.collect {
@@ -61,6 +66,15 @@ class ZoneViewModel(
                             identifier = identifier,
                             state = state,
                             entityRepository = entityRepository,
+                        )
+                    }
+
+                    is ZoneScreenAction.ToggleEntityState -> action.flow.collect {
+                        entityRepository.execute(
+                            action = when (it.state) {
+                                true -> OnOff.Toggle.On(identifier = action.entity)
+                                false -> OnOff.Toggle.Off(identifier = action.entity)
+                            },
                         )
                     }
                 }

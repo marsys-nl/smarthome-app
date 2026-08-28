@@ -255,11 +255,11 @@ private fun bottomNavigationItems(): BottomNavigationItemProviderScope<SmartHome
             icon = Icons.SquareDashed,
         )
 
-        item(
+        /*item(
             screen = SmartHomeScreen.Scenes,
             text = scenesNavigationItemTextResource,
             icon = Icons.Zap,
-        )
+        )*/
 
         item(
             screen = SmartHomeScreen.Profile,
