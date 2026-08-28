@@ -141,6 +141,7 @@ private fun SplitPaneDashboard(
                 )
             }
         },
+        spacerWidth = 40.dp,
     )
 }
 
