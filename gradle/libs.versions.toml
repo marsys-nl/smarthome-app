@@ -7,7 +7,7 @@ smarthome-app-name = "2026.08-SNAPSHOT"
 smarthome-domain = "2026.08-SNAPSHOT"
 smarthome-api = "2026.08-SNAPSHOT"
 
-android-gradle-plugin = "9.3.2"
+android-gradle-plugin = "9.4.0"
 android-sdk-compile = "37"
 android-sdk-min = "31"
 android-sdk-target = "37"
