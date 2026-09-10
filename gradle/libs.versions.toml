@@ -32,7 +32,7 @@ jvm-toolchain = "21"
 
 koin = "4.2.2"
 
-kotlin = "2.4.10"
+kotlin = "2.4.20"
 kotlin-expect = "0.2"
 kotlin-kover = "0.9.9"
 kotlinx-collections-immutable = "0.5.2"
