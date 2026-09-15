@@ -24,3 +24,7 @@ keystore.properties
 
 # Stop recording updates
 Versions.xcconfig
+
+# Keystores
+*.keystore
+*.jks
