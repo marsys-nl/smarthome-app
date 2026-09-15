@@ -18,6 +18,10 @@ class ApplyIosVersionPlugin : Plugin<Project> {
 
             val applyIosVersionTask = tasks.register("applyIosVersion") {
                 val directory = rootDir.resolve("app/ios/SmartHome/Configuration")
+
+                inputs.property("marketingVersion", marketingVersion)
+                inputs.property("currentVersion", currentVersion)
+
                 generateFile(
                     targetDirectory = directory,
                     file = XCODE_CONFIG_FILE_NAME,

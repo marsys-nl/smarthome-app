@@ -37,7 +37,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		55F3E29F2F1512D700811597 /* Exceptions for "SmartHome" folder in "SmartHome" target */ = {
+		55F3E29F2F1512D700811597 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -50,7 +50,7 @@
 		55F3E26C2F13B96000811597 /* SmartHome */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				55F3E29F2F1512D700811597 /* Exceptions for "SmartHome" folder in "SmartHome" target */,
+				55F3E29F2F1512D700811597 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = SmartHome;
 			sourceTree = "<group>";
@@ -265,7 +265,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/../../..\"\n./gradlew :shared:library:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/../../..\"\n./gradlew :shared:library:embedAndSignAppleFrameworkForXcode";
 		};
 /* End PBXShellScriptBuildPhase section */
 
