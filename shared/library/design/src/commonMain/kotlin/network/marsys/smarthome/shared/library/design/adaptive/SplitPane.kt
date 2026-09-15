@@ -17,7 +17,7 @@ fun SplitPane(
     modifier: Modifier = Modifier,
     leftWeight: Float = 1f,
     rightWeight: Float = 1f,
-    spacerWidth: Dp = 0.dp
+    spacerWidth: Dp = 0.dp,
 ) {
     Row(
         modifier = modifier

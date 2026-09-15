@@ -1,5 +1,5 @@
-import java.util.Properties
 import org.gradle.api.Project
+import java.util.Properties
 
 val propertiesFactory: Project.() -> Properties = {
     Properties().apply {
