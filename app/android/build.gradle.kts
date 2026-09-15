@@ -25,8 +25,35 @@ android {
         versionName = "$version"
     }
 
+    signingConfigs {
+        create("release") {
+            val keystorePath = requireNotNull(project.valueOf("KEYSTORE_PATH")) {
+                "The keystore path isn't defined and should be defined in the local.properties or in the environment variables. Please define the KEYSTORE_PATH variable."
+            }
+
+            storeFile = file(keystorePath)
+            storePassword = project.valueOf("KEYSTORE_PASSWORD")
+            keyAlias = project.valueOf("KEY_ALIAS")
+            keyPassword = project.valueOf("KEY_PASSWORD")
+        }
+    }
+
     buildFeatures {
         compose = true
+    }
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro",
+            )
+
+            signingConfig = signingConfigs.getByName("release")
+        }
     }
 }
 

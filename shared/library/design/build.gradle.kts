@@ -35,6 +35,7 @@ kotlin {
 
             implementation(libs.compose.foundation)
             implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.unstyled.button)
             implementation(libs.compose.unstyled.modal)
             implementation(libs.compose.unstyled.modal.bottom.sheet)
             implementation(libs.compose.unstyled.outline)
