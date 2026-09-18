@@ -70,7 +70,6 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.ModalBottomSheet
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.component.TextDefaults
 import network.marsys.smarthome.shared.library.design.icons.Bell
 import network.marsys.smarthome.shared.library.design.icons.ChevronRight
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -514,17 +513,21 @@ private fun ResetOnboardingModalBottomSheetContent(
 
         Text(
             text = stringResource(Res.string.reset_onboarding_modal_title),
-            style = TextDefaults.sectionHeader,
             modifier = Modifier
                 .padding(bottom = 8.dp),
+            lineHeight = 28.sp,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W600,
             color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         )
 
         Text(
             text = stringResource(Res.string.reset_onboarding_modal_description),
-            style = TextDefaults.description,
             modifier = Modifier
                 .padding(bottom = 24.dp),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
         )
 
         ConfirmModalBottomSheetButtons(
@@ -573,17 +576,21 @@ private fun ConfirmLogoutModalBottomSheetContent(
 
         Text(
             text = stringResource(Res.string.logout_modal_title),
-            style = TextDefaults.sectionHeader,
             modifier = Modifier
                 .padding(bottom = 8.dp),
+            lineHeight = 28.sp,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.W600,
             color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         )
 
         Text(
             text = stringResource(Res.string.logout_modal_description),
-            style = TextDefaults.description,
             modifier = Modifier
                 .padding(bottom = 24.dp),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
         )
 
         ConfirmModalBottomSheetButtons(

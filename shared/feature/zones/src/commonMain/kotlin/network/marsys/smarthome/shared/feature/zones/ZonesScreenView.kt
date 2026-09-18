@@ -1,6 +1,5 @@
 package network.marsys.smarthome.shared.feature.zones
 
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,14 +11,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -50,8 +51,6 @@ import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.component.TextDefaults
-import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.domain.icon
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -229,14 +228,21 @@ private fun ZonesScreenEmptyViewContent(
 
             Text(
                 text = stringResource(Res.string.zones_empty_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_empty_description),
-                style = TextDefaults.description then TextStyles.centered,
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
         }
@@ -278,17 +284,22 @@ private fun ZonesScreenErrorViewContent(
 
             Text(
                 text = stringResource(Res.string.zones_error_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 6.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_error_description),
-                style = TextDefaults.description then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 20.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
@@ -368,7 +379,9 @@ private fun ZonesScreenZoneRow(
             ) {
                 Text(
                     text = stringResource(state.zone.identifier),
-                    style = TextDefaults.title then TextStyles.bold,
+                    lineHeight = 32.sp,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.W700,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
                 )
 
@@ -378,7 +391,9 @@ private fun ZonesScreenZoneRow(
                         quantity = state.entities.size,
                         formatArgs = arrayOf(active, state.entities.size),
                     ),
-                    style = TextDefaults.description,
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 )
             }
 
@@ -436,8 +451,10 @@ private fun ZonesScreenHeader(
     @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = stringResource(Res.string.zones_header),
-        style = TextDefaults.title then TextStyles.bold,
         modifier = modifier,
+        lineHeight = 32.sp,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.W700,
         color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
     )
 }
@@ -453,8 +470,10 @@ private fun ZonesScreenDescription(
             resource = Res.plurals.zones_description,
             quantity = zones,
         ),
-        style = TextDefaults.description,
         modifier = modifier,
+        lineHeight = 20.sp,
+        fontSize = 14.sp,
+        color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
     )
 }
 
