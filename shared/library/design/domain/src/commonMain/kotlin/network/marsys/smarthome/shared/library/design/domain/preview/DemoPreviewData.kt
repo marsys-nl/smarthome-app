@@ -1,4 +1,6 @@
-package network.marsys.smarthome.shared.feature.dashboard
+@file:Suppress("StringLiteralDuplication")
+
+package network.marsys.smarthome.shared.library.design.domain.preview
 
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
@@ -15,8 +17,10 @@ import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.library.i18n.TranslationCache
+import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationCache
 
-object DashboardScreenEntityData {
+object DemoPreviewData {
     val zones = listOf(
         Zone(
             identifier = EntityIdentifier("zone.bathroom"),
@@ -117,7 +121,113 @@ object DashboardScreenEntityData {
             zone = zone("zone.living-room"),
         ),
     )
+
+    val translations: TranslationCache = InMemoryTranslationCache(
+        translations = DemoEntityTranslations + ZoneTranslations,
+        fallback = "en",
+    )
 }
 
 private fun zone(identifier: String): Zone? =
-    DashboardScreenEntityData.zones.firstOrNull { it.identifier.value == identifier }
+    DemoPreviewData.zones.firstOrNull { it.identifier.value == identifier }
+
+private val ZoneTranslations = mapOf(
+    "zone.bathroom" to mapOf(
+        "en" to "Bathroom",
+        "nl" to "Badkamer",
+    ),
+    "zone.bedroom" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "zone.garage" to mapOf(
+        "en" to "Garage",
+        "nl" to "Garage",
+    ),
+    "zone.hallway" to mapOf(
+        "en" to "Hallway",
+        "nl" to "Hal",
+    ),
+    "zone.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "zone.living-room" to mapOf(
+        "en" to "Living room",
+        "nl" to "Woonkamer",
+    ),
+    "zone.nursery" to mapOf(
+        "en" to "Nursery",
+        "nl" to "Babykamer",
+    ),
+    "zone.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+)
+
+private val DemoEntityTranslations = mapOf(
+    "light.bedroom-lamp" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "light.kitchen-light" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "light.ceiling-light" to mapOf(
+        "en" to "Ceiling hallway",
+        "nl" to "Plafond hal",
+    ),
+    "thermostat.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+    "thermostat.main-bedroom" to mapOf(
+        "en" to "Main bedroom",
+        "nl" to "Hoofdslaapkamer",
+    ),
+    "thermostat.nursery" to mapOf(
+        "en" to "Nursery",
+        "nl" to "Babykamer",
+    ),
+    "plug.office-plug" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+    "plug.smart-tv" to mapOf(
+        "en" to "Smart TV",
+    ),
+    "shutter.main-bedroom" to mapOf(
+        "en" to "Main bedroom",
+        "nl" to "Hoofdslaapkamer",
+    ),
+    "blind.living-room" to mapOf(
+        "en" to "Living room",
+        "nl" to "Woonkamer",
+    ),
+    "blind.office" to mapOf(
+        "en" to "Office",
+        "nl" to "Kantoor",
+    ),
+    "curtain.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "fan.bedroom" to mapOf(
+        "en" to "Bedroom",
+        "nl" to "Slaapkamer",
+    ),
+    "speaker.kitchen" to mapOf(
+        "en" to "Kitchen",
+        "nl" to "Keuken",
+    ),
+    "camera.front-door" to mapOf(
+        "en" to "Front door",
+        "nl" to "Voordeur",
+    ),
+    "lock.front-door" to mapOf(
+        "en" to "Front door",
+        "nl" to "Voordeur",
+    ),
+)

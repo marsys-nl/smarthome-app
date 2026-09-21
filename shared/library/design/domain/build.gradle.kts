@@ -27,8 +27,12 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.design)
+            implementation(projects.shared.library.i18n)
+            implementation(projects.shared.library.i18n.memory)
 
             implementation(libs.compose.foundation)
+
+            implementation(libs.marsys.smarthome.domain)
         }
     }
 }

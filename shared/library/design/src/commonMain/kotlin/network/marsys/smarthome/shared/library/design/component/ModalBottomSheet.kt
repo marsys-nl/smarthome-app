@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.contentPadding
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +35,7 @@ import com.composeunstyled.SheetDetent
 import com.composeunstyled.UnstyledModalBottomSheet
 import com.composeunstyled.rememberModalBottomSheetState
 import kotlinx.coroutines.launch
+import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
@@ -144,7 +146,7 @@ private fun CloseModalBottomSheetIconButton(
 private fun HiddenModalBottomSheetPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
-    SmartHomeTheme(
+    SmartHomeModalPreview(
         theme = theme,
     ) {
         val state = rememberModalBottomSheetState(
@@ -183,7 +185,7 @@ private fun HiddenModalBottomSheetPreview(
 private fun FullyExpandedModalBottomSheetPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
-    SmartHomeTheme(
+    SmartHomeModalPreview(
         theme = theme,
     ) {
         val state = rememberModalBottomSheetState(

@@ -1,6 +1,5 @@
 package network.marsys.smarthome.shared.feature.zones
 
-import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,17 +11,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_active_entities
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
@@ -50,9 +52,9 @@ import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.component.TextDefaults
-import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.domain.icon
+import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
+import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
@@ -229,14 +231,21 @@ private fun ZonesScreenEmptyViewContent(
 
             Text(
                 text = stringResource(Res.string.zones_empty_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_empty_description),
-                style = TextDefaults.description then TextStyles.centered,
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
         }
@@ -278,17 +287,22 @@ private fun ZonesScreenErrorViewContent(
 
             Text(
                 text = stringResource(Res.string.zones_error_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 6.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_error_description),
-                style = TextDefaults.description then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 20.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
@@ -338,8 +352,6 @@ private fun ZonesScreenZoneRow(
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val active = state.entities.values.count { it is Entity.Activatable && it.active }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -360,27 +372,11 @@ private fun ZonesScreenZoneRow(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
+            ZonesScreenZoneDescription(
+                state = state,
                 modifier = Modifier
                     .weight(1f),
-                verticalArrangement = Arrangement
-                    .spacedBy(4.dp),
-            ) {
-                Text(
-                    text = stringResource(state.zone.identifier),
-                    style = TextDefaults.title then TextStyles.bold,
-                    color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-                )
-
-                Text(
-                    text = pluralStringResource(
-                        resource = Res.plurals.zones_active_entities,
-                        quantity = state.entities.size,
-                        formatArgs = arrayOf(active, state.entities.size),
-                    ),
-                    style = TextDefaults.description,
-                )
-            }
+            )
 
             Row(
                 modifier = Modifier,
@@ -401,6 +397,39 @@ private fun ZonesScreenZoneRow(
 }
 
 private const val ZONE_ENTITY_COUNT = 3
+
+@Composable
+private fun ZonesScreenZoneDescription(
+    state: ZonesScreenState.ZoneState,
+    modifier: Modifier = Modifier,
+) {
+    val active = state.entities.values.count { it is Entity.Activatable && it.active }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = stringResource(state.zone.identifier),
+            lineHeight = 32.sp,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.W700,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        )
+
+        Text(
+            text = pluralStringResource(
+                resource = Res.plurals.zones_active_entities,
+                quantity = state.entities.size,
+                formatArgs = arrayOf(active, state.entities.size),
+            ),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        )
+    }
+}
 
 @Composable
 private fun ZonesScreenEntityIcon(
@@ -436,8 +465,10 @@ private fun ZonesScreenHeader(
     @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = stringResource(Res.string.zones_header),
-        style = TextDefaults.title then TextStyles.bold,
         modifier = modifier,
+        lineHeight = 32.sp,
+        fontSize = 24.sp,
+        fontWeight = FontWeight.W700,
         color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
     )
 }
@@ -453,8 +484,10 @@ private fun ZonesScreenDescription(
             resource = Res.plurals.zones_description,
             quantity = zones,
         ),
-        style = TextDefaults.description,
         modifier = modifier,
+        lineHeight = 20.sp,
+        fontSize = 14.sp,
+        color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
     )
 }
 
@@ -547,6 +580,18 @@ internal object ZonesScreenPreviewData {
 
     fun loaded() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Success
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = emptyMap()
+        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = DemoPreviewData.zones
+            .take(PREVIEW_MAX_ZONES)
+            .associateBy { it.identifier }
+            .mapValues { (_, zone) ->
+                object : ZonesScreenState.ZoneState {
+                    override val zone: Zone = zone
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
+                        .filter { it.zone?.identifier == zone.identifier }
+                        .associateBy { it.identifier }
+                }
+            }
     }
 }
+
+private const val PREVIEW_MAX_ZONES = 6

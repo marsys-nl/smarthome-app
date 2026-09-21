@@ -26,8 +26,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.Style
-import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -38,14 +36,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
-import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityData
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.MAX_ZONES
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
@@ -73,8 +72,7 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.component.TextDefaults
-import network.marsys.smarthome.shared.library.design.component.TextStyles
+import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.icons.Bath
 import network.marsys.smarthome.shared.library.design.icons.Bed
 import network.marsys.smarthome.shared.library.design.icons.Briefcase
@@ -185,15 +183,22 @@ private fun ZonesSectionEmptyContent(
 
             Text(
                 text = stringResource(Res.string.zones_empty_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_empty_description),
-                style = TextDefaults.description then TextStyles.centered,
                 minLines = 2,
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
             )
         }
     }
@@ -233,17 +238,22 @@ private fun ZonesSectionErrorContent(
 
             Text(
                 text = stringResource(Res.string.zones_error_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 6.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zones_error_description),
-                style = TextDefaults.description then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 20.dp),
+                textAlign = TextAlign.Center,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
@@ -326,9 +336,11 @@ private fun ZonesSectionZoneCard(
 
                 Text(
                     text = stringResource(state.zone.identifier),
-                    style = TextDefaults.header,
                     modifier = Modifier
                         .padding(top = 8.dp),
+                    lineHeight = 24.sp,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.W600,
                     color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
                 )
 
@@ -338,9 +350,11 @@ private fun ZonesSectionZoneCard(
                         active,
                         total,
                     ),
-                    style = TextDefaults.description,
                     modifier = Modifier
                         .padding(top = 4.dp),
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 )
             }
 
@@ -458,9 +472,10 @@ private fun ZonesSectionHeader(
                     ) {
                         Text(
                             text = stringResource(Res.string.zones_see_all),
-                            style = TextDefaults.normal then Style {
-                                fontWeight(FontWeight.W500)
-                            },
+                            lineHeight = 20.sp,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.W500,
+                            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                         )
 
                         Icon(
@@ -515,6 +530,7 @@ private fun ZonesSectionLoadedPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         ZonesSection(
             state = ZonesSectionPreviewData.loaded(),
@@ -550,13 +566,13 @@ internal object ZonesSectionPreviewData {
     }
 
     fun loaded() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DashboardScreenEntityData.zones
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DemoPreviewData.zones
             .take(MAX_ZONES)
             .associateBy { it.identifier }
             .mapValues { (_, zone) ->
                 object : DashboardScreenState.ZoneState {
                     override val zone: Zone = zone
-                    override val entities: Map<EntityIdentifier, Entity<*>> = DashboardScreenEntityData.entities
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
                         .filter { it.zone?.identifier == zone.identifier }
                         .associateBy { it.identifier }
                 }

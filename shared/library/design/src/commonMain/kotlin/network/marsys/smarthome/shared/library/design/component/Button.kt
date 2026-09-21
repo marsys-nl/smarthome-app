@@ -6,6 +6,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.foundation.style.Style
+import androidx.compose.foundation.style.animate
+import androidx.compose.foundation.style.contentPadding
 import androidx.compose.foundation.style.disabled
 import androidx.compose.foundation.style.hovered
 import androidx.compose.foundation.style.pressed
@@ -13,6 +15,7 @@ import androidx.compose.foundation.style.rememberUpdatedStyleState
 import androidx.compose.foundation.style.styleable
 import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -189,9 +192,11 @@ object ButtonStyle {
     )
 
     @Composable
-    fun primary() = base(
+    fun primary(
+        content: Color = ButtonColorTokens.ContentColor,
+    ) = base(
         background = SmartHomeTheme.colors[GradientKeyToken.BrandPrimaryToSecondary],
-        content = ButtonColorTokens.ContentColor,
+        content = content,
         border = ButtonColorTokens.BorderColor,
         disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
         disabledContent = ButtonColorTokens.DisabledContentColor,
@@ -269,6 +274,24 @@ private fun ButtonPreview(
         Button(
             onClick = {},
             style = ButtonStyle.primary(),
+            enabled = true,
+        ) {
+            Text("Button")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun OnBrandButtonPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeComponentPreview(
+        theme = theme,
+    ) {
+        Button(
+            onClick = {},
+            style = ButtonStyle.onBrand(),
             enabled = true,
         ) {
             Text("Button")

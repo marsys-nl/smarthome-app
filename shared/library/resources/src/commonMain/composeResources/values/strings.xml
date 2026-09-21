@@ -38,5 +38,5 @@
     <string name="entity_state_opening">Opening</string>
     <string name="entity_state_closing">Shutting</string>
 
-    <string name="unknown_entity">Unknown device</string>
+    <string name="unknown_entity">Unknown</string>
 </resources>

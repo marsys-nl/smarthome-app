@@ -101,14 +101,11 @@ fun SmartHomeApp(
         val theme by appearancePreferencesRepository.theme
             .collectAsStateWithLifecycle(ThemeSelection.SystemDefault)
 
-        CompositionLocalProvider(
-            LocalTranslationCache provides translationCache,
+        SmartHomeTheme(
+            theme = theme,
+            translations = translationCache,
         ) {
-            SmartHomeTheme(
-                theme = theme,
-            ) {
-                SmartHomeNavigation()
-            }
+            SmartHomeNavigation()
         }
     }
 }

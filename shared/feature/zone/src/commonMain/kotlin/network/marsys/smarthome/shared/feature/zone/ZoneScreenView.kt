@@ -12,15 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
-import androidx.compose.foundation.style.then
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
@@ -53,10 +55,7 @@ import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaul
 import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.SwitchSize
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.component.TextDefaults
-import network.marsys.smarthome.shared.library.design.component.TextStyles
 import network.marsys.smarthome.shared.library.design.domain.icon
-import network.marsys.smarthome.shared.library.design.icons.Blinds
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -244,15 +243,21 @@ private fun ZoneScreenEmptyViewContent(
 
             Text(
                 text = stringResource(Res.string.zone_entities_empty_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 4.dp),
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zone_entities_empty_description),
-                style = TextDefaults.description then TextStyles.centered,
                 minLines = 2,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
             )
         }
     }
@@ -293,17 +298,21 @@ private fun ZoneScreenErrorViewContent(
 
             Text(
                 text = stringResource(Res.string.zone_entities_error_title),
-                style = TextDefaults.header then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 6.dp),
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = stringResource(Res.string.zone_entities_error_description),
-                style = TextDefaults.description then TextStyles.centered,
                 modifier = Modifier
                     .padding(bottom = 20.dp),
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
                 minLines = 2,
             )
@@ -429,7 +438,9 @@ private fun RowScope.EntityDetails(
     ) {
         Text(
             text = stringResource(entity.identifier),
-            style = TextDefaults.header then TextStyles.bold,
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W700,
             color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -438,7 +449,8 @@ private fun RowScope.EntityDetails(
         Text(
             text = entity.descriptor
                 .localized(),
-            style = TextDefaults.description,
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
@@ -473,13 +485,15 @@ private fun ZoneScreenHeader(
         ) {
             Text(
                 text = stringResource(state.zone),
-                style = TextDefaults.title then TextStyles.bold,
+                lineHeight = 24.sp,
+                fontSize = 16.sp,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
             Text(
                 text = determineHeaderDescriptionText(state = state),
-                style = TextDefaults.description,
+                lineHeight = 20.sp,
+                fontSize = 14.sp,
             )
         }
     }

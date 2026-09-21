@@ -24,6 +24,7 @@ import network.marsys.smarthome.shared.library.design.adaptive.SplitPane
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import org.koin.compose.viewmodel.koinViewModel

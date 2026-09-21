@@ -23,12 +23,16 @@ import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
+import network.marsys.smarthome.shared.library.i18n.EmptyTranslationCache
 import network.marsys.smarthome.shared.library.i18n.LocalDescriptorStrings
+import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
+import network.marsys.smarthome.shared.library.i18n.TranslationCache
 import network.marsys.smarthome.shared.library.i18n.rememberDescriptorStrings
 
 @Composable
 fun SmartHomeTheme(
     theme: ThemeSelection,
+    translations: TranslationCache,
     content: @Composable () -> Unit,
 ) {
     val descriptorStrings = rememberDescriptorStrings()
@@ -50,6 +54,7 @@ fun SmartHomeTheme(
             LocalDescriptorStrings provides descriptorStrings,
             LocalIndication provides object : Indication {},
             LocalThemeSelection provides theme,
+            LocalTranslationCache provides translations,
         ),
     ) {
         SmartHomeTheme(
@@ -82,12 +87,14 @@ private fun SmartHomeTheme(
 fun SmartHomeComponentPreview(
     theme: ThemeSelection,
     modifier: Modifier = Modifier,
+    translations: TranslationCache = EmptyTranslationCache,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
         theme = theme,
+        translations = translations,
     ) {
         Column(
             modifier = modifier
@@ -103,11 +110,13 @@ fun SmartHomeComponentPreview(
 fun SmartHomeModalPreview(
     theme: ThemeSelection,
     modifier: Modifier = Modifier,
+    translations: TranslationCache = EmptyTranslationCache,
     background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
         theme = theme,
+        translations = translations,
     ) {
         Box(
             modifier = modifier
