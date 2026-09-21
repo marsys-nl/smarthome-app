@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_active_entities
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
@@ -52,6 +53,8 @@ import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.icon
+import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
+import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
@@ -349,8 +352,6 @@ private fun ZonesScreenZoneRow(
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val active = state.entities.values.count { it is Entity.Activatable && it.active }
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -371,31 +372,11 @@ private fun ZonesScreenZoneRow(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
+            ZonesScreenZoneDescription(
+                state = state,
                 modifier = Modifier
                     .weight(1f),
-                verticalArrangement = Arrangement
-                    .spacedBy(4.dp),
-            ) {
-                Text(
-                    text = stringResource(state.zone.identifier),
-                    lineHeight = 32.sp,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.W700,
-                    color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-                )
-
-                Text(
-                    text = pluralStringResource(
-                        resource = Res.plurals.zones_active_entities,
-                        quantity = state.entities.size,
-                        formatArgs = arrayOf(active, state.entities.size),
-                    ),
-                    lineHeight = 20.sp,
-                    fontSize = 14.sp,
-                    color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
-                )
-            }
+            )
 
             Row(
                 modifier = Modifier,
@@ -416,6 +397,39 @@ private fun ZonesScreenZoneRow(
 }
 
 private const val ZONE_ENTITY_COUNT = 3
+
+@Composable
+private fun ZonesScreenZoneDescription(
+    state: ZonesScreenState.ZoneState,
+    modifier: Modifier = Modifier,
+) {
+    val active = state.entities.values.count { it is Entity.Activatable && it.active }
+
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(4.dp),
+    ) {
+        Text(
+            text = stringResource(state.zone.identifier),
+            lineHeight = 32.sp,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.W700,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+        )
+
+        Text(
+            text = pluralStringResource(
+                resource = Res.plurals.zones_active_entities,
+                quantity = state.entities.size,
+                formatArgs = arrayOf(active, state.entities.size),
+            ),
+            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+        )
+    }
+}
 
 @Composable
 private fun ZonesScreenEntityIcon(
@@ -566,6 +580,18 @@ internal object ZonesScreenPreviewData {
 
     fun loaded() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Success
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = emptyMap()
+        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = DemoPreviewData.zones
+            .take(PREVIEW_MAX_ZONES)
+            .associateBy { it.identifier }
+            .mapValues { (_, zone) ->
+                object : ZonesScreenState.ZoneState {
+                    override val zone: Zone = zone
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
+                        .filter { it.zone?.identifier == zone.identifier }
+                        .associateBy { it.identifier }
+                }
+            }
     }
 }
+
+private const val PREVIEW_MAX_ZONES = 6

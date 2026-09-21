@@ -6,7 +6,7 @@ interface TranslationCache {
     operator fun get(key: String, language: String): String?
 }
 
-internal data object EmptyTranslationCache : TranslationCache {
+data object EmptyTranslationCache : TranslationCache {
     override fun get(key: String, language: String): String? = null
 }
 

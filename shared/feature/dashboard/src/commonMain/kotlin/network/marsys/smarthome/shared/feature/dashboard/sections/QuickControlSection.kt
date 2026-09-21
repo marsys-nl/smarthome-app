@@ -40,7 +40,6 @@ import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
-import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenEntityData
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
 import network.marsys.smarthome.shared.feature.dashboard.dashboard.generated.resources.Res
@@ -71,6 +70,7 @@ import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.icon
+import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
@@ -539,6 +539,7 @@ private fun LoadingQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loading(),
@@ -554,6 +555,7 @@ private fun EmptyQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.empty(),
@@ -569,6 +571,7 @@ private fun ErrorQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.error(),
@@ -584,6 +587,7 @@ private fun QuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(),
@@ -599,6 +603,7 @@ private fun GroupedQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
+        translations = DemoPreviewData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(
@@ -629,7 +634,7 @@ internal object QuickControlSectionPreviewData {
     }
 
     fun loaded(
-        entities: Map<EntityIdentifier, Entity<*>> = DashboardScreenEntityData.entities
+        entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
             .associateBy { it.identifier },
         groupedEntitiesByType: Boolean = false,
     ) = object : DashboardScreenState.QuickControlState {

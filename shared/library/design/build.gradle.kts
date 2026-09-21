@@ -31,6 +31,7 @@ kotlin {
         }
 
         commonMain.dependencies {
+            implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.i18n)
 
             implementation(libs.compose.foundation)
