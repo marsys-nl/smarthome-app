@@ -47,6 +47,7 @@ include(
     ":shared:domain:connection",
     ":shared:domain:entity",
     ":shared:feature:dashboard",
+    ":shared:feature:initialization",
     ":shared:feature:onboarding",
     ":shared:feature:profile",
     ":shared:feature:zone",
