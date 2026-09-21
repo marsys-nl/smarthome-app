@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.Authenticate
+import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.CheckSystemHealth
+import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfig
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
@@ -37,10 +41,8 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
-import network.marsys.smarthome.shared.library.design.icons.Check
 import network.marsys.smarthome.shared.library.design.icons.CircleCheck
 import network.marsys.smarthome.shared.library.design.icons.CircleClose
-import network.marsys.smarthome.shared.library.design.icons.Close
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -57,6 +59,9 @@ fun InitializationScreenView(
     content: @Composable () -> Unit,
 ) {
     InitializationScreenViewContent(
+        state = object : InitializationScreenState {
+            override val current: InitializationScreenState.State = InitializationScreenState.Idle
+        },
         modifier = modifier,
         content = content,
     )
@@ -64,46 +69,53 @@ fun InitializationScreenView(
 
 @Composable
 fun InitializationScreenViewContent(
+    state: InitializationScreenState,
     modifier: Modifier = Modifier,
     @Suppress("unused")
     content: @Composable () -> Unit,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        Column(
-            modifier = Modifier
-                .widthIn(max = Breakpoints.MEDIUM.dp)
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            InitializationScreenIcon(
-                modifier = Modifier
-                    .padding(bottom = 24.dp),
-            )
+    when (state.current) {
+        InitializationScreenState.Done ->
+            content.invoke()
 
-            Text(
-                text = "Connecting to your home...",
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                lineHeight = 32.sp,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.W700,
-            )
+        else ->
+            Box(
+                modifier = modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .widthIn(max = Breakpoints.MEDIUM.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    InitializationScreenIcon(
+                        modifier = Modifier
+                            .padding(bottom = 24.dp),
+                    )
 
-            Text(
-                text = "https://example.com",
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-                color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
-            )
+                    Text(
+                        text = "Connecting to your home...",
+                        modifier = Modifier
+                            .padding(bottom = 8.dp),
+                        lineHeight = 32.sp,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.W700,
+                    )
 
-            InitializationScreenSteps()
-        }
+                    Text(
+                        text = "https://example.com",
+                        modifier = Modifier
+                            .padding(bottom = 8.dp),
+                        lineHeight = 20.sp,
+                        fontSize = 14.sp,
+                        color = SmartHomeTheme.colors[ColorKeyToken.TextSecondary],
+                    )
+
+                    InitializationScreenSteps(state = state)
+                }
+            }
     }
 }
 
@@ -127,6 +139,7 @@ internal fun InitializationScreenIcon(
 
 @Composable
 private fun InitializationScreenSteps(
+    state: InitializationScreenState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -135,29 +148,29 @@ private fun InitializationScreenSteps(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        InitializationScreenStep(
-            title = "Connecting to backend",
-            icon = Icons.Wifi,
-            state = StepState.Complete,
-        )
-
-        InitializationScreenStep(
-            title = "Fetching configuration",
-            icon = Icons.Component,
-            state = StepState.InProgress,
-        )
-
-        InitializationScreenStep(
-            title = "Checking system health",
-            icon = Icons.House,
-            state = StepState.Failed,
-        )
-
-        InitializationScreenStep(
-            title = "Checking authentication",
-            icon = Icons.Shield,
-            state = StepState.Idle,
-        )
+        listOf(
+            Step(
+                title = "Checking system health",
+                icon = Icons.House,
+                state = determineStepState(current = state.current, step = CheckSystemHealth.order),
+            ),
+            Step(
+                title = "Fetching configuration",
+                icon = Icons.Component,
+                state = determineStepState(current = state.current, step = DownloadConfig.order),
+            ),
+            Step(
+                title = "Checking authentication",
+                icon = Icons.Shield,
+                state = determineStepState(current = state.current, step = Authenticate.order),
+            ),
+        ).forEach { step ->
+            InitializationScreenStep(
+                title = step.title,
+                icon = step.icon,
+                state = step.state,
+            )
+        }
     }
 }
 
@@ -278,6 +291,13 @@ private fun stepTitleColor(
     else -> SmartHomeTheme.colors[ColorKeyToken.TextPrimary]
 }
 
+@Stable
+data class Step(
+    val title: String,
+    val icon: ImageVector,
+    val state: StepState,
+)
+
 sealed interface StepState {
     data object Idle : StepState
     data object InProgress : StepState
@@ -285,18 +305,110 @@ sealed interface StepState {
     data object Failed : StepState
 }
 
+private fun determineStepState(current: InitializationScreenState.State, step: Int): StepState =
+    when (current) {
+        is InitializationScreenState.Complete, InitializationScreenState.Done ->
+            StepState.Complete
+
+        is InitializationScreenState.Step if current.order == step ->
+            StepState.InProgress
+
+        is InitializationScreenState.Step if current.order > step ->
+            StepState.Complete
+
+        is InitializationScreenState.Error if current.step.order == step ->
+            StepState.Failed
+
+        is InitializationScreenState.Error if current.step.order > step ->
+            StepState.Complete
+
+        else -> StepState.Idle
+    }
+
 @PreviewLocales
 @PreviewFontScales
 @PreviewScreenSizes
 @Composable
-private fun InitializationScreenViewPreview(
+private fun IdleInitializationScreenViewPreview(
     @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
 ) {
     SmartHomeTheme(
         theme = theme,
     ) {
         InitializationScreenViewContent(
+            state = InitializationPreviewData.idle,
             content = {},
         )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun InProgressInitializationScreenViewPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        InitializationScreenViewContent(
+            state = InitializationPreviewData.inProgress,
+            content = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun FailedInitializationScreenViewPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        InitializationScreenViewContent(
+            state = InitializationPreviewData.failed,
+            content = {},
+        )
+    }
+}
+
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun SucceededInitializationScreenViewPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        InitializationScreenViewContent(
+            state = InitializationPreviewData.succeeded,
+            content = {},
+        )
+    }
+}
+
+private object InitializationPreviewData {
+    val idle = object : InitializationScreenState {
+        override val current: InitializationScreenState.State = InitializationScreenState.Idle
+    }
+
+    val inProgress = object : InitializationScreenState {
+        override val current: InitializationScreenState.State = DownloadConfig
+    }
+
+    val failed = object : InitializationScreenState {
+        override val current: InitializationScreenState.State = InitializationScreenState.Error(
+            step = DownloadConfig,
+        )
+    }
+
+    val succeeded = object : InitializationScreenState {
+        override val current: InitializationScreenState.State = InitializationScreenState.Complete
     }
 }
