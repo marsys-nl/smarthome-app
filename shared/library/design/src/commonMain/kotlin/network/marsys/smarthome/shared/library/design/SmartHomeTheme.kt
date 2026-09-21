@@ -32,7 +32,7 @@ import network.marsys.smarthome.shared.library.i18n.rememberDescriptorStrings
 @Composable
 fun SmartHomeTheme(
     theme: ThemeSelection,
-    translations: TranslationCache,
+    translations: TranslationCache = EmptyTranslationCache,
     content: @Composable () -> Unit,
 ) {
     val descriptorStrings = rememberDescriptorStrings()
