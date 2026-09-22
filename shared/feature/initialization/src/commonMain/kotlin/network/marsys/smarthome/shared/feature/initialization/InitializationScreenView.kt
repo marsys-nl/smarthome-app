@@ -28,6 +28,11 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.Authenticate
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.CheckSystemHealth
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfig
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.Res
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_authenticate
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_check_system_health
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_download_configuration
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_title
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -53,6 +58,7 @@ import network.marsys.smarthome.shared.library.design.icons.Wifi
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.CardTokens
+import network.marsys.smarthome.shared.library.i18n.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -98,7 +104,7 @@ fun InitializationScreenViewContent(
                     )
 
                     Text(
-                        text = "Connecting to your home...",
+                        text = stringResource(Res.string.initialization_title),
                         modifier = Modifier
                             .padding(bottom = 8.dp),
                         lineHeight = 32.sp,
@@ -152,17 +158,17 @@ private fun InitializationScreenSteps(
     ) {
         listOf(
             Step(
-                title = "Checking system health",
+                title = stringResource(Res.string.initialization_step_check_system_health),
                 icon = Icons.House,
                 state = determineStepState(current = state.current, step = CheckSystemHealth.order),
             ),
             Step(
-                title = "Fetching configuration",
+                title = stringResource(Res.string.initialization_step_download_configuration),
                 icon = Icons.Component,
                 state = determineStepState(current = state.current, step = DownloadConfig.order),
             ),
             Step(
-                title = "Checking authentication",
+                title = stringResource(Res.string.initialization_step_authenticate),
                 icon = Icons.Shield,
                 state = determineStepState(current = state.current, step = Authenticate.order),
             ),
