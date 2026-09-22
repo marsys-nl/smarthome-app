@@ -29,6 +29,7 @@ kotlin {
         }
 
         commonMain.dependencies {
+            implementation(projects.shared.domain.connection)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.design.domain)

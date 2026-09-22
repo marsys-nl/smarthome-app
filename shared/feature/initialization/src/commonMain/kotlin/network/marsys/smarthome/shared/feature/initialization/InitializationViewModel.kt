@@ -7,7 +7,10 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
+import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
@@ -19,24 +22,17 @@ internal typealias InitializationStateHolder =
 
 class InitializationViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
+    private val validateBackendUriUseCase: ValidateBackendUriUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     InitializationStateHolder by coroutineScope.suspendingActionStateMutator(
         state = MutableInitializationScreenState(),
         producer = { state, actions ->
-            var connectionValidationJob: Job?
+            var initializationJob: Job?
 
-            launchDemoModeMutations(
+            initializationJob = launchInitializationMutations(
                 applicationConfigurationRepository = applicationConfigurationRepository,
-                state = state,
-            )
-
-            launchUriMutations(
-                applicationConfigurationRepository = applicationConfigurationRepository,
-                state = state,
-            )
-
-            connectionValidationJob = launchConnectionValidationMutations(
+                validateBackendUriUseCase = validateBackendUriUseCase,
                 state = state,
             )
 
@@ -46,8 +42,10 @@ class InitializationViewModel(
             ) {
                 when (type()) {
                     is InitializationScreenAction.RetryInitialization -> {
-                        connectionValidationJob?.cancel()
-                        connectionValidationJob = launchConnectionValidationMutations(
+                        initializationJob?.cancel()
+                        initializationJob = launchInitializationMutations(
+                            applicationConfigurationRepository = applicationConfigurationRepository,
+                            validateBackendUriUseCase = validateBackendUriUseCase,
                             state = state,
                         )
                     }
@@ -57,43 +55,83 @@ class InitializationViewModel(
     )
 
 context(scope: CoroutineScope)
-private fun launchDemoModeMutations(
+private fun launchInitializationMutations(
     applicationConfigurationRepository: ApplicationConfigurationRepository,
+    validateBackendUriUseCase: ValidateBackendUriUseCase,
     state: MutableInitializationScreenState,
+) = scope.launch {
+    context(with = state) {
+        if (applicationConfigurationRepository.isDemoMode.first()) {
+            state.current = InitializationScreenState.Done
+            return@launch
+        }
+
+        val uri = applicationConfigurationRepository.backendUri.first()
+        val apiKey = applicationConfigurationRepository.apiKey.first()
+
+        state.uri = uri ?: "…"
+
+        if (uri == null) {
+            state.current = InitializationScreenState.Error(
+                step = InitializationScreenState.CheckSystemHealth,
+            )
+            return@launch
+        }
+
+        runInitializationStages(
+            stages = listOf(
+                Stage(
+                    state = InitializationScreenState.CheckSystemHealth,
+                    run = {
+                        validateBackendUriUseCase.invoke(uri = uri, apiKey = apiKey)
+                    },
+                ),
+                Stage(
+                    state = InitializationScreenState.DownloadConfig,
+                    run = {
+                        delay(1.seconds)
+                        Result.succeed(Unit)
+                    },
+                ),
+                Stage(
+                    state = InitializationScreenState.Authenticate,
+                    run = {
+                        delay(1.seconds)
+                        Result.succeed(Unit)
+                    },
+                ),
+            ),
+        )
+    }
+}
+
+context(state: MutableInitializationScreenState)
+private suspend fun runInitializationStages(
+    stages: List<Stage>,
 ) {
-    scope.launch {
-        applicationConfigurationRepository.isDemoMode.collect {
-            if (it) {
-                state.current = InitializationScreenState.Done
+    for (stage in stages.sortedBy { it.state.order }) {
+        state.current = stage.state
+
+        @Suppress("BracesOnWhenStatements")
+        when (stage.run()) {
+            is Result.Success -> continue
+
+            is Result.Failure -> {
+                state.current = InitializationScreenState.Error(step = stage.state)
+                return
             }
         }
     }
+
+    state.current = InitializationScreenState.Complete
+    delay(.5.seconds)
+    state.current = InitializationScreenState.Done
 }
 
-context(scope: CoroutineScope)
-private fun launchUriMutations(
-    applicationConfigurationRepository: ApplicationConfigurationRepository,
-    state: MutableInitializationScreenState,
-) {
-    scope.launch {
-        applicationConfigurationRepository.backendUri.collect {
-            state.uri = it ?: "…"
-        }
-    }
-}
-
-context(scope: CoroutineScope)
-private fun launchConnectionValidationMutations(
-    state: MutableInitializationScreenState,
-) = scope.launch {
-    state.current = InitializationScreenState.CheckSystemHealth
-    delay(1.seconds)
-    state.current = InitializationScreenState.DownloadConfig
-    delay(2.seconds)
-    state.current = InitializationScreenState.Error(
-        step = InitializationScreenState.DownloadConfig,
-    )
-}
+private class Stage(
+    val state: InitializationScreenState.Step,
+    val run: suspend () -> Result<Unit, *>,
+)
 
 private class MutableInitializationScreenState : InitializationScreenState {
     override var current: InitializationScreenState.State by mutableStateOf(InitializationScreenState.Idle)
