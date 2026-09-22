@@ -7,6 +7,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
+import network.marsys.smarthome.shared.feature.initialization.InitializationViewModel
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
 import network.marsys.smarthome.shared.feature.profile.ProfileViewModel
 import network.marsys.smarthome.shared.feature.zone.ZoneViewModel
@@ -14,6 +15,7 @@ import network.marsys.smarthome.shared.feature.zones.ZonesViewModel
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
 import network.marsys.smarthome.shared.library.i18n.TranslationCache
 import network.marsys.smarthome.shared.library.network.networkModule
@@ -33,6 +35,13 @@ private val viewModelModule = module {
         DashboardViewModel(
             applicationConfigurationRepository = get(),
             entityRepository = get(),
+            coroutineScope = viewModelCoroutineScope(),
+        )
+    }
+
+    viewModel {
+        InitializationViewModel(
+            applicationConfigurationRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
@@ -95,15 +104,13 @@ fun SmartHomeApp(
             )
         },
     ) {
-        val translationCache = koinInject<TranslationCache>()
-
         val appearancePreferencesRepository = koinInject<AppearancePreferencesRepository>()
         val theme by appearancePreferencesRepository.theme
             .collectAsStateWithLifecycle(ThemeSelection.SystemDefault)
 
         SmartHomeTheme(
             theme = theme,
-            translations = translationCache,
+            translations = DemoPreviewData.translations,
         ) {
             SmartHomeNavigation()
         }

@@ -1,12 +1,13 @@
 package network.marsys.smarthome.shared.feature.initialization
 
 import androidx.compose.runtime.Stable
-import kotlin.reflect.KClass
 
 @Stable
 interface InitializationScreenState {
     val current: State
+    val uri: String
 
+    @Stable
     sealed interface State
 
     @Stable
@@ -26,11 +27,8 @@ interface InitializationScreenState {
     data class Error(
         val step: Step,
     ) : State
+}
 
-    val steps: List<KClass<out Step>>
-        get() = listOf(
-            CheckSystemHealth::class,
-            DownloadConfig::class,
-            Authenticate::class,
-        )
+sealed class InitializationScreenAction(val key: String) {
+    data object RetryInitialization : InitializationScreenAction("RetryInitialization")
 }

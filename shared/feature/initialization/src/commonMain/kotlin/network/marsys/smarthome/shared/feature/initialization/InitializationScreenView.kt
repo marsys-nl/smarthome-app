@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.Authenticate
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.CheckSystemHealth
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfig
+import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
@@ -52,16 +53,17 @@ import network.marsys.smarthome.shared.library.design.icons.Wifi
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.design.theme.tokens.components.CardTokens
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun InitializationScreenView(
     modifier: Modifier = Modifier,
+    viewModel: InitializationViewModel = koinViewModel(),
     content: @Composable () -> Unit,
 ) {
+    val state = viewModel.produceStateWithLifecycle()
     InitializationScreenViewContent(
-        state = object : InitializationScreenState {
-            override val current: InitializationScreenState.State = InitializationScreenState.Idle
-        },
+        state = state,
         modifier = modifier,
         content = content,
     )
@@ -105,7 +107,7 @@ fun InitializationScreenViewContent(
                     )
 
                     Text(
-                        text = "https://example.com",
+                        text = state.uri,
                         modifier = Modifier
                             .padding(bottom = 8.dp),
                         lineHeight = 20.sp,
@@ -396,19 +398,23 @@ private fun SucceededInitializationScreenViewPreview(
 private object InitializationPreviewData {
     val idle = object : InitializationScreenState {
         override val current: InitializationScreenState.State = InitializationScreenState.Idle
+        override val uri: String = "https://thisisaverylongurlthatshouldstillwork.com"
     }
 
     val inProgress = object : InitializationScreenState {
         override val current: InitializationScreenState.State = DownloadConfig
+        override val uri: String = "https://example.com"
     }
 
     val failed = object : InitializationScreenState {
         override val current: InitializationScreenState.State = InitializationScreenState.Error(
             step = DownloadConfig,
         )
+        override val uri: String = "https://example.com"
     }
 
     val succeeded = object : InitializationScreenState {
         override val current: InitializationScreenState.State = InitializationScreenState.Complete
+        override val uri: String = "https://example.com"
     }
 }
