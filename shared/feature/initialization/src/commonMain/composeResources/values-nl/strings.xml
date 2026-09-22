@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="initialization_title">Verbinding maken met je huis</string>
+    <string name="initialization_step_check_system_health">Systeemstatus controleren</string>
+    <string name="initialization_step_download_configuration">Configuratie ophalen</string>
+    <string name="initialization_step_authenticate">Authenticatie controleren</string>
+</resources>

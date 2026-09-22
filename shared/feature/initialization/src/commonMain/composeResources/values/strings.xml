@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="initialization_title">Connecting to your home</string>
+    <string name="initialization_step_check_system_health">Checking system health</string>
+    <string name="initialization_step_download_configuration">Fetching configuration</string>
+    <string name="initialization_step_authenticate">Checking authentication</string>
+</resources>
