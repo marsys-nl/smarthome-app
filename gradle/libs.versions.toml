@@ -19,7 +19,7 @@ androidx-lifecycle = "2.11.0"
 androidx-navigation = "1.1.1"
 androidx-window = "1.5.1"
 
-build-konfig = "0.22.0"
+build-konfig = "0.23.0"
 
 compose-unstyled = "2.10.0"
 
