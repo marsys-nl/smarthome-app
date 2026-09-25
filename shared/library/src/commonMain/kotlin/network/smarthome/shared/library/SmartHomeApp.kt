@@ -42,7 +42,8 @@ private val viewModelModule = module {
     viewModel {
         InitializationViewModel(
             applicationConfigurationRepository = get(),
-            validateBackendUriUseCase = get(),
+            checkSystemHealthUseCase = get(),
+            downloadConfigurationUseCase = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }

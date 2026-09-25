@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.Authenticate
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.CheckSystemHealth
-import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfig
+import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfiguration
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.Res
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_authenticate
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_check_system_health
@@ -165,7 +165,7 @@ private fun InitializationScreenSteps(
             Step(
                 title = stringResource(Res.string.initialization_step_download_configuration),
                 icon = Icons.Component,
-                state = determineStepState(current = state.current, step = DownloadConfig.order),
+                state = determineStepState(current = state.current, step = DownloadConfiguration.order),
             ),
             Step(
                 title = stringResource(Res.string.initialization_step_authenticate),
@@ -408,13 +408,13 @@ private object InitializationPreviewData {
     }
 
     val inProgress = object : InitializationScreenState {
-        override val current: InitializationScreenState.State = DownloadConfig
+        override val current: InitializationScreenState.State = DownloadConfiguration
         override val uri: String = "https://example.com"
     }
 
     val failed = object : InitializationScreenState {
         override val current: InitializationScreenState.State = InitializationScreenState.Error(
-            step = DownloadConfig,
+            step = DownloadConfiguration,
         )
         override val uri: String = "https://example.com"
     }
