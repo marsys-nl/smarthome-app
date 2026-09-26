@@ -25,6 +25,7 @@ kotlin {
             implementation(projects.shared.domain.connection)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.network)
+            implementation(projects.shared.library.store)
 
             implementation(libs.koin.compose)
 

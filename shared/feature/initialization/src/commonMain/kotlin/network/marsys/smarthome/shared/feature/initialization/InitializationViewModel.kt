@@ -9,8 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import network.marsys.smarthome.shared.domain.connection.ValidateBackendUriUseCase
+import network.marsys.smarthome.shared.domain.connection.CheckSystemHealthUseCase
+import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUseCase
 import network.marsys.smarthome.shared.library.core.Result
+import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
@@ -22,7 +24,8 @@ internal typealias InitializationStateHolder =
 
 class InitializationViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
-    private val validateBackendUriUseCase: ValidateBackendUriUseCase,
+    private val checkSystemHealthUseCase: CheckSystemHealthUseCase,
+    private val downloadConfigurationUseCase: DownloadConfigurationUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     InitializationStateHolder by coroutineScope.suspendingActionStateMutator(
@@ -32,7 +35,8 @@ class InitializationViewModel(
 
             initializationJob = launchInitializationMutations(
                 applicationConfigurationRepository = applicationConfigurationRepository,
-                validateBackendUriUseCase = validateBackendUriUseCase,
+                checkSystemHealthUseCase = checkSystemHealthUseCase,
+                downloadConfigurationUseCase = downloadConfigurationUseCase,
                 state = state,
             )
 
@@ -45,7 +49,8 @@ class InitializationViewModel(
                         initializationJob?.cancel()
                         initializationJob = launchInitializationMutations(
                             applicationConfigurationRepository = applicationConfigurationRepository,
-                            validateBackendUriUseCase = validateBackendUriUseCase,
+                            checkSystemHealthUseCase = checkSystemHealthUseCase,
+                            downloadConfigurationUseCase = downloadConfigurationUseCase,
                             state = state,
                         )
                     }
@@ -57,7 +62,8 @@ class InitializationViewModel(
 context(scope: CoroutineScope)
 private fun launchInitializationMutations(
     applicationConfigurationRepository: ApplicationConfigurationRepository,
-    validateBackendUriUseCase: ValidateBackendUriUseCase,
+    checkSystemHealthUseCase: CheckSystemHealthUseCase,
+    downloadConfigurationUseCase: DownloadConfigurationUseCase,
     state: MutableInitializationScreenState,
 ) = scope.launch {
     context(with = state) {
@@ -67,71 +73,62 @@ private fun launchInitializationMutations(
         }
 
         val uri = applicationConfigurationRepository.backendUri.first()
-        val apiKey = applicationConfigurationRepository.apiKey.first()
-
         state.uri = uri ?: "…"
 
-        if (uri == null) {
-            state.current = InitializationScreenState.Error(
-                step = InitializationScreenState.CheckSystemHealth,
-            )
-            return@launch
-        }
-
-        runInitializationStages(
-            stages = listOf(
-                Stage(
-                    state = InitializationScreenState.CheckSystemHealth,
-                    run = {
-                        validateBackendUriUseCase.invoke(uri = uri, apiKey = apiKey)
-                    },
-                ),
-                Stage(
-                    state = InitializationScreenState.DownloadConfig,
-                    run = {
-                        delay(1.seconds)
-                        Result.succeed(Unit)
-                    },
-                ),
-                Stage(
-                    state = InitializationScreenState.Authenticate,
-                    run = {
-                        delay(1.seconds)
-                        Result.succeed(Unit)
-                    },
-                ),
-            ),
-        )
-    }
-}
-
-context(state: MutableInitializationScreenState)
-private suspend fun runInitializationStages(
-    stages: List<Stage>,
-) {
-    for (stage in stages.sortedBy { it.state.order }) {
-        state.current = stage.state
-
-        @Suppress("BracesOnWhenStatements")
-        when (stage.run()) {
-            is Result.Success -> continue
-
-            is Result.Failure -> {
-                state.current = InitializationScreenState.Error(step = stage.state)
-                return
+        state.runInitialization {
+            stage(InitializationScreenState.CheckSystemHealth) {
+                checkSystemHealthUseCase.invoke()
             }
+
+            val configuration = stage(InitializationScreenState.DownloadConfiguration) {
+                downloadConfigurationUseCase.invoke()
+            }
+
+            val user = stage(InitializationScreenState.Authenticate) {
+                delay(1.seconds)
+                succeed(with = Unit)
+            }
+
+            //
         }
     }
-
-    state.current = InitializationScreenState.Complete
-    delay(.5.seconds)
-    state.current = InitializationScreenState.Done
 }
 
-private class Stage(
-    val state: InitializationScreenState.Step,
-    val run: suspend () -> Result<Unit, *>,
-)
+private suspend fun MutableInitializationScreenState.runInitialization(
+    block: suspend InitializationScope.() -> Unit,
+) {
+    try {
+        block.invoke(InitializationScope(state = this))
+    } catch (failure: StageFailure) {
+        current = InitializationScreenState.Error(step = failure.step)
+        return
+    }
+
+    current = InitializationScreenState.Complete
+    delay(.5.seconds)
+    current = InitializationScreenState.Done
+}
+
+class StageFailure(
+    val step: InitializationScreenState.Step,
+    val reason: Any?,
+) : Exception()
+
+private class InitializationScope(
+    private val state: MutableInitializationScreenState,
+) {
+    suspend fun <T> stage(
+        step: InitializationScreenState.Step,
+        block: suspend () -> Result<T, *>,
+    ): T {
+        state.current = step
+
+        return when (val result = block()) {
+            is Result.Success -> result.value
+            is Result.Failure -> throw StageFailure(step = step, reason = result.value)
+        }
+    }
+}
 
 private class MutableInitializationScreenState : InitializationScreenState {
     override var current: InitializationScreenState.State by mutableStateOf(InitializationScreenState.Idle)

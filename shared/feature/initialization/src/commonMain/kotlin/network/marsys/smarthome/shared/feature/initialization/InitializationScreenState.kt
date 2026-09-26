@@ -18,7 +18,7 @@ interface InitializationScreenState {
     data object Idle : State
 
     data object CheckSystemHealth : Step(order = 1)
-    data object DownloadConfig : Step(order = 2)
+    data object DownloadConfiguration : Step(order = 2)
     data object Authenticate : Step(order = 3)
 
     data object Complete : State
