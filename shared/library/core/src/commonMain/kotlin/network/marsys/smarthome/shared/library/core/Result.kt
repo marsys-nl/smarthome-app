@@ -1,5 +1,7 @@
 package network.marsys.smarthome.shared.library.core
 
+import network.marsys.smarthome.shared.library.core.Result.Companion.fail
+
 /**
  * A sealed interface representing a result of an operation that can either
  * be a success with a value of type [T], or a failure with a value of type [E].
@@ -22,6 +24,12 @@ sealed interface Result<out T, out E> {
             Failure(with)
     }
 }
+
+inline fun <T, E, R> Result<T, E>.mapFailure(action: (E) -> R): Result<T, R> =
+    when (this) {
+        is Result.Success -> this
+        is Result.Failure -> fail(with = action.invoke(value))
+    }
 
 inline fun <T, E> Result<T, E>.onFailure(action: (Result.Failure<E>) -> Nothing): T =
     when (this) {

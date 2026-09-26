@@ -35,8 +35,10 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.data.authentication)
             implementation(projects.shared.data.connection)
             implementation(projects.shared.data.entity)
+            implementation(projects.shared.domain.authentication)
             implementation(projects.shared.domain.connection)
             implementation(projects.shared.domain.entity)
             implementation(projects.shared.feature.dashboard)
@@ -45,6 +47,7 @@ kotlin {
             implementation(projects.shared.feature.profile)
             implementation(projects.shared.feature.zone)
             implementation(projects.shared.feature.zones)
+            implementation(projects.shared.infrastructure.authentication)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.design.domain)

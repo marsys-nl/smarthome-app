@@ -23,6 +23,8 @@ android {
 
         versionCode = libs.versions.smarthome.app.code.get().toInt()
         versionName = "$version"
+
+        manifestPlaceholders["oidcRedirectScheme"] = "network.marsys.smarthome"
     }
 
     signingConfigs {
@@ -68,4 +70,6 @@ dependencies {
 
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
+
+    implementation(libs.oidc.appsupport)
 }
