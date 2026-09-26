@@ -9,6 +9,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import network.marsys.smarthome.shared.domain.authentication.AuthenticateUseCase
 import network.marsys.smarthome.shared.domain.connection.CheckSystemHealthUseCase
 import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUseCase
 import network.marsys.smarthome.shared.library.core.Result
@@ -24,6 +25,7 @@ internal typealias InitializationStateHolder =
 
 class InitializationViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
+    private val authenticateUseCase: AuthenticateUseCase,
     private val checkSystemHealthUseCase: CheckSystemHealthUseCase,
     private val downloadConfigurationUseCase: DownloadConfigurationUseCase,
     coroutineScope: CoroutineScope,
@@ -35,6 +37,7 @@ class InitializationViewModel(
 
             initializationJob = launchInitializationMutations(
                 applicationConfigurationRepository = applicationConfigurationRepository,
+                authenticateUseCase = authenticateUseCase,
                 checkSystemHealthUseCase = checkSystemHealthUseCase,
                 downloadConfigurationUseCase = downloadConfigurationUseCase,
                 state = state,
@@ -49,6 +52,7 @@ class InitializationViewModel(
                         initializationJob?.cancel()
                         initializationJob = launchInitializationMutations(
                             applicationConfigurationRepository = applicationConfigurationRepository,
+                            authenticateUseCase = authenticateUseCase,
                             checkSystemHealthUseCase = checkSystemHealthUseCase,
                             downloadConfigurationUseCase = downloadConfigurationUseCase,
                             state = state,
@@ -62,6 +66,7 @@ class InitializationViewModel(
 context(scope: CoroutineScope)
 private fun launchInitializationMutations(
     applicationConfigurationRepository: ApplicationConfigurationRepository,
+    authenticateUseCase: AuthenticateUseCase,
     checkSystemHealthUseCase: CheckSystemHealthUseCase,
     downloadConfigurationUseCase: DownloadConfigurationUseCase,
     state: MutableInitializationScreenState,
@@ -84,12 +89,12 @@ private fun launchInitializationMutations(
                 downloadConfigurationUseCase.invoke()
             }
 
-            val user = stage(InitializationScreenState.Authenticate) {
-                delay(1.seconds)
-                succeed(with = Unit)
+            stage(InitializationScreenState.Authenticate) {
+                authenticateUseCase.invoke(
+                    issuer = configuration.authUri,
+                    clientIdentifier = "smarthome-app",
+                )
             }
-
-            //
         }
     }
 }

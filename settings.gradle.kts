@@ -42,8 +42,10 @@ includeBuild("build-logic")
 
 include(
     ":app:android",
+    ":shared:data:authentication",
     ":shared:data:connection",
     ":shared:data:entity",
+    ":shared:domain:authentication",
     ":shared:domain:connection",
     ":shared:domain:entity",
     ":shared:feature:dashboard",
@@ -52,6 +54,7 @@ include(
     ":shared:feature:profile",
     ":shared:feature:zone",
     ":shared:feature:zones",
+    ":shared:infrastructure:authentication",
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",

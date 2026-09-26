@@ -44,6 +44,8 @@ ktlint = "1.8.0"
 
 ktor = "3.6.0"
 
+oidc = "0.18.3"
+
 test-balloon = "1.1.0"
 
 [libraries]
@@ -91,6 +93,11 @@ ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serializatio
 
 marsys-smarthome-api = { group = "network.marsys.smarthome", name = "smarthome-api", version.ref = "smarthome-api" }
 marsys-smarthome-domain = { group = "network.marsys.smarthome", name = "smarthome-domain", version.ref = "smarthome-domain" }
+
+oidc-appsupport = { group = "io.github.kalinjul.kotlin.multiplatform", name = "oidc-appsupport", version.ref = "oidc" }
+oidc-core = { group = "io.github.kalinjul.kotlin.multiplatform", name = "oidc-core", version.ref = "oidc" }
+oidc-ktor = { group = "io.github.kalinjul.kotlin.multiplatform", name = "oidc-ktor", version.ref = "oidc" }
+oidc-tokenstore = { group = "io.github.kalinjul.kotlin.multiplatform", name = "oidc-tokenstore", version.ref = "oidc" }
 
 test-balloon-core = { group = "de.infix.testBalloon", name = "testBalloon-framework-core", version.ref = "test-balloon" }
 
