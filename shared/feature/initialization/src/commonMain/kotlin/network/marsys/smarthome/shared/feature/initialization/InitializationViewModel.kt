@@ -95,6 +95,10 @@ private fun launchInitializationMutations(
                     clientIdentifier = "smarthome-app",
                 )
             }
+
+            stage(InitializationScreenState.SynchronizeApplicationState) {
+                succeed(with = Unit)
+            }
         }
     }
 }
@@ -111,7 +115,7 @@ private suspend fun MutableInitializationScreenState.runInitialization(
 
     current = InitializationScreenState.Complete
     delay(.5.seconds)
-    current = InitializationScreenState.Done
+//    current = InitializationScreenState.Done
 }
 
 class StageFailure(
