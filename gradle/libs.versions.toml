@@ -26,7 +26,7 @@ compose-unstyled = "2.10.0"
 detekt = "2.0.0-alpha.6"
 detekt-compose-rules = "0.6.6"
 
-jetbrains-compose = "1.12.0"
+jetbrains-compose = "1.12.1"
 
 jvm-toolchain = "21"
 
