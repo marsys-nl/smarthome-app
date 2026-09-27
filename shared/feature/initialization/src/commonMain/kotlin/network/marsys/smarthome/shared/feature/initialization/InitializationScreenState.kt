@@ -21,6 +21,8 @@ interface InitializationScreenState {
     data object DownloadConfiguration : Step(order = 2)
     data object Authenticate : Step(order = 3)
 
+    data object SynchronizeApplicationState : Step(order = 4)
+
     data object Complete : State
     data object Done : State
 

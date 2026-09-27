@@ -28,10 +28,12 @@ import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.Authenticate
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.CheckSystemHealth
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfiguration
+import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.SynchronizeApplicationState
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.Res
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_authenticate
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_check_system_health
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_download_configuration
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_synchronize_state
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_title
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -53,6 +55,7 @@ import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
+import network.marsys.smarthome.shared.library.design.icons.RefreshCw
 import network.marsys.smarthome.shared.library.design.icons.Shield
 import network.marsys.smarthome.shared.library.design.icons.Wifi
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
@@ -171,6 +174,11 @@ private fun InitializationScreenSteps(
                 title = stringResource(Res.string.initialization_step_authenticate),
                 icon = Icons.Shield,
                 state = determineStepState(current = state.current, step = Authenticate.order),
+            ),
+            Step(
+                title = stringResource(Res.string.initialization_step_synchronize_state),
+                icon = Icons.RefreshCw,
+                state = determineStepState(current = state.current, step = SynchronizeApplicationState.order),
             ),
         ).forEach { step ->
             InitializationScreenStep(
