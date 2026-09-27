@@ -115,12 +115,11 @@ private suspend fun MutableInitializationScreenState.runInitialization(
 
     current = InitializationScreenState.Complete
     delay(.5.seconds)
-//    current = InitializationScreenState.Done
+    current = InitializationScreenState.Done
 }
 
 class StageFailure(
     val step: InitializationScreenState.Step,
-    val reason: Any?,
 ) : Exception()
 
 private class InitializationScope(
@@ -134,7 +133,7 @@ private class InitializationScope(
 
         return when (val result = block()) {
             is Result.Success -> result.value
-            is Result.Failure -> throw StageFailure(step = step, reason = result.value)
+            is Result.Failure -> throw StageFailure(step = step)
         }
     }
 }
