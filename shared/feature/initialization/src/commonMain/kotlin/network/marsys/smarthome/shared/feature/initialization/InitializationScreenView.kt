@@ -52,11 +52,14 @@ import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTh
 import network.marsys.smarthome.shared.library.design.icons.CircleCheck
 import network.marsys.smarthome.shared.library.design.icons.CircleClose
 import network.marsys.smarthome.shared.library.design.icons.Component
+import network.marsys.smarthome.shared.library.design.icons.HeartPulse
 import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
 import network.marsys.smarthome.shared.library.design.icons.RefreshCw
+import network.marsys.smarthome.shared.library.design.icons.Settings
 import network.marsys.smarthome.shared.library.design.icons.Shield
+import network.marsys.smarthome.shared.library.design.icons.ShieldCheck
 import network.marsys.smarthome.shared.library.design.icons.Wifi
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
@@ -162,17 +165,17 @@ private fun InitializationScreenSteps(
         listOf(
             Step(
                 title = stringResource(Res.string.initialization_step_check_system_health),
-                icon = Icons.House,
+                icon = Icons.HeartPulse,
                 state = determineStepState(current = state.current, step = CheckSystemHealth.order),
             ),
             Step(
                 title = stringResource(Res.string.initialization_step_download_configuration),
-                icon = Icons.Component,
+                icon = Icons.Settings,
                 state = determineStepState(current = state.current, step = DownloadConfiguration.order),
             ),
             Step(
                 title = stringResource(Res.string.initialization_step_authenticate),
-                icon = Icons.Shield,
+                icon = Icons.ShieldCheck,
                 state = determineStepState(current = state.current, step = Authenticate.order),
             ),
             Step(
