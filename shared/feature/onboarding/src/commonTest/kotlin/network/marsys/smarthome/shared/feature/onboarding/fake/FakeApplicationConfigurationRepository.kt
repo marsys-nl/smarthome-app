@@ -3,27 +3,12 @@ package network.marsys.smarthome.shared.feature.onboarding.fake
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 
 class FakeApplicationConfigurationRepository(
-    override val apiKey: MutableStateFlow<String?> =
-        MutableStateFlow(value = null),
-    override val backendUri: MutableStateFlow<String?> =
-        MutableStateFlow(value = null),
-    override val isDemoMode: MutableStateFlow<Boolean> =
-        MutableStateFlow(value = false),
+    override val connection: MutableStateFlow<ConnectionConfiguration> =
+        MutableStateFlow(value = ConnectionConfiguration.Unconfigured),
 ) : ApplicationConfigurationRepository {
-    override suspend fun setApiKey(apiKey: String?) =
-        this.apiKey.update {
-            apiKey
-        }
-
-    override suspend fun setBackendUri(uri: String) =
-        this.backendUri.update {
-            uri
-        }
-
-    override suspend fun setDemoMode(enabled: Boolean) =
-        this.isDemoMode.update {
-            enabled
-        }
+    override suspend fun setConnectionConfiguration(configuration: ConnectionConfiguration) =
+        this.connection.update { configuration }
 }

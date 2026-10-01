@@ -20,23 +20,12 @@ import network.marsys.smarthome.shared.library.core.onFailure
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 
 internal class CheckSystemHealthUseCaseImpl(
-    private val applicationConfigurationRepository: ApplicationConfigurationRepository,
     private val client: HttpClient,
 ) : CheckSystemHealthUseCase {
     override suspend fun invoke(): Result<Unit, CheckSystemHealthUseCase.Reason> = try {
-        val apiKey = applicationConfigurationRepository.apiKey.first()
-        val url = formatUri(uri = applicationConfigurationRepository.backendUri.first())
-            .onFailure {
-                return fail(with = CheckSystemHealthUseCase.Reason.Unreachable)
-            }
-
-        val response = client.get("${url}${HEALTH_ENDPOINT}") {
+        val response = client.get("/api/health") {
             timeout {
                 requestTimeoutMillis = 10_000
-            }
-
-            if (!apiKey.isNullOrBlank()) {
-                header(API_KEY_HEADER, apiKey)
             }
         }
 
@@ -59,10 +48,5 @@ internal class CheckSystemHealthUseCaseImpl(
         fail(with = CheckSystemHealthUseCase.Reason.Unreachable)
     } catch (_: IllegalArgumentException) {
         fail(with = CheckSystemHealthUseCase.Reason.Unreachable)
-    }
-
-    companion object {
-        private const val API_KEY_HEADER = "X-Api-Key"
-        private const val HEALTH_ENDPOINT = "/api/health"
     }
 }

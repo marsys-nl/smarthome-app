@@ -14,6 +14,7 @@ import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import org.jetbrains.compose.resources.getString
 
 internal typealias ProfileStateHolder =
@@ -27,12 +28,7 @@ class ProfileViewModel(
     ProfileStateHolder by coroutineScope.suspendingActionStateEffectMutator(
         state = MutableProfileScreenState(),
         producer = { state, actions, emitter ->
-            launchUserMutations(
-                state = state,
-                applicationConfigurationRepository = applicationConfigurationRepository,
-            )
-
-            launchConnectedBackendMutations(
+            launchConfigurationMutations(
                 state = state,
                 applicationConfigurationRepository = applicationConfigurationRepository,
             )
@@ -75,34 +71,44 @@ class ProfileViewModel(
     )
 
 context(scope: CoroutineScope)
-private fun launchConnectedBackendMutations(
+private fun launchConfigurationMutations(
     state: MutableProfileScreenState,
     applicationConfigurationRepository: ApplicationConfigurationRepository,
 ) {
     scope.launch {
-        applicationConfigurationRepository.backendUri.collect {
-            state.connectedBackend = it
+        applicationConfigurationRepository.connection.collect {
+            applyConnectedBackendMutations(
+                state = state,
+                configuration = it,
+            )
+
+            applyUserMutations(
+                state = state,
+                demoMode = it is ConnectionConfiguration.Demo,
+            )
         }
     }
 }
 
-context(scope: CoroutineScope)
-private fun launchUserMutations(
+private fun applyConnectedBackendMutations(
     state: MutableProfileScreenState,
-    applicationConfigurationRepository: ApplicationConfigurationRepository,
+    configuration: ConnectionConfiguration,
 ) {
-    scope.launch {
-        applicationConfigurationRepository.isDemoMode.collect {
-            state.user = when (it) {
-                true -> getString(SmartHomeRes.string.demo_user)
-                else -> "Niels"
-            }
+    state.connectedBackend = (configuration as? ConnectionConfiguration.Backend)?.uri
+}
 
-            state.email = when (it) {
-                true -> "demo.user@example.com"
-                else -> "niels.marsman@example.com"
-            }
-        }
+private suspend fun applyUserMutations(
+    state: MutableProfileScreenState,
+    demoMode: Boolean,
+) {
+    state.user = when (demoMode) {
+        true -> getString(SmartHomeRes.string.demo_user)
+        else -> "Niels"
+    }
+
+    state.email = when (demoMode) {
+        true -> "demo.user@example.com"
+        else -> "niels.marsman@example.com"
     }
 }
 

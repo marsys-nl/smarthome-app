@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenView
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import org.koin.compose.koinInject
 
 @Composable
@@ -11,13 +12,15 @@ internal fun WithRequireConnection(
     applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
     content: @Composable () -> Unit,
 ) {
-    val demoMode = applicationConfigurationRepository.isDemoMode
-        .collectAsState(initial = false)
+    val connection = applicationConfigurationRepository.connection
+        .collectAsState(
+            initial = ConnectionConfiguration.Unconfigured,
+        )
 
-    when (demoMode.value) {
-        true -> content.invoke()
+    when (connection.value) {
+        is ConnectionConfiguration.Demo -> content.invoke()
 
-        false -> InitializationScreenView(
+        else -> InitializationScreenView(
             content = content,
         )
     }

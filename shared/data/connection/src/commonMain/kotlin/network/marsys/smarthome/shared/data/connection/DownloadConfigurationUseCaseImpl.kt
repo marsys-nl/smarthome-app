@@ -22,24 +22,13 @@ import network.marsys.smarthome.shared.library.core.onFailure
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 
 internal class DownloadConfigurationUseCaseImpl(
-    private val applicationConfigurationRepository: ApplicationConfigurationRepository,
     private val client: HttpClient,
 ) : DownloadConfigurationUseCase {
     override suspend fun invoke(): Result<Response, Reason> =
         try {
-            val apiKey = applicationConfigurationRepository.apiKey.first()
-            val url = formatUri(uri = applicationConfigurationRepository.backendUri.first())
-                .onFailure {
-                    return fail(with = Reason.Unreachable)
-                }
-
-            val response = client.get("${url}${CONFIG_ENDPOINT}") {
+            val response = client.get("/api/config") {
                 timeout {
                     requestTimeoutMillis = 10_000
-                }
-
-                if (!apiKey.isNullOrBlank()) {
-                    header(API_KEY_HEADER, apiKey)
                 }
             }
 
@@ -65,9 +54,4 @@ internal class DownloadConfigurationUseCaseImpl(
 
     private fun handle(response: ConfigurationResponse): Result<Response, Reason> =
         succeed(with = Response(authUri = response.authUri))
-
-    companion object {
-        private const val API_KEY_HEADER = "X-Api-Key"
-        private const val CONFIG_ENDPOINT = "/api/config"
-    }
 }

@@ -25,6 +25,7 @@ import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import org.jetbrains.compose.resources.getString
 
 internal typealias DashboardStateHolder =
@@ -207,10 +208,13 @@ private fun launchUserNameMutations(
     applicationConfigurationRepository: ApplicationConfigurationRepository,
 ) {
     scope.launch {
-        applicationConfigurationRepository.isDemoMode.collect {
+        applicationConfigurationRepository.connection.collect {
             state.user = when (it) {
-                true -> getString(SmartHomeRes.string.demo_user)
-                else -> "Niels"
+                is ConnectionConfiguration.Demo ->
+                    getString(SmartHomeRes.string.demo_user)
+
+                else ->
+                    "Niels"
             }
         }
     }
