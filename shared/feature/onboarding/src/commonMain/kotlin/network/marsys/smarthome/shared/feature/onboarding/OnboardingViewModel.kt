@@ -19,6 +19,7 @@ import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 
 class OnboardingViewModel(
     private val appearancePreferencesRepository: AppearancePreferencesRepository,
@@ -78,7 +79,9 @@ class OnboardingViewModel(
         viewModelScope.launch {
             configurationState.update { ConfigurationOnboardingState.Processing }
 
-            applicationConfigurationRepository.setDemoMode(true)
+            applicationConfigurationRepository.setConnectionConfiguration(
+                configuration = ConnectionConfiguration.Demo,
+            )
             onboardingRepository.finishOnboarding()
         }
     }
@@ -95,10 +98,12 @@ class OnboardingViewModel(
 
             when (val result = validateBackendUriUseCase.invoke(uri, apiKey)) {
                 is Result.Success -> {
-                    applicationConfigurationRepository.setApiKey(apiKey)
-                    applicationConfigurationRepository.setBackendUri(uri)
-                    applicationConfigurationRepository.setDemoMode(false)
-
+                    applicationConfigurationRepository.setConnectionConfiguration(
+                        configuration = ConnectionConfiguration.Backend(
+                            uri = uri,
+                            apiKey = apiKey,
+                        ),
+                    )
                     onboardingRepository.finishOnboarding()
                 }
 

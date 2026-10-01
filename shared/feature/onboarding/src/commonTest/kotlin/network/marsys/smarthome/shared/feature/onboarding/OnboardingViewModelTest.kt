@@ -4,7 +4,6 @@ import de.infix.testBalloon.framework.core.testSuite
 import dev.nmarsman.expect.api.expectThat
 import dev.nmarsman.expect.assertions.isA
 import dev.nmarsman.expect.assertions.isEqualTo
-import dev.nmarsman.expect.assertions.isFalse
 import dev.nmarsman.expect.assertions.isNotNull
 import dev.nmarsman.expect.assertions.isTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,6 +22,7 @@ import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
 import org.koin.dsl.module
@@ -108,11 +108,13 @@ val OnboardingViewModelTest by testSuite {
             viewModel.finishOnboarding()
             testScope.advanceUntilIdle()
 
-            expectThat(applicationConfigurationRepository.backendUri.first())
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Backend>()
+                .get(ConnectionConfiguration.Backend::uri)
                 .isEqualTo("https://example.com")
         }
 
-        test(name = "Should reset demo mode when finish onboarding is called with a valid uri") {
+        test(name = "Should update connection configuration when finish onboarding is called with a valid uri") {
             val applicationConfigurationRepository = it.get<ApplicationConfigurationRepository>()
             val viewModel = OnboardingViewModel(
                 appearancePreferencesRepository = it.get(),
@@ -122,12 +124,15 @@ val OnboardingViewModelTest by testSuite {
                 coroutineScope = testScope,
             )
 
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Unconfigured>()
+
             viewModel.uriTextFieldState.edit { append("https://example.com") }
             viewModel.finishOnboarding()
             testScope.advanceUntilIdle()
 
-            expectThat(applicationConfigurationRepository.isDemoMode.first())
-                .isFalse()
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Backend>()
         }
 
         test(name = "Should set onboarding finished when finish onboarding is called with a valid uri") {
@@ -230,7 +235,9 @@ val OnboardingViewModelTest by testSuite {
             viewModel.finishOnboarding()
             testScope.advanceUntilIdle()
 
-            expectThat(applicationConfigurationRepository.backendUri.first())
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Backend>()
+                .get(ConnectionConfiguration.Backend::uri)
                 .isEqualTo("https://example.com")
         }
 
@@ -244,11 +251,14 @@ val OnboardingViewModelTest by testSuite {
                 coroutineScope = testScope,
             )
 
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Unconfigured>()
+
             viewModel.skipToDemo()
             testScope.advanceUntilIdle()
 
-            expectThat(applicationConfigurationRepository.isDemoMode.first())
-                .isTrue()
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Demo>()
         }
 
         test(name = "Should set onboarding finished when skip to demo is called") {
@@ -278,6 +288,9 @@ val OnboardingViewModelTest by testSuite {
                 coroutineScope = testScope,
             )
 
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Unconfigured>()
+
             viewModel.uriTextFieldState.edit { append("https://example.com") }
             viewModel.finishOnboarding()
             testScope.runCurrent()
@@ -285,8 +298,8 @@ val OnboardingViewModelTest by testSuite {
             viewModel.skipToDemo()
             testScope.advanceUntilIdle()
 
-            expectThat(applicationConfigurationRepository.isDemoMode.first())
-                .isFalse()
+            expectThat(applicationConfigurationRepository.connection.first())
+                .isA<ConnectionConfiguration.Backend>()
         }
     }
 }

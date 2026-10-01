@@ -18,6 +18,7 @@ import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionS
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import kotlin.time.Duration.Companion.seconds
 
 internal typealias InitializationStateHolder =
@@ -72,13 +73,17 @@ private fun launchInitializationMutations(
     state: MutableInitializationScreenState,
 ) = scope.launch {
     context(with = state) {
-        if (applicationConfigurationRepository.isDemoMode.first()) {
+        val configuration = applicationConfigurationRepository.connection.first()
+
+        if (configuration is ConnectionConfiguration.Demo) {
             state.current = InitializationScreenState.Done
             return@launch
         }
 
-        val uri = applicationConfigurationRepository.backendUri.first()
-        state.uri = uri ?: "…"
+        state.uri = when (val connection = configuration) {
+            is ConnectionConfiguration.Backend -> connection.uri
+            else -> "…"
+        }
 
         state.runInitialization {
             stage(InitializationScreenState.CheckSystemHealth) {
