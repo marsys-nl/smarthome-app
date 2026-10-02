@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.map
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
-import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 
 class SmartHomeStoreRepository(
     private val dataStore: DataStore<Preferences>,
-) : AppearancePreferencesRepository, ApplicationConfigurationRepository, OnboardingRepository {
+) : AppearancePreferencesRepository, ApplicationConfigurationRepository {
     override val theme: Flow<ThemeSelection> =
         dataStore.data.map { preferences ->
             try {
@@ -49,11 +48,6 @@ class SmartHomeStoreRepository(
             }
         }
 
-    override val isOnboardingFinished: Flow<Boolean> =
-        dataStore.data.map { preferences ->
-            preferences[Keys.isOnboardingFinished] ?: false
-        }
-
     override suspend fun setTheme(theme: ThemeSelection) {
         dataStore.edit { preferences ->
             preferences[Keys.theme] = theme.name
@@ -82,23 +76,10 @@ class SmartHomeStoreRepository(
         }
     }
 
-    override suspend fun finishOnboarding() {
-        dataStore.edit { preferences ->
-            preferences[Keys.isOnboardingFinished] = true
-        }
-    }
-
-    override suspend fun resetOnboarding() {
-        dataStore.edit { preferences ->
-            preferences[Keys.isOnboardingFinished] = false
-        }
-    }
-
     private companion object Keys {
         private val apiKey = stringPreferencesKey("config.api_key")
         private val backendUri = stringPreferencesKey("config.backend_uri")
         private val isDemoMode = booleanPreferencesKey("config.is_demo_mode")
-        private val isOnboardingFinished = booleanPreferencesKey("onboarding.is_finished")
         private val theme = stringPreferencesKey("appearance.theme")
     }
 }

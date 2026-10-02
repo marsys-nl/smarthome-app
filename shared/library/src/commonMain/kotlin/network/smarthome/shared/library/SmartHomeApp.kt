@@ -55,7 +55,6 @@ private val viewModelModule = module {
         OnboardingViewModel(
             appearancePreferencesRepository = get(),
             applicationConfigurationRepository = get(),
-            onboardingRepository = get(),
             validateBackendUriUseCase = get(),
         )
     }
@@ -63,7 +62,6 @@ private val viewModelModule = module {
     viewModel {
         ProfileViewModel(
             applicationConfigurationRepository = get(),
-            onboardingRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }

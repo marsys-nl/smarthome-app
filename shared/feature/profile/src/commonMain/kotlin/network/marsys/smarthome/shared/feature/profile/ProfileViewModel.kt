@@ -13,7 +13,6 @@ import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.demo_user
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
-import network.marsys.smarthome.shared.library.store.OnboardingRepository
 import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import org.jetbrains.compose.resources.getString
 
@@ -22,7 +21,6 @@ internal typealias ProfileStateHolder =
 
 class ProfileViewModel(
     private val applicationConfigurationRepository: ApplicationConfigurationRepository,
-    private val onboardingRepository: OnboardingRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     ProfileStateHolder by coroutineScope.suspendingActionStateEffectMutator(
@@ -51,7 +49,9 @@ class ProfileViewModel(
                         Unit
 
                     ProfileScreenAction.ConfirmResetOnboarding ->
-                        onboardingRepository.resetOnboarding()
+                        applicationConfigurationRepository.setConnectionConfiguration(
+                            configuration = ConnectionConfiguration.Unconfigured,
+                        )
 
                     ProfileScreenAction.Logout -> action.flow.collect {
                         emitter.emit(
