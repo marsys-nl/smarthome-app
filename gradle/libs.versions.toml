@@ -44,7 +44,7 @@ ktlint = "1.8.0"
 
 ktor = "3.6.0"
 
-oidc = "0.18.3"
+oidc = "0.18.4"
 
 test-balloon = "1.1.0"
 
