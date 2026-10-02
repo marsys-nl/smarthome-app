@@ -16,7 +16,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingScreenView
 import network.marsys.smarthome.shared.feature.onboarding.navigation.rememberNavBackStack
-import network.marsys.smarthome.shared.library.store.OnboardingRepository
+import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 import network.smarthome.shared.library.main.MainScreenView
 import org.koin.compose.koinInject
 
@@ -32,17 +33,16 @@ private val config = SavedStateConfiguration {
 @Composable
 fun SmartHomeNavigation(
     modifier: Modifier = Modifier,
-    onboardingRepository: OnboardingRepository = koinInject(),
+    applicationConfigurationRepository: ApplicationConfigurationRepository = koinInject(),
 ) {
     var onboardingSessionKey by retain { mutableIntStateOf(0) }
 
-    val isOnboardingFinished by onboardingRepository.isOnboardingFinished
-        .collectAsStateWithLifecycle(initialValue = null)
+    val configuration by applicationConfigurationRepository.connection
+        .collectAsStateWithLifecycle(initialValue = ConnectionConfiguration.Unconfigured)
 
-    val initialScreen = when (isOnboardingFinished) {
-        true -> SmartHomeNavigationFlow.Main
-        false -> SmartHomeNavigationFlow.Onboarding
-        else -> return SmartHomeLoadingScreen()
+    val initialScreen = when (configuration) {
+        is ConnectionConfiguration.Unconfigured -> SmartHomeNavigationFlow.Onboarding
+        else -> SmartHomeNavigationFlow.Main
     }
 
     val backStack = rememberNavBackStack<SmartHomeNavigationFlow>(
@@ -50,10 +50,10 @@ fun SmartHomeNavigation(
         elements = arrayOf(initialScreen),
     )
 
-    LaunchedEffect(isOnboardingFinished) {
-        val targetScreen = when (isOnboardingFinished) {
-            true -> SmartHomeNavigationFlow.Main
-            else -> SmartHomeNavigationFlow.Onboarding
+    LaunchedEffect(configuration) {
+        val targetScreen = when (configuration) {
+            is ConnectionConfiguration.Unconfigured -> SmartHomeNavigationFlow.Onboarding
+            else -> SmartHomeNavigationFlow.Main
         }
 
         if (backStack.lastOrNull() == targetScreen && backStack.size == 1) return@LaunchedEffect
@@ -61,7 +61,7 @@ fun SmartHomeNavigation(
         backStack.clear()
         backStack += targetScreen
 
-        if (isOnboardingFinished == false) {
+        if (configuration is ConnectionConfiguration.Unconfigured) {
             onboardingSessionKey++
         }
     }
