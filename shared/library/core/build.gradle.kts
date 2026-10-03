@@ -1,4 +1,4 @@
-import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.INT
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 
 plugins {
@@ -18,6 +18,12 @@ buildkonfig {
     exposeObjectWithName = "SmartHomeConfig"
 
     defaultConfigs {
+        buildConfigField(
+            type = BOOLEAN,
+            name = "DEBUG",
+            value = "${libs.versions.smarthome.app.name.get().contains("SNAPSHOT")}",
+        )
+
         buildConfigField(
             type = STRING,
             name = "VERSION_NAME",
