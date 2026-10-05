@@ -21,6 +21,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.library.core)
+            implementation(projects.shared.library.network)
             implementation(projects.shared.data.authentication)
 
             implementation(libs.koin.compose)

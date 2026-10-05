@@ -5,11 +5,8 @@ import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
-import io.ktor.client.request.header
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.ContentConvertException
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.last
 import kotlinx.io.IOException
 import network.marsys.smarthome.api.models.config.ConfigurationResponse
 import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUseCase
@@ -18,8 +15,7 @@ import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUs
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
 import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
-import network.marsys.smarthome.shared.library.core.onFailure
-import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
+import network.marsys.smarthome.shared.library.network.SmartHomeInitializationRequestAttributeKey
 
 internal class DownloadConfigurationUseCaseImpl(
     private val client: HttpClient,
@@ -27,6 +23,8 @@ internal class DownloadConfigurationUseCaseImpl(
     override suspend fun invoke(): Result<Response, Reason> =
         try {
             val response = client.get("/api/config") {
+                attributes.put(SmartHomeInitializationRequestAttributeKey, true)
+
                 timeout {
                     requestTimeoutMillis = 10_000
                 }

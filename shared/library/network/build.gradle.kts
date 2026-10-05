@@ -28,10 +28,16 @@ kotlin {
             implementation(projects.shared.library.store)
 
             implementation(libs.koin.compose)
+
+            implementation(libs.ktor.client.auth)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation(libs.oidc.core)
+            implementation(libs.oidc.ktor)
+            implementation(libs.oidc.tokenstore)
         }
 
         iosMain.dependencies {

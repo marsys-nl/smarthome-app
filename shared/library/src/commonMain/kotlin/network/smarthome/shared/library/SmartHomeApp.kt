@@ -1,7 +1,6 @@
 package network.smarthome.shared.library
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.authentication.di.applicationAuthenticationModule
@@ -18,8 +17,6 @@ import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutin
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
-import network.marsys.smarthome.shared.library.i18n.LocalTranslationCache
-import network.marsys.smarthome.shared.library.i18n.TranslationCache
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
@@ -47,6 +44,7 @@ private val viewModelModule = module {
             authenticateUseCase = get(),
             checkSystemHealthUseCase = get(),
             downloadConfigurationUseCase = get(),
+            synchronizeEntitiesUseCase = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }

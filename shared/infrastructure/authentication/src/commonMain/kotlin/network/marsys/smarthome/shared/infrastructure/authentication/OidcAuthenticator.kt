@@ -5,6 +5,7 @@ import network.marsys.smarthome.shared.data.authentication.ports.outbound.Authen
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
 import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
+import network.marsys.smarthome.shared.library.network.OidcClientProvider
 import org.publicvalue.multiplatform.oidc.ExperimentalOpenIdConnect
 import org.publicvalue.multiplatform.oidc.OpenIdConnectClient
 import org.publicvalue.multiplatform.oidc.OpenIdConnectException
@@ -18,13 +19,13 @@ import org.publicvalue.multiplatform.oidc.util.refreshTokenExpired
 @OptIn(ExperimentalOpenIdConnect::class)
 internal class OidcAuthenticator(
     private val store: TokenStore,
+    private val tokenRefreshHandler: TokenRefreshHandler,
     private val authenticationFlowFactory: CodeAuthFlowFactory,
-) : Authenticator {
-    private val tokenRefreshHandler: TokenRefreshHandler = TokenRefreshHandler(
-        tokenStore = store,
-    )
-
-    private var client: OpenIdConnectClient? = null
+) : Authenticator, OidcClientProvider {
+    private var activeClientKey: OidcClientKey? = null
+    private val clients = mutableMapOf<OidcClientKey, OpenIdConnectClient>()
+    override val client: OpenIdConnectClient?
+        get() = clients[activeClientKey]
 
     override suspend fun authenticate(
         issuer: String,
@@ -106,19 +107,24 @@ internal class OidcAuthenticator(
     }
 
     override suspend fun invalidate() {
+        clients.remove(activeClientKey)
         store.removeTokens()
     }
 
     private suspend fun getOrCreateClient(
         issuer: String,
         clientIdentifier: String,
-    ): OpenIdConnectClient =
-        client ?: createClient(
-            issuer = issuer,
-            clientIdentifier = clientIdentifier,
-        ).also {
-            client = it
+    ): OpenIdConnectClient = OidcClientKey(
+        issuer = issuer,
+        clientIdentifier = clientIdentifier,
+    ).let { key ->
+        clients.getOrPut(key) {
+            createClient(
+                issuer = issuer,
+                clientIdentifier = clientIdentifier,
+            )
         }
+    }
 
     private suspend fun createClient(
         issuer: String,
@@ -139,3 +145,8 @@ internal class OidcAuthenticator(
         private const val DISCOVERY_URI = ".well-known/openid-configuration"
     }
 }
+
+private data class OidcClientKey(
+    val issuer: String,
+    val clientIdentifier: String,
+)
