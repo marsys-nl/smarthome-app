@@ -12,8 +12,8 @@ import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.domain.authentication.AuthenticateUseCase
 import network.marsys.smarthome.shared.domain.connection.CheckSystemHealthUseCase
 import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUseCase
+import network.marsys.smarthome.shared.domain.connection.SynchronizeEntitiesUseCase
 import network.marsys.smarthome.shared.library.core.Result
-import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
@@ -29,6 +29,7 @@ class InitializationViewModel(
     private val authenticateUseCase: AuthenticateUseCase,
     private val checkSystemHealthUseCase: CheckSystemHealthUseCase,
     private val downloadConfigurationUseCase: DownloadConfigurationUseCase,
+    private val synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     InitializationStateHolder by coroutineScope.suspendingActionStateMutator(
@@ -41,6 +42,7 @@ class InitializationViewModel(
                 authenticateUseCase = authenticateUseCase,
                 checkSystemHealthUseCase = checkSystemHealthUseCase,
                 downloadConfigurationUseCase = downloadConfigurationUseCase,
+                synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
                 state = state,
             )
 
@@ -56,6 +58,7 @@ class InitializationViewModel(
                             authenticateUseCase = authenticateUseCase,
                             checkSystemHealthUseCase = checkSystemHealthUseCase,
                             downloadConfigurationUseCase = downloadConfigurationUseCase,
+                            synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
                             state = state,
                         )
                     }
@@ -70,6 +73,7 @@ private fun launchInitializationMutations(
     authenticateUseCase: AuthenticateUseCase,
     checkSystemHealthUseCase: CheckSystemHealthUseCase,
     downloadConfigurationUseCase: DownloadConfigurationUseCase,
+    synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
     state: MutableInitializationScreenState,
 ) = scope.launch {
     context(with = state) {
@@ -102,7 +106,7 @@ private fun launchInitializationMutations(
             }
 
             stage(InitializationScreenState.SynchronizeApplicationState) {
-                succeed(with = Unit)
+                synchronizeEntitiesUseCase.invoke()
             }
         }
     }
