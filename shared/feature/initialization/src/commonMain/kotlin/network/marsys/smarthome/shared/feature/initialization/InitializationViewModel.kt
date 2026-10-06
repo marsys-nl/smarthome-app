@@ -50,8 +50,8 @@ class InitializationViewModel(
                 scope = this,
                 keySelector = InitializationScreenAction::key,
             ) {
-                when (type()) {
-                    is InitializationScreenAction.RetryInitialization -> {
+                when (val action = type()) {
+                    is InitializationScreenAction.RetryInitialization -> action.flow.collect {
                         initializationJob?.cancel()
                         initializationJob = launchInitializationMutations(
                             applicationConfigurationRepository = applicationConfigurationRepository,

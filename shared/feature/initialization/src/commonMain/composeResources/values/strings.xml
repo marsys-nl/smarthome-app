@@ -5,4 +5,5 @@
     <string name="initialization_step_check_system_health">Checking system health</string>
     <string name="initialization_step_download_configuration">Fetching configuration</string>
     <string name="initialization_step_synchronize_state">Synchronize with system</string>
+    <string name="initialization_retry_action">Try again</string>
 </resources>
