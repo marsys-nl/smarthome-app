@@ -5,4 +5,5 @@
     <string name="initialization_step_check_system_health">Systeemstatus controleren</string>
     <string name="initialization_step_download_configuration">Configuratie ophalen</string>
     <string name="initialization_step_synchronize_state">Synchroniseer met systeem</string>
+    <string name="initialization_retry_action">Probeer opnieuw</string>
 </resources>

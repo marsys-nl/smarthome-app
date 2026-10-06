@@ -13,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.style.ExperimentalFoundationStyleApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
@@ -30,6 +32,7 @@ import network.marsys.smarthome.shared.feature.initialization.InitializationScre
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.DownloadConfiguration
 import network.marsys.smarthome.shared.feature.initialization.InitializationScreenState.SynchronizeApplicationState
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.Res
+import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_retry_action
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_authenticate
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_check_system_health
 import network.marsys.smarthome.shared.feature.initialization.initialization.generated.resources.initialization_step_download_configuration
@@ -42,23 +45,23 @@ import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
 import network.marsys.smarthome.shared.library.design.annotation.PreviewFontScales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewLocales
 import network.marsys.smarthome.shared.library.design.annotation.PreviewScreenSizes
+import network.marsys.smarthome.shared.library.design.component.ButtonStyle
 import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardColors
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
+import network.marsys.smarthome.shared.library.design.component.IconButton
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.CircleCheck
 import network.marsys.smarthome.shared.library.design.icons.CircleClose
-import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.HeartPulse
-import network.marsys.smarthome.shared.library.design.icons.House
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
 import network.marsys.smarthome.shared.library.design.icons.RefreshCw
+import network.marsys.smarthome.shared.library.design.icons.Reset
 import network.marsys.smarthome.shared.library.design.icons.Settings
-import network.marsys.smarthome.shared.library.design.icons.Shield
 import network.marsys.smarthome.shared.library.design.icons.ShieldCheck
 import network.marsys.smarthome.shared.library.design.icons.Wifi
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
@@ -76,6 +79,7 @@ fun InitializationScreenView(
     val state = viewModel.produceStateWithLifecycle()
     InitializationScreenViewContent(
         state = state,
+        onAction = viewModel.accept,
         modifier = modifier,
         content = content,
     )
@@ -84,6 +88,7 @@ fun InitializationScreenView(
 @Composable
 fun InitializationScreenViewContent(
     state: InitializationScreenState,
+    onAction: (InitializationScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     @Suppress("unused")
     content: @Composable () -> Unit,
@@ -128,6 +133,11 @@ fun InitializationScreenViewContent(
                     )
 
                     InitializationScreenSteps(state = state)
+
+                    InitializationScreenActions(
+                        state = state,
+                        onAction = onAction,
+                    )
                 }
             }
     }
@@ -150,6 +160,40 @@ internal fun InitializationScreenIcon(
         size = 40.dp,
     )
 }
+
+@Composable
+private fun InitializationScreenActions(
+    state: InitializationScreenState,
+    onAction: (InitializationScreenAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val isError = state.current is InitializationScreenState.Error
+
+    InitializationScreenRetryAction(
+        onClick = {
+            if (isError) {
+                onAction.invoke(InitializationScreenAction.RetryInitialization)
+            }
+        },
+        modifier = modifier
+            .padding(top = 48.dp)
+            .alpha(if (isError) 1f else 0f),
+    )
+}
+
+@OptIn(ExperimentalFoundationStyleApi::class)
+@Composable
+private fun InitializationScreenRetryAction(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) = IconButton(
+    text = stringResource(Res.string.initialization_retry_action),
+    icon = Icons.Reset,
+    onClick = onClick,
+    modifier = modifier,
+    foregroundColor = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+    style = ButtonStyle.outlined(),
+)
 
 @Composable
 private fun InitializationScreenSteps(
@@ -356,6 +400,7 @@ private fun IdleInitializationScreenViewPreview(
     ) {
         InitializationScreenViewContent(
             state = InitializationPreviewData.idle,
+            onAction = {},
             content = {},
         )
     }
@@ -373,6 +418,7 @@ private fun InProgressInitializationScreenViewPreview(
     ) {
         InitializationScreenViewContent(
             state = InitializationPreviewData.inProgress,
+            onAction = {},
             content = {},
         )
     }
@@ -390,6 +436,7 @@ private fun FailedInitializationScreenViewPreview(
     ) {
         InitializationScreenViewContent(
             state = InitializationPreviewData.failed,
+            onAction = {},
             content = {},
         )
     }
@@ -407,6 +454,7 @@ private fun SucceededInitializationScreenViewPreview(
     ) {
         InitializationScreenViewContent(
             state = InitializationPreviewData.succeeded,
+            onAction = {},
             content = {},
         )
     }
