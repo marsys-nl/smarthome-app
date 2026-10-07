@@ -45,8 +45,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared.domain.entity)
-
             implementation(libs.androidx.lifecycle.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
