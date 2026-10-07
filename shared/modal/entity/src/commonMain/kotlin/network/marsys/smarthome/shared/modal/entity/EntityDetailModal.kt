@@ -39,7 +39,6 @@ import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
-import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -48,6 +47,7 @@ import network.marsys.smarthome.shared.library.design.component.Card
 import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.icons.Clock
 import network.marsys.smarthome.shared.library.design.icons.Close
 import network.marsys.smarthome.shared.library.design.icons.Icons

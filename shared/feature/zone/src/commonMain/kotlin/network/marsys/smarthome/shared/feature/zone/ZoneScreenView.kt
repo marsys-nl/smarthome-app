@@ -35,7 +35,6 @@ import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zon
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_error_title
 import network.marsys.smarthome.shared.library.core.coroutines.collectEffectsWithLifecycle
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
-import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 import network.marsys.smarthome.shared.library.design.adaptive.Breakpoints
@@ -55,6 +54,7 @@ import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaul
 import network.marsys.smarthome.shared.library.design.component.Switch
 import network.marsys.smarthome.shared.library.design.component.SwitchSize
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.domain.icon
 import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft

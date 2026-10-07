@@ -1,4 +1,4 @@
-package network.marsys.smarthome.shared.library.core.helper
+package network.marsys.smarthome.shared.library.design.domain.helper
 
 import androidx.compose.runtime.Composable
 import network.marsys.smarthome.shared.domain.entity.capability.Capability

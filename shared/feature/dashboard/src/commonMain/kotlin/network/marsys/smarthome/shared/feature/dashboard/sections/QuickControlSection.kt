@@ -54,7 +54,6 @@ import network.marsys.smarthome.shared.feature.dashboard.sections.controls.Group
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeader
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderColors
 import network.marsys.smarthome.shared.feature.dashboard.sections.controls.GroupedEntityHeaderDefaults
-import network.marsys.smarthome.shared.library.core.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.ActiveEntityCardColors
 import network.marsys.smarthome.shared.library.design.EntityCard
 import network.marsys.smarthome.shared.library.design.EntityCardDefaults
@@ -69,6 +68,7 @@ import network.marsys.smarthome.shared.library.design.component.ErrorIconButton
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
+import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.domain.icon
 import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.icons.Component
