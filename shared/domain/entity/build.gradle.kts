@@ -21,6 +21,8 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.library.core)
+
             implementation(libs.marsys.smarthome.domain)
 
             implementation(libs.kotlinx.coroutines.core)

@@ -23,6 +23,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.domain.entity)
+            implementation(projects.shared.library.core)
+            implementation(projects.shared.library.store)
 
             implementation(libs.koin.compose)
 

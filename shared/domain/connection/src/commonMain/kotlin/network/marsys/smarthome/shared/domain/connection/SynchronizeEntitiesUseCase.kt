@@ -6,6 +6,7 @@ fun interface SynchronizeEntitiesUseCase {
     suspend operator fun invoke(): Result<Unit, Reason>
 
     sealed interface Reason {
+        data object InvalidData: Reason
         data object Unreachable : Reason
         data object Unauthenticated : Reason
     }

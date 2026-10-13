@@ -22,7 +22,7 @@ val connectionDataModule = module {
 
     single<SynchronizeEntitiesUseCase> {
         SynchronizeEntitiesUseCaseImpl(
-            client = get(named("smarthomeHttpClient")),
+            repository = get(),
         )
     }
 

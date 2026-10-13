@@ -1,12 +1,22 @@
 package network.marsys.smarthome.shared.data.entity
 
+import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import org.koin.core.qualifier.named
 import org.koin.dsl.binds
 import org.koin.dsl.module
 
 val entityDataModule = module {
+    single<EntityDataSource>(named("demoEntityDataSource")) {
+        DemoEntityDataSource()
+    }
+
     single {
-        DemoEntityRepository()
+        DefaultEntityRepository(
+            applicationConfigurationRepository = get(),
+            demoEntityDataSource = get(named("demoEntityDataSource")),
+            smartHomeEntityDataSource = get(named("smartHomeEntityDataSource")),
+        )
     } binds arrayOf(
         EntityRepository::class,
     )

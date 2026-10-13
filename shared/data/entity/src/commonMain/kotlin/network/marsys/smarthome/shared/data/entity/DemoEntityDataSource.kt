@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
+import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
@@ -44,26 +45,21 @@ import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.library.core.Result
+import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
+import kotlin.collections.plus
 import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
-@Suppress("TooManyFunctions")
-class DemoEntityRepository(
+class DemoEntityDataSource(
     seed: List<Entity<*>> = DemoEntities,
-    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
-) : EntityRepository {
+    private val scope: CoroutineScope = CoroutineScope(
+        context = SupervisorJob() + Dispatchers.Default,
+    ),
+) : EntityDataSource {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
     private val state = MutableStateFlow(seed.associateBy { it.identifier })
-
-    override val zones: Flow<Collection<Zone>> =
-        state
-            .map { entityMap ->
-                entityMap.values
-                    .mapNotNull { it.zone }
-                    .distinct()
-            }
-            .distinctUntilChanged()
 
     override val entities: Flow<Collection<Entity<*>>> =
         state
@@ -132,6 +128,9 @@ class DemoEntityRepository(
             else -> simulations[action.identifier] = action
         }
     }
+
+    override suspend fun synchronize(): Result<Unit, EntityRepository.Reason> =
+        succeed(with = Unit)
 
     /*
      * Simulations
