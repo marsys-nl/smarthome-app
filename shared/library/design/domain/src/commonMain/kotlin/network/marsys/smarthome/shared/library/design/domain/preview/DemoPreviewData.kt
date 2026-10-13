@@ -17,8 +17,8 @@ import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
-import network.marsys.smarthome.shared.library.i18n.TranslationCache
-import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationCache
+import network.marsys.smarthome.shared.library.i18n.TranslationSource
+import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationSource
 
 object DemoPreviewData {
     val zones = listOf(
@@ -122,9 +122,8 @@ object DemoPreviewData {
         ),
     )
 
-    val translations: TranslationCache = InMemoryTranslationCache(
+    val translations: TranslationSource = InMemoryTranslationSource(
         translations = DemoEntityTranslations + ZoneTranslations,
-        fallback = "en",
     )
 }
 
