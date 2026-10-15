@@ -34,6 +34,7 @@ private val viewModelModule = module {
         DashboardViewModel(
             applicationConfigurationRepository = get(),
             entityRepository = get(),
+            zoneRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
@@ -75,6 +76,7 @@ private val viewModelModule = module {
     viewModel {
         ZonesViewModel(
             entityRepository = get(),
+            zoneRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }

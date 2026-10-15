@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.ZoneRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
@@ -27,6 +28,7 @@ internal typealias ZonesStateHolder =
 
 class ZonesViewModel(
     private val entityRepository: EntityRepository,
+    private val zoneRepository: ZoneRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     ZonesStateHolder by coroutineScope.suspendingActionStateEffectMutator(
@@ -37,6 +39,7 @@ class ZonesViewModel(
             zoneMutationJob = launchZoneMutations(
                 state = state,
                 entityRepository = entityRepository,
+                zoneRepository = zoneRepository,
             )
 
             actions.handle(
@@ -59,6 +62,7 @@ class ZonesViewModel(
                         zoneMutationJob = launchZoneMutations(
                             state = state,
                             entityRepository = entityRepository,
+                            zoneRepository = zoneRepository,
                         )
                     }
                 }
@@ -70,11 +74,12 @@ context(scope: CoroutineScope)
 private fun launchZoneMutations(
     state: MutableZonesScreenState,
     entityRepository: EntityRepository,
+    zoneRepository: ZoneRepository,
 ) = scope.launch {
     state.condition = ZonesScreenState.Condition.Loading
 
     val flow = combine(
-        entityRepository.zones,
+        zoneRepository.zones,
         entityRepository.entities,
     ) { zones, entities ->
         val current = state.zones

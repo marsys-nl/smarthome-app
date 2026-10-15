@@ -230,8 +230,9 @@ object DemoData {
     val translations: TranslationCatalog = InMemoryTranslationCatalog(
         translations = DemoEntityTranslations + ZoneTranslations,
     )
-    fun zone(identifier: String): Zone? =
-        zones.firstOrNull { it.identifier.value == identifier }
+
+    fun zone(identifier: String): Zone =
+        zones.first { it.identifier.value == identifier }
 }
 
 private val ZoneTranslations = mapOf(
