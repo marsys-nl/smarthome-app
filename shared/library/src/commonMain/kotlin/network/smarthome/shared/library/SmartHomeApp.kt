@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.authentication.di.applicationAuthenticationModule
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.initialization.InitializationViewModel
@@ -16,7 +17,6 @@ import network.marsys.smarthome.shared.infrastructure.authentication.di.infrastr
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
-import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
@@ -113,7 +113,7 @@ fun SmartHomeApp(
 
         SmartHomeTheme(
             theme = theme,
-            translations = DemoPreviewData.translations,
+            translations = DemoData.translations,
         ) {
             SmartHomeNavigation()
         }

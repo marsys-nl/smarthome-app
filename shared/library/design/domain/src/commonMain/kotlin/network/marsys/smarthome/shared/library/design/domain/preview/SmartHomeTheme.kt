@@ -1,6 +1,7 @@
 package network.marsys.smarthome.shared.library.design.domain.preview
 
 import androidx.compose.runtime.Composable
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
 
@@ -10,6 +11,6 @@ fun SmartHomeTheme(
     content: @Composable () -> Unit,
 ) = SmartHomeTheme(
     theme = theme,
-    translations = DemoPreviewData.translations,
+    translations = DemoData.translations,
     content = content,
 )

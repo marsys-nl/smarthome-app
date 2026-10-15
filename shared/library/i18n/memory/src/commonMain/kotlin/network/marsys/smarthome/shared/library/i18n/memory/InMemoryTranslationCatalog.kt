@@ -1,10 +1,10 @@
 package network.marsys.smarthome.shared.library.i18n.memory
 
-import network.marsys.smarthome.shared.library.i18n.TranslationSource
+import network.marsys.smarthome.shared.library.i18n.TranslationCatalog
 
-class InMemoryTranslationSource(
+class InMemoryTranslationCatalog(
     private val translations: Map<String, Map<String, String>>,
-) : TranslationSource {
+) : TranslationCatalog {
     override fun get(key: String, language: String): String? =
         translations[key]?.get(language)
 }

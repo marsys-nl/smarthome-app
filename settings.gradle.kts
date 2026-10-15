@@ -44,6 +44,7 @@ include(
     ":app:android",
     ":shared:data:authentication",
     ":shared:data:connection",
+    ":shared:data:demo",
     ":shared:data:entity",
     ":shared:domain:authentication",
     ":shared:domain:connection",

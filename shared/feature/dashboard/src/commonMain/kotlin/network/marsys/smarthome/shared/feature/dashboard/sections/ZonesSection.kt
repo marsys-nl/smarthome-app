@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
@@ -72,7 +73,6 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.icons.Bath
 import network.marsys.smarthome.shared.library.design.icons.Bed
 import network.marsys.smarthome.shared.library.design.icons.Briefcase
@@ -530,7 +530,7 @@ private fun ZonesSectionLoadedPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         ZonesSection(
             state = ZonesSectionPreviewData.loaded(),
@@ -566,13 +566,13 @@ internal object ZonesSectionPreviewData {
     }
 
     fun loaded() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DemoPreviewData.zones
+        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DemoData.zones
             .take(MAX_ZONES)
             .associateBy { it.identifier }
             .mapValues { (_, zone) ->
                 object : DashboardScreenState.ZoneState {
                     override val zone: Zone = zone
-                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
                         .filter { it.zone?.identifier == zone.identifier }
                         .associateBy { it.identifier }
                 }

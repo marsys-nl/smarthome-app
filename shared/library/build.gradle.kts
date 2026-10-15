@@ -37,6 +37,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.data.authentication)
             implementation(projects.shared.data.connection)
+            implementation(projects.shared.data.demo)
             implementation(projects.shared.data.entity)
             implementation(projects.shared.domain.authentication)
             implementation(projects.shared.domain.connection)

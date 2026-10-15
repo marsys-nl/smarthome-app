@@ -18,7 +18,7 @@ object EntityDetailModalPreviewData {
 
     val loaded = mapOf(
         Light::class to object : EntityDetailModalState {
-            override val isLoading: Boolean = true
+            override val isLoading: Boolean = false
             override val entity: Entity<*> = Light(
                 identifier = EntityIdentifier("light.kitchen-light"),
                 state = Light.State.Known(
@@ -29,7 +29,7 @@ object EntityDetailModalPreviewData {
         },
 
         Thermostat::class to object : EntityDetailModalState {
-            override val isLoading: Boolean = true
+            override val isLoading: Boolean = false
             override val entity: Entity<*> = Thermostat(
                 identifier = EntityIdentifier("thermostat.living-room"),
                 state = Thermostat.State.Unknown,
