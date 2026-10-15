@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Blind
 import network.marsys.smarthome.shared.domain.entity.entity.Camera
@@ -70,7 +71,6 @@ import network.marsys.smarthome.shared.library.design.component.LoadingIndicator
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.domain.icon
-import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.Reset
@@ -539,7 +539,7 @@ private fun LoadingQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loading(),
@@ -555,7 +555,7 @@ private fun EmptyQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.empty(),
@@ -571,7 +571,7 @@ private fun ErrorQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.error(),
@@ -587,7 +587,7 @@ private fun QuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(),
@@ -603,7 +603,7 @@ private fun GroupedQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoPreviewData.translations,
+        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(
@@ -634,7 +634,7 @@ internal object QuickControlSectionPreviewData {
     }
 
     fun loaded(
-        entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
+        entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
             .associateBy { it.identifier },
         groupedEntitiesByType: Boolean = false,
     ) = object : DashboardScreenState.QuickControlState {

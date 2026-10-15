@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
@@ -53,7 +54,6 @@ import network.marsys.smarthome.shared.library.design.component.ShimmerBox
 import network.marsys.smarthome.shared.library.design.component.ShimmerBoxDefaults
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.icon
-import network.marsys.smarthome.shared.library.design.domain.preview.DemoPreviewData
 import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -580,13 +580,13 @@ internal object ZonesScreenPreviewData {
 
     fun loaded() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Success
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = DemoPreviewData.zones
+        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = DemoData.zones
             .take(PREVIEW_MAX_ZONES)
             .associateBy { it.identifier }
             .mapValues { (_, zone) ->
                 object : ZonesScreenState.ZoneState {
                     override val zone: Zone = zone
-                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoPreviewData.entities
+                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
                         .filter { it.zone?.identifier == zone.identifier }
                         .associateBy { it.identifier }
                 }

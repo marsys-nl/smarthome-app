@@ -55,7 +55,7 @@ fun SmartHomeTheme(
         repository = object : TranslationRepository {
             override val catalog: StateFlow<TranslationCatalog>
                 get() = MutableStateFlow(translations)
-        }
+        },
     ) {
         CompositionLocalProvider(
             values = arrayOf(
