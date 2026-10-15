@@ -22,6 +22,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.data.demo)
             implementation(projects.shared.domain.entity)
 
             implementation(libs.koin.compose)

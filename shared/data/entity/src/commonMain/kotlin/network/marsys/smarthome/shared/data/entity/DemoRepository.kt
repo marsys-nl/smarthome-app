@@ -9,17 +9,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.ZoneRepository
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
 import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
 import network.marsys.smarthome.shared.domain.entity.capability.Movement
@@ -31,17 +32,8 @@ import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperatur
 import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
-import network.marsys.smarthome.shared.domain.entity.entity.Blind
-import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Cover
-import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Fan
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.Lock
-import network.marsys.smarthome.shared.domain.entity.entity.Shutter
-import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
-import network.marsys.smarthome.shared.domain.entity.entity.Speaker
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import kotlin.random.Random
@@ -49,21 +41,16 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
-class DemoEntityRepository(
-    seed: List<Entity<*>> = DemoEntities,
+class DemoRepository(
+    entities: List<Entity<*>> = DemoData.entities,
+    zones: List<Zone> = DemoData.zones,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
-) : EntityRepository {
+) : EntityRepository, ZoneRepository {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
-    private val state = MutableStateFlow(seed.associateBy { it.identifier })
+    private val state = MutableStateFlow(entities.associateBy { it.identifier })
 
     override val zones: Flow<Collection<Zone>> =
-        state
-            .map { entityMap ->
-                entityMap.values
-                    .mapNotNull { it.zone }
-                    .distinct()
-            }
-            .distinctUntilChanged()
+        flowOf(zones)
 
     override val entities: Flow<Collection<Entity<*>>> =
         state
@@ -97,6 +84,13 @@ class DemoEntityRepository(
             it + (action.identifier to updated)
         }
     }
+
+    override fun zone(identifier: EntityIdentifier): Flow<Zone?> =
+        zones
+            .map {
+                it.firstOrNull { zone -> zone.identifier == identifier }
+            }
+            .distinctUntilChanged()
 
     private fun executeChildLockCapabilityAction(action: ChildLock.Toggle) = when (action) {
         is ChildLock.Toggle.On -> ChildLock(current = true)
@@ -297,198 +291,3 @@ class DemoEntityRepository(
         private val randomizer = Random(seed = Clock.System.now().epochSeconds)
     }
 }
-
-val DemoZones = listOf(
-    Zone(
-        identifier = EntityIdentifier("zone.bathroom"),
-        icon = Zone.Icon.Bathroom,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.bedroom"),
-        icon = Zone.Icon.Bedroom,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.garage"),
-        icon = Zone.Icon.Garage,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.hallway"),
-        icon = Zone.Icon.Other,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.kitchen"),
-        icon = Zone.Icon.Kitchen,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.living-room"),
-        icon = Zone.Icon.LivingRoom,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.office"),
-        icon = Zone.Icon.Office,
-    ),
-    Zone(
-        identifier = EntityIdentifier("zone.nursery"),
-        icon = Zone.Icon.Bedroom,
-    ),
-)
-
-val DemoEntities: List<Entity<*>> = listOf(
-    // Lights
-    Light(
-        identifier = EntityIdentifier("light.bedroom-lamp"),
-        state = Light.State.Known(
-            onOff = required(OnOff(current = true)),
-            brightness = optional(Brightness(80.percent)),
-        ),
-        zone = zone("zone.bedroom"),
-    ),
-    Light(
-        identifier = EntityIdentifier("light.kitchen-light"),
-        state = Light.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.kitchen"),
-    ),
-    Light(
-        identifier = EntityIdentifier("light.ceiling-light"),
-        state = Light.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.hallway"),
-    ),
-    // Thermostats
-    Thermostat(
-        identifier = EntityIdentifier("thermostat.office"),
-        state = Thermostat.State.Known(
-            onOff = required(OnOff(current = false)),
-            mode = required(ThermostatMode(current = ThermostatMode.Mode.Heat)),
-            temperatures = Thermostat.Temperatures(
-                current = required(MeasureTemperature(current = 18.celsius)),
-                target = required(TargetTemperature(current = 22.celsius)),
-            ),
-        ),
-        zone = zone("zone.office"),
-    ),
-    Thermostat(
-        identifier = EntityIdentifier("thermostat.main-bedroom"),
-        state = Thermostat.State.Known(
-            onOff = required(OnOff(current = true)),
-            mode = required(ThermostatMode(current = ThermostatMode.Mode.Auto)),
-            temperatures = Thermostat.Temperatures(
-                current = required(MeasureTemperature(current = 18.celsius)),
-                target = required(TargetTemperature(current = 22.celsius)),
-            ),
-        ),
-        zone = zone("zone.bedroom"),
-    ),
-    Thermostat(
-        identifier = EntityIdentifier("thermostat.nursery"),
-        state = Thermostat.State.Known(
-            onOff = required(OnOff(current = true)),
-            mode = required(
-                value = ThermostatMode(
-                    current = ThermostatMode.Mode.Heat,
-                    supported = setOf(
-                        ThermostatMode.Mode.Heat,
-                    ),
-                ),
-            ),
-            temperatures = Thermostat.Temperatures(
-                current = required(MeasureTemperature(current = 19.celsius)),
-                target = required(TargetTemperature(current = 21.celsius)),
-            ),
-            childLock = optional(ChildLock(current = true)),
-            windowDetection = optional(WindowDetection(current = true)),
-            scheduledMode = optional(ScheduledMode(current = false)),
-        ),
-        zone = zone("zone.nursery"),
-    ),
-    // Plugs
-    SmartPlug(
-        identifier = EntityIdentifier("plug.office-plug"),
-        state = SmartPlug.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.office"),
-    ),
-    SmartPlug(
-        identifier = EntityIdentifier("plug.smart-tv"),
-        state = SmartPlug.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.living-room"),
-    ),
-    // Covers
-    Blind(
-        identifier = EntityIdentifier("blind.living-room"),
-        state = Blind.State.Known(
-            control = Cover.Control.WithPosition(
-                position = required(Position(current = 0.percent)),
-                movement = optional(Movement(current = Movement.Direction.Idle)),
-            ),
-        ),
-        zone = zone("zone.living-room"),
-    ),
-    Blind(
-        identifier = EntityIdentifier("blind.office"),
-        state = Blind.State.Known(
-            control = Cover.Control.WithoutPosition(
-                opened = required(Opened(current = false)),
-            ),
-        ),
-        zone = zone("zone.office"),
-    ),
-    Shutter(
-        identifier = EntityIdentifier("shutter.main-bedroom"),
-        state = Shutter.State.Known(
-            control = Cover.Control.WithPosition(
-                position = required(Position(current = 50.percent)),
-            ),
-        ),
-        zone = zone("zone.bedroom"),
-    ),
-    Curtain(
-        identifier = EntityIdentifier("curtain.kitchen"),
-        state = Curtain.State.Known(
-            control = Cover.Control.WithoutPosition(
-                opened = required(Opened(current = true)),
-                movement = optional(Movement(current = Movement.Direction.Idle)),
-            ),
-        ),
-        zone = zone("zone.kitchen"),
-    ),
-    // Fans
-    Fan(
-        identifier = EntityIdentifier("fan.bedroom"),
-        state = Fan.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.bedroom"),
-    ),
-    // Speakers
-    Speaker(
-        identifier = EntityIdentifier("speaker.kitchen"),
-        state = Speaker.State.Unknown,
-        zone = zone("zone.kitchen"),
-    ),
-    // Cameras
-    Camera(
-        identifier = EntityIdentifier("camera.front-door"),
-        state = Camera.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.hallway"),
-    ),
-    // Locks
-    Lock(
-        identifier = EntityIdentifier("lock.front-door"),
-        state = Lock.State.Known(
-            onOff = required(OnOff(current = true)),
-        ),
-        zone = zone("zone.hallway"),
-    ),
-)
-
-private fun zone(identifier: String): Zone? =
-    DemoZones.firstOrNull { it.identifier.value == identifier }
