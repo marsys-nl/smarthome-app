@@ -21,7 +21,7 @@ androidx-window = "1.5.1"
 
 build-konfig = "0.23.0"
 
-compose-unstyled = "2.10.0"
+compose-unstyled = "2.10.1"
 
 detekt = "2.0.0-alpha.6"
 detekt-compose-rules = "0.6.8"
