@@ -8,9 +8,11 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
@@ -47,26 +49,29 @@ class DemoRepository(
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityRepository, ZoneRepository {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
-    private val state = MutableStateFlow(entities.associateBy { it.identifier })
 
-    override val zones: Flow<Collection<Zone>> =
-        flowOf(zones)
+    override val entities: Flow<Collection<Entity<*>>>
+        field = MutableStateFlow(value = entities)
 
-    override val entities: Flow<Collection<Entity<*>>> =
-        state
-            .map { it.values }
+    override val zones: Flow<Collection<Zone>>
+        field = MutableStateFlow(value = zones)
 
     init {
         initializeObservingSimulations()
     }
 
-    override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
-        state
-            .map { it[identifier] }
-            .distinctUntilChanged()
+    override fun entity(identifier: EntityIdentifier): StateFlow<Entity<*>?> =
+        entities.mapState(scope = scope, initial = entities.value) { collection ->
+            collection.firstOrNull { entity -> entity.identifier == identifier }
+        }
+
+    override fun zone(identifier: EntityIdentifier): StateFlow<Zone?> =
+        zones.mapState(scope = scope, initial = zones.value) { collection ->
+            collection.firstOrNull { zone -> zone.identifier == identifier }
+        }
 
     override suspend fun execute(action: Entity.Action) {
-        val entity = state.value[action.identifier] ?: return
+        val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return
 
         val capability: WritableCapability<*> = when (action) {
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
@@ -79,18 +84,12 @@ class DemoRepository(
             else -> return
         }
 
-        val updated = entity.update { it.with(capability) }
-        state.update {
-            it + (action.identifier to updated)
-        }
+        entities.replace(
+            replacement = entity.update {
+                it.with(capability)
+            },
+        )
     }
-
-    override fun zone(identifier: EntityIdentifier): Flow<Zone?> =
-        zones
-            .map {
-                it.firstOrNull { zone -> zone.identifier == identifier }
-            }
-            .distinctUntilChanged()
 
     private fun executeChildLockCapabilityAction(action: ChildLock.Toggle) = when (action) {
         is ChildLock.Toggle.On -> ChildLock(current = true)
@@ -141,7 +140,7 @@ class DemoRepository(
             while (true) {
                 delay(SIMULATION_TICK)
 
-                state.value.values.filterIsInstance<Thermostat>()
+                entities.value.filterIsInstance<Thermostat>()
                     .forEach { thermostat ->
                         val thermostatState = thermostat.state as? Thermostat.State.Known ?: return@forEach
 
@@ -163,17 +162,15 @@ class DemoRepository(
                                 else -> measured.current
                             }
 
-                            val updated = thermostat.update {
-                                it.with(
-                                    capability = MeasureTemperature(
-                                        current = adjusted.coerceIn(target.range),
-                                    ),
-                                )
-                            }
-
-                            state.update {
-                                it + (thermostat.identifier to updated)
-                            }
+                            entities.replace(
+                                replacement = thermostat.update {
+                                    it.with(
+                                        capability = MeasureTemperature(
+                                            current = adjusted.coerceIn(target.range),
+                                        ),
+                                    )
+                                },
+                            )
                         }
                     }
             }
@@ -186,7 +183,7 @@ class DemoRepository(
                 delay(SIMULATION_TICK)
 
                 simulations.forEach { (_, action) ->
-                    val entity = state.value[action.identifier] ?: return@forEach
+                    val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return@forEach
 
                     when (entity) {
                         is Cover<*> if action is Movement.Move -> applyCoverSimulation(entity, action)
@@ -219,15 +216,13 @@ class DemoRepository(
             )
         }
 
-        val updated = entity.update { state ->
-            capabilities.fold(state) { accumulator, capability ->
-                accumulator.with(capability = capability)
-            }
-        }
-
-        state.update {
-            it + (entity.identifier to updated)
-        }
+        entities.replace(
+            replacement = entity.update { state ->
+                capabilities.fold(state) { accumulator, capability ->
+                    accumulator.with(capability = capability)
+                }
+            },
+        )
 
         capabilities.filterIsInstance<Movement>()
             .firstOrNull { it.current == Movement.Direction.Idle }
@@ -285,7 +280,31 @@ class DemoRepository(
         delay(1.seconds)
     }
 
+    /*
+     * Helper methods
+     */
+
+    private fun MutableStateFlow<List<Entity<*>>>.replace(replacement: Entity<*>) = update { collection ->
+        collection.map { item ->
+            if (item.identifier == replacement.identifier) {
+                replacement
+            } else {
+                item
+            }
+        }
+    }
+
+    private fun <T, R> Flow<T>.mapState(
+        scope: CoroutineScope,
+        initial: T,
+        started: SharingStarted = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
+        transform: (T) -> R,
+    ): StateFlow<R> = map(transform)
+        .distinctUntilChanged()
+        .stateIn(scope = scope, started = started, initialValue = transform(initial))
+
     companion object {
+        private const val DEFAULT_STOP_TIMEOUT_MILLIS = 5000L
         private val SIMULATION_TICK = 0.1.seconds
 
         private val randomizer = Random(seed = Clock.System.now().epochSeconds)

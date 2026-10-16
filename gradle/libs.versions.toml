@@ -1,11 +1,11 @@
 [versions]
 # year = major, month = minor
 # major * 100000, minor * 1000, patch * 1
-smarthome-app-code = "2609001"
-smarthome-app-name = "2026.09-SNAPSHOT"
+smarthome-app-code = "2610001"
+smarthome-app-name = "2026.10-SNAPSHOT"
 
 smarthome-domain = "2026.10-SNAPSHOT"
-smarthome-api = "2026.09-SNAPSHOT"
+smarthome-api = "2026.10-SNAPSHOT"
 
 android-gradle-plugin = "9.4.1"
 android-sdk-compile = "37"
