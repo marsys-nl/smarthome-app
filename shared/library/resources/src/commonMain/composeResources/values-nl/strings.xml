@@ -37,4 +37,52 @@
     <string name="entity_state_closing">Wordt gesloten</string>
 
     <string name="unknown_entity">Onbekend</string>
+
+    <!-- Zone related -->
+    <string name="bathroom">Badkamer</string>
+    <string name="basement">Kelder</string>
+    <string name="bedroom">Slaapkamer</string>
+    <string name="garage">Garage</string>
+    <string name="hallway">Gang</string>
+    <string name="kitchen">Keuken</string>
+    <string name="living-room">Woonkamer</string>
+    <string name="nursery">Babykamer</string>
+    <string name="office">Kantoor</string>
+    <string name="pavilion">Overkapping</string>
+    <string name="pergola">Pergola</string>
+    <string name="porch">Veranda</string>
+    <string name="yard">Tuin</string>
+
+    <!-- Entity type related -->
+    <string name="blind">Jaloezie</string>
+    <string name="camera">Camera</string>
+    <string name="curtain">Gordijn</string>
+    <string name="fan">Ventilator</string>
+    <string name="light">Lamp</string>
+    <string name="lock">Slot</string>
+    <string name="plug">Smart plug</string>
+    <string name="shutter">Rolluik</string>
+    <string name="speaker">Speaker</string>
+
+    <!-- Qualifiers -->
+    <string name="ceiling">Plafond</string>
+    <string name="spots">Spotjes</string>
+
+    <string name="back-door">Achterdeur</string>
+    <string name="front-door">Voordeur</string>
+    <string name="garage-door">Garagedeur</string>
+    <string name="gate">Poort</string>
+    <string name="window">Raam</string>
+
+    <string name="front-bedroom">Slaapkamer voor</string>
+    <string name="main-bedroom">Hoofdslaapkamer</string>
+    <string name="second-bedroom">Tweede slaapkamer</string>
+
+    <string name="ac">Airco</string>
+    <string name="christmas-tree">Kerstboom</string>
+    <string name="tv">TV</string>
+
+    <string name="back-yard">Achtertuin</string>
+    <string name="front-yard">Voortuin</string>
+    <string name="side-yard">Zijtuin</string>
 </resources>

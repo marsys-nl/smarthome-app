@@ -40,42 +40,42 @@ object DemoData {
     val zones = listOf(
         Zone(
             identifier = EntityIdentifier("zone.bathroom"),
-            naming = TranslationKey("zone.bathroom"),
+            naming = TranslationKey("bathroom"),
             icon = Zone.Icon.Bathroom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.bedroom"),
-            naming = TranslationKey("zone.bedroom"),
+            naming = TranslationKey("bedroom"),
             icon = Zone.Icon.Bedroom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.garage"),
-            naming = TranslationKey("zone.garage"),
+            naming = TranslationKey("garage"),
             icon = Zone.Icon.Garage,
         ),
         Zone(
             identifier = EntityIdentifier("zone.hallway"),
-            naming = TranslationKey("zone.hallway"),
+            naming = TranslationKey("hallway"),
             icon = Zone.Icon.Other,
         ),
         Zone(
             identifier = EntityIdentifier("zone.kitchen"),
-            naming = TranslationKey("zone.kitchen"),
+            naming = TranslationKey("kitchen"),
             icon = Zone.Icon.Kitchen,
         ),
         Zone(
             identifier = EntityIdentifier("zone.living-room"),
-            naming = TranslationKey("zone.living-room"),
+            naming = TranslationKey("living-room"),
             icon = Zone.Icon.LivingRoom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.office"),
-            naming = TranslationKey("zone.office"),
+            naming = TranslationKey("office"),
             icon = Zone.Icon.Office,
         ),
         Zone(
             identifier = EntityIdentifier("zone.nursery"),
-            naming = TranslationKey("zone.nursery"),
+            naming = TranslationKey("nursery"),
             icon = Zone.Icon.Bedroom,
         ),
     )
@@ -85,7 +85,7 @@ object DemoData {
         Light(
             identifier = EntityIdentifier("light.bedroom-lamp"),
             naming = EntityNaming(
-                key = TranslationKey("light.bedroom-lamp"),
+                key = TranslationKey("light.bedroom"),
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
@@ -96,7 +96,7 @@ object DemoData {
         Light(
             identifier = EntityIdentifier("light.kitchen-light"),
             naming = EntityNaming(
-                key = TranslationKey("light.kitchen-light"),
+                key = TranslationKey("light.kitchen.spots"),
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
@@ -106,7 +106,19 @@ object DemoData {
         Light(
             identifier = EntityIdentifier("light.ceiling-light"),
             naming = EntityNaming(
-                key = TranslationKey("light.ceiling-light"),
+                key = TranslationKey("light.living-room"),
+                qualifier = TranslationKey("ceiling"),
+            ),
+            state = Light.State.Known(
+                onOff = required(OnOff(current = true)),
+            ),
+            zone = zone("zone.living-room"),
+        ),
+        Light(
+            identifier = EntityIdentifier("light.ceiling-light"),
+            naming = EntityNaming(
+                key = TranslationKey("light.hallway"),
+                qualifier = TranslationKey("ceiling"),
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
@@ -173,7 +185,7 @@ object DemoData {
         SmartPlug(
             identifier = EntityIdentifier("plug.office-plug"),
             naming = EntityNaming(
-                key = TranslationKey("plug.office-plug"),
+                key = TranslationKey("plug.office"),
             ),
             state = SmartPlug.State.Known(
                 onOff = required(OnOff(current = true)),
@@ -183,7 +195,7 @@ object DemoData {
         SmartPlug(
             identifier = EntityIdentifier("plug.smart-tv"),
             naming = EntityNaming(
-                key = TranslationKey("plug.smart-tv"),
+                key = TranslationKey("plug.tv"),
             ),
             state = SmartPlug.State.Known(
                 onOff = required(OnOff(current = true)),
