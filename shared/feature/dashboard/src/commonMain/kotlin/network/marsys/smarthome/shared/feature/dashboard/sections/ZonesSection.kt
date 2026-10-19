@@ -305,7 +305,6 @@ private fun ZonesSectionLoadedContent(
     }
 }
 
-@OptIn(ExperimentalGridApi::class, ExperimentalFoundationStyleApi::class)
 @Composable
 private fun ZonesSectionZoneCard(
     state: DashboardScreenState.ZoneState,

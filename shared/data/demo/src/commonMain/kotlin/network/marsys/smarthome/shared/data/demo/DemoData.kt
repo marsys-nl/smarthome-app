@@ -2,6 +2,7 @@
 
 package network.marsys.smarthome.shared.data.demo
 
+import network.marsys.smarthome.domain.i18n.TranslationKey
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
@@ -23,6 +24,7 @@ import network.marsys.smarthome.shared.domain.entity.entity.Camera
 import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Curtain
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
 import network.marsys.smarthome.shared.domain.entity.entity.Fan
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Lock
@@ -38,34 +40,42 @@ object DemoData {
     val zones = listOf(
         Zone(
             identifier = EntityIdentifier("zone.bathroom"),
+            naming = TranslationKey("zone.bathroom"),
             icon = Zone.Icon.Bathroom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.bedroom"),
+            naming = TranslationKey("zone.bedroom"),
             icon = Zone.Icon.Bedroom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.garage"),
+            naming = TranslationKey("zone.garage"),
             icon = Zone.Icon.Garage,
         ),
         Zone(
             identifier = EntityIdentifier("zone.hallway"),
+            naming = TranslationKey("zone.hallway"),
             icon = Zone.Icon.Other,
         ),
         Zone(
             identifier = EntityIdentifier("zone.kitchen"),
+            naming = TranslationKey("zone.kitchen"),
             icon = Zone.Icon.Kitchen,
         ),
         Zone(
             identifier = EntityIdentifier("zone.living-room"),
+            naming = TranslationKey("zone.living-room"),
             icon = Zone.Icon.LivingRoom,
         ),
         Zone(
             identifier = EntityIdentifier("zone.office"),
+            naming = TranslationKey("zone.office"),
             icon = Zone.Icon.Office,
         ),
         Zone(
             identifier = EntityIdentifier("zone.nursery"),
+            naming = TranslationKey("zone.nursery"),
             icon = Zone.Icon.Bedroom,
         ),
     )
@@ -74,6 +84,9 @@ object DemoData {
         // Lights
         Light(
             identifier = EntityIdentifier("light.bedroom-lamp"),
+            naming = EntityNaming(
+                key = TranslationKey("light.bedroom-lamp"),
+            ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
                 brightness = optional(Brightness(80.percent)),
@@ -82,6 +95,9 @@ object DemoData {
         ),
         Light(
             identifier = EntityIdentifier("light.kitchen-light"),
+            naming = EntityNaming(
+                key = TranslationKey("light.kitchen-light"),
+            ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -89,6 +105,9 @@ object DemoData {
         ),
         Light(
             identifier = EntityIdentifier("light.ceiling-light"),
+            naming = EntityNaming(
+                key = TranslationKey("light.ceiling-light"),
+            ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -97,6 +116,9 @@ object DemoData {
         // Thermostats
         Thermostat(
             identifier = EntityIdentifier("thermostat.office"),
+            naming = EntityNaming(
+                key = TranslationKey("thermostat.office"),
+            ),
             state = Thermostat.State.Known(
                 onOff = required(OnOff(current = false)),
                 mode = required(ThermostatMode(current = ThermostatMode.Mode.Heat)),
@@ -109,6 +131,9 @@ object DemoData {
         ),
         Thermostat(
             identifier = EntityIdentifier("thermostat.main-bedroom"),
+            naming = EntityNaming(
+                key = TranslationKey("thermostat.main-bedroom"),
+            ),
             state = Thermostat.State.Known(
                 onOff = required(OnOff(current = true)),
                 mode = required(ThermostatMode(current = ThermostatMode.Mode.Auto)),
@@ -121,6 +146,9 @@ object DemoData {
         ),
         Thermostat(
             identifier = EntityIdentifier("thermostat.nursery"),
+            naming = EntityNaming(
+                key = TranslationKey("thermostat.nursery"),
+            ),
             state = Thermostat.State.Known(
                 onOff = required(OnOff(current = true)),
                 mode = required(
@@ -144,6 +172,9 @@ object DemoData {
         // Plugs
         SmartPlug(
             identifier = EntityIdentifier("plug.office-plug"),
+            naming = EntityNaming(
+                key = TranslationKey("plug.office-plug"),
+            ),
             state = SmartPlug.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -151,6 +182,9 @@ object DemoData {
         ),
         SmartPlug(
             identifier = EntityIdentifier("plug.smart-tv"),
+            naming = EntityNaming(
+                key = TranslationKey("plug.smart-tv"),
+            ),
             state = SmartPlug.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -159,6 +193,9 @@ object DemoData {
         // Covers
         Blind(
             identifier = EntityIdentifier("blind.living-room"),
+            naming = EntityNaming(
+                key = TranslationKey("blind.living-room"),
+            ),
             state = Blind.State.Known(
                 control = Cover.Control.WithPosition(
                     position = required(Position(current = 0.percent)),
@@ -169,6 +206,9 @@ object DemoData {
         ),
         Blind(
             identifier = EntityIdentifier("blind.office"),
+            naming = EntityNaming(
+                key = TranslationKey("blind.office"),
+            ),
             state = Blind.State.Known(
                 control = Cover.Control.WithoutPosition(
                     opened = required(Opened(current = false)),
@@ -178,6 +218,9 @@ object DemoData {
         ),
         Shutter(
             identifier = EntityIdentifier("shutter.main-bedroom"),
+            naming = EntityNaming(
+                key = TranslationKey("shutter.main-bedroom"),
+            ),
             state = Shutter.State.Known(
                 control = Cover.Control.WithPosition(
                     position = required(Position(current = 50.percent)),
@@ -187,6 +230,9 @@ object DemoData {
         ),
         Curtain(
             identifier = EntityIdentifier("curtain.kitchen"),
+            naming = EntityNaming(
+                key = TranslationKey("curtain.kitchen"),
+            ),
             state = Curtain.State.Known(
                 control = Cover.Control.WithoutPosition(
                     opened = required(Opened(current = true)),
@@ -198,6 +244,9 @@ object DemoData {
         // Fans
         Fan(
             identifier = EntityIdentifier("fan.bedroom"),
+            naming = EntityNaming(
+                key = TranslationKey("fan.bedroom"),
+            ),
             state = Fan.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -206,12 +255,18 @@ object DemoData {
         // Speakers
         Speaker(
             identifier = EntityIdentifier("speaker.kitchen"),
+            naming = EntityNaming(
+                key = TranslationKey("speaker.kitchen"),
+            ),
             state = Speaker.State.Unknown,
             zone = zone("zone.kitchen"),
         ),
         // Cameras
         Camera(
             identifier = EntityIdentifier("camera.front-door"),
+            naming = EntityNaming(
+                key = TranslationKey("camera.front-door"),
+            ),
             state = Camera.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
@@ -220,6 +275,9 @@ object DemoData {
         // Locks
         Lock(
             identifier = EntityIdentifier("lock.front-door"),
+            naming = EntityNaming(
+                key = TranslationKey("lock.front-door"),
+            ),
             state = Lock.State.Known(
                 onOff = required(OnOff(current = true)),
             ),

@@ -8,6 +8,7 @@ import network.marsys.smarthome.shared.domain.entity.zone.Zone
 
 interface Entity<S : Entity.State> {
     val identifier: EntityIdentifier
+    val naming: EntityNaming
     val state: S
     val zone: Zone?
 
