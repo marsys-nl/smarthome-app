@@ -231,6 +231,9 @@ object DemoData {
         translations = DemoEntityTranslations + ZoneTranslations,
     )
 
+    fun zone(identifier: EntityIdentifier): Zone =
+        zones.first { it.identifier == identifier }
+
     fun zone(identifier: String): Zone =
         zones.first { it.identifier.value == identifier }
 }

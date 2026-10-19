@@ -85,6 +85,7 @@ private val viewModelModule = module {
         ZoneViewModel(
             identifier = it.get(),
             entityRepository = get(),
+            zoneRepository = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
