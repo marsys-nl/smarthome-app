@@ -9,6 +9,7 @@ import network.marsys.smarthome.shared.domain.entity.zone.Zone
 
 data class Light(
     override val identifier: EntityIdentifier,
+    override val naming: EntityNaming,
     override val state: State = State.Unknown,
     override val zone: Zone? = null,
 ) : AbstractEntity<Light.State>(), Entity.Activatable {

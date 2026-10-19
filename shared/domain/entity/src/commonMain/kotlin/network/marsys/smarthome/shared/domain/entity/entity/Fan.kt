@@ -8,6 +8,7 @@ import network.marsys.smarthome.shared.domain.entity.zone.Zone
 
 data class Fan(
     override val identifier: EntityIdentifier,
+    override val naming: EntityNaming,
     override val state: State = State.Unknown,
     override val zone: Zone? = null,
 ) : AbstractEntity<Fan.State>(), Entity.Activatable {

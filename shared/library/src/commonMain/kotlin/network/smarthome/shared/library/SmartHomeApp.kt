@@ -91,7 +91,6 @@ private val viewModelModule = module {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun SmartHomeApp(
     applicationModule: Module,
