@@ -24,8 +24,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_description
@@ -120,7 +122,9 @@ private fun ZoneScreenViewContent(
                 onAction = onAction,
             )
 
+            @Suppress("ktlint:standard:trailing-comma-on-declaration-site")
             when (state.condition) {
+                is ZoneScreenState.Condition.Resolving,
                 is ZoneScreenState.Condition.Loading ->
                     ZoneScreenLoadingViewContent()
 
@@ -280,7 +284,6 @@ private fun ZoneScreenErrorViewContent(
         contentPadding = PaddingValues(32.dp),
         border = Border.Solid(1.dp),
     ) {
-        @OptIn(ExperimentalFoundationStyleApi::class)
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -426,7 +429,6 @@ private fun EntityIcon(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationStyleApi::class)
 private fun RowScope.EntityDetails(
     entity: Entity<*>,
     modifier: Modifier = Modifier,
@@ -485,19 +487,27 @@ private fun ZoneScreenHeader(
             modifier = Modifier,
         ) {
             Text(
-                text = stringResource(state.zone),
+                text = determineHeaderTitleText(state = state),
                 lineHeight = 24.sp,
                 fontSize = 16.sp,
                 color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
             )
 
-            Text(
-                text = determineHeaderDescriptionText(state = state),
-                lineHeight = 20.sp,
-                fontSize = 14.sp,
-            )
+            if (state.condition != ZoneScreenState.Condition.Resolving) {
+                Text(
+                    text = determineHeaderDescriptionText(state = state),
+                    lineHeight = 20.sp,
+                    fontSize = 14.sp,
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun determineHeaderTitleText(state: ZoneScreenState): String = when (val zone = state.zone) {
+    is Zone -> stringResource(zone.identifier)
+    else -> "…"
 }
 
 @Composable
@@ -580,30 +590,55 @@ private fun LoadedZoneScreenPreview(
     }
 }
 
+@PreviewLocales
+@PreviewFontScales
+@PreviewScreenSizes
+@Composable
+private fun ResolvingZoneScreenPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeTheme(
+        theme = theme,
+    ) {
+        ZoneScreenViewContent(
+            state = ZoneScreenPreviewData.resolving(),
+            onAction = {},
+        )
+    }
+}
+
 internal object ZoneScreenPreviewData {
-    private val zone: EntityIdentifier = EntityIdentifier("zone.living-room")
+    private val identifier = EntityIdentifier("zone.living-room")
 
     fun loading() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Loading
-        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val zone: Zone = DemoData.zone(identifier = identifier)
         override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
     }
 
     fun empty() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Empty
-        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val zone: Zone = DemoData.zone(identifier = identifier)
         override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
     }
 
     fun error() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Error
-        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val zone: Zone = DemoData.zone(identifier = identifier)
         override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
     }
 
     fun loaded() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Success
-        override val zone: EntityIdentifier = ZoneScreenPreviewData.zone
+        override val zone: Zone = DemoData.zone(identifier = identifier)
+        override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
+            .filter { it.zone?.identifier == identifier }
+            .associateBy { it.identifier }
+    }
+
+    fun resolving() = object : ZoneScreenState {
+        override val condition = ZoneScreenState.Condition.Resolving
+        override val zone: Zone? = null
         override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
     }
 }

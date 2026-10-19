@@ -13,8 +13,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.EntityRepository
+import network.marsys.smarthome.shared.domain.entity.ZoneRepository
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.library.core.coroutines.EffectEmitter
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
@@ -26,17 +29,20 @@ internal typealias ZoneStateHolder =
 class ZoneViewModel(
     private val identifier: EntityIdentifier,
     private val entityRepository: EntityRepository,
+    private val zoneRepository: ZoneRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     ZoneStateHolder by coroutineScope.suspendingActionStateEffectMutator(
-        state = MutableZoneScreenState(identifier),
+        state = MutableZoneScreenState(),
         producer = { state, actions, emitter ->
-            var entityMutationJob: Job?
+            var zoneMutationJob: Job?
 
-            entityMutationJob = launchEntityMutations(
+            zoneMutationJob = launchZoneMutations(
                 identifier = identifier,
-                state = state,
                 entityRepository = entityRepository,
+                zoneRepository = zoneRepository,
+                emitter = emitter,
+                state = state,
             )
 
             actions.handle(
@@ -61,11 +67,13 @@ class ZoneViewModel(
                     }
 
                     is ZoneScreenAction.RetryLoadingEntities -> action.flow.collect {
-                        entityMutationJob?.cancel()
-                        entityMutationJob = launchEntityMutations(
+                        zoneMutationJob?.cancel()
+                        zoneMutationJob = launchZoneMutations(
                             identifier = identifier,
-                            state = state,
                             entityRepository = entityRepository,
+                            zoneRepository = zoneRepository,
+                            emitter = emitter,
+                            state = state,
                         )
                     }
 
@@ -82,7 +90,38 @@ class ZoneViewModel(
         },
     )
 
-@OptIn(FlowPreview::class)
+context(scope: CoroutineScope)
+private fun launchZoneMutations(
+    identifier: EntityIdentifier,
+    entityRepository: EntityRepository,
+    zoneRepository: ZoneRepository,
+    emitter: EffectEmitter<ZoneScreenEffect>,
+    state: MutableZoneScreenState,
+) = scope.launch {
+    if (state.condition != ZoneScreenState.Condition.Resolving) {
+        state.condition = ZoneScreenState.Condition.Loading
+    }
+
+    zoneRepository.zone(identifier = identifier)
+        .collect { zone ->
+            if (zone == null) {
+                emitter.emit(
+                    effect = ZoneScreenEffect.Navigate(
+                        target = NavigationDestination.Zones,
+                    ),
+                )
+            } else {
+                state.zone = zone
+
+                launchEntityMutations(
+                    identifier = identifier,
+                    state = state,
+                    entityRepository = entityRepository,
+                )
+            }
+        }
+}
+
 context(scope: CoroutineScope)
 private fun launchEntityMutations(
     identifier: EntityIdentifier,
@@ -114,10 +153,8 @@ private fun launchEntityMutations(
         }
 }
 
-private class MutableZoneScreenState(
-    identifier: EntityIdentifier,
-) : ZoneScreenState {
-    override var condition: ZoneScreenState.Condition by mutableStateOf(ZoneScreenState.Condition.Loading)
-    override var zone: EntityIdentifier by mutableStateOf(identifier)
+private class MutableZoneScreenState : ZoneScreenState {
+    override var condition: ZoneScreenState.Condition by mutableStateOf(ZoneScreenState.Condition.Resolving)
+    override var zone: Zone? by mutableStateOf(null)
     override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
 }
