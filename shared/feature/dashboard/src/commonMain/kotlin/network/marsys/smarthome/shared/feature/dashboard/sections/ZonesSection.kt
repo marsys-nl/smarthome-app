@@ -334,7 +334,7 @@ private fun ZonesSectionZoneCard(
                 )
 
                 Text(
-                    text = stringResource(state.zone.identifier),
+                    text = stringResource(key = state.zone.naming),
                     modifier = Modifier
                         .padding(top = 8.dp),
                     lineHeight = 24.sp,

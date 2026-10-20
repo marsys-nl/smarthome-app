@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -19,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -36,6 +39,7 @@ import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
 import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
 import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
 import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
@@ -92,7 +96,6 @@ fun EntityDetailModal(
     val state = viewModel.produceStateWithLifecycle()
 
     EntityDetailModalContent(
-        title = stringResource(identifier = entity),
         state = state,
         onAction = viewModel.accept,
         onDismissRequest = onDismissRequest,
@@ -102,7 +105,6 @@ fun EntityDetailModal(
 
 @Composable
 private fun EntityDetailModalContent(
-    title: String,
     state: EntityDetailModalState,
     onAction: (EntityDetailModalAction) -> Unit,
     onDismissRequest: () -> Unit,
@@ -118,23 +120,10 @@ private fun EntityDetailModalContent(
             modifier = Modifier
                 .fillMaxWidth(),
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = title,
-                    lineHeight = 32.sp,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.W700,
-                )
-
-                CloseModalButton(
-                    onDismissRequest = onDismissRequest,
-                )
-            }
+            EntityDetailHeader(
+                state = state,
+                onDismissRequest = onDismissRequest,
+            )
 
             if (!state.isLoading) {
                 EntityDetailLastUpdated()
@@ -152,6 +141,56 @@ private fun EntityDetailModalContent(
                 )
         }
     }
+}
+
+@Composable
+private fun EntityDetailHeader(
+    state: EntityDetailModalState,
+    onDismissRequest: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = determineEntityDetailTitle(entity = state.entity),
+                lineHeight = 32.sp,
+                fontSize = 24.sp,
+                fontWeight = FontWeight.W700,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+
+            state.entity?.naming?.qualifier?.let { qualifier ->
+                Text(
+                    text = stringResource(key = qualifier),
+                    modifier = Modifier
+                        .padding(start = 8.dp),
+                    lineHeight = 32.sp,
+                    fontSize = 20.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+        }
+
+        CloseModalButton(
+            onDismissRequest = onDismissRequest,
+        )
+    }
+}
+
+@Composable
+private fun determineEntityDetailTitle(
+    entity: Entity<*>?,
+) = when (entity) {
+    is Entity<*> -> stringResource(key = entity.naming.key)
+    else -> "…"
 }
 
 @Composable
@@ -359,7 +398,6 @@ private fun LoadingEntityDetailModalPreview(
         theme = theme,
     ) {
         EntityDetailModalContent(
-            title = "Kitchen spots",
             state = EntityDetailModalPreviewData.loading,
             onAction = {},
             onDismissRequest = {},
@@ -378,7 +416,6 @@ private fun LoadedLightEntityDetailModalPreview(
         val state = EntityDetailModalPreviewData.loaded[Light::class] ?: error("Missing preview data")
 
         EntityDetailModalContent(
-            title = "Kitchen spots",
             state = state,
             onAction = {},
             onDismissRequest = {},
@@ -397,7 +434,6 @@ private fun LoadedThermostatEntityDetailModalPreview(
         val state = EntityDetailModalPreviewData.loaded[Thermostat::class] ?: error("Missing preview data")
 
         EntityDetailModalContent(
-            title = "Living room",
             state = state,
             onAction = {},
             onDismissRequest = {},
