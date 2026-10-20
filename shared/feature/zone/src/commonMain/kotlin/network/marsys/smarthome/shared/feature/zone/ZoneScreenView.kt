@@ -59,7 +59,6 @@ import network.marsys.smarthome.shared.library.design.component.SwitchSize
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.domain.icon
-import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.ChevronLeft
 import network.marsys.smarthome.shared.library.design.icons.Component
 import network.marsys.smarthome.shared.library.design.icons.Icons

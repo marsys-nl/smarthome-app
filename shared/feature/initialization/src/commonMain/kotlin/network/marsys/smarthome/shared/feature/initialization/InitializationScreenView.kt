@@ -53,7 +53,6 @@ import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.IconButton
 import network.marsys.smarthome.shared.library.design.component.IconCard
 import network.marsys.smarthome.shared.library.design.component.Text
-import network.marsys.smarthome.shared.library.design.domain.preview.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.icons.CircleCheck
 import network.marsys.smarthome.shared.library.design.icons.CircleClose
 import network.marsys.smarthome.shared.library.design.icons.HeartPulse

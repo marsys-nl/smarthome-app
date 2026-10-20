@@ -545,7 +545,6 @@ private fun LoadingQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loading(),
@@ -561,7 +560,6 @@ private fun EmptyQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.empty(),
@@ -577,7 +575,6 @@ private fun ErrorQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.error(),
@@ -593,7 +590,6 @@ private fun QuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(),
@@ -609,7 +605,6 @@ private fun GroupedQuickControlSectionPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         QuickControlSection(
             state = QuickControlSectionPreviewData.loaded(
