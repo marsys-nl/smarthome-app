@@ -39,4 +39,52 @@
     <string name="entity_state_closing">Shutting</string>
 
     <string name="unknown_entity">Unknown</string>
+
+    <!-- Zone related -->
+    <string name="bathroom">Bathroom</string>
+    <string name="basement">Basement</string>
+    <string name="bedroom">Bedroom</string>
+    <string name="garage">Garage</string>
+    <string name="hallway">Hallway</string>
+    <string name="kitchen">Kitchen</string>
+    <string name="living-room">Living room</string>
+    <string name="nursery">Nursery</string>
+    <string name="office">Office</string>
+    <string name="pavilion">Pavilion</string>
+    <string name="pergola">Pergola</string>
+    <string name="porch">Porch</string>
+    <string name="yard">Yard</string>
+
+    <!-- Entity type related -->
+    <string name="blind">Blind</string>
+    <string name="camera">Camera</string>
+    <string name="curtain">Curtain</string>
+    <string name="fan">Fan</string>
+    <string name="light">Light</string>
+    <string name="lock">Lock</string>
+    <string name="plug">Smart plug</string>
+    <string name="shutter">Shutter</string>
+    <string name="speaker">Speaker</string>
+
+    <!-- Qualifiers -->
+    <string name="ceiling">Ceiling</string>
+    <string name="spots">Spots</string>
+
+    <string name="back-door">Back door</string>
+    <string name="front-door">Front door</string>
+    <string name="garage-door">Garage door</string>
+    <string name="gate">Gate</string>
+    <string name="window">Window</string>
+
+    <string name="front-bedroom">Front bedroom</string>
+    <string name="main-bedroom">Main bedroom</string>
+    <string name="second-bedroom">Second bedroom</string>
+
+    <string name="ac">Air conditioner</string>
+    <string name="christmas-tree">Christmas tree</string>
+    <string name="tv">TV</string>
+
+    <string name="back-yard">Back yard</string>
+    <string name="front-yard">Front yard</string>
+    <string name="side-yard">Side yard</string>
 </resources>

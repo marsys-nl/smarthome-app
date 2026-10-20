@@ -27,6 +27,7 @@ import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.domain.entity.capability.OnOff
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
@@ -439,14 +440,8 @@ private fun RowScope.EntityDetails(
         verticalArrangement = Arrangement
             .spacedBy(4.dp),
     ) {
-        Text(
-            text = stringResource(entity.identifier),
-            lineHeight = 24.sp,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.W700,
-            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+        EntityNaming(
+            naming = entity.naming,
         )
 
         Text(
@@ -457,6 +452,38 @@ private fun RowScope.EntityDetails(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
+    }
+}
+
+@Composable
+private fun EntityNaming(
+    naming: EntityNaming,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(key = naming.key),
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.W700,
+            color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        naming.qualifier?.let { qualifier ->
+            Text(
+                text = stringResource(key = qualifier),
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                lineHeight = 24.sp,
+                fontSize = 12.sp,
+                color = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
     }
 }
 
@@ -506,7 +533,7 @@ private fun ZoneScreenHeader(
 
 @Composable
 private fun determineHeaderTitleText(state: ZoneScreenState): String = when (val zone = state.zone) {
-    is Zone -> stringResource(zone.identifier)
+    is Zone -> stringResource(zone.naming)
     else -> "…"
 }
 
