@@ -411,7 +411,7 @@ private fun ZonesScreenZoneDescription(
             .spacedBy(4.dp),
     ) {
         Text(
-            text = stringResource(state.zone.identifier),
+            text = stringResource(state.zone.naming),
             lineHeight = 32.sp,
             fontSize = 24.sp,
             fontWeight = FontWeight.W700,

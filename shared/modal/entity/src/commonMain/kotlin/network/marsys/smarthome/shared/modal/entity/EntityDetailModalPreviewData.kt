@@ -24,7 +24,8 @@ object EntityDetailModalPreviewData {
             override val entity: Entity<*> = Light(
                 identifier = EntityIdentifier("light.kitchen-light"),
                 naming = EntityNaming(
-                    key = TranslationKey("light.kitchen-light"),
+                    key = TranslationKey("light.kitchen"),
+                    qualifier = TranslationKey("spots"),
                 ),
                 state = Light.State.Known(
                     onOff = required(OnOff(current = true)),
