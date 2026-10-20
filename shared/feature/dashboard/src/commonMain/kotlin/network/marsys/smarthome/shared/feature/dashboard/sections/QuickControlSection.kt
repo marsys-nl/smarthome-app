@@ -58,6 +58,7 @@ import network.marsys.smarthome.shared.feature.dashboard.sections.controls.Group
 import network.marsys.smarthome.shared.library.design.ActiveEntityCardColors
 import network.marsys.smarthome.shared.library.design.EntityCard
 import network.marsys.smarthome.shared.library.design.EntityCardDefaults
+import network.marsys.smarthome.shared.library.design.EntityCardScope
 import network.marsys.smarthome.shared.library.design.LocalDarkMode
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -367,7 +368,6 @@ private fun QuickControlSectionEntities(
     }
 }
 
-@OptIn(ExperimentalGridApi::class)
 @Composable
 private fun QuickControlSectionEntityCard(
     entity: Entity<*>,
@@ -394,7 +394,13 @@ private fun QuickControlSectionEntityCard(
     }
 
     EntityCard(
-        title = stringResource(entity.identifier),
+        title = { active ->
+            EntityCardScope.Title(
+                title = stringResource(key = entity.naming.key),
+                qualifier = entity.naming.qualifier?.let { stringResource(key = it) },
+                active = active,
+            )
+        },
         subtitle = entity.descriptor
             .localized(),
         icon = icon,

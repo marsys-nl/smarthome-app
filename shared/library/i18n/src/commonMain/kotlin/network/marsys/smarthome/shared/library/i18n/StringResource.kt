@@ -47,17 +47,6 @@ fun stringResource(
 }
 
 @Composable
-@Deprecated(
-    message = "Use stringResource(key: TranslationKey) instead",
-    replaceWith = ReplaceWith("stringResource(key)"),
-)
-fun stringResource(identifier: EntityIdentifier): String {
-    val language = LocalLocale.current.language
-    return LocalTranslationCatalog.current[identifier.value, language]
-        ?: stringResource(SmartHomeRes.string.unknown_entity)
-}
-
-@Composable
 private fun stringResource(key: String): String? {
     val language = LocalLocale.current.language
 

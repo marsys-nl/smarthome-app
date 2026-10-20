@@ -44,7 +44,7 @@ import network.marsys.smarthome.shared.library.design.theme.tokens.PaletteTokens
 
 @Composable
 fun EntityCard(
-    title: String,
+    title: @Composable EntityCardScope.(Boolean) -> Unit,
     subtitle: String,
     icon: ImageVector,
     active: Boolean,
@@ -90,7 +90,7 @@ fun EntityCard(
                 topRight?.invoke(EntityCardScope)
             }
 
-            EntityCardTitle(
+            EntityCardDetails(
                 title = title,
                 subtitle = subtitle,
                 active = active,
@@ -100,8 +100,8 @@ fun EntityCard(
 }
 
 @Composable
-private fun EntityCardTitle(
-    title: String,
+private fun EntityCardDetails(
+    title: @Composable EntityCardScope.(Boolean) -> Unit,
     subtitle: String,
     active: Boolean,
 ) {
@@ -110,15 +110,7 @@ private fun EntityCardTitle(
         verticalArrangement = Arrangement
             .spacedBy(4.dp),
     ) {
-        Text(
-            text = title,
-            lineHeight = 24.sp,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = EntityCardDefaults.titleColor(active).value,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        title.invoke(EntityCardScope, active)
 
         Text(
             text = subtitle,
@@ -214,6 +206,19 @@ object EntityCardScope {
             onCheckedChange = onCheckedChange,
         )
     }
+
+    @Composable
+    fun Title(
+        title: String,
+        active: Boolean,
+        qualifier: String? = null,
+    ) {
+        EntityCardTitle(
+            title = title,
+            qualifier = qualifier,
+            active = active,
+        )
+    }
 }
 
 @Composable
@@ -231,6 +236,42 @@ private fun EntityCardIcon(
         size = 24.dp,
         tint = EntityCardDefaults.iconTintColor(enabled).value,
     )
+}
+
+@Composable
+private fun EntityCardTitle(
+    title: String,
+    active: Boolean,
+    modifier: Modifier = Modifier,
+    qualifier: String? = null,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = title,
+            lineHeight = 24.sp,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = EntityCardDefaults.titleColor(active).value,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        qualifier?.let {
+            Text(
+                text = it,
+                modifier = Modifier
+                    .padding(start = 8.dp),
+                lineHeight = 24.sp,
+                fontSize = 14.sp,
+                color = EntityCardDefaults.titleColor(active).value,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
 }
 
 @Composable
@@ -256,7 +297,13 @@ private fun LightOnEntityCardPreview(
         theme = theme,
     ) {
         EntityCard(
-            title = "Kitchen light",
+            title = { active ->
+                EntityCardScope.Title(
+                    title = "Kitchen",
+                    qualifier = "Spots",
+                    active = active,
+                )
+            },
             subtitle = "55% brightness",
             icon = Icons.Lightbulb,
             active = true,
@@ -278,7 +325,12 @@ private fun ThermostatOnEntityCardPreview(
         theme = theme,
     ) {
         EntityCard(
-            title = "Downstairs",
+            title = { active ->
+                EntityCardScope.Title(
+                    title = "Downstairs",
+                    active = active,
+                )
+            },
             subtitle = "30°C • Idle",
             icon = Icons.Thermostat,
             active = true,
@@ -305,7 +357,12 @@ private fun SmartTvOnEntityCardPreview(
         theme = theme,
     ) {
         EntityCard(
-            title = "Smart TV",
+            title = { active ->
+                EntityCardScope.Title(
+                    title = "Smart TV",
+                    active = active,
+                )
+            },
             subtitle = "On",
             icon = Icons.Monitor,
             active = true,
@@ -327,7 +384,13 @@ private fun LightOffEntityCardPreview(
         theme = theme,
     ) {
         EntityCard(
-            title = "Kitchen light",
+            title = { active ->
+                EntityCardScope.Title(
+                    title = "Kitchen",
+                    qualifier = "Spots",
+                    active = active,
+                )
+            },
             subtitle = "55% brightness",
             icon = Icons.Lightbulb,
             active = false,
