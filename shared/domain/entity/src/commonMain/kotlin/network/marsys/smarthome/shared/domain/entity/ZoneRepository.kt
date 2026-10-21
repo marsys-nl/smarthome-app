@@ -8,5 +8,5 @@ import network.marsys.smarthome.shared.domain.entity.zone.Zone
 interface ZoneRepository {
     val zones: Flow<Collection<Zone>>
 
-    fun zone(identifier: EntityIdentifier): StateFlow<Zone?>
+    fun zone(identifier: EntityIdentifier): Flow<Zone?>
 }

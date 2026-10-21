@@ -6,9 +6,9 @@ import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 
 interface EntityDataSource {
-    val entities: Flow<Collection<Entity<*>>>
+    val entities: StateFlow<Collection<Entity<*>>>
 
-    fun entity(identifier: EntityIdentifier): StateFlow<Entity<*>?>
+    fun entity(identifier: EntityIdentifier): Flow<Entity<*>?>
 
     suspend fun execute(action: Entity.Action)
 }

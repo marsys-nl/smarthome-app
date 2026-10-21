@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,8 +19,7 @@ import network.marsys.smarthome.domain.identifiers.EntityIdentifier
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.data.demo.DemoData
-import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.ZoneRepository
+import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
 import network.marsys.smarthome.shared.domain.entity.capability.Brightness
 import network.marsys.smarthome.shared.domain.entity.capability.Capability
 import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
@@ -38,47 +36,31 @@ import network.marsys.smarthome.shared.domain.entity.capability.WritableCapabili
 import network.marsys.smarthome.shared.domain.entity.entity.Cover
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
-class DemoRepository(
+class DemoEntityDataSource(
     seed: List<Entity<*>> = DemoData.entities,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
-) : EntityRepository, ZoneRepository {
+) : EntityDataSource {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
 
-    override val entities: Flow<Collection<Entity<*>>>
+    override val entities: StateFlow<Collection<Entity<*>>>
         field = MutableStateFlow(value = seed)
-
-    override val zones: Flow<Collection<Zone>>
-        field = entities
-            .map { collection -> collection.distinctZones() }
-            .distinctUntilChanged()
-            .stateIn(
-                scope = scope,
-                started = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
-                initialValue = seed.distinctZones(),
-            )
 
     init {
         initializeObservingSimulations()
     }
 
-    override fun entity(identifier: EntityIdentifier): StateFlow<Entity<*>?> =
-        entities.mapState(scope = scope, initial = entities.value) { collection ->
-            collection.firstOrNull { entity -> entity.identifier == identifier }
-        }
-
-    override fun zone(identifier: EntityIdentifier): StateFlow<Zone?> =
-        zones.mapState(scope = scope, initial = zones.value) { collection ->
-            collection.firstOrNull { zone -> zone.identifier == identifier }
-        }
-
-    private fun Collection<Entity<*>>.distinctZones(): List<Zone> = mapNotNull { it.zone }
-        .distinctBy { it.identifier }
+    override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
+        entities
+            .map { collection ->
+                collection
+                    .firstOrNull { entity -> entity.identifier == identifier }
+            }
+            .distinctUntilChanged()
 
     override suspend fun execute(action: Entity.Action) {
         val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return
