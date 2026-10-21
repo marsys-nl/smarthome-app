@@ -529,7 +529,6 @@ private fun ZonesSectionLoadedPreview(
 ) {
     SmartHomeComponentPreview(
         theme = theme,
-        translations = DemoData.translations,
     ) {
         ZonesSection(
             state = ZonesSectionPreviewData.loaded(),

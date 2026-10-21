@@ -17,25 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import network.marsys.smarthome.shared.library.design.component.Modal
 import network.marsys.smarthome.shared.library.design.theme.ColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalColorScheme
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.LocalTextStyle
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
-import network.marsys.smarthome.shared.library.i18n.EmptyTranslationCatalog
 import network.marsys.smarthome.shared.library.i18n.LocalDescriptorStrings
-import network.marsys.smarthome.shared.library.i18n.TranslationCatalog
-import network.marsys.smarthome.shared.library.i18n.TranslationProvider
-import network.marsys.smarthome.shared.library.i18n.TranslationRepository
 import network.marsys.smarthome.shared.library.i18n.rememberDescriptorStrings
 
 @Composable
 fun SmartHomeTheme(
     theme: ThemeSelection,
-    translations: TranslationCatalog = EmptyTranslationCatalog,
     content: @Composable () -> Unit,
 ) {
     val descriptorStrings = rememberDescriptorStrings()
@@ -51,25 +44,18 @@ fun SmartHomeTheme(
         else -> ColorScheme.lightColorScheme
     }
 
-    TranslationProvider(
-        repository = object : TranslationRepository {
-            override val catalog: StateFlow<TranslationCatalog>
-                get() = MutableStateFlow(translations)
-        },
+    CompositionLocalProvider(
+        values = arrayOf(
+            LocalDarkMode provides darkMode,
+            LocalDescriptorStrings provides descriptorStrings,
+            LocalIndication provides object : Indication {},
+            LocalThemeSelection provides theme,
+        ),
     ) {
-        CompositionLocalProvider(
-            values = arrayOf(
-                LocalDarkMode provides darkMode,
-                LocalDescriptorStrings provides descriptorStrings,
-                LocalIndication provides object : Indication {},
-                LocalThemeSelection provides theme,
-            ),
-        ) {
-            SmartHomeTheme(
-                scheme = scheme,
-                content = content,
-            )
-        }
+        SmartHomeTheme(
+            scheme = scheme,
+            content = content,
+        )
     }
 }
 
@@ -96,14 +82,12 @@ private fun SmartHomeTheme(
 fun SmartHomeComponentPreview(
     theme: ThemeSelection,
     modifier: Modifier = Modifier,
-    translations: TranslationCatalog = EmptyTranslationCatalog,
     contentPadding: PaddingValues = PaddingValues(16.dp),
     background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
         theme = theme,
-        translations = translations,
     ) {
         Column(
             modifier = modifier
@@ -119,13 +103,11 @@ fun SmartHomeComponentPreview(
 fun SmartHomeModalPreview(
     theme: ThemeSelection,
     modifier: Modifier = Modifier,
-    translations: TranslationCatalog = EmptyTranslationCatalog,
     background: @Composable () -> Color = { LocalColorScheme.current[ColorKeyToken.BackgroundPrimary] },
     content: @Composable () -> Unit,
 ) {
     SmartHomeTheme(
         theme = theme,
-        translations = translations,
     ) {
         Box(
             modifier = modifier

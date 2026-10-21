@@ -33,7 +33,6 @@ kotlin {
             implementation(projects.shared.domain.authentication)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
-            implementation(projects.shared.library.design.domain)
             implementation(projects.shared.library.i18n)
             implementation(projects.shared.library.resources)
             implementation(projects.shared.library.store)

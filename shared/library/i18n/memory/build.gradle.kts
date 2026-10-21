@@ -21,6 +21,10 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.library.i18n)
+
+            implementation(libs.koin.compose)
+
+            implementation(libs.kotlinx.coroutines.core)
         }
     }
 }

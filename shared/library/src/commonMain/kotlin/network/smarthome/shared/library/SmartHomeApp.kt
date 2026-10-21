@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.authentication.di.applicationAuthenticationModule
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
-import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.initialization.InitializationViewModel
@@ -17,11 +16,13 @@ import network.marsys.smarthome.shared.infrastructure.authentication.di.infrastr
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
+import network.marsys.smarthome.shared.library.i18n.TranslationProvider
+import network.marsys.smarthome.shared.library.i18n.TranslationRepository
+import network.marsys.smarthome.shared.library.i18n.memory.di.internationalizationModule
 import network.marsys.smarthome.shared.library.network.networkModule
 import network.marsys.smarthome.shared.library.store.AppearancePreferencesRepository
 import network.marsys.smarthome.shared.modal.entity.EntityDetailModalViewModel
 import network.smarthome.shared.library.di.smartHomeApplicationModule
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
 import org.koin.core.module.Module
@@ -103,6 +104,7 @@ fun SmartHomeApp(
                 connectionDataModule,
                 entityDataModule,
                 infrastructureAuthenticationModule,
+                internationalizationModule,
                 networkModule,
                 smartHomeApplicationModule,
                 viewModelModule,
@@ -110,14 +112,19 @@ fun SmartHomeApp(
         },
     ) {
         val appearancePreferencesRepository = koinInject<AppearancePreferencesRepository>()
+        val translationRepository = koinInject<TranslationRepository>()
+
         val theme by appearancePreferencesRepository.theme
             .collectAsStateWithLifecycle(ThemeSelection.SystemDefault)
 
-        SmartHomeTheme(
-            theme = theme,
-            translations = DemoData.translations,
+        TranslationProvider(
+            repository = translationRepository,
         ) {
-            SmartHomeNavigation()
+            SmartHomeTheme(
+                theme = theme,
+            ) {
+                SmartHomeNavigation()
+            }
         }
     }
 }
