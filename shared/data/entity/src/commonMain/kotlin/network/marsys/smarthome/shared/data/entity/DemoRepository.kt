@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -44,17 +45,23 @@ import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 class DemoRepository(
-    entities: List<Entity<*>> = DemoData.entities,
-    zones: List<Zone> = DemoData.zones,
+    seed: List<Entity<*>> = DemoData.entities,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityRepository, ZoneRepository {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
 
     override val entities: Flow<Collection<Entity<*>>>
-        field = MutableStateFlow(value = entities)
+        field = MutableStateFlow(value = seed)
 
     override val zones: Flow<Collection<Zone>>
-        field = MutableStateFlow(value = zones)
+        field = entities
+            .map { collection -> collection.distinctZones() }
+            .distinctUntilChanged()
+            .stateIn(
+                scope = scope,
+                started = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
+                initialValue = seed.distinctZones(),
+            )
 
     init {
         initializeObservingSimulations()
@@ -69,6 +76,9 @@ class DemoRepository(
         zones.mapState(scope = scope, initial = zones.value) { collection ->
             collection.firstOrNull { zone -> zone.identifier == identifier }
         }
+
+    private fun Collection<Entity<*>>.distinctZones(): List<Zone> = mapNotNull { it.zone }
+        .distinctBy { it.identifier }
 
     override suspend fun execute(action: Entity.Action) {
         val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return
