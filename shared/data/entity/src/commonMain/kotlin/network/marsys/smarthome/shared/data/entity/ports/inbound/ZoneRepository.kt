@@ -9,4 +9,3 @@ interface ZoneRepository {
 
     fun zone(identifier: EntityIdentifier): Flow<Zone?>
 }
-

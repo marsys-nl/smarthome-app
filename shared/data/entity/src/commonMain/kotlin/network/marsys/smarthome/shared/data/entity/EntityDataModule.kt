@@ -11,7 +11,7 @@ val entityDataModule = module {
         DefaultRepository(
             applicationConfigurationRepository = get(),
             demoEntityDataSource = get(named("demoEntityDataSource")),
-            backendEntityDataSource = get(named("backendEntityDataSource")),
+            backendEntityDataSource = get(named("smartHomeEntityDataSource")),
         )
     } binds arrayOf(
         EntityRepository::class,

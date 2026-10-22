@@ -14,4 +14,3 @@ interface EntityRepository {
 
     suspend fun synchronize(): Result<Unit, EntitySynchronization.Reason>
 }
-
