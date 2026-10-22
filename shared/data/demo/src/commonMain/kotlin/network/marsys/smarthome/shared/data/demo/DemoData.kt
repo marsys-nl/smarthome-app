@@ -105,7 +105,7 @@ object DemoData {
             zone = zone("zone.kitchen"),
         ),
         Light(
-            identifier = EntityIdentifier("light.ceiling-light"),
+            identifier = EntityIdentifier("light.living-room.ceiling"),
             naming = EntityNaming(
                 key = TranslationKey("light.living-room"),
                 qualifier = TranslationKey("ceiling"),
@@ -116,7 +116,7 @@ object DemoData {
             zone = zone("zone.living-room"),
         ),
         Light(
-            identifier = EntityIdentifier("light.ceiling-light"),
+            identifier = EntityIdentifier("light.hallway.ceiling"),
             naming = EntityNaming(
                 key = TranslationKey("light.hallway"),
                 qualifier = TranslationKey("ceiling"),

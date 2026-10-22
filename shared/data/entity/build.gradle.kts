@@ -24,6 +24,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.shared.data.demo)
             implementation(projects.shared.domain.entity)
+            implementation(projects.shared.library.store)
 
             implementation(libs.koin.compose)
 
