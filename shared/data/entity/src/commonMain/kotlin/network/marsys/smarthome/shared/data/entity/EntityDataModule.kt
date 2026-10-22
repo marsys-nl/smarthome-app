@@ -1,7 +1,7 @@
 package network.marsys.smarthome.shared.data.entity
 
-import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.ZoneRepository
+import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
+import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
 import org.koin.core.qualifier.named
 import org.koin.dsl.binds
 import org.koin.dsl.module

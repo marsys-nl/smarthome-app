@@ -31,6 +31,7 @@ kotlin {
 
         commonMain.dependencies {
             implementation(projects.shared.data.demo)
+            implementation(projects.shared.data.entity)
             implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)

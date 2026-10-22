@@ -7,11 +7,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
+import network.marsys.smarthome.shared.data.entity.ports.inbound.EntitySynchronization
+import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
-import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.ZoneRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
 
@@ -54,6 +56,15 @@ internal class DefaultRepository(
         determineEntityDataSource(
             configuration = applicationConfigurationRepository.connection.first(),
         ).execute(action)
+    }
+
+    override suspend fun synchronize(): Result<Unit, EntitySynchronization.Reason> {
+        val dataSource = determineEntityDataSource(
+            configuration = applicationConfigurationRepository.connection.first(),
+        )
+
+        return (dataSource as? EntitySynchronization)
+            ?.synchronize() ?: Result.succeed(with = Unit)
     }
 
     private fun determineEntityDataSource(configuration: ConnectionConfiguration): EntityDataSource =
