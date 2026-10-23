@@ -56,6 +56,7 @@ include(
     ":shared:feature:zone",
     ":shared:feature:zones",
     ":shared:infrastructure:authentication",
+    ":shared:infrastructure:entity",
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",

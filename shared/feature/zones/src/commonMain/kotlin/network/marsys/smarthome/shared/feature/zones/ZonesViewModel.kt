@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.domain.identifiers.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.ZoneRepository
+import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
+import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
 import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator

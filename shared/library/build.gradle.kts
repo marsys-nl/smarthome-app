@@ -49,6 +49,7 @@ kotlin {
             implementation(projects.shared.feature.zone)
             implementation(projects.shared.feature.zones)
             implementation(projects.shared.infrastructure.authentication)
+            implementation(projects.shared.infrastructure.entity)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.design.domain)

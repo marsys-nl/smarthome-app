@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import network.marsys.smarthome.shared.data.authentication.di.applicationAuthenticationModule
 import network.marsys.smarthome.shared.data.connection.connectionDataModule
-import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.feature.dashboard.DashboardViewModel
 import network.marsys.smarthome.shared.feature.initialization.InitializationViewModel
 import network.marsys.smarthome.shared.feature.onboarding.OnboardingViewModel
@@ -13,6 +12,7 @@ import network.marsys.smarthome.shared.feature.profile.ProfileViewModel
 import network.marsys.smarthome.shared.feature.zone.ZoneViewModel
 import network.marsys.smarthome.shared.feature.zones.ZonesViewModel
 import network.marsys.smarthome.shared.infrastructure.authentication.di.infrastructureAuthenticationModule
+import network.marsys.smarthome.shared.infrastructure.entity.di.infrastructureEntityModule
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -102,8 +102,8 @@ fun SmartHomeApp(
                 applicationModule,
                 applicationAuthenticationModule,
                 connectionDataModule,
-                entityDataModule,
                 infrastructureAuthenticationModule,
+                infrastructureEntityModule,
                 internationalizationModule,
                 networkModule,
                 smartHomeApplicationModule,

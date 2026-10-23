@@ -1,6 +1,6 @@
 @file:Suppress("StringLiteralDuplication")
 
-package network.marsys.smarthome.shared.data.entity
+package network.marsys.smarthome.shared.infrastructure.entity
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,7 @@ import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
-class DemoEntityDataSource(
+internal class DemoEntityDataSource(
     seed: List<Entity<*>> = DemoData.entities,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityDataSource {
