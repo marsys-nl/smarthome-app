@@ -23,6 +23,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.domain.connection)
+            implementation(projects.shared.data.entity)
             implementation(projects.shared.library.core)
             implementation(projects.shared.library.network)
             implementation(projects.shared.library.store)
