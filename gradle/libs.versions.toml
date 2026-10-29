@@ -46,7 +46,7 @@ ktor = "3.6.0"
 
 oidc = "0.18.4"
 
-test-balloon = "1.1.0"
+test-balloon = "1.2.0"
 
 [libraries]
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
