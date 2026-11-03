@@ -42,7 +42,7 @@ kotlinx-serialization = "1.12.0"
 
 ktlint = "1.8.0"
 
-ktor = "3.6.0"
+ktor = "3.6.1"
 
 oidc = "0.18.4"
 
