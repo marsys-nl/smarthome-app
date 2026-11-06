@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
-import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
+import network.marsys.smarthome.domain.capability.ThermostatStatus.Status
+import network.marsys.smarthome.shared.domain.entity.Descriptor
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_state_closed
 import network.marsys.smarthome.shared.library.resources.entity_state_closing
@@ -20,48 +20,62 @@ import network.marsys.smarthome.shared.library.resources.entity_state_opening
 import network.marsys.smarthome.shared.library.resources.entity_state_separator
 
 @Composable
-fun Entity.State.Descriptor.localized(): String =
+fun Descriptor.localized(): String =
     localized(LocalDescriptorStrings.current)
 
 @Composable
 @Suppress("CyclomaticComplexMethod")
-fun Entity.State.Descriptor.localized(strings: DescriptorStrings): String = when (this) {
-    Entity.State.Descriptor.On -> strings.on
+fun Descriptor.localized(strings: DescriptorStrings): String =
+    when (this) {
+        Descriptor.On -> strings.on
 
-    Entity.State.Descriptor.Off -> strings.off
+        Descriptor.Off -> strings.off
 
-    Entity.State.Descriptor.Open -> strings.open
+        Descriptor.Open -> strings.open
 
-    Entity.State.Descriptor.Closed -> strings.closed
+        Descriptor.Closed -> strings.closed
 
-    is Entity.State.Descriptor.Opened -> strings.opened.replaceWithArgs(listOf(percentage.toString()))
+        is Descriptor.Opened -> strings.opened.replaceWithArgs(listOf(percentage.toString()))
 
-    Entity.State.Descriptor.Opening -> strings.opening
+        Descriptor.Opening -> strings.opening
 
-    Entity.State.Descriptor.Closing -> strings.closing
+        Descriptor.Closing -> strings.closing
 
-    is Entity.State.Descriptor.Combined ->
-        parts
-            .map { it.localized(strings) }
-            .joinToString(separator = strings.separator)
+        is Descriptor.Combined ->
+            @Suppress("SimplifiableCallChain")
+            parts
+                .map { it.localized(strings) }
+                .joinToString(separator = strings.separator)
 
-    is Entity.State.Descriptor.Enum<*> ->
-        when (value) {
-            ThermostatStatus.Status.Idle -> strings.idle
-            ThermostatStatus.Status.Cooling -> strings.cooling
-            ThermostatStatus.Status.Heating -> strings.heating
-            else -> value.toString()
-        }
+        is Descriptor.Enum<*> ->
+            when (value) {
+                Status.Idle -> strings.idle
+                Status.Cooling -> strings.cooling
+                Status.Heating -> strings.heating
+                else -> value.toString()
+            }
 
-    is Entity.State.Descriptor.Value<*> ->
-        value.toString()
+        is Descriptor.Date ->
+            value.toString()
 
-    Entity.State.Descriptor.Unknown ->
-        "-"
+        is Descriptor.TimeAgo ->
+            value.toString()
 
-    Entity.State.Descriptor.Empty ->
-        ""
-}
+        is Descriptor.Value<*> ->
+            value.toString()
+
+        is Descriptor.FormattedValue<*> ->
+            value.format(
+                scale = scale,
+                rounding = rounding,
+            )
+
+        Descriptor.Unknown ->
+            "-"
+
+        Descriptor.Empty ->
+            ""
+    }
 
 @Immutable
 data class DescriptorStrings(

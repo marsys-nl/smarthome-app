@@ -8,53 +8,51 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.capability.Brightness
+import network.marsys.smarthome.domain.capability.Capability
+import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.MeasureTemperature
+import network.marsys.smarthome.domain.capability.Movement
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.capability.Opened
+import network.marsys.smarthome.domain.capability.Position
+import network.marsys.smarthome.domain.capability.ScheduledMode
+import network.marsys.smarthome.domain.capability.TargetTemperature
+import network.marsys.smarthome.domain.capability.ThermostatMode
+import network.marsys.smarthome.domain.capability.WindowDetection
+import network.marsys.smarthome.domain.entity.Cover
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Thermostat
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.Capability
-import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
-import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.Movement
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.capability.Opened
-import network.marsys.smarthome.shared.domain.entity.capability.Position
-import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
-import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
-import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
-import network.marsys.smarthome.shared.domain.entity.capability.WritableCapability
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.shared.domain.entity.update
 import kotlin.random.Random
 import kotlin.time.Clock
 import kotlin.time.Duration.Companion.seconds
 
 @Suppress("TooManyFunctions")
 internal class DemoEntityDataSource(
-    seed: List<Entity<*>> = DemoData.entities,
+    seed: List<Entity> = DemoData.entities,
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
 ) : EntityDataSource {
     private val simulations = mutableMapOf<EntityIdentifier, Entity.Action>()
 
-    override val entities: StateFlow<Collection<Entity<*>>>
+    override val entities: StateFlow<Collection<Entity>>
         field = MutableStateFlow(value = seed)
 
     init {
         initializeObservingSimulations()
     }
 
-    override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
+    override fun entity(identifier: EntityIdentifier): Flow<Entity?> =
         entities
             .map { collection ->
                 collection
@@ -65,20 +63,20 @@ internal class DemoEntityDataSource(
     override suspend fun execute(action: Entity.Action) {
         val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return
 
-        val capability: WritableCapability<*> = when (action) {
+        val capability = when (action) {
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
             is ChildLock.Toggle -> executeChildLockCapabilityAction(action)
             is Movement.Move -> executeMovementCapabilityAction(action)
             is OnOff.Toggle -> executeOnOffCapabilityAction(action)
             is ScheduledMode.Toggle -> executeScheduledModeCapabilityAction(action)
-            is TargetTemperature.SetTargetTemperature -> TargetTemperature(current = action.targetTemperature)
+            is TargetTemperature.SetTargetTemperature -> TargetTemperature(current = action.temperature)
             is WindowDetection.Toggle -> executeWindowDetectionCapabilityAction(action)
             else -> return
         }
 
         entities.replace(
             replacement = entity.update {
-                it.with(capability)
+                it.updateWith(capability)
             },
         )
     }
@@ -156,9 +154,10 @@ internal class DemoEntityDataSource(
 
                             entities.replace(
                                 replacement = thermostat.update {
-                                    it.with(
+                                    it.updateWith(
                                         capability = MeasureTemperature(
                                             current = adjusted.coerceIn(target.range),
+                                            context = Thermostat.TemperatureType.Current,
                                         ),
                                     )
                                 },
@@ -178,15 +177,16 @@ internal class DemoEntityDataSource(
                     val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return@forEach
 
                     when (entity) {
-                        is Cover<*> if action is Movement.Move -> applyCoverSimulation(entity, action)
+                        is Cover if action is Movement.Move -> applyCoverSimulation(entity, action)
+                        else -> Unit
                     }
                 }
             }
         }
     }
 
-    private suspend fun applyCoverSimulation(entity: Cover<*>, action: Movement.Move) {
-        val coverState = entity.state as? Cover.State ?: return run {
+    private suspend fun applyCoverSimulation(entity: Cover, action: Movement.Move) {
+        val coverState = entity.state as? Cover.State.Known ?: return run {
             simulations.remove(entity.identifier)
         }
 
@@ -194,7 +194,7 @@ internal class DemoEntityDataSource(
             simulations.remove(entity.identifier)
         }
 
-        val capabilities: List<Capability<*>> = when (val control = coverState.control) {
+        val capabilities: List<Capability<*, *>> = when (val control = coverState.control) {
             is Cover.Control.WithPosition -> determineUpdatedCapabilitiesWithPosition(
                 movement = movement.value,
                 position = control.position.value,
@@ -210,8 +210,8 @@ internal class DemoEntityDataSource(
 
         entities.replace(
             replacement = entity.update { state ->
-                capabilities.fold(state) { accumulator, capability ->
-                    accumulator.with(capability = capability)
+                capabilities.fold(state as Entity.State) { accumulator, capability ->
+                    accumulator.updateWith(capability = capability)
                 }
             },
         )
@@ -227,7 +227,7 @@ internal class DemoEntityDataSource(
         movement: Movement,
         position: Position,
         action: Movement.Move,
-    ): List<Capability<*>> {
+    ): List<Capability<*, *>> {
         val updatedPosition = when (action) {
             is Movement.Move.Open -> position.copy(
                 current = (position.current + 1.percent)
@@ -257,7 +257,7 @@ internal class DemoEntityDataSource(
         movement: Movement,
         opened: Opened,
         action: Movement.Move,
-    ): List<Capability<*>> = listOf(
+    ): List<Capability<*, *>> = listOf(
         movement.copy(
             current = Movement.Direction.Idle,
         ),
@@ -276,7 +276,7 @@ internal class DemoEntityDataSource(
      * Helper methods
      */
 
-    private fun MutableStateFlow<List<Entity<*>>>.replace(replacement: Entity<*>) = update { collection ->
+    private fun MutableStateFlow<List<Entity>>.replace(replacement: Entity) = update { collection ->
         collection.map { item ->
             if (item.identifier == replacement.identifier) {
                 replacement
@@ -285,15 +285,6 @@ internal class DemoEntityDataSource(
             }
         }
     }
-
-    private fun <T, R> Flow<T>.mapState(
-        scope: CoroutineScope,
-        initial: T,
-        started: SharingStarted = SharingStarted.WhileSubscribed(DEFAULT_STOP_TIMEOUT_MILLIS),
-        transform: (T) -> R,
-    ): StateFlow<R> = map(transform)
-        .distinctUntilChanged()
-        .stateIn(scope = scope, started = started, initialValue = transform(initial))
 
     companion object {
         private const val DEFAULT_STOP_TIMEOUT_MILLIS = 5000L

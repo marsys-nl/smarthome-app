@@ -1,13 +1,14 @@
 package network.marsys.smarthome.shared.library.navigation
 
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 
 sealed interface NavigationDestination {
     sealed interface MainNavigationDestination : NavigationDestination
 
     data object Zones : MainNavigationDestination
 
-    data class Zone(val zone: EntityIdentifier) : MainNavigationDestination
+    data class Zone(val zone: ZoneIdentifier) : MainNavigationDestination
 
     data object ChangeAppAppearanceModal : NavigationDestination
 

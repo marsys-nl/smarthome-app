@@ -41,10 +41,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.data.demo.DemoData
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.domain.entity.ZoneIcon
+import network.marsys.smarthome.shared.domain.entity.icon
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.MAX_ZONES
@@ -165,7 +168,6 @@ private fun ZonesSectionEmptyContent(
         contentPadding = PaddingValues(32.dp),
         border = Border.Dashed(1.dp),
     ) {
-        @OptIn(ExperimentalFoundationStyleApi::class)
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -219,7 +221,6 @@ private fun ZonesSectionErrorContent(
         contentPadding = PaddingValues(32.dp),
         border = Border.Solid(1.dp),
     ) {
-        @OptIn(ExperimentalFoundationStyleApi::class)
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -272,7 +273,7 @@ private fun ZonesSectionErrorContent(
 @Composable
 private fun ZonesSectionLoadedContent(
     @Suppress("UnstableCollections")
-    zones: Map<EntityIdentifier, DashboardScreenState.ZoneState>,
+    zones: Map<ZoneIdentifier, DashboardScreenState.ZoneState>,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -311,9 +312,8 @@ private fun ZonesSectionZoneCard(
     modifier: Modifier = Modifier,
 ) {
     val total = state.entities.size
-    val active = state.entities.values.count {
-        it is Entity.Activatable && it.active
-    }
+    val active = state.entities.values
+        .count { it is Entity.Activatable && it.active }
 
     Card(
         modifier = modifier,
@@ -334,7 +334,7 @@ private fun ZonesSectionZoneCard(
                 )
 
                 Text(
-                    text = stringResource(key = state.zone.naming),
+                    text = stringResource(key = state.zone.naming.key),
                     modifier = Modifier
                         .padding(top = 8.dp),
                     lineHeight = 24.sp,
@@ -397,14 +397,14 @@ private fun ZoneIcon(
     )
 }
 
-private fun determineZoneIcon(icon: Zone.Icon) = when (icon) {
-    Zone.Icon.Bathroom -> Icons.Bath
-    Zone.Icon.Bedroom -> Icons.Bed
-    Zone.Icon.Garage -> Icons.Car
-    Zone.Icon.Kitchen -> Icons.ChefHat
-    Zone.Icon.LivingRoom -> Icons.Sofa
-    Zone.Icon.Office -> Icons.Briefcase
-    Zone.Icon.Other -> Icons.Component
+private fun determineZoneIcon(icon: ZoneIcon) = when (icon) {
+    ZoneIcon.Bathroom -> Icons.Bath
+    ZoneIcon.Bedroom -> Icons.Bed
+    ZoneIcon.Garage -> Icons.Car
+    ZoneIcon.Kitchen -> Icons.ChefHat
+    ZoneIcon.LivingRoom -> Icons.Sofa
+    ZoneIcon.Office -> Icons.Briefcase
+    ZoneIcon.Other -> Icons.Component
 }
 
 @Composable
@@ -554,24 +554,24 @@ private fun ZonesSectionLoadingPreview(
 
 internal object ZonesSectionPreviewData {
     fun empty() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Empty
     }
 
     fun error() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Error
     }
 
     fun loaded() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = DemoData.zones
+        override val zones: Map<ZoneIdentifier, DashboardScreenState.ZoneState> = DemoData.zones
             .take(MAX_ZONES)
             .associateBy { it.identifier }
             .mapValues { (_, zone) ->
                 object : DashboardScreenState.ZoneState {
                     override val zone: Zone = zone
-                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
-                        .filter { it.zone?.identifier == zone.identifier }
+                    override val entities: Map<EntityIdentifier, Entity> = DemoData.entities
+                        .filter { it.zone == zone.identifier }
                         .associateBy { it.identifier }
                 }
             }
@@ -580,7 +580,7 @@ internal object ZonesSectionPreviewData {
     }
 
     fun loading() = object : DashboardScreenState.ZonesState {
-        override val zones: Map<EntityIdentifier, DashboardScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, DashboardScreenState.ZoneState> = emptyMap()
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
     }
 }

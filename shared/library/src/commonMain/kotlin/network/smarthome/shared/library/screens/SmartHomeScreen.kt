@@ -3,7 +3,8 @@ package network.smarthome.shared.library.screens
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 
 @Serializable
 internal sealed interface SmartHomeScreen : NavKey {
@@ -15,7 +16,7 @@ internal sealed interface SmartHomeScreen : NavKey {
 
     @Serializable
     data class Zone(
-        val zone: @Contextual EntityIdentifier,
+        val zone: @Contextual ZoneIdentifier,
     ) : SmartHomeScreen
 
     @Serializable

@@ -24,22 +24,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
-import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.Movement
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.capability.Opened
-import network.marsys.smarthome.shared.domain.entity.capability.Position
-import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
-import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.ThermostatStatus
-import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.domain.capability.Brightness
+import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.MeasureTemperature
+import network.marsys.smarthome.domain.capability.Movement
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.capability.Opened
+import network.marsys.smarthome.domain.capability.Position
+import network.marsys.smarthome.domain.capability.ScheduledMode
+import network.marsys.smarthome.domain.capability.TargetTemperature
+import network.marsys.smarthome.domain.capability.ThermostatStatus
+import network.marsys.smarthome.domain.capability.WindowDetection
+import network.marsys.smarthome.domain.capability.with
+import network.marsys.smarthome.domain.entity.Cover
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Light
+import network.marsys.smarthome.domain.entity.Thermostat
+import network.marsys.smarthome.domain.entity.Thermostat.TemperatureType
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -50,6 +52,7 @@ import network.marsys.smarthome.shared.library.design.component.CardDefaults
 import network.marsys.smarthome.shared.library.design.component.Icon
 import network.marsys.smarthome.shared.library.design.component.Text
 import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
+import network.marsys.smarthome.shared.library.design.domain.helper.optional
 import network.marsys.smarthome.shared.library.design.icons.Clock
 import network.marsys.smarthome.shared.library.design.icons.Close
 import network.marsys.smarthome.shared.library.design.icons.Icons
@@ -185,9 +188,9 @@ private fun EntityDetailHeader(
 
 @Composable
 private fun determineEntityDetailTitle(
-    entity: Entity<*>?,
+    entity: Entity?,
 ) = when (entity) {
-    is Entity<*> -> stringResource(key = entity.naming.key)
+    is Entity -> stringResource(key = entity.naming.key)
     else -> "…"
 }
 
@@ -224,11 +227,12 @@ private fun EntityDetailLoadingModalContent() {
 }
 
 @Composable
+@Suppress("LongMethod")
 private fun EntityDetailLoadedModalContent(
-    entity: Entity<*>,
+    entity: Entity,
     onAction: (EntityDetailModalAction) -> Unit,
 ) {
-    entity.ifPresent<OnOff> {
+    entity.ifPresent(query = OnOff) {
         OnOffSection(
             entity = entity.identifier,
             onOff = it,
@@ -238,7 +242,7 @@ private fun EntityDetailLoadedModalContent(
         )
     }
 
-    entity.ifPresent<Brightness> {
+    entity.ifPresent(query = Brightness) {
         BrightnessSection(
             entity = entity.identifier,
             brightness = it,
@@ -248,7 +252,11 @@ private fun EntityDetailLoadedModalContent(
         )
     }
 
-    entity.ifPresent<ChildLock, WindowDetection, ScheduledMode> { childLock, windowDetection, scheduledMode ->
+    entity.ifPresent(
+        ChildLock.optional,
+        WindowDetection.optional,
+        ScheduledMode.optional,
+    ) { childLock, windowDetection, scheduledMode ->
         ThermostatControlSection(
             entity = entity.identifier,
             childLock = childLock,
@@ -260,26 +268,30 @@ private fun EntityDetailLoadedModalContent(
         )
     }
 
-    entity.ifPresent<MeasureTemperature, TargetTemperature, ThermostatStatus>(
-        block = { measureTemperature, targetTemperature, thermostatStatus ->
-            measureTemperature ?: return@ifPresent
+    entity.ifPresent(
+        MeasureTemperature with TemperatureType.Current,
+        TargetTemperature.optional,
+        ThermostatStatus.optional,
+    ) { measureTemperature, targetTemperature, thermostatStatus ->
+        TemperatureControlSection(
+            entity = entity.identifier,
+            measureTemperature = measureTemperature,
+            targetTemperature = targetTemperature,
+            thermostatStatus = thermostatStatus,
+            onAction = onAction,
+        )
+    }
 
-            TemperatureControlSection(
-                entity = entity.identifier,
-                measureTemperature = measureTemperature,
-                targetTemperature = targetTemperature,
-                thermostatStatus = thermostatStatus,
-                onAction = onAction,
-            )
-        },
-    )
-
-    if (entity is Cover<*>) {
-        entity.ifPresent<Opened, Position, Movement> { opened, position, movement ->
+    if (entity is Cover) {
+        entity.ifPresent(
+            Opened,
+            Position.optional,
+            Movement.optional,
+        ) { opened, position, movement ->
             CoverControlSection(
                 entity = entity.identifier,
                 orientation = entity.orientation,
-                opened = opened ?: return,
+                opened = opened,
                 position = position,
                 movement = movement,
                 onAction = onAction,
@@ -411,7 +423,7 @@ private fun LoadedLightEntityDetailModalPreview(
     SmartHomeModalPreview(
         theme = theme,
     ) {
-        val state = EntityDetailModalPreviewData.loaded[Light::class] ?: error("Missing preview data")
+        val state = EntityDetailModalPreviewData.loaded[Light] ?: error("Missing preview data")
 
         EntityDetailModalContent(
             state = state,
@@ -429,7 +441,7 @@ private fun LoadedThermostatEntityDetailModalPreview(
     SmartHomeModalPreview(
         theme = theme,
     ) {
-        val state = EntityDetailModalPreviewData.loaded[Thermostat::class] ?: error("Missing preview data")
+        val state = EntityDetailModalPreviewData.loaded[Thermostat] ?: error("Missing preview data")
 
         EntityDetailModalContent(
             state = state,

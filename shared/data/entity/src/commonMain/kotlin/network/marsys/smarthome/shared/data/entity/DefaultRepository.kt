@@ -5,14 +5,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
+import network.marsys.smarthome.shared.data.demo.DemoData
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntitySynchronization
 import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.store.ApplicationConfigurationRepository
 import network.marsys.smarthome.shared.library.store.model.ConnectionConfiguration
@@ -28,24 +31,17 @@ internal class DefaultRepository(
             .distinctUntilChanged()
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override val entities: Flow<Collection<Entity<*>>> =
+    override val entities: Flow<Collection<Entity>> =
         source.flatMapLatest { it.entities }
 
-    override val zones: Flow<Collection<Zone>> =
-        entities
-            .map { collection ->
-                collection
-                    .mapNotNull { entity -> entity.zone }
-                    .distinctBy { it.identifier }
-            }
-            .distinctUntilChanged()
+    override val zones: Flow<Collection<Zone>> = flowOf(DemoData.zones)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
+    override fun entity(identifier: EntityIdentifier): Flow<Entity?> =
         source
             .flatMapLatest { it.entity(identifier) }
 
-    override fun zone(identifier: EntityIdentifier): Flow<Zone?> =
+    override fun zone(identifier: ZoneIdentifier): Flow<Zone?> =
         zones
             .map { collection ->
                 collection

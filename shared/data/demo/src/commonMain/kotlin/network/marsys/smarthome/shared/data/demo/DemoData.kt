@@ -2,85 +2,95 @@
 
 package network.marsys.smarthome.shared.data.demo
 
-import network.marsys.smarthome.domain.i18n.TranslationKey
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.TranslationKey
+import network.marsys.smarthome.domain.capability.Brightness
+import network.marsys.smarthome.domain.capability.Capability.Companion.optional
+import network.marsys.smarthome.domain.capability.Capability.Companion.required
+import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.MeasureTemperature
+import network.marsys.smarthome.domain.capability.Movement
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.capability.Opened
+import network.marsys.smarthome.domain.capability.Position
+import network.marsys.smarthome.domain.capability.ScheduledMode
+import network.marsys.smarthome.domain.capability.TargetTemperature
+import network.marsys.smarthome.domain.capability.ThermostatMode
+import network.marsys.smarthome.domain.capability.WindowDetection
+import network.marsys.smarthome.domain.entity.Blind
+import network.marsys.smarthome.domain.entity.Camera
+import network.marsys.smarthome.domain.entity.Cover
+import network.marsys.smarthome.domain.entity.Curtain
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.EntityNaming
+import network.marsys.smarthome.domain.entity.Fan
+import network.marsys.smarthome.domain.entity.Light
+import network.marsys.smarthome.domain.entity.Shutter
+import network.marsys.smarthome.domain.entity.SmartLock
+import network.marsys.smarthome.domain.entity.SmartPlug
+import network.marsys.smarthome.domain.entity.Speaker
+import network.marsys.smarthome.domain.entity.Thermostat
 import network.marsys.smarthome.domain.unit.celsius
 import network.marsys.smarthome.domain.unit.percent
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
-import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
-import network.marsys.smarthome.shared.domain.entity.capability.MeasureTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.Movement
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.capability.Opened
-import network.marsys.smarthome.shared.domain.entity.capability.Position
-import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
-import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.ThermostatMode
-import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
-import network.marsys.smarthome.shared.domain.entity.entity.Blind
-import network.marsys.smarthome.shared.domain.entity.entity.Camera
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
-import network.marsys.smarthome.shared.domain.entity.entity.Curtain
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
-import network.marsys.smarthome.shared.domain.entity.entity.Fan
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.Lock
-import network.marsys.smarthome.shared.domain.entity.entity.Shutter
-import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
-import network.marsys.smarthome.shared.domain.entity.entity.Speaker
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
+import network.marsys.smarthome.domain.zone.ZoneNaming
 import network.marsys.smarthome.shared.library.i18n.TranslationCatalog
 import network.marsys.smarthome.shared.library.i18n.memory.InMemoryTranslationCatalog
 
 object DemoData {
     val zones = listOf(
         Zone(
-            identifier = EntityIdentifier("zone.bathroom"),
-            naming = TranslationKey("bathroom"),
-            icon = Zone.Icon.Bathroom,
+            identifier = ZoneIdentifier("zone.bathroom"),
+            naming = ZoneNaming(
+                key = TranslationKey("bathroom"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.bedroom"),
-            naming = TranslationKey("bedroom"),
-            icon = Zone.Icon.Bedroom,
+            identifier = ZoneIdentifier("zone.bedroom"),
+            naming = ZoneNaming(
+                key = TranslationKey("bedroom"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.garage"),
-            naming = TranslationKey("garage"),
-            icon = Zone.Icon.Garage,
+            identifier = ZoneIdentifier("zone.garage"),
+            naming = ZoneNaming(
+                key = TranslationKey("garage"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.hallway"),
-            naming = TranslationKey("hallway"),
-            icon = Zone.Icon.Other,
+            identifier = ZoneIdentifier("zone.hallway"),
+            naming = ZoneNaming(
+                key = TranslationKey("hallway"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.kitchen"),
-            naming = TranslationKey("kitchen"),
-            icon = Zone.Icon.Kitchen,
+            identifier = ZoneIdentifier("zone.kitchen"),
+            naming = ZoneNaming(
+                key = TranslationKey("kitchen"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.living-room"),
-            naming = TranslationKey("living-room"),
-            icon = Zone.Icon.LivingRoom,
+            identifier = ZoneIdentifier("zone.living-room"),
+            naming = ZoneNaming(
+                key = TranslationKey("living-room"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.office"),
-            naming = TranslationKey("office"),
-            icon = Zone.Icon.Office,
+            identifier = ZoneIdentifier("zone.office"),
+            naming = ZoneNaming(
+                key = TranslationKey("office"),
+            ),
         ),
         Zone(
-            identifier = EntityIdentifier("zone.nursery"),
-            naming = TranslationKey("nursery"),
-            icon = Zone.Icon.Bedroom,
+            identifier = ZoneIdentifier("zone.nursery"),
+            naming = ZoneNaming(
+                key = TranslationKey("nursery"),
+            ),
         ),
     )
 
-    val entities: List<Entity<*>> = listOf(
+    val entities: List<Entity> = listOf(
         // Lights
         Light(
             identifier = EntityIdentifier("light.bedroom-lamp"),
@@ -101,6 +111,7 @@ object DemoData {
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
+                brightness = optional(null),
             ),
             zone = zone("zone.kitchen"),
         ),
@@ -112,6 +123,7 @@ object DemoData {
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
+                brightness = optional(null),
             ),
             zone = zone("zone.living-room"),
         ),
@@ -123,6 +135,7 @@ object DemoData {
             ),
             state = Light.State.Known(
                 onOff = required(OnOff(current = true)),
+                brightness = optional(null),
             ),
             zone = zone("zone.hallway"),
         ),
@@ -286,12 +299,12 @@ object DemoData {
             zone = zone("zone.hallway"),
         ),
         // Locks
-        Lock(
+        SmartLock(
             identifier = EntityIdentifier("lock.front-door"),
             naming = EntityNaming(
                 key = TranslationKey("lock.front-door"),
             ),
-            state = Lock.State.Known(
+            state = SmartLock.State.Known(
                 onOff = required(OnOff(current = true)),
             ),
             zone = zone("zone.hallway"),
@@ -302,11 +315,12 @@ object DemoData {
         translations = DemoEntityTranslations + ZoneTranslations,
     )
 
-    fun zone(identifier: EntityIdentifier): Zone =
+    fun zone(identifier: ZoneIdentifier): Zone =
         zones.first { it.identifier == identifier }
 
-    fun zone(identifier: String): Zone =
-        zones.first { it.identifier.value == identifier }
+    fun zone(identifier: String): ZoneIdentifier? =
+        zones.firstOrNull { it.identifier.value == identifier }
+            ?.identifier
 }
 
 private val ZoneTranslations = mapOf(

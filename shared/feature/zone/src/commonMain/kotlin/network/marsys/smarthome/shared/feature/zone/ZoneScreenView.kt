@@ -23,12 +23,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.EntityNaming
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.data.demo.DemoData
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.shared.domain.entity.descriptor
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_description_nr_entities
 import network.marsys.smarthome.shared.feature.zone.zone.generated.resources.zone_entities_empty_description
@@ -76,7 +78,7 @@ import org.koin.core.parameter.parametersOf
 
 @Composable
 fun ZoneScreenView(
-    zone: EntityIdentifier,
+    zone: ZoneIdentifier,
     onNavigate: (NavigationDestination) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -354,7 +356,7 @@ private fun ZoneScreenLoadedViewContent(
 
 @Composable
 private fun ZoneScreenEntityRow(
-    entity: Entity<*>,
+    entity: Entity,
     onAction: (ZoneScreenAction) -> Unit,
     modifier: Modifier = Modifier,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -382,7 +384,7 @@ private fun ZoneScreenEntityRow(
             EntityIcon(entity = entity)
             EntityDetails(entity = entity)
 
-            entity.ifPresent<OnOff> {
+            entity.ifPresent(query = OnOff) {
                 Switch(
                     checked = it.current,
                     onCheckedChange = { value ->
@@ -404,7 +406,7 @@ private fun ZoneScreenEntityRow(
 
 @Composable
 private fun EntityIcon(
-    entity: Entity<*>,
+    entity: Entity,
     modifier: Modifier = Modifier,
 ) {
     val colors = when (entity) {
@@ -420,7 +422,7 @@ private fun EntityIcon(
     }
 
     IconCard(
-        icon = entity::class.icon(),
+        icon = entity.type.icon(),
         colors = colors,
         modifier = modifier
             .padding(end = 16.dp),
@@ -430,7 +432,7 @@ private fun EntityIcon(
 
 @Composable
 private fun RowScope.EntityDetails(
-    entity: Entity<*>,
+    entity: Entity,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -532,7 +534,7 @@ private fun ZoneScreenHeader(
 
 @Composable
 private fun determineHeaderTitleText(state: ZoneScreenState): String = when (val zone = state.zone) {
-    is Zone -> stringResource(zone.naming)
+    is Zone -> stringResource(zone.naming.key)
     else -> "…"
 }
 
@@ -634,37 +636,37 @@ private fun ResolvingZoneScreenPreview(
 }
 
 internal object ZoneScreenPreviewData {
-    private val identifier = EntityIdentifier("zone.living-room")
+    private val identifier = ZoneIdentifier("zone.living-room")
 
     fun loading() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Loading
         override val zone: Zone = DemoData.zone(identifier = identifier)
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
     }
 
     fun empty() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Empty
         override val zone: Zone = DemoData.zone(identifier = identifier)
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
     }
 
     fun error() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Error
         override val zone: Zone = DemoData.zone(identifier = identifier)
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
     }
 
     fun loaded() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Success
         override val zone: Zone = DemoData.zone(identifier = identifier)
-        override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
-            .filter { it.zone?.identifier == identifier }
+        override val entities: Map<EntityIdentifier, Entity> = DemoData.entities
+            .filter { it.zone == identifier }
             .associateBy { it.identifier }
     }
 
     fun resolving() = object : ZoneScreenState {
         override val condition = ZoneScreenState.Condition.Resolving
         override val zone: Zone? = null
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
     }
 }

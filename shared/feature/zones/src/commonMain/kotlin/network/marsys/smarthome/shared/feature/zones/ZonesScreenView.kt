@@ -22,10 +22,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.data.demo.DemoData
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.Res
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_active_entities
 import network.marsys.smarthome.shared.feature.zones.zones.generated.resources.zones_description
@@ -212,7 +213,6 @@ private fun ZonesScreenEmptyViewContent(
         contentPadding = PaddingValues(32.dp),
         border = Border.Dashed(1.dp),
     ) {
-        @OptIn(ExperimentalFoundationStyleApi::class)
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -344,7 +344,6 @@ private fun ZonesScreenLoadedViewContent(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationStyleApi::class)
 private fun ZonesScreenZoneRow(
     state: ZonesScreenState.ZoneState,
     onAction: (ZonesScreenAction) -> Unit,
@@ -402,7 +401,8 @@ private fun ZonesScreenZoneDescription(
     state: ZonesScreenState.ZoneState,
     modifier: Modifier = Modifier,
 ) {
-    val active = state.entities.values.count { it is Entity.Activatable && it.active }
+    val active = state.entities.values
+        .count { it is Entity.Activatable && it.active }
 
     Column(
         modifier = modifier,
@@ -410,7 +410,7 @@ private fun ZonesScreenZoneDescription(
             .spacedBy(4.dp),
     ) {
         Text(
-            text = stringResource(state.zone.naming),
+            text = stringResource(state.zone.naming.key),
             lineHeight = 32.sp,
             fontSize = 24.sp,
             fontWeight = FontWeight.W700,
@@ -433,7 +433,7 @@ private fun ZonesScreenZoneDescription(
 @Composable
 private fun ZonesScreenEntityIcon(
     index: Int,
-    entity: Entity<*>,
+    entity: Entity,
     modifier: Modifier = Modifier,
 ) {
     val colors = when (entity) {
@@ -449,7 +449,7 @@ private fun ZonesScreenEntityIcon(
     }
 
     IconCard(
-        icon = entity::class.icon(),
+        icon = entity.type.icon(),
         colors = colors,
         modifier = modifier
             .size(width = 40.dp, height = 40.dp)
@@ -461,7 +461,6 @@ private fun ZonesScreenEntityIcon(
 private fun ZonesScreenHeader(
     modifier: Modifier = Modifier,
 ) {
-    @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = stringResource(Res.string.zones_header),
         modifier = modifier,
@@ -477,7 +476,6 @@ private fun ZonesScreenDescription(
     zones: Int,
     modifier: Modifier = Modifier,
 ) {
-    @OptIn(ExperimentalFoundationStyleApi::class)
     Text(
         text = pluralStringResource(
             resource = Res.plurals.zones_description,
@@ -564,29 +562,29 @@ private fun LoadedZonesScreenPreview(
 internal object ZonesScreenPreviewData {
     fun loading() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Loading
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, ZonesScreenState.ZoneState> = emptyMap()
     }
 
     fun empty() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Empty
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, ZonesScreenState.ZoneState> = emptyMap()
     }
 
     fun error() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Error
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = emptyMap()
+        override val zones: Map<ZoneIdentifier, ZonesScreenState.ZoneState> = emptyMap()
     }
 
     fun loaded() = object : ZonesScreenState {
         override val condition: ZonesScreenState.Condition = ZonesScreenState.Condition.Success
-        override val zones: Map<EntityIdentifier, ZonesScreenState.ZoneState> = DemoData.zones
+        override val zones: Map<ZoneIdentifier, ZonesScreenState.ZoneState> = DemoData.zones
             .take(PREVIEW_MAX_ZONES)
             .associateBy { it.identifier }
             .mapValues { (_, zone) ->
                 object : ZonesScreenState.ZoneState {
                     override val zone: Zone = zone
-                    override val entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
-                        .filter { it.zone?.identifier == zone.identifier }
+                    override val entities: Map<EntityIdentifier, Entity> = DemoData.entities
+                        .filter { it.zone == zone.identifier }
                         .associateBy { it.identifier }
                 }
             }

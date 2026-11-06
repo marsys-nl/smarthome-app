@@ -19,10 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
-import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
-import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
+import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.ScheduledMode
+import network.marsys.smarthome.domain.capability.WindowDetection
+import network.marsys.smarthome.domain.entity.EntityIdentifier
 import network.marsys.smarthome.shared.library.design.SmartHomeComponentPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection

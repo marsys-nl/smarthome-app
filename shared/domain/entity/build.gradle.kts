@@ -22,6 +22,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(libs.marsys.smarthome.domain)
+            implementation(libs.kotlinx.datetime)
         }
     }
 }

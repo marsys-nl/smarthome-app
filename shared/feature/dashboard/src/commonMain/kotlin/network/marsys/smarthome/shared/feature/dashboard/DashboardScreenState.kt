@@ -1,9 +1,10 @@
 package network.marsys.smarthome.shared.feature.dashboard
 
 import androidx.compose.runtime.Stable
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 @Stable
@@ -15,20 +16,20 @@ interface DashboardScreenState {
     @Stable
     interface QuickControlState {
         val condition: Condition
-        val entities: Map<EntityIdentifier, Entity<*>>
+        val entities: Map<EntityIdentifier, Entity>
         val groupedEntitiesByType: Boolean
     }
 
     @Stable
     interface ZonesState {
         val condition: Condition
-        val zones: Map<EntityIdentifier, ZoneState>
+        val zones: Map<ZoneIdentifier, ZoneState>
     }
 
     @Stable
     interface ZoneState {
         val zone: Zone
-        val entities: Map<EntityIdentifier, Entity<*>>
+        val entities: Map<EntityIdentifier, Entity>
     }
 
     sealed interface Condition {
@@ -49,7 +50,7 @@ sealed class DashboardScreenAction(val key: String) {
     ) : DashboardScreenAction("EditEntity[$entity]")
 
     data class OpenZoneScreen(
-        val zone: EntityIdentifier,
+        val zone: ZoneIdentifier,
     ) : DashboardScreenAction("OpenZoneScreen[$zone]")
 
     data object RetryQuickControl : DashboardScreenAction("RetryQuickControl")

@@ -25,21 +25,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.entity.Blind
+import network.marsys.smarthome.domain.entity.Camera
+import network.marsys.smarthome.domain.entity.Cover
+import network.marsys.smarthome.domain.entity.Curtain
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Fan
+import network.marsys.smarthome.domain.entity.Light
+import network.marsys.smarthome.domain.entity.Shutter
+import network.marsys.smarthome.domain.entity.SmartLock
+import network.marsys.smarthome.domain.entity.SmartPlug
+import network.marsys.smarthome.domain.entity.Speaker
+import network.marsys.smarthome.domain.entity.Thermostat
 import network.marsys.smarthome.shared.data.demo.DemoData
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Blind
-import network.marsys.smarthome.shared.domain.entity.entity.Camera
-import network.marsys.smarthome.shared.domain.entity.entity.Cover
-import network.marsys.smarthome.shared.domain.entity.entity.Curtain
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.Fan
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.Lock
-import network.marsys.smarthome.shared.domain.entity.entity.Shutter
-import network.marsys.smarthome.shared.domain.entity.entity.SmartPlug
-import network.marsys.smarthome.shared.domain.entity.entity.Speaker
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
+import network.marsys.smarthome.shared.domain.entity.descriptor
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenAction
 import network.marsys.smarthome.shared.feature.dashboard.DashboardScreenState
 import network.marsys.smarthome.shared.feature.dashboard.components.ShimmerCard
@@ -310,10 +311,10 @@ private fun QuickControlSectionLoadedContent(
 @Composable
 private fun QuickControlSectionGroupedEntities(
     @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
+    entities: Map<EntityIdentifier, Entity>,
     onAction: (DashboardScreenAction) -> Unit,
 ) {
-    val groupedIds: Map<KClass<out Entity<*>>, ImmutableList<EntityIdentifier>> by
+    val groupedIds: Map<KClass<out Entity>, ImmutableList<EntityIdentifier>> by
         remember(entities) {
             derivedStateOf {
                 entities.entries
@@ -347,7 +348,7 @@ private fun QuickControlSectionGroupedEntities(
 @Composable
 private fun QuickControlSectionEntities(
     @Suppress("UnstableCollections")
-    entities: Map<EntityIdentifier, Entity<*>>,
+    entities: Map<EntityIdentifier, Entity>,
     identifiers: ImmutableList<EntityIdentifier>,
     onAction: (DashboardScreenAction) -> Unit,
 ) {
@@ -370,12 +371,12 @@ private fun QuickControlSectionEntities(
 
 @Composable
 private fun QuickControlSectionEntityCard(
-    entity: Entity<*>,
+    entity: Entity,
     onAction: (DashboardScreenAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val type = entity::class
-    val icon = remember(type) { type.icon() }
+    val icon = remember(type) { entity.type.icon() }
     val colors = type.cardColors()
 
     val active = entity is Entity.Activatable && entity.active
@@ -409,7 +410,7 @@ private fun QuickControlSectionEntityCard(
             .then(clickModifier),
         activeColors = colors,
     ) {
-        entity.ifPresent<OnOff> {
+        entity.ifPresent(query = OnOff) {
             Switch(
                 checked = it.current,
                 onCheckedChange = {
@@ -426,7 +427,7 @@ private fun QuickControlSectionEntityCard(
 }
 
 @Composable
-private fun KClass<out Entity<*>>.groupTitle(): String =
+private fun KClass<out Entity>.groupTitle(): String =
     stringResource(
         resource = when (this) {
             Blind::class -> SmartHomeRes.string.entity_category_blinds
@@ -434,8 +435,8 @@ private fun KClass<out Entity<*>>.groupTitle(): String =
             Curtain::class -> SmartHomeRes.string.entity_category_curtains
             Fan::class -> SmartHomeRes.string.entity_category_fans
             Light::class -> SmartHomeRes.string.entity_category_lights
-            Lock::class -> SmartHomeRes.string.entity_category_locks
             Shutter::class -> SmartHomeRes.string.entity_category_shutters
+            SmartLock::class -> SmartHomeRes.string.entity_category_locks
             SmartPlug::class -> SmartHomeRes.string.entity_category_smartplugs
             Speaker::class -> SmartHomeRes.string.entity_category_speakers
             Thermostat::class -> SmartHomeRes.string.entity_category_thermostats
@@ -445,7 +446,7 @@ private fun KClass<out Entity<*>>.groupTitle(): String =
 
 @Composable
 @Suppress("CyclomaticComplexMethod")
-private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = when (this) {
+private fun KClass<out Entity>.headerColors(): GroupedEntityHeaderColors = when (this) {
     Light::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Amber.Amber400.ToOrange500,
         textColor = when (LocalDarkMode.current) {
@@ -478,7 +479,7 @@ private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = wh
         },
     )
 
-    Lock::class, Camera::class -> GroupedEntityHeaderDefaults.colors(
+    SmartLock::class, Camera::class -> GroupedEntityHeaderDefaults.colors(
         markerBackgroundColor = GradientTokens.Emerald.Emerald400.ToTeal600,
         textColor = when (LocalDarkMode.current) {
             true -> PaletteTokens.Emerald.Emerald300
@@ -498,7 +499,7 @@ private fun KClass<out Entity<*>>.headerColors(): GroupedEntityHeaderColors = wh
 }
 
 @Composable
-private fun KClass<out Entity<*>>.cardColors(): ActiveEntityCardColors = when (this) {
+private fun KClass<out Entity>.cardColors(): ActiveEntityCardColors = when (this) {
     Light::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Amber.Amber400.ToOrange500,
         border = PaletteTokens.Amber.Amber400
@@ -523,7 +524,7 @@ private fun KClass<out Entity<*>>.cardColors(): ActiveEntityCardColors = when (t
             .copy(alpha = .4f),
     )
 
-    Lock::class, Camera::class -> EntityCardDefaults.activeCardColors(
+    SmartLock::class, Camera::class -> EntityCardDefaults.activeCardColors(
         background = GradientTokens.Emerald.Emerald400.ToTeal600,
         border = PaletteTokens.Emerald.Emerald400
             .copy(alpha = .4f),
@@ -618,29 +619,29 @@ private fun GroupedQuickControlSectionPreview(
 internal object QuickControlSectionPreviewData {
     fun empty() = object : DashboardScreenState.QuickControlState {
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Empty
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
         override val groupedEntitiesByType: Boolean = false
     }
 
     fun error() = object : DashboardScreenState.QuickControlState {
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Error
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
         override val groupedEntitiesByType: Boolean = false
     }
 
     fun loading() = object : DashboardScreenState.QuickControlState {
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Loading
-        override val entities: Map<EntityIdentifier, Entity<*>> = emptyMap()
+        override val entities: Map<EntityIdentifier, Entity> = emptyMap()
         override val groupedEntitiesByType: Boolean = false
     }
 
     fun loaded(
-        entities: Map<EntityIdentifier, Entity<*>> = DemoData.entities
+        entities: Map<EntityIdentifier, Entity> = DemoData.entities
             .associateBy { it.identifier },
         groupedEntitiesByType: Boolean = false,
     ) = object : DashboardScreenState.QuickControlState {
         override val condition: DashboardScreenState.Condition = DashboardScreenState.Condition.Success
-        override val entities: Map<EntityIdentifier, Entity<*>> = entities
+        override val entities: Map<EntityIdentifier, Entity> = entities
         override val groupedEntitiesByType: Boolean = groupedEntitiesByType
     }
 }

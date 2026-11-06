@@ -26,7 +26,6 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.shared.data.demo)
-            implementation(projects.shared.domain.entity)
             implementation(projects.shared.library.design)
             implementation(projects.shared.library.i18n)
             implementation(projects.shared.library.i18n.memory)

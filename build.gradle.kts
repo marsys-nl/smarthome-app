@@ -65,6 +65,14 @@ kover {
     }
 }
 
+subprojects {
+    configurations.configureEach {
+        resolutionStrategy {
+            cacheChangingModulesFor(5, "minutes")
+        }
+    }
+}
+
 tasks.register("ktlintCheck", JavaExec::class) {
     group = LifecycleBasePlugin.VERIFICATION_GROUP
     description = "Check Kotlin code style"
