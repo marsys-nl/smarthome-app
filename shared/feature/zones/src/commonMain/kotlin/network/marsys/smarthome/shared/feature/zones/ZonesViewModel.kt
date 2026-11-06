@@ -12,16 +12,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
 import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
-import kotlin.collections.set
 
 internal typealias ZonesStateHolder =
     SuspendingActionStateEffectMutator<ZonesScreenAction, ZonesScreenState, ZonesScreenEffect>
@@ -90,13 +90,13 @@ private fun launchZoneMutations(
             }
 
             val stateEntities = current[zone.identifier]
-                ?.entities as? SnapshotStateMap<EntityIdentifier, Entity<*>>
+                ?.entities as? SnapshotStateMap<EntityIdentifier, Entity>
                 ?: return@forEach
 
             stateEntities.clear()
             stateEntities.putAll(
                 from = entities
-                    .filter { entity -> entity.zone?.identifier == zone.identifier }
+                    .filter { entity -> entity.zone == zone.identifier }
                     .associateBy { entity -> entity.identifier },
             )
         }
@@ -117,12 +117,12 @@ private fun launchZoneMutations(
 
 private class MutableZonesScreenState : ZonesScreenState {
     override var condition: ZonesScreenState.Condition by mutableStateOf(ZonesScreenState.Condition.Loading)
-    override var zones: SnapshotStateMap<EntityIdentifier, ZonesScreenState.ZoneState> = mutableStateMapOf()
+    override var zones: SnapshotStateMap<ZoneIdentifier, ZonesScreenState.ZoneState> = mutableStateMapOf()
 }
 
 private class MutableZoneState(
     zone: Zone,
 ) : ZonesScreenState.ZoneState {
     override var zone: Zone by mutableStateOf(zone)
-    override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
+    override var entities: SnapshotStateMap<EntityIdentifier, Entity> = mutableStateMapOf()
 }

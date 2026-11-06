@@ -1,15 +1,15 @@
 package network.marsys.smarthome.shared.modal.entity
 
 import androidx.compose.runtime.Stable
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
 import network.marsys.smarthome.domain.unit.Dimension
 import network.marsys.smarthome.domain.unit.Quantity
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
 
 @Stable
 interface EntityDetailModalState {
     val isLoading: Boolean
-    val entity: Entity<*>?
+    val entity: Entity?
 }
 
 sealed class EntityDetailModalAction(val key: String) {

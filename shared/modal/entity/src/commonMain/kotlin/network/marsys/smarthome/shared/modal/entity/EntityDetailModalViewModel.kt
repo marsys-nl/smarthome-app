@@ -6,16 +6,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.capability.Brightness
+import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.Movement
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.capability.ScheduledMode
+import network.marsys.smarthome.domain.capability.TargetTemperature
+import network.marsys.smarthome.domain.capability.WindowDetection
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.ChildLock
-import network.marsys.smarthome.shared.domain.entity.capability.Movement
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.capability.ScheduledMode
-import network.marsys.smarthome.shared.domain.entity.capability.TargetTemperature
-import network.marsys.smarthome.shared.domain.entity.capability.WindowDetection
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
 import network.marsys.smarthome.shared.library.core.coroutines.suspendingActionStateMutator
@@ -55,7 +55,7 @@ class EntityDetailModalViewModel(
                         entityRepository.execute(
                             action = TargetTemperature.SetTargetTemperature(
                                 identifier = it.entity,
-                                targetTemperature = it.temperature,
+                                temperature = it.temperature,
                             ),
                         )
                     }
@@ -140,5 +140,5 @@ private fun launchEntityMutations(
 
 private class MutableEntityDetailModalState : EntityDetailModalState {
     override var isLoading: Boolean by mutableStateOf(true)
-    override var entity: Entity<*>? by mutableStateOf(null)
+    override var entity: Entity? by mutableStateOf(null)
 }

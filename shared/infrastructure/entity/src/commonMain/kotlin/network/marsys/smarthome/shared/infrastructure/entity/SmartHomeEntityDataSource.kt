@@ -13,25 +13,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.io.IOException
+import network.marsys.smarthome.api.mappers.EntityCollectionDomainMapper
 import network.marsys.smarthome.api.models.entity.EntityResponse
-import network.marsys.smarthome.api.models.entity.LightEntity
-import network.marsys.smarthome.domain.i18n.TranslationKey
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntitySynchronization
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
-import network.marsys.smarthome.shared.domain.entity.entity.Light
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
 
 internal class SmartHomeEntityDataSource(
     private val client: HttpClient,
 ) : EntityDataSource, EntitySynchronization {
-    override val entities: StateFlow<Collection<Entity<*>>>
+    override val entities: StateFlow<Collection<Entity>>
         field = MutableStateFlow(emptyList())
 
-    override fun entity(identifier: EntityIdentifier): Flow<Entity<*>?> =
+    override fun entity(identifier: EntityIdentifier): Flow<Entity?> =
         entities.map { collection ->
             collection.find { entity -> entity.identifier == identifier }
         }
@@ -71,28 +68,12 @@ internal class SmartHomeEntityDataSource(
         }
 
     private fun handle(collection: Collection<EntityResponse>) {
-        val mapped = collection
-            .mapNotNull { it.map() }
+        val mapped = EntityCollectionDomainMapper
+            .invoke(source = collection)
 
         entities.update { current ->
             (mapped + current)
                 .distinctBy { it.identifier }
         }
     }
-
-    private fun EntityResponse.map(): Entity<*>? =
-        when (this) {
-            is LightEntity ->
-                Light(
-                    identifier = identifier,
-                    naming = EntityNaming(
-                        key = TranslationKey(naming.key),
-                        qualifier = naming.qualifier?.let(::TranslationKey),
-                    ),
-                    state = Light.State.Unknown,
-                )
-
-            else ->
-                null
-        }
 }

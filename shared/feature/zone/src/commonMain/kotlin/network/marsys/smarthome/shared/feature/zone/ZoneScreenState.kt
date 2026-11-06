@@ -1,16 +1,16 @@
 package network.marsys.smarthome.shared.feature.zone
 
 import androidx.compose.runtime.Stable
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
 import network.marsys.smarthome.shared.library.navigation.NavigationDestination
 
 @Stable
 internal interface ZoneScreenState {
     val condition: Condition
     val zone: Zone?
-    val entities: Map<EntityIdentifier, Entity<*>>
+    val entities: Map<EntityIdentifier, Entity>
 
     sealed interface Condition {
         data object Error : Condition

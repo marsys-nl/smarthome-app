@@ -1,27 +1,27 @@
 package network.marsys.smarthome.shared.modal.entity
 
-import network.marsys.smarthome.domain.i18n.TranslationKey
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.TranslationKey
+import network.marsys.smarthome.domain.capability.Brightness
+import network.marsys.smarthome.domain.capability.Capability.Companion.optional
+import network.marsys.smarthome.domain.capability.Capability.Companion.required
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.entity.EntityNaming
+import network.marsys.smarthome.domain.entity.Light
+import network.marsys.smarthome.domain.entity.Thermostat
 import network.marsys.smarthome.domain.unit.percent
-import network.marsys.smarthome.shared.domain.entity.capability.Brightness
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.optional
-import network.marsys.smarthome.shared.domain.entity.capability.Capability.Companion.required
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.entity.EntityNaming
-import network.marsys.smarthome.shared.domain.entity.entity.Light
-import network.marsys.smarthome.shared.domain.entity.entity.Thermostat
 
 object EntityDetailModalPreviewData {
     val loading = object : EntityDetailModalState {
         override val isLoading: Boolean = true
-        override val entity: Entity<*>? = null
+        override val entity: Entity? = null
     }
 
     val loaded = mapOf(
-        Light::class to object : EntityDetailModalState {
+        Light to object : EntityDetailModalState {
             override val isLoading: Boolean = false
-            override val entity: Entity<*> = Light(
+            override val entity: Entity = Light(
                 identifier = EntityIdentifier("light.kitchen-light"),
                 naming = EntityNaming(
                     key = TranslationKey("light.kitchen"),
@@ -34,9 +34,9 @@ object EntityDetailModalPreviewData {
             )
         },
 
-        Thermostat::class to object : EntityDetailModalState {
+        Thermostat to object : EntityDetailModalState {
             override val isLoading: Boolean = false
-            override val entity: Entity<*> = Thermostat(
+            override val entity: Entity = Thermostat(
                 identifier = EntityIdentifier("thermostat.living-room"),
                 naming = EntityNaming(
                     key = TranslationKey("thermostat.living-room"),

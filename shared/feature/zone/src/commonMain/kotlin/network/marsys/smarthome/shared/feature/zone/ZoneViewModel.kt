@@ -10,12 +10,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
-import network.marsys.smarthome.domain.identifiers.EntityIdentifier
+import network.marsys.smarthome.domain.capability.OnOff
+import network.marsys.smarthome.domain.entity.Entity
+import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.domain.zone.Zone
+import network.marsys.smarthome.domain.zone.ZoneIdentifier
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntityRepository
 import network.marsys.smarthome.shared.data.entity.ports.inbound.ZoneRepository
-import network.marsys.smarthome.shared.domain.entity.capability.OnOff
-import network.marsys.smarthome.shared.domain.entity.entity.Entity
-import network.marsys.smarthome.shared.domain.entity.zone.Zone
 import network.marsys.smarthome.shared.library.core.coroutines.EffectEmitter
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateEffectMutator
 import network.marsys.smarthome.shared.library.core.coroutines.handle
@@ -26,7 +27,7 @@ internal typealias ZoneStateHolder =
     SuspendingActionStateEffectMutator<ZoneScreenAction, ZoneScreenState, ZoneScreenEffect>
 
 class ZoneViewModel(
-    private val identifier: EntityIdentifier,
+    private val identifier: ZoneIdentifier,
     private val entityRepository: EntityRepository,
     private val zoneRepository: ZoneRepository,
     coroutineScope: CoroutineScope,
@@ -91,7 +92,7 @@ class ZoneViewModel(
 
 context(scope: CoroutineScope)
 private fun launchZoneMutations(
-    identifier: EntityIdentifier,
+    identifier: ZoneIdentifier,
     entityRepository: EntityRepository,
     zoneRepository: ZoneRepository,
     emitter: EffectEmitter<ZoneScreenEffect>,
@@ -123,7 +124,7 @@ private fun launchZoneMutations(
 
 context(scope: CoroutineScope)
 private fun launchEntityMutations(
-    identifier: EntityIdentifier,
+    identifier: ZoneIdentifier,
     state: MutableZoneScreenState,
     entityRepository: EntityRepository,
 ) = scope.launch {
@@ -135,7 +136,7 @@ private fun launchEntityMutations(
             val current = state.entities
 
             entities
-                .filter { it.zone?.identifier == identifier }
+                .filter { it.zone == identifier }
                 .forEach {
                     if (current[it.identifier] != it) {
                         current[it.identifier] = it
@@ -155,5 +156,5 @@ private fun launchEntityMutations(
 private class MutableZoneScreenState : ZoneScreenState {
     override var condition: ZoneScreenState.Condition by mutableStateOf(ZoneScreenState.Condition.Resolving)
     override var zone: Zone? by mutableStateOf(null)
-    override var entities: SnapshotStateMap<EntityIdentifier, Entity<*>> = mutableStateMapOf()
+    override var entities: SnapshotStateMap<EntityIdentifier, Entity> = mutableStateMapOf()
 }
