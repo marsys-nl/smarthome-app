@@ -7,4 +7,8 @@ class InMemoryTranslationCatalog(
 ) : TranslationCatalog {
     override fun get(key: String, language: String): String? =
         translations[key]?.get(language)
+
+    override fun get(key: String, category: String, language: String): String? =
+        translations["$key.$category"]?.get(language)
+            ?: translations["$key.other"]?.get(language)
 }

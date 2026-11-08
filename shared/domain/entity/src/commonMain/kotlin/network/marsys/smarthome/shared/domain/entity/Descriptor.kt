@@ -32,6 +32,7 @@ import network.marsys.smarthome.domain.unit.Rounding
 import network.marsys.smarthome.domain.unit.Scale
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 import kotlin.time.Instant
@@ -100,12 +101,12 @@ sealed interface TimeAgoDisplay {
     data object JustNow : TimeAgoDisplay
 }
 
-interface TimeAgoStrategy {
+sealed interface TimeAgoStrategy {
     fun displayFor(duration: Duration): TimeAgoDisplay
 }
 
 data class FixedUnits(
-    private val units: List<DurationUnit>,
+    val units: List<DurationUnit>,
 ) : TimeAgoStrategy {
     override fun displayFor(duration: Duration): TimeAgoDisplay =
         TimeAgoDisplay.Components(units = units)
@@ -146,6 +147,13 @@ data class AdaptiveUnits(
             threshold = 1.days,
             display = TimeAgoDisplay.Components(
                 DurationUnit.DAYS,
+                DurationUnit.HOURS,
+                DurationUnit.MINUTES,
+            ),
+        ),
+        AgeRule.AtLeast(
+            threshold = 1.hours,
+            display = TimeAgoDisplay.Components(
                 DurationUnit.HOURS,
                 DurationUnit.MINUTES,
             ),
