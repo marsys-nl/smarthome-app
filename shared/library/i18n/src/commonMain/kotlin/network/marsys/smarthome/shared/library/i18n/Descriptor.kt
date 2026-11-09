@@ -5,11 +5,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import network.marsys.smarthome.domain.capability.ThermostatStatus.Status
-import network.marsys.smarthome.shared.domain.entity.AdaptiveUnits
 import network.marsys.smarthome.shared.domain.entity.Descriptor
-import network.marsys.smarthome.shared.domain.entity.FixedUnits
-import network.marsys.smarthome.shared.domain.entity.TimeAgoDisplay
-import network.marsys.smarthome.shared.domain.entity.TimeAgoStrategy
 import network.marsys.smarthome.shared.library.resources.SmartHomeRes
 import network.marsys.smarthome.shared.library.resources.entity_state_closed
 import network.marsys.smarthome.shared.library.resources.entity_state_closing
@@ -22,19 +18,7 @@ import network.marsys.smarthome.shared.library.resources.entity_state_open_perce
 import network.marsys.smarthome.shared.library.resources.entity_state_opened
 import network.marsys.smarthome.shared.library.resources.entity_state_opening
 import network.marsys.smarthome.shared.library.resources.entity_state_separator
-import network.marsys.smarthome.shared.library.resources.time_ago_append
-import network.marsys.smarthome.shared.library.resources.time_ago_days
-import network.marsys.smarthome.shared.library.resources.time_ago_final_separator
-import network.marsys.smarthome.shared.library.resources.time_ago_hours
-import network.marsys.smarthome.shared.library.resources.time_ago_minutes
-import network.marsys.smarthome.shared.library.resources.time_ago_recent
-import network.marsys.smarthome.shared.library.resources.time_ago_seconds
-import network.marsys.smarthome.shared.library.resources.time_ago_updated
-import org.jetbrains.compose.resources.PluralStringResource
 import kotlin.time.Clock
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.Instant
 
 @Composable
 fun Descriptor.localized(): String =
@@ -77,7 +61,11 @@ fun Descriptor.localized(strings: DescriptorStrings): String =
 
         is Descriptor.TimeAgo ->
             with(Clock.System.now().minus(value)) {
-                display(this, strategy.displayFor(this))
+                timeAgo(
+                    duration = this,
+                    display = strategy.displayFor(this),
+                    kind = kind,
+                )
             }
 
         is Descriptor.Value<*> ->
@@ -95,76 +83,6 @@ fun Descriptor.localized(strings: DescriptorStrings): String =
         Descriptor.Empty ->
             ""
     }
-
-/*
- * Time ago formatting
- */
-
-@Composable
-private fun display(duration: Duration, display: TimeAgoDisplay): String =
-    stringResource(
-        resource = SmartHomeRes.string.time_ago_updated,
-        formatArgs = arrayOf(
-            when (display) {
-                is TimeAgoDisplay.JustNow -> stringResource(SmartHomeRes.string.time_ago_recent)
-
-                is TimeAgoDisplay.Components ->
-                    stringResource(
-                        resource = SmartHomeRes.string.time_ago_append,
-                        format(
-                            duration = duration,
-                            units = display.units,
-                        ),
-                    )
-            },
-        ),
-    )
-
-@Composable
-@Suppress("UnstableCollections")
-private fun format(duration: Duration, units: List<DurationUnit>): String {
-    val components = duration.toComponents { days, hours, minutes, seconds, _ ->
-        units.mapNotNull { unit ->
-            when (unit) {
-                DurationUnit.DAYS ->
-                    SmartHomeRes.plurals.time_ago_days to days.toInt()
-
-                DurationUnit.HOURS ->
-                    SmartHomeRes.plurals.time_ago_hours to hours
-
-                DurationUnit.MINUTES ->
-                    SmartHomeRes.plurals.time_ago_minutes to minutes
-
-                DurationUnit.SECONDS ->
-                    SmartHomeRes.plurals.time_ago_seconds to seconds
-
-                else -> null
-            }
-        }
-    }
-
-    val formatted = components
-        .filter { it.second > 0 }
-        .ifEmpty { components.takeLast(1) }
-        .map { (resource, quantity) ->
-            pluralStringResource(
-                resource = resource,
-                quantity = quantity,
-            )
-        }
-
-    return when (formatted.size) {
-        0 -> ""
-
-        1 -> formatted.first()
-
-        else -> buildString {
-            append(formatted.dropLast(1).joinToString(separator = ", "))
-            append(" ${stringResource(SmartHomeRes.string.time_ago_final_separator)} ")
-            append(formatted.last())
-        }
-    }
-}
 
 /*
  * Descriptor strings

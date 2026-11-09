@@ -92,8 +92,9 @@
     <!-- Time ago -->
     <string name="time_ago_final_separator">en</string>
     <string name="time_ago_updated">%1$s geüpdatet</string>
+    <string name="time_ago_started">%1$s gestart</string>
     <string name="time_ago_append">%1$s geleden</string>
-    <string name="time_ago_recent">recent</string>
+    <string name="time_ago_recent">Zojuist</string>
     <plurals name="time_ago_seconds">
         <item quantity="one">%1$d seconde</item>
         <item quantity="other">%1$d seconden</item>

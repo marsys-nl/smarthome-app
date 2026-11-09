@@ -93,9 +93,10 @@
 
     <!-- Time ago -->
     <string name="time_ago_final_separator">and</string>
-    <string name="time_ago_updated">%1$s updated</string>
+    <string name="time_ago_updated">Updated %1$s</string>
+    <string name="time_ago_started">Started %1$s</string>
     <string name="time_ago_append">%1$s ago</string>
-    <string name="time_ago_recent">just now</string>
+    <string name="time_ago_recent">Just now</string>
     <plurals name="time_ago_seconds">
         <item quantity="one">%1$d second</item>
         <item quantity="other">%1$d seconds</item>

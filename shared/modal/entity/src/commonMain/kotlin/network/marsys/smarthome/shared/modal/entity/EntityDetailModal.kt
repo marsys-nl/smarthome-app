@@ -5,11 +5,13 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -82,6 +84,7 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
 import network.marsys.smarthome.shared.modal.entity.section.CoverControlSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
+import network.marsys.smarthome.shared.modal.entity.section.SystemStatisticsSection
 import network.marsys.smarthome.shared.modal.entity.section.TemperatureControlSection
 import network.marsys.smarthome.shared.modal.entity.section.ThermostatControlSection
 import org.koin.compose.viewmodel.koinViewModel
@@ -235,7 +238,7 @@ private fun EntityDetailLoadingModalContent() {
     }
 }
 
-typealias EntityDetailModalComponent = @Composable (Entity, (EntityDetailModalAction) -> Unit) -> Unit
+typealias EntityDetailModalComponent<E> = @Composable (E, (EntityDetailModalAction) -> Unit) -> Unit
 
 @Composable
 @Suppress("LongMethod")
@@ -249,35 +252,63 @@ private fun EntityDetailLoadedModalContent(
     content.invoke(entity, onAction)
 }
 
-private val entityDetailModalContentMap: Map<Entity.Type<*>, EntityDetailModalComponent> = mapOf(
-    System to ::SystemEntityDetailModalContent,
+private fun <E : Entity> entityDetailModalComponent(
+    type: Entity.Type<E>,
+    content: EntityDetailModalComponent<E>,
+): Pair<Entity.Type<E>, EntityDetailModalComponent<Entity>> = type to { entity, onAction ->
+    @Suppress("UNCHECKED_CAST")
+    content.invoke(entity as E, onAction)
+}
+
+private val entityDetailModalContentMap: Map<Entity.Type<*>, EntityDetailModalComponent<Entity>> = mapOf(
+    entityDetailModalComponent(System, ::SystemEntityDetailModalContent),
 )
 
 @Composable
 @Suppress("UnusedParameter")
 private fun SystemEntityDetailModalContent(
-    entity: Entity,
+    entity: System,
     onAction: (EntityDetailModalAction) -> Unit,
 ) {
-    entity.ifPresent(MeasureLoad) { load ->
-        PercentageDisplay(
-            quantity = load.current,
-            title = stringResource(Res.string.entity_system_processor),
-            icon = Icons.Cpu,
+    Column(
+        modifier = Modifier,
+        verticalArrangement = Arrangement
+            .spacedBy(16.dp),
+    ) {
+        entity.ifPresent(MeasureLoad) { load ->
+            PercentageDisplay(
+                quantity = load.current,
+                title = stringResource(Res.string.entity_system_processor),
+                icon = Icons.Cpu,
+            )
+        }
+
+        entity.ifPresent(
+            MeasureDataSize with System.MemoryType.Total,
+            MeasureDataSize with System.MemoryType.Available,
+        ) { total, available ->
+            val used = total.current - available.current
+            val percentage = (used.value / total.current.value * 100).percent
+
+            PercentageDisplay(
+                quantity = percentage,
+                title = stringResource(Res.string.entity_system_memory),
+                icon = Icons.MemoryStick,
+            )
+        }
+
+        val state = entity.state as? System.State.Known ?: return
+
+        Spacer(
+            modifier = Modifier
+                .padding(vertical = 10.dp)
+                .background(SmartHomeTheme.colors[ColorKeyToken.BorderPrimary])
+                .fillMaxWidth()
+                .height(1.dp),
         )
-    }
 
-    entity.ifPresent(
-        MeasureDataSize with System.MemoryType.Total,
-        MeasureDataSize with System.MemoryType.Available,
-    ) { total, available ->
-        val used = total.current - available.current
-        val percentage = (used.value / total.current.value * 100).percent
-
-        PercentageDisplay(
-            quantity = percentage,
-            title = stringResource(Res.string.entity_system_memory),
-            icon = Icons.MemoryStick,
+        SystemStatisticsSection(
+            state = state,
         )
     }
 }
