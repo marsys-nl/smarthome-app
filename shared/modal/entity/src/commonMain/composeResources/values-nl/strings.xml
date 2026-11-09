@@ -39,4 +39,8 @@
         <item quantity="one">%1$d dag</item>
         <item quantity="other">%1$d dagen</item>
     </plurals>
+
+    <!-- Specific capabilities -->
+    <string name="entity_system_processor">Processor</string>
+    <string name="entity_system_memory">Geheugen</string>
 </resources>

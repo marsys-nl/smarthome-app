@@ -39,4 +39,8 @@
         <item quantity="one">%1$d day</item>
         <item quantity="other">%1$d days</item>
     </plurals>
+
+    <!-- Specific capabilities -->
+    <string name="entity_system_processor">CPU</string>
+    <string name="entity_system_memory">Memory</string>
 </resources>

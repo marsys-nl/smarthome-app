@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import network.marsys.smarthome.domain.capability.Brightness
 import network.marsys.smarthome.domain.capability.ChildLock
+import network.marsys.smarthome.domain.capability.MeasureDataSize
+import network.marsys.smarthome.domain.capability.MeasureLoad
 import network.marsys.smarthome.domain.capability.MeasureTemperature
 import network.marsys.smarthome.domain.capability.Movement
 import network.marsys.smarthome.domain.capability.OnOff
@@ -40,8 +42,10 @@ import network.marsys.smarthome.domain.entity.Cover
 import network.marsys.smarthome.domain.entity.Entity
 import network.marsys.smarthome.domain.entity.EntityIdentifier
 import network.marsys.smarthome.domain.entity.Light
+import network.marsys.smarthome.domain.entity.System
 import network.marsys.smarthome.domain.entity.Thermostat
 import network.marsys.smarthome.domain.entity.Thermostat.TemperatureType
+import network.marsys.smarthome.domain.unit.percent
 import network.marsys.smarthome.shared.library.core.coroutines.produceStateWithLifecycle
 import network.marsys.smarthome.shared.library.design.SmartHomeModalPreview
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
@@ -55,13 +59,16 @@ import network.marsys.smarthome.shared.library.design.domain.helper.ifPresent
 import network.marsys.smarthome.shared.library.design.domain.helper.optional
 import network.marsys.smarthome.shared.library.design.icons.Clock
 import network.marsys.smarthome.shared.library.design.icons.Close
+import network.marsys.smarthome.shared.library.design.icons.Cpu
 import network.marsys.smarthome.shared.library.design.icons.Icons
 import network.marsys.smarthome.shared.library.design.icons.LoaderCircle
+import network.marsys.smarthome.shared.library.design.icons.MemoryStick
 import network.marsys.smarthome.shared.library.design.theme.LocalContentColor
 import network.marsys.smarthome.shared.library.design.theme.ThemeSelectionPreviewParameterProvider
 import network.marsys.smarthome.shared.library.design.theme.tokens.ColorKeyToken
 import network.marsys.smarthome.shared.library.i18n.pluralStringResource
 import network.marsys.smarthome.shared.library.i18n.stringResource
+import network.marsys.smarthome.shared.modal.entity.component.PercentageDisplay
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.Res
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_max
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_update_now
@@ -70,6 +77,8 @@ import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.e
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_hours
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_minutes
 import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_state_updated_seconds
+import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_system_memory
+import network.marsys.smarthome.shared.modal.entity.entity.generated.resources.entity_system_processor
 import network.marsys.smarthome.shared.modal.entity.section.BrightnessSection
 import network.marsys.smarthome.shared.modal.entity.section.CoverControlSection
 import network.marsys.smarthome.shared.modal.entity.section.OnOffSection
@@ -226,9 +235,56 @@ private fun EntityDetailLoadingModalContent() {
     }
 }
 
+typealias EntityDetailModalComponent = @Composable (Entity, (EntityDetailModalAction) -> Unit) -> Unit
+
 @Composable
 @Suppress("LongMethod")
 private fun EntityDetailLoadedModalContent(
+    entity: Entity,
+    onAction: (EntityDetailModalAction) -> Unit,
+) {
+    val content = entityDetailModalContentMap[entity.type]
+        ?: ::DefaultEntityDetailModalContent
+
+    content.invoke(entity, onAction)
+}
+
+private val entityDetailModalContentMap: Map<Entity.Type<*>, EntityDetailModalComponent> = mapOf(
+    System to ::SystemEntityDetailModalContent,
+)
+
+@Composable
+@Suppress("UnusedParameter")
+private fun SystemEntityDetailModalContent(
+    entity: Entity,
+    onAction: (EntityDetailModalAction) -> Unit,
+) {
+    entity.ifPresent(MeasureLoad) { load ->
+        PercentageDisplay(
+            quantity = load.current,
+            title = stringResource(Res.string.entity_system_processor),
+            icon = Icons.Cpu,
+        )
+    }
+
+    entity.ifPresent(
+        MeasureDataSize with System.MemoryType.Total,
+        MeasureDataSize with System.MemoryType.Available,
+    ) { total, available ->
+        val used = total.current - available.current
+        val percentage = (used.value / total.current.value * 100).percent
+
+        PercentageDisplay(
+            quantity = percentage,
+            title = stringResource(Res.string.entity_system_memory),
+            icon = Icons.MemoryStick,
+        )
+    }
+}
+
+@Composable
+@Suppress("LongMethod")
+private fun DefaultEntityDetailModalContent(
     entity: Entity,
     onAction: (EntityDetailModalAction) -> Unit,
 ) {
@@ -442,6 +498,24 @@ private fun LoadedThermostatEntityDetailModalPreview(
         theme = theme,
     ) {
         val state = EntityDetailModalPreviewData.loaded[Thermostat] ?: error("Missing preview data")
+
+        EntityDetailModalContent(
+            state = state,
+            onAction = {},
+            onDismissRequest = {},
+        )
+    }
+}
+
+@PreviewScreenSizes
+@Composable
+private fun LoadedSystemEntityDetailModalPreview(
+    @PreviewParameter(ThemeSelectionPreviewParameterProvider::class) theme: ThemeSelection,
+) {
+    SmartHomeModalPreview(
+        theme = theme,
+    ) {
+        val state = EntityDetailModalPreviewData.loaded[System] ?: error("Missing preview data")
 
         EntityDetailModalContent(
             state = state,
