@@ -68,6 +68,7 @@ sealed interface Descriptor {
     data class TimeAgo(
         val value: Instant,
         val strategy: TimeAgoStrategy = AdaptiveUnits(),
+        val kind: TimeAgoKind = TimeAgoKind.Raw,
     ) : Descriptor
 
     data class Enum<T : Any>(
@@ -90,6 +91,12 @@ sealed interface Descriptor {
 /**
  * Time ago strategy.
  */
+
+enum class TimeAgoKind {
+    Raw,
+    Started,
+    Updated,
+}
 
 sealed interface TimeAgoDisplay {
     data class Components(
@@ -318,7 +325,10 @@ val Speaker.State.Known.descriptor: Descriptor
 val System.State.Known.descriptor: Descriptor
     get() = Descriptor.Combined(
         processor.load.descriptor,
-        Descriptor.TimeAgo(value = startedAt.application),
+        Descriptor.TimeAgo(
+            value = startedAt.application,
+            kind = TimeAgoKind.Started,
+        ),
     )
 
 val Thermostat.State.Known.descriptor: Descriptor
