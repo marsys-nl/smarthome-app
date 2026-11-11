@@ -7,6 +7,8 @@ import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
+import io.ktor.client.plugins.sse.SSE
+import io.ktor.http.encodedPath
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import network.marsys.smarthome.shared.library.core.SmartHomeConfig
@@ -27,6 +29,7 @@ val networkModule = module {
         HttpClient(engineFactory = httpClientEngine()) {
             installContentNegotiation()
             installLogging()
+            installServerSentEvents()
             installSmartHomePlugins()
         }
     }
@@ -47,7 +50,15 @@ private fun HttpClientConfig<*>.installLogging() {
         install(Logging) {
             logger = Logger.SIMPLE
             level = LogLevel.ALL
+
+            filter { request -> !request.url.encodedPath.endsWith("/api/events") }
         }
+    }
+}
+
+private fun HttpClientConfig<*>.installServerSentEvents() {
+    install(SSE) {
+        maxReconnectionAttempts = 0
     }
 }
 
