@@ -32,82 +32,88 @@ class InitializationViewModel(
     private val synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
-    InitializationStateHolder by coroutineScope.suspendingActionStateMutator(
-        state = MutableInitializationScreenState(),
-        producer = { state, actions ->
-            var initializationJob: Job?
-
-            initializationJob = launchInitializationMutations(
+    InitializationStateHolder by initializationStateHolder(
+        scope = coroutineScope,
+        initialize = { state ->
+            state.initialize(
                 applicationConfigurationRepository = applicationConfigurationRepository,
                 authenticateUseCase = authenticateUseCase,
                 checkSystemHealthUseCase = checkSystemHealthUseCase,
                 downloadConfigurationUseCase = downloadConfigurationUseCase,
                 synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
-                state = state,
             )
-
-            actions.handle(
-                scope = this,
-                keySelector = InitializationScreenAction::key,
-            ) {
-                when (val action = type()) {
-                    is InitializationScreenAction.RetryInitialization -> action.flow.collect {
-                        initializationJob?.cancel()
-                        initializationJob = launchInitializationMutations(
-                            applicationConfigurationRepository = applicationConfigurationRepository,
-                            authenticateUseCase = authenticateUseCase,
-                            checkSystemHealthUseCase = checkSystemHealthUseCase,
-                            downloadConfigurationUseCase = downloadConfigurationUseCase,
-                            synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
-                            state = state,
-                        )
-                    }
-                }
-            }
         },
     )
 
-context(scope: CoroutineScope)
-private fun launchInitializationMutations(
+private fun initializationStateHolder(
+    scope: CoroutineScope,
+    initialize: suspend (MutableInitializationScreenState) -> Unit,
+): InitializationStateHolder {
+    val state = MutableInitializationScreenState()
+    var job: Job? = null
+
+    fun restart() {
+        job?.cancel()
+        job = scope.launch {
+            initialize.invoke(state)
+        }
+    }
+
+    return scope.suspendingActionStateMutator(state = state) { state, actions ->
+        if (job?.isActive != true && state.current != InitializationScreenState.Done) {
+            restart()
+        }
+
+        actions.handle(
+            scope = this,
+            keySelector = InitializationScreenAction::key,
+        ) {
+            when (val action = type()) {
+                is InitializationScreenAction.RetryInitialization -> action.flow.collect {
+                    restart()
+                }
+            }
+        }
+    }
+}
+
+private suspend fun MutableInitializationScreenState.initialize(
     applicationConfigurationRepository: ApplicationConfigurationRepository,
     authenticateUseCase: AuthenticateUseCase,
     checkSystemHealthUseCase: CheckSystemHealthUseCase,
     downloadConfigurationUseCase: DownloadConfigurationUseCase,
     synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
-    state: MutableInitializationScreenState,
-) = scope.launch {
-    context(with = state) {
-        val configuration = applicationConfigurationRepository.connection.first()
+) {
+    val configuration = applicationConfigurationRepository.connection.first()
 
-        if (configuration is ConnectionConfiguration.Demo) {
-            state.current = InitializationScreenState.Done
-            return@launch
+    if (configuration is ConnectionConfiguration.Demo) {
+        current = InitializationScreenState.Done
+        return
+    }
+
+    uri = when (val connection = configuration) {
+        is ConnectionConfiguration.Backend -> connection.uri
+        else -> "…"
+    }
+
+    runInitialization {
+        stage(InitializationScreenState.CheckSystemHealth) {
+            checkSystemHealthUseCase.invoke()
         }
 
-        state.uri = when (val connection = configuration) {
-            is ConnectionConfiguration.Backend -> connection.uri
-            else -> "…"
+        val configuration = stage(InitializationScreenState.DownloadConfiguration) {
+            downloadConfigurationUseCase.invoke()
         }
 
-        state.runInitialization {
-            stage(InitializationScreenState.CheckSystemHealth) {
-                checkSystemHealthUseCase.invoke()
-            }
+        stage(InitializationScreenState.Authenticate) {
+            authenticateUseCase.invoke(
+                issuer = configuration.authUri,
+                clientIdentifier = "smarthome-app",
+            )
+        }
 
-            val configuration = stage(InitializationScreenState.DownloadConfiguration) {
-                downloadConfigurationUseCase.invoke()
-            }
-
-            stage(InitializationScreenState.Authenticate) {
-                authenticateUseCase.invoke(
-                    issuer = configuration.authUri,
-                    clientIdentifier = "smarthome-app",
-                )
-            }
-
-            stage(InitializationScreenState.SynchronizeApplicationState) {
-                synchronizeEntitiesUseCase.invoke()
-            }
+        stage(InitializationScreenState.SynchronizeApplicationState) {
+            synchronizeEntitiesUseCase.invoke()
         }
     }
 }
