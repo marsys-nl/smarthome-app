@@ -42,6 +42,7 @@ includeBuild("build-logic")
 
 include(
     ":app:android",
+    ":shared:application:hub",
     ":shared:data:authentication",
     ":shared:data:connection",
     ":shared:data:demo",
@@ -57,6 +58,7 @@ include(
     ":shared:feature:zones",
     ":shared:infrastructure:authentication",
     ":shared:infrastructure:entity",
+    ":shared:infrastructure:hub",
     ":shared:library",
     ":shared:library:core",
     ":shared:library:design",
