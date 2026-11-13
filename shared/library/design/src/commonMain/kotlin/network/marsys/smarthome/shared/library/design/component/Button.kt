@@ -149,13 +149,13 @@ object ButtonStyle {
 
     @Composable
     fun outlined() = base(
-        background = SolidColor(Color.Unspecified),
+        background = SolidColor(Color.Transparent),
         content = SmartHomeTheme.colors[ColorKeyToken.TextPrimary],
         border = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
         disabledBackground = ButtonColorTokens.DisabledBackgroundColor,
         disabledContent = ButtonColorTokens.DisabledContentColor,
         disabledBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
-        pressedBackground = ButtonColorTokens.PressedBackgroundColor,
+        pressedBackground = SolidColor(SmartHomeTheme.colors[ColorKeyToken.BackgroundTertiary]),
         pressedContent = ButtonColorTokens.PressedContentColor,
         pressedBorder = SmartHomeTheme.colors[ColorKeyToken.BorderPrimary],
     ) then {

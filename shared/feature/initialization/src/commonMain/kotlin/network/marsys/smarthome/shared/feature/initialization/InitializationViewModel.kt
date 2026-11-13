@@ -7,11 +7,15 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import network.marsys.smarthome.shared.domain.authentication.AuthenticateUseCase
 import network.marsys.smarthome.shared.domain.connection.CheckSystemHealthUseCase
+import network.marsys.smarthome.shared.domain.connection.ConnectionState
 import network.marsys.smarthome.shared.domain.connection.DownloadConfigurationUseCase
+import network.marsys.smarthome.shared.domain.connection.EstablishConnectionUseCase
+import network.marsys.smarthome.shared.domain.connection.ObserveConnectionUseCase
 import network.marsys.smarthome.shared.domain.connection.SynchronizeEntitiesUseCase
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.coroutines.SuspendingActionStateMutator
@@ -30,10 +34,13 @@ class InitializationViewModel(
     private val checkSystemHealthUseCase: CheckSystemHealthUseCase,
     private val downloadConfigurationUseCase: DownloadConfigurationUseCase,
     private val synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
+    private val establishConnectionUseCase: EstablishConnectionUseCase,
+    private val observeConnectionUseCase: ObserveConnectionUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(viewModelScope = coroutineScope),
     InitializationStateHolder by initializationStateHolder(
         scope = coroutineScope,
+        observeConnectionUseCase = observeConnectionUseCase,
         initialize = { state ->
             state.initialize(
                 applicationConfigurationRepository = applicationConfigurationRepository,
@@ -41,12 +48,14 @@ class InitializationViewModel(
                 checkSystemHealthUseCase = checkSystemHealthUseCase,
                 downloadConfigurationUseCase = downloadConfigurationUseCase,
                 synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
+                establishConnectionUseCase = establishConnectionUseCase,
             )
         },
     )
 
 private fun initializationStateHolder(
     scope: CoroutineScope,
+    observeConnectionUseCase: ObserveConnectionUseCase,
     initialize: suspend (MutableInitializationScreenState) -> Unit,
 ): InitializationStateHolder {
     val state = MutableInitializationScreenState()
@@ -62,6 +71,16 @@ private fun initializationStateHolder(
     return scope.suspendingActionStateMutator(state = state) { state, actions ->
         if (job?.isActive != true && state.current != InitializationScreenState.Done) {
             restart()
+        }
+
+        launch {
+            observeConnectionUseCase.invoke()
+                .filter { it == ConnectionState.Lost }
+                .collect {
+                    if (state.current == InitializationScreenState.Done) {
+                        restart()
+                    }
+                }
         }
 
         actions.handle(
@@ -83,6 +102,7 @@ private suspend fun MutableInitializationScreenState.initialize(
     checkSystemHealthUseCase: CheckSystemHealthUseCase,
     downloadConfigurationUseCase: DownloadConfigurationUseCase,
     synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
+    establishConnectionUseCase: EstablishConnectionUseCase,
 ) {
     val configuration = applicationConfigurationRepository.connection.first()
 
@@ -113,7 +133,11 @@ private suspend fun MutableInitializationScreenState.initialize(
         }
 
         stage(InitializationScreenState.SynchronizeApplicationState) {
+            // Synchronize first
             synchronizeEntitiesUseCase.invoke()
+
+            // Establish connection afterwards
+            establishConnectionUseCase.invoke()
         }
     }
 }

@@ -13,6 +13,7 @@ import network.marsys.smarthome.shared.feature.zone.ZoneViewModel
 import network.marsys.smarthome.shared.feature.zones.ZonesViewModel
 import network.marsys.smarthome.shared.infrastructure.authentication.di.infrastructureAuthenticationModule
 import network.marsys.smarthome.shared.infrastructure.entity.di.infrastructureEntityModule
+import network.marsys.smarthome.shared.infrastructure.hub.di.infrastructureHubModule
 import network.marsys.smarthome.shared.library.core.coroutines.viewModelCoroutineScope
 import network.marsys.smarthome.shared.library.design.SmartHomeTheme
 import network.marsys.smarthome.shared.library.design.ThemeSelection
@@ -47,6 +48,8 @@ private val viewModelModule = module {
             checkSystemHealthUseCase = get(),
             downloadConfigurationUseCase = get(),
             synchronizeEntitiesUseCase = get(),
+            establishConnectionUseCase = get(),
+            observeConnectionUseCase = get(),
             coroutineScope = viewModelCoroutineScope(),
         )
     }
@@ -104,6 +107,7 @@ fun SmartHomeApp(
                 connectionDataModule,
                 infrastructureAuthenticationModule,
                 infrastructureEntityModule,
+                infrastructureHubModule,
                 internationalizationModule,
                 networkModule,
                 smartHomeApplicationModule,
