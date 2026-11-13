@@ -33,7 +33,6 @@ class InitializationViewModel(
     private val authenticateUseCase: AuthenticateUseCase,
     private val checkSystemHealthUseCase: CheckSystemHealthUseCase,
     private val downloadConfigurationUseCase: DownloadConfigurationUseCase,
-    private val synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
     private val establishConnectionUseCase: EstablishConnectionUseCase,
     private val observeConnectionUseCase: ObserveConnectionUseCase,
     coroutineScope: CoroutineScope,
@@ -47,7 +46,6 @@ class InitializationViewModel(
                 authenticateUseCase = authenticateUseCase,
                 checkSystemHealthUseCase = checkSystemHealthUseCase,
                 downloadConfigurationUseCase = downloadConfigurationUseCase,
-                synchronizeEntitiesUseCase = synchronizeEntitiesUseCase,
                 establishConnectionUseCase = establishConnectionUseCase,
             )
         },
@@ -101,7 +99,6 @@ private suspend fun MutableInitializationScreenState.initialize(
     authenticateUseCase: AuthenticateUseCase,
     checkSystemHealthUseCase: CheckSystemHealthUseCase,
     downloadConfigurationUseCase: DownloadConfigurationUseCase,
-    synchronizeEntitiesUseCase: SynchronizeEntitiesUseCase,
     establishConnectionUseCase: EstablishConnectionUseCase,
 ) {
     val configuration = applicationConfigurationRepository.connection.first()
@@ -133,10 +130,6 @@ private suspend fun MutableInitializationScreenState.initialize(
         }
 
         stage(InitializationScreenState.SynchronizeApplicationState) {
-            // Synchronize first
-            synchronizeEntitiesUseCase.invoke()
-
-            // Establish connection afterwards
             establishConnectionUseCase.invoke()
         }
     }

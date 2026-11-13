@@ -47,7 +47,6 @@ private val viewModelModule = module {
             authenticateUseCase = get(),
             checkSystemHealthUseCase = get(),
             downloadConfigurationUseCase = get(),
-            synchronizeEntitiesUseCase = get(),
             establishConnectionUseCase = get(),
             observeConnectionUseCase = get(),
             coroutineScope = viewModelCoroutineScope(),
