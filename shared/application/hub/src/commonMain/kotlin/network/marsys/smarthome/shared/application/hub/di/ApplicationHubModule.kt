@@ -5,7 +5,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import network.marsys.smarthome.shared.application.hub.EstablishConnectionUseCaseImpl
 import network.marsys.smarthome.shared.application.hub.ObserveConnectionUseCaseImpl
+import network.marsys.smarthome.shared.application.hub.SmartHomeEventHandler
 import network.marsys.smarthome.shared.application.hub.SmartHomeSession
+import network.marsys.smarthome.shared.application.hub.SyncRequiredHandler
 import network.marsys.smarthome.shared.domain.connection.EstablishConnectionUseCase
 import network.marsys.smarthome.shared.domain.connection.ObserveConnectionUseCase
 import org.koin.dsl.binds
@@ -13,8 +15,17 @@ import org.koin.dsl.module
 
 val applicationHubModule = module {
     single {
+        SyncRequiredHandler(
+            synchronizeEntitiesUseCase = get(),
+        )
+    } binds arrayOf(
+        SmartHomeEventHandler::class,
+    )
+
+    single {
         SmartHomeSession(
             source = get(),
+            handlers = getAll<SmartHomeEventHandler>(),
             applicationConfigurationRepository = get(),
             scope = CoroutineScope(SupervisorJob() + Dispatchers.Default),
         )
