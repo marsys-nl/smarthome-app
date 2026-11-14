@@ -20,11 +20,12 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(projects.shared.application.hub)
             implementation(projects.shared.data.demo)
-            implementation(projects.shared.library.core)
-            implementation(projects.shared.library.network)
             implementation(projects.shared.data.entity)
             implementation(projects.shared.domain.entity)
+            implementation(projects.shared.library.core)
+            implementation(projects.shared.library.network)
 
             implementation(libs.koin.compose)
 
