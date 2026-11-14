@@ -59,8 +59,6 @@ internal class ServerSentEventSmartHomeEventSource(
         val data = event.data
             ?: return null
 
-        println("Event data received: $data")
-
         return when (event.event) {
             "sync-required" ->
                 json.decodeFromString<SmartHomeEventMessage.SyncRequired>(string = data)

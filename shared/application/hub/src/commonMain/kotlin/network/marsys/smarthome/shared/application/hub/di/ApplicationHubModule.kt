@@ -3,6 +3,7 @@ package network.marsys.smarthome.shared.application.hub.di
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import network.marsys.smarthome.shared.application.hub.CapabilityUpdatedHandler
 import network.marsys.smarthome.shared.application.hub.EstablishConnectionUseCaseImpl
 import network.marsys.smarthome.shared.application.hub.ObserveConnectionUseCaseImpl
 import network.marsys.smarthome.shared.application.hub.SmartHomeEventHandler
@@ -16,6 +17,15 @@ import org.koin.dsl.module
 val applicationHubModule = module {
     single {
         SyncRequiredHandler(
+            synchronizeEntitiesUseCase = get(),
+        )
+    } binds arrayOf(
+        SmartHomeEventHandler::class,
+    )
+
+    single {
+        CapabilityUpdatedHandler(
+            entityCapabilityUpdater = get(),
             synchronizeEntitiesUseCase = get(),
         )
     } binds arrayOf(

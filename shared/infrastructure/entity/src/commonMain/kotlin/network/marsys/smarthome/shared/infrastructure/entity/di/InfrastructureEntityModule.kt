@@ -1,5 +1,6 @@
 package network.marsys.smarthome.shared.infrastructure.entity.di
 
+import network.marsys.smarthome.shared.application.hub.ports.outbound.EntityCapabilityUpdater
 import network.marsys.smarthome.shared.data.entity.entityDataModule
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntitySynchronization
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
@@ -26,7 +27,10 @@ val infrastructureEntityModule = module {
 
     single {
         get<SmartHomeEntityDataSource>(named("smartHomeEntityDataSource"))
-    } bind EntitySynchronization::class
+    } binds arrayOf(
+        EntityCapabilityUpdater::class,
+        EntitySynchronization::class,
+    )
 
     includes(entityDataModule)
 }

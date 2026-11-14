@@ -15,16 +15,21 @@ import kotlinx.coroutines.flow.update
 import kotlinx.io.IOException
 import network.marsys.smarthome.api.mappers.EntityCollectionDomainMapper
 import network.marsys.smarthome.api.models.entity.EntityResponse
+import network.marsys.smarthome.domain.capability.Capability
+import network.marsys.smarthome.domain.capability.with
 import network.marsys.smarthome.domain.entity.Entity
 import network.marsys.smarthome.domain.entity.EntityIdentifier
+import network.marsys.smarthome.shared.application.hub.ports.outbound.EntityCapabilityUpdater
 import network.marsys.smarthome.shared.data.entity.ports.inbound.EntitySynchronization
 import network.marsys.smarthome.shared.data.entity.ports.outbound.EntityDataSource
+import network.marsys.smarthome.shared.domain.entity.update
 import network.marsys.smarthome.shared.library.core.Result
 import network.marsys.smarthome.shared.library.core.Result.Companion.fail
+import network.marsys.smarthome.shared.library.core.Result.Companion.succeed
 
 internal class SmartHomeEntityDataSource(
     private val client: HttpClient,
-) : EntityDataSource, EntitySynchronization {
+) : EntityDataSource, EntitySynchronization, EntityCapabilityUpdater {
     override val entities: StateFlow<Collection<Entity>>
         field = MutableStateFlow(emptyList())
 
@@ -66,6 +71,44 @@ internal class SmartHomeEntityDataSource(
         } catch (_: IllegalArgumentException) {
             fail(with = EntitySynchronization.Reason.Unreachable)
         }
+
+    override suspend fun update(
+        identifier: EntityIdentifier,
+        capability: Capability<*, *>,
+    ): Result<Unit, EntityCapabilityUpdater.Reason> {
+        val entity = entities.value
+            .find { it.identifier == identifier }
+
+        return when {
+            entity == null ->
+                fail(with = EntityCapabilityUpdater.Reason.EntityNotFound(entity = identifier))
+
+            entity.state !is Entity.State.Known ->
+                fail(with = EntityCapabilityUpdater.Reason.EntityStateUnknown(entity = identifier))
+
+            entity.state.find(query = capability.type with capability.context) == null ->
+                fail(
+                    with = EntityCapabilityUpdater.Reason.UnsupportedCapability(
+                        entity = identifier,
+                        capability = capability,
+                    ),
+                )
+
+            else -> succeed(with = Unit).also {
+                entities.update { current ->
+                    current.map { entity ->
+                        when {
+                            entity.identifier == identifier -> entity.update { state ->
+                                state.updateWith(capability = capability)
+                            }
+
+                            else -> entity
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun handle(collection: Collection<EntityResponse>) {
         val mapped = EntityCollectionDomainMapper
