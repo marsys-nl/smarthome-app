@@ -108,6 +108,7 @@ internal class OidcAuthenticator(
 
     override suspend fun invalidate() {
         clients.remove(activeClientKey)
+        activeClientKey = null
         store.removeTokens()
     }
 
@@ -118,6 +119,7 @@ internal class OidcAuthenticator(
         issuer = issuer,
         clientIdentifier = clientIdentifier,
     ).let { key ->
+        activeClientKey = key
         clients.getOrPut(key) {
             createClient(
                 issuer = issuer,

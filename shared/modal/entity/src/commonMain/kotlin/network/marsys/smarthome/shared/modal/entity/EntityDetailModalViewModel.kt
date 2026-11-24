@@ -45,7 +45,7 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.AdjustBrightness -> action.flow.collect {
                         entityRepository.execute(
                             action = Brightness.SetBrightness(
-                                identifier = it.entity,
+                                entity = it.entity,
                                 brightness = it.brightness,
                             ),
                         )
@@ -54,7 +54,7 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.AdjustTargetTemperature -> action.flow.collect {
                         entityRepository.execute(
                             action = TargetTemperature.SetTargetTemperature(
-                                identifier = it.entity,
+                                entity = it.entity,
                                 temperature = it.temperature,
                             ),
                         )
@@ -63,7 +63,7 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.MoveCover.Open -> action.flow.collect {
                         entityRepository.execute(
                             action = Movement.Move.Open(
-                                identifier = it.entity,
+                                entity = it.entity,
                             ),
                         )
                     }
@@ -71,7 +71,7 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.MoveCover.Close -> action.flow.collect {
                         entityRepository.execute(
                             action = Movement.Move.Close(
-                                identifier = it.entity,
+                                entity = it.entity,
                             ),
                         )
                     }
@@ -79,7 +79,7 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.MoveCover.Stop -> action.flow.collect {
                         entityRepository.execute(
                             action = Movement.Move.Stop(
-                                identifier = it.entity,
+                                entity = it.entity,
                             ),
                         )
                     }
@@ -87,8 +87,8 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.ToggleChildLock -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
-                                true -> ChildLock.Toggle.On(identifier = action.entity)
-                                false -> ChildLock.Toggle.Off(identifier = action.entity)
+                                true -> ChildLock.Toggle.On(entity = action.entity)
+                                false -> ChildLock.Toggle.Off(entity = action.entity)
                             },
                         )
                     }
@@ -96,8 +96,8 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.ToggleEntity -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
-                                true -> OnOff.Toggle.On(identifier = action.entity)
-                                false -> OnOff.Toggle.Off(identifier = action.entity)
+                                true -> OnOff.Toggle.On(entity = action.entity)
+                                false -> OnOff.Toggle.Off(entity = action.entity)
                             },
                         )
                     }
@@ -105,8 +105,8 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.ToggleScheduledMode -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
-                                true -> ScheduledMode.Toggle.On(identifier = action.entity)
-                                false -> ScheduledMode.Toggle.Off(identifier = action.entity)
+                                true -> ScheduledMode.Toggle.On(entity = action.entity)
+                                false -> ScheduledMode.Toggle.Off(entity = action.entity)
                             },
                         )
                     }
@@ -114,8 +114,8 @@ class EntityDetailModalViewModel(
                     is EntityDetailModalAction.ToggleWindowDetection -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
-                                true -> WindowDetection.Toggle.On(identifier = action.entity)
-                                false -> WindowDetection.Toggle.Off(identifier = action.entity)
+                                true -> WindowDetection.Toggle.On(entity = action.entity)
+                                false -> WindowDetection.Toggle.Off(entity = action.entity)
                             },
                         )
                     }

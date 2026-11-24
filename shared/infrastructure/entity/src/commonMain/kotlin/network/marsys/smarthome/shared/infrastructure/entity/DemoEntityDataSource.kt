@@ -61,7 +61,7 @@ internal class DemoEntityDataSource(
             .distinctUntilChanged()
 
     override suspend fun execute(action: Entity.Action) {
-        val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return
+        val entity = entities.value.firstOrNull { it.identifier == action.entity } ?: return
 
         val capability = when (action) {
             is Brightness.SetBrightness -> Brightness(current = action.brightness)
@@ -111,8 +111,8 @@ internal class DemoEntityDataSource(
 
     private fun setupCoverSimulation(action: Movement.Move) {
         when (action) {
-            is Movement.Move.Stop -> simulations.remove(action.identifier)
-            else -> simulations[action.identifier] = action
+            is Movement.Move.Stop -> simulations.remove(action.entity)
+            else -> simulations[action.entity] = action
         }
     }
 
@@ -174,7 +174,7 @@ internal class DemoEntityDataSource(
                 delay(SIMULATION_TICK)
 
                 simulations.forEach { (_, action) ->
-                    val entity = entities.value.firstOrNull { it.identifier == action.identifier } ?: return@forEach
+                    val entity = entities.value.firstOrNull { it.identifier == action.entity } ?: return@forEach
 
                     when (entity) {
                         is Cover if action is Movement.Move -> applyCoverSimulation(entity, action)

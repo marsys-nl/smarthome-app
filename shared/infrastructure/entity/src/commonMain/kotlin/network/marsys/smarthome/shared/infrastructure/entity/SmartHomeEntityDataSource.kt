@@ -5,7 +5,11 @@ import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
 import io.ktor.serialization.ContentConvertException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.io.IOException
 import network.marsys.smarthome.api.mappers.EntityCollectionDomainMapper
+import network.marsys.smarthome.api.mappers.entity.action.EntityActionApiMapper
 import network.marsys.smarthome.api.models.entity.EntityResponse
 import network.marsys.smarthome.domain.capability.Capability
 import network.marsys.smarthome.domain.capability.with
@@ -39,7 +44,14 @@ internal class SmartHomeEntityDataSource(
         }
 
     override suspend fun execute(action: Entity.Action) {
-        // No-op for now.
+        try {
+            client.post("/api/entities/actions") {
+                contentType(ContentType.Application.Json)
+                setBody(EntityActionApiMapper.invoke(source = action))
+            }
+        } catch (_: Exception) {
+            // No-op for now
+        }
     }
 
     override suspend fun synchronize(): Result<Unit, EntitySynchronization.Reason> =
