@@ -117,8 +117,8 @@ class DashboardViewModel(
                     is DashboardScreenAction.ToggleEntityState -> action.flow.collect {
                         entityRepository.execute(
                             action = when (it.state) {
-                                true -> OnOff.Toggle.On(identifier = action.entity)
-                                false -> OnOff.Toggle.Off(identifier = action.entity)
+                                true -> OnOff.Toggle.On(entity = action.entity)
+                                false -> OnOff.Toggle.Off(entity = action.entity)
                             },
                         )
                     }
