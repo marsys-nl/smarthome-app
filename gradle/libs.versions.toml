@@ -4,7 +4,7 @@
 smarthome-app-code = "2611001"
 smarthome-app-name = "2026.11-SNAPSHOT"
 
-smarthome-domain = "2026.11-SNAPSHOT"
+smarthome-domain = "2026.11"
 smarthome-api = "2026.11-SNAPSHOT"
 
 android-gradle-plugin = "9.5.2"
